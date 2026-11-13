@@ -1,0 +1,98 @@
+# ── Секреты и окружение ───────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa*
+id_ed25519*
+*.kdbx
+.htpasswd
+secrets/
+credentials*
+*token*.txt
+# боевые конфиги хостинга (хэши паролей, домены, IP) — в репозитории только *.example
+tools/hosting/Caddyfile
+tools/hosting/Caddyfile.bak-*
+tools/hosting/.env
+
+# ── Личные данные: хранилище и выгрузки ───────────────────────────
+# Хранилище скиллов (на NAS) и его локальные зеркала
+/Claude-Memory/
+/Codex-Memory/
+/_nas/
+_drafts/
+.versions/
+.intake-backups/
+# Портфель: реальные выгрузки брокера, снапшоты, журналы решений
+/Portfolio/
+docs/investment/source/
+docs/investment/temp/
+docs/investment/20[0-9][0-9]-*.md
+# Финансы: выгрузки и выписки банков
+/ZenMoney/
+docs/zenmoney/csv/
+docs/zenmoney/source/
+docs/zenmoney/*.csv
+docs/zenmoney/*.pdf
+# Здоровье и медицинские документы
+/Health/
+/Медицинские анализы/
+# Поездки, игры, еда — личные данные
+/trips/
+/Gaming/
+/Food/
+# Исходные файлы IntelInvest / баланса / выписок
+*.numbers
+*.xlsx
+*.xls
+*.csv
+!tools/tests/fixtures/**/*.csv
+*.sqlite
+*.sqlite3
+*.db
+
+# ── Сгенерированное ───────────────────────────────────────────────
+outputs/
+examples/
+docs/travel-planning/**/*.pdf
+docs/travel-planning/**/*.png
+docs/travel-planning/**/*.docx
+tools/_redesign-staging/
+*.skill
+
+# ── Python / инструменты ──────────────────────────────────────────
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ── ОС и редакторы ────────────────────────────────────────────────
+.DS_Store
+@eaDir/
+#recycle/
+.~lock.*
+*.swp
+.idea/
+.vscode/
+
+# ── Локальные настройки ассистентов ───────────────────────────────
+.claude/settings.json
+.claude/settings.local.json
+.agents/
+*.log
+*.ovpn
+*.p8
+*.jks
+*.pcap
+
+# рецепты и сгенерированные PDF
+docs/food/*.pdf
