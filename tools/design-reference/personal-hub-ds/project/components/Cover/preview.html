@@ -1,0 +1,29 @@
+<!-- @dsCard height=288 -->
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>cover</title><style>
+.cv{position:relative;width:960px;height:288px;background:var(--bg);overflow:hidden;font-family:var(--font-serif)}
+.cv svg{position:absolute;inset:0;width:960px;height:288px}
+.c1{fill:var(--c-1)}.c2{fill:var(--c-2)}.c3{fill:var(--c-3)}.c4{fill:var(--c-4)}.c5{fill:var(--c-5)}.c6{fill:var(--c-6)}
+.rule{stroke:var(--border-strong);stroke-width:1}
+.tile{rx:var(--radius)}
+.name{position:absolute;left:40px;bottom:50px;max-width:440px;color:var(--text);font-weight:600;font-size:96px;line-height:.95;letter-spacing:-.02em;margin:0}
+.tagline{position:absolute;left:42px;bottom:26px;max-width:440px;color:var(--text-muted);font-family:var(--font-sans);font-size:13.5px;margin:0}
+</style></head><body><div class="cv">
+<!-- derivation:
+     blocks: c-1 (инвестиции) 300×132 · c-6 (деньги) 150×132 · c-3 (здоровье) 160×72 · c-4 (путешествия) 120×72 · c-2 (еда) 90×48 · c-5 (игры) 60×48 — шесть красок разделов, вес по площади раздела в кабинете
+     arrangement: ступенчатая стопка полос у правого края, крупная слева-сверху, сбегает вниз-вправо; всё правее x=480
+     pattern: editorial, serif, «границы, не тени» → три горизонтальные hairline-правила border-strong, пересекающие блоки; одна строка — не поле
+     scales: шаг 20px между блоками, скругление radius (9px) у каждого блока -->
+<svg viewBox="0 0 960 288" aria-hidden="true">
+  <rect class="c1 tile" x="500" y="24" width="300" height="132"/>
+  <rect class="c6 tile" x="820" y="24" width="150" height="132"/>
+  <rect class="c3 tile" x="560" y="176" width="160" height="72"/>
+  <rect class="c4 tile" x="740" y="176" width="120" height="72"/>
+  <rect class="c2 tile" x="880" y="176" width="90" height="48"/>
+  <rect class="c5 tile" x="500" y="200" width="40" height="48"/>
+  <line class="rule" x1="480" y1="92" x2="960" y2="92"/>
+  <line class="rule" x1="480" y1="164" x2="960" y2="164"/>
+  <line class="rule" x1="480" y1="236" x2="960" y2="236"/>
+</svg>
+<p class="name">Personal<br>Hub</p>
+<p class="tagline">портфель · деньги · здоровье · поездки · игры · еда</p>
+</div></body></html>

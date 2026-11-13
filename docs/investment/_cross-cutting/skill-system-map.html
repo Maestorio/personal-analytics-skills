@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Система скиллов Claude — Архитектура</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  header {
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+    padding: 11px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+  header h1 { font-size: 16px; font-weight: 600; color: #c9d1d9; }
+  header .sub { font-size: 11px; color: #6e7681; margin-top: 1px; }
+  .legend { display: flex; gap: 12px; margin-left: auto; align-items: center; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #6e7681; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+  #main { display: flex; flex: 1; overflow: hidden; }
+
+  #canvas-area { flex: 1; overflow: auto; }
+  #canvas-area svg { display: block; }
+
+  #side-panel {
+    width: 298px; flex-shrink: 0;
+    background: #161b22;
+    border-left: 1px solid #30363d;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sys-summary {
+    padding: 13px 15px;
+    border-bottom: 1px solid #30363d;
+    font-size: 11px; color: #6e7681; line-height: 1.65;
+    flex-shrink: 0;
+  }
+  .sys-summary strong { color: #8b949e; }
+  #panel-body { flex: 1; overflow-y: auto; padding: 15px; }
+
+  .panel-hint { font-size: 11px; color: #4a5568; line-height: 1.7; }
+  .panel-hint h3 { color: #6e7681; font-size: 12px; margin-bottom: 8px; font-weight: 600; }
+  .panel-hint .item { margin-bottom: 5px; }
+
+  #panel-detail { display: none; }
+  #panel-detail h2 { font-size: 13px; color: #c9d1d9; margin-bottom: 5px; line-height: 1.3; }
+  .cat-badge {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    letter-spacing: 0.07em; padding: 2px 9px; border-radius: 10px;
+    text-transform: uppercase; margin-bottom: 11px;
+  }
+  #panel-detail .desc { font-size: 11px; color: #8b949e; line-height: 1.7; margin-bottom: 8px; }
+  #panel-detail h4 {
+    font-size: 9px; color: #6e7681; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-top: 11px; margin-bottom: 4px;
+  }
+  #panel-detail ul { list-style: none; padding: 0; }
+  #panel-detail ul li {
+    font-size: 11px; color: #8b949e;
+    padding: 2px 0 2px 13px; position: relative; line-height: 1.5;
+  }
+  #panel-detail ul li::before { content: "→"; position: absolute; left: 0; color: #30363d; }
+
+  .node-g { cursor: pointer; }
+  .node-g:hover .node-rect { filter: brightness(1.25); }
+  .node-g.selected .node-rect { filter: brightness(1.4); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Система скиллов Claude</h1>
+    <div class="sub">16 скиллов · 1 база знаний · персональная OS для инвестиций и прогнозирования</div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div>Данные</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>Прогноз</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Оркестрация</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div>Портфель</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fb923c"></div>Обслуживание</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div>База знаний</div>
+  </div>
+</header>
+<div id="main">
+  <div id="canvas-area">
+    <svg id="svg" xmlns="http://www.w3.org/2000/svg" width="1040" height="660"></svg>
+  </div>
+  <div id="side-panel">
+    <div class="sys-summary">
+      <strong>О системе:</strong> Персональная OS для принятия инвестиционных решений. Скиллы работают как конвейер — данные собираются, анализируются, синтезируются и копятся в единой базе знаний.
+    </div>
+    <div id="panel-body">
+      <div id="panel-hint" class="panel-hint">
+        <h3>Нажмите на блок</h3>
+        <div class="item"><span style="color:#60a5fa">●</span> <strong style="color:#6e7681">Данные</strong> — парсинг портфеля, макро-снапшот, сбор прогнозов</div>
+        <div class="item"><span style="color:#34d399">●</span> <strong style="color:#6e7681">Прогноз</strong> — взвешенный консенсус, стресс-тест гипотез, сценарии 2×2, ретроаудит</div>
+        <div class="item"><span style="color:#a78bfa">●</span> <strong style="color:#6e7681">Оркестрация</strong> — DAG-координация факторов, синтез данных</div>
+        <div class="item"><span style="color:#f472b6">●</span> <strong style="color:#6e7681">Портфель</strong> — 8 режимов анализа, сценарный стресс по позициям</div>
+        <div class="item"><span style="color:#fb923c">●</span> <strong style="color:#6e7681">Обслуживание</strong> — запись в базу, синхронизация, ревизия</div>
+        <div class="item"><span style="color:#fbbf24">●</span> <strong style="color:#6e7681">База знаний</strong> — все артефакты на Synology/Google Drive</div>
+        <br>
+        <div style="color:#3d4f67; font-size:10px;">── основной поток данных<br>
+        <span style="color:#7c3a14; opacity:.8">── сохранение артефактов</span><br>
+        <span style="color:#92400e; opacity:.9">- - чтение из базы</span></div>
+      </div>
+      <div id="panel-detail">
+        <h2 id="pd-name"></h2>
+        <span id="pd-badge" class="cat-badge"></span>
+        <p id="pd-desc" class="desc"></p>
+        <div id="pd-inputs"></div>
+        <div id="pd-outputs"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── ДАННЫЕ ──────────────────────────────────────────────────────────────────
+
+const CATS = {
+  data:          { label: "Сбор данных",    fill: "#0e2040", stroke: "#60a5fa", text: "#93c5fd" },
+  forecast:      { label: "Прогнозирование",fill: "#0a2416", stroke: "#34d399", text: "#6ee7b7" },
+  orchestration: { label: "Оркестрация",    fill: "#1a1030", stroke: "#a78bfa", text: "#c4b5fd" },
+  portfolio:     { label: "Портфель",       fill: "#2a0d20", stroke: "#f472b6", text: "#f9a8d4" },
+  maintenance:   { label: "Обслуживание",   fill: "#2a1506", stroke: "#fb923c", text: "#fdba74" },
+  db:            { label: "База знаний",    fill: "#261e00", stroke: "#fbbf24", text: "#fde68a" },
+};
+
+// x, y — центр узла
+const NODES = [
+  // ── ДАННЫЕ (col x≈110) ───────────────────────────────────────────────────
+  { id: "forecast-collector",
+    label: "forecast-\ncollector",
+    category: "data", x: 110, y: 160, w: 135, h: 58,
+    desc: "Ingest-пайплайн. Собирает 10–20 исторически верифицируемых прогнозов из одного источника (аналитик, Telegram-канал, think-tank). Подготавливает структурированный материал для ретроспективного аудита.",
+    inputs: ["Имя источника + домен/период", "web_search"],
+    outputs: ["fc-{source}-collection-{date}.md"],
+  },
+  { id: "macro-ru-watcher",
+    label: "macro-ru-\nwatcher",
+    category: "data", x: 110, y: 275, w: 135, h: 58,
+    desc: "Панель сигналов для 7 российских макроиндикаторов: ставка ЦБ, инфляция, USD/RUB, CNY/RUB, Brent, RGBI, IMOEX. Фетчит живые данные, показывает diff и z-score аномалии. Никакой интерпретации — только факты.",
+    inputs: ["MOEX ISS", "ЦБ РФ", "EIA", "FRED"],
+    outputs: ["RU-{date}.md — макро-снапшот"],
+  },
+  { id: "portfolio-data-loader",
+    label: "portfolio-\ndata-loader",
+    category: "data", x: 110, y: 400, w: 135, h: 58,
+    desc: "Чистый data-layer. Парсит выгрузки IntelInvest XLS + Общий баланс.numbers. Считает XIRR/TWR/ROI с разбивкой по типам активов, фетчит живые цены MOEX, считает YTM для облигаций. Выдаёт версионированный JSON-снапшот v2.",
+    inputs: ["trades_portfolio_*.xlsx", "Общий баланс.numbers", "MOEX ISS API"],
+    outputs: ["portfolio-{date}.json (снапшот v2)"],
+  },
+
+  // ── АНАЛИЗ / ПРОГНОЗ (col x≈305) ─────────────────────────────────────────
+  { id: "forecast-confidence-applier",
+    label: "forecast-\nconfidence-\napplier",
+    category: "forecast", x: 305, y: 130, w: 145, h: 70,
+    desc: "Агрегирует 3–7 прогнозов экспертов через web_search. Применяет веса доверия из INDEX.md (HIGH/MEDIUM/LOW). Считает взвешенную/невзвешенную медиану, P10/P90, горизонтально-взвешенный confidence. Выдаёт filtered consensus с модальным сценарием и Tier 1 YAML-блоком.",
+    inputs: ["Тема прогноза/домен", "Веса доверия INDEX.md", "web_search"],
+    outputs: ["Markdown-консенсус + Tier 1 YAML-блок событий"],
+  },
+  { id: "hypothesis-stress-tester",
+    label: "hypothesis-\nstress-tester",
+    category: "forecast", x: 305, y: 245, w: 145, h: 58,
+    desc: "Структурная атака на готовый прогноз. Последовательно: pre-mortem, KAC lite, Devil's Advocate, проверка обратимости, ACH, sweep чувствительности. Выявляет уязвимые допущения. Выдаёт стресс-отчёт и Tier 2 YAML-пару.",
+    inputs: ["Текст прогноза/утверждения + горизонт + домен"],
+    outputs: ["Стресс-отчёт + Tier 2 YAML-блок"],
+  },
+  { id: "scenario-builder",
+    label: "scenario-\nbuilder",
+    category: "forecast", x: 305, y: 355, w: 145, h: 58,
+    desc: "Shell Scenario Planning. Выводит два ключевых неопределённых параметра из карты стейкхолдеров, строит матрицу 2×2 из четырёх равновероятных сценариев с нарративами, механиками и опережающими индикаторами.",
+    inputs: ["Тема + горизонт + домен", "web_search для позиций стейкхолдеров"],
+    outputs: ["Матрица сценариев 2×2 + Events YAML-блок"],
+  },
+  { id: "retrospective-forecast-audit",
+    label: "retro-forecast-\naudit",
+    category: "forecast", x: 305, y: 465, w: 145, h: 58,
+    desc: "Post-hoc аудит источника прогнозов. Оценивает каждый тезис vs консенсус на дату прогноза, декомпозирует ошибки по 3 шкалам (фактическое исполнение, позиция к консенсусу, тип ошибки). Генерирует 7 осей качества: hit_rate, alpha_generation, bull/bear-симметрия и др.",
+    inputs: ["Материал прогноза (статья/транскрипт)", "Выход forecast-collector", "web_search — консенсус на дату"],
+    outputs: ["Full/Light-аудит с метриками", "Trust profile для INDEX.md"],
+  },
+
+  // ── ОРКЕСТРАЦИЯ (col x≈500) ───────────────────────────────────────────────
+  { id: "macro-forecast-chain",
+    label: "macro-forecast-\nchain",
+    category: "orchestration", x: 500, y: 200, w: 155, h: 63,
+    desc: "Оркестратор макропрогнозного пайплайна. Читает снапшот портфеля, определяет какие факторы требуют обновления (coverage report), запускает forecast-confidence-applier и scenario-builder в DAG-порядке. Выдаёт матрицу макро-входных данных для стресс-тестирования.",
+    inputs: ["portfolio-{date}.json", "Прогнозы/сценарии из Claude-Memory", "stale_flags.yaml"],
+    outputs: ["macro-input-{date}.yaml (матрица факторов × горизонтов)"],
+  },
+  { id: "ru-portfolio-advisor",
+    label: "ru-portfolio-\nadvisor",
+    category: "orchestration", x: 500, y: 380, w: 155, h: 63,
+    desc: "Движок анализа инвестиций — 8 режимов: еженедельный обзор акций, обзор облигаций, мнение по ребалансировке, анализ эмитента, анализ фонда, доходность, советник ИИС-3, качественный форвард-ревью акций. Использует живые котировки MOEX + снапшот + веса доверия.",
+    inputs: ["portfolio-{date}.json (≤14 дней)", "Живые котировки MOEX", "Веса доверия INDEX.md"],
+    outputs: ["Markdown-анализ (1–8 режимов)", "weekly-review-{date}.yaml (по запросу)"],
+  },
+
+  // ── ПОРТФЕЛЬ / СИНТЕЗ (col x≈700) ────────────────────────────────────────
+  { id: "portfolio-scenario-stress",
+    label: "portfolio-\nscenario-\nstress",
+    category: "portfolio", x: 700, y: 270, w: 148, h: 70,
+    desc: "Мост от сценариев к P&L. Транслирует любой прогноз/сценарий (Shell, FCA, HST, macro-input) в количественный ΔP&L по каждой позиции. Считает секторный разброс, tail_var, макро-слепые пятна.",
+    inputs: ["portfolio-{date}.json", "Сценарий/прогноз (4 типа A–D)"],
+    outputs: ["stress-{date}-{slug}.md + .yaml (schema v1)"],
+  },
+  { id: "portfolio-integrated-view",
+    label: "portfolio-\nintegrated-\nview",
+    category: "portfolio", x: 700, y: 430, w: 148, h: 70,
+    desc: "Read-only синтезатор. Агрегирует снапшот + стресс-тест + weekly-review в единый дашборд. Пропагирует доверительные интервалы, вычисляет joint expectation через macro_dependency, выдаёт вердикт по акциям vs облигациям на 20 месяцев. Только агрегация — никаких рекомендаций.",
+    inputs: ["portfolio-{date}.json", "stress-{date}.yaml", "weekly-review-{date}.yaml"],
+    outputs: ["integrated-view-{date}.md (11 секций)"],
+  },
+
+  // ── ХРАНЕНИЕ (col x≈900) ──────────────────────────────────────────────────
+  { id: "save-to-library",
+    label: "save-to-\nlibrary",
+    category: "maintenance", x: 900, y: 200, w: 138, h: 58,
+    desc: "Универсальный write-шлюз. Обрабатывает 11 типов артефактов (Workflows A–K): аудиты, прогнозы, сценарии, ретроаудиты, стресс-тесты, weekly-reviews, интегрированные-views, снапшоты, макро-снапшоты, макро-инпуты, коллекции. Единственный скилл с правом записи в Claude-Memory (Правило D3).",
+    inputs: ["Любой артефакт от вышестоящих скиллов", "Transport B или A"],
+    outputs: ["Файл в Claude-Memory/{подпапка}", "Обновлённый INDEX.md", "Запись в _sync_log.md"],
+  },
+  { id: "claude-memory",
+    label: "Claude-Memory\n(Synology + GDrive)",
+    category: "db", x: 900, y: 390, w: 162, h: 78,
+    desc: "Центральная база знаний. Хранит все артефакты: аудиты, прогнозы, сценарии, стресс-тесты, снапшоты портфеля, weekly-reviews, интегрированные-views, макро-цепочки. Синхронизируется через Synology Drive → Google Drive. Доступ через Transport B (Read/Write/Edit) или Transport A (Google Drive MCP).",
+    inputs: ["Все результаты через save-to-library"],
+    outputs: ["Источник данных для скиллов-читателей"],
+  },
+
+  // ── ОБСЛУЖИВАНИЕ (нижняя строка, y≈575) ──────────────────────────────────
+  { id: "forecast-monitor",
+    label: "forecast-\nmonitor",
+    category: "maintenance", x: 110, y: 575, w: 130, h: 58,
+    desc: "Еженедельный watchdog. Читает активные forecasts/*.yaml и scenarios/*.yaml из Claude-Memory. Проверяет дедлайны, окна ревью (±5/±7 мес), автоматически проверяемые события через web_search. Каскадирует stale_flags через DEPENDENCY-MAP.",
+    inputs: ["forecasts/*.yaml", "scenarios/*.yaml", "DEPENDENCY-MAP.md", "web_search"],
+    outputs: ["Дайджест алертов в чат", "stale_flags для каскадирования"],
+  },
+  { id: "memory-sync",
+    label: "memory-\nsync",
+    category: "maintenance", x: 305, y: 575, w: 130, h: 58,
+    desc: "Синхронизирует библиотеку Claude-Memory в Claude auto-memory. Применяет newest-wins merge для trust-субдоменов, контролирует лимит 30 записей, форматирует [lib]-записи. Позволяет весам доверия быть доступными в любой сессии без перечитывания файлов.",
+    inputs: ["Claude-Memory/*.md (YAML frontmatter)", "sync_planner.py"],
+    outputs: ["auto-memory [lib]-записи", "Запись в _sync_log.md"],
+  },
+  { id: "revise-memory-remote",
+    label: "revise-memory-\nremote",
+    category: "maintenance", x: 545, y: 575, w: 142, h: 58,
+    desc: "Health-check библиотеки. Валидирует YAML frontmatter аудитов, проверяет парность *.md ↔ *.yaml в прогнозах/сценариях, флаги устаревания, консистентность INDEX, суммы вероятностей, битые superseded_by-ссылки. Только отчёт — без записи без подтверждения.",
+    inputs: ["Все Claude-Memory/*.md и *.yaml", "validate_library.py"],
+    outputs: ["Markdown-отчёт о проблемах по категориям"],
+  },
+  { id: "revise-memory-local",
+    label: "revise-memory-\nlocal",
+    category: "maintenance", x: 760, y: 575, w: 138, h: 58,
+    desc: "Гигиена локальной auto-memory. Консолидирует дубликаты, исправляет устаревшие факты, соблюдает лимит 30 записей, обновляет индекс MEMORY.md. Работает с сессионной памятью Claude, а не с библиотекой Synology.",
+    inputs: ["Локальные auto-memory записи"],
+    outputs: ["Консолидированное состояние памяти"],
+  },
+];
+
+// Типы связей: "flow" | "save" | "read" | "maint"
+const LINKS = [
+  // Основной поток
+  { from: "forecast-collector",          to: "retrospective-forecast-audit", type: "flow" },
+  { from: "macro-ru-watcher",            to: "macro-forecast-chain",         type: "flow" },
+  { from: "portfolio-data-loader",       to: "ru-portfolio-advisor",         type: "flow" },
+  { from: "portfolio-data-loader",       to: "macro-forecast-chain",         type: "flow" },
+  { from: "portfolio-data-loader",       to: "portfolio-scenario-stress",    type: "flow" },
+  { from: "forecast-confidence-applier", to: "hypothesis-stress-tester",     type: "flow" },
+  { from: "forecast-confidence-applier", to: "macro-forecast-chain",         type: "flow" },
+  { from: "scenario-builder",            to: "hypothesis-stress-tester",     type: "flow" },
+  { from: "scenario-builder",            to: "macro-forecast-chain",         type: "flow" },
+  { from: "hypothesis-stress-tester",    to: "scenario-builder",             type: "flow", curve: true },
+  { from: "macro-forecast-chain",        to: "portfolio-scenario-stress",    type: "flow" },
+  { from: "ru-portfolio-advisor",        to: "portfolio-integrated-view",    type: "flow" },
+  { from: "portfolio-scenario-stress",   to: "portfolio-integrated-view",    type: "flow" },
+  { from: "save-to-library",             to: "claude-memory",                type: "flow" },
+
+  // Сохранение артефактов
+  { from: "forecast-collector",          to: "save-to-library", type: "save" },
+  { from: "forecast-confidence-applier", to: "save-to-library", type: "save" },
+  { from: "hypothesis-stress-tester",    to: "save-to-library", type: "save" },
+  { from: "scenario-builder",            to: "save-to-library", type: "save" },
+  { from: "retrospective-forecast-audit",to: "save-to-library", type: "save" },
+  { from: "macro-forecast-chain",        to: "save-to-library", type: "save" },
+  { from: "ru-portfolio-advisor",        to: "save-to-library", type: "save" },
+  { from: "portfolio-scenario-stress",   to: "save-to-library", type: "save" },
+  { from: "portfolio-integrated-view",   to: "save-to-library", type: "save" },
+
+  // Чтение из базы (пунктир)
+  { from: "claude-memory", to: "macro-forecast-chain",     type: "read" },
+  { from: "claude-memory", to: "portfolio-integrated-view",type: "read" },
+  { from: "claude-memory", to: "ru-portfolio-advisor",     type: "read" },
+  { from: "claude-memory", to: "forecast-monitor",         type: "read" },
+  { from: "claude-memory", to: "memory-sync",              type: "read" },
+
+  // Обслуживание
+  { from: "forecast-monitor",    to: "claude-memory", type: "maint" },
+  { from: "memory-sync",         to: "claude-memory", type: "maint" },
+  { from: "revise-memory-remote",to: "claude-memory", type: "maint" },
+];
+
+// ── SVG SETUP ────────────────────────────────────────────────────────────────
+
+const SVG_W = 1040, SVG_H = 660;
+const svg = document.getElementById("svg");
+
+// Build index
+const nodeMap = {};
+NODES.forEach(n => { nodeMap[n.id] = n; });
+
+// ── DEFS (arrowheads + glows) ────────────────────────────────────────────────
+const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+
+const arrowDefs = [
+  { id: "arr-flow",  fill: "#4a6280" },
+  { id: "arr-save",  fill: "#92400e" },
+  { id: "arr-read",  fill: "#b45309" },
+  { id: "arr-maint", fill: "#7c3a14" },
+];
+arrowDefs.forEach(a => {
+  const m = document.createElementNS("http://www.w3.org/2000/svg", "marker");
+  m.setAttribute("id", a.id);
+  m.setAttribute("viewBox", "0 -4 8 8");
+  m.setAttribute("refX", "7"); m.setAttribute("refY", "0");
+  m.setAttribute("markerWidth", "5"); m.setAttribute("markerHeight", "5");
+  m.setAttribute("orient", "auto");
+  const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  p.setAttribute("d", "M0,-4L8,0L0,4Z");
+  p.setAttribute("fill", a.fill);
+  m.appendChild(p);
+  defs.appendChild(m);
+});
+
+// Glow filters per category
+Object.entries(CATS).forEach(([key, cat]) => {
+  const f = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+  f.setAttribute("id", "glow-" + key);
+  f.setAttribute("x", "-35%"); f.setAttribute("y", "-35%");
+  f.setAttribute("width", "170%"); f.setAttribute("height", "170%");
+  const ds = document.createElementNS("http://www.w3.org/2000/svg", "feDropShadow");
+  ds.setAttribute("dx", "0"); ds.setAttribute("dy", "0");
+  ds.setAttribute("stdDeviation", "5");
+  ds.setAttribute("flood-color", cat.stroke);
+  ds.setAttribute("flood-opacity", "0.7");
+  f.appendChild(ds);
+  defs.appendChild(f);
+});
+
+svg.appendChild(defs);
+
+// ── STAGE BACKGROUNDS ────────────────────────────────────────────────────────
+const stages = [
+  { label: "СБОР ДАННЫХ",    x1: 32,  x2: 182 },
+  { label: "АНАЛИЗ",         x1: 224, x2: 384 },
+  { label: "КООРДИНАЦИЯ",    x1: 415, x2: 580 },
+  { label: "СИНТЕЗ",         x1: 615, x2: 782 },
+  { label: "ХРАНЕНИЕ",       x1: 820, x2: 985 },
+];
+
+const bgG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+stages.forEach(s => {
+  const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  r.setAttribute("x", s.x1); r.setAttribute("y", 32);
+  r.setAttribute("width", s.x2 - s.x1); r.setAttribute("height", 498);
+  r.setAttribute("rx", "8");
+  r.setAttribute("fill", "#ffffff03"); r.setAttribute("stroke", "#ffffff07");
+  r.setAttribute("stroke-width", "1");
+  bgG.appendChild(r);
+
+  const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  t.setAttribute("x", (s.x1 + s.x2) / 2); t.setAttribute("y", "22");
+  t.setAttribute("text-anchor", "middle");
+  t.setAttribute("font-size", "8"); t.setAttribute("font-weight", "700");
+  t.setAttribute("letter-spacing", "0.12em"); t.setAttribute("fill", "#2d3f56");
+  t.setAttribute("font-family", "'Segoe UI', system-ui, sans-serif");
+  t.textContent = s.label;
+  bgG.appendChild(t);
+});
+
+// Maintenance band
+const mBand = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+mBand.setAttribute("x", "32"); mBand.setAttribute("y", "546");
+mBand.setAttribute("width", "960"); mBand.setAttribute("height", "98");
+mBand.setAttribute("rx", "8");
+mBand.setAttribute("fill", "#ffffff03"); mBand.setAttribute("stroke", "#ffffff07");
+mBand.setAttribute("stroke-width", "1");
+bgG.appendChild(mBand);
+
+const mLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+mLabel.setAttribute("x", "512"); mLabel.setAttribute("y", "540");
+mLabel.setAttribute("text-anchor", "middle");
+mLabel.setAttribute("font-size", "8"); mLabel.setAttribute("font-weight", "700");
+mLabel.setAttribute("letter-spacing", "0.12em"); mLabel.setAttribute("fill", "#2d3f56");
+mLabel.setAttribute("font-family", "'Segoe UI', system-ui, sans-serif");
+mLabel.textContent = "ОБСЛУЖИВАНИЕ";
+bgG.appendChild(mLabel);
+svg.appendChild(bgG);
+
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+
+// Точка на краю прямоугольника в направлении to
+function edgePt(n, tx, ty) {
+  const dx = tx - n.x, dy = ty - n.y;
+  if (!dx && !dy) return { x: n.x, y: n.y };
+  const hw = n.w / 2 + 2, hh = n.h / 2 + 2;
+  const sx = dx !== 0 ? hw / Math.abs(dx) : Infinity;
+  const sy = dy !== 0 ? hh / Math.abs(dy) : Infinity;
+  const s = Math.min(sx, sy);
+  return { x: n.x + dx * s, y: n.y + dy * s };
+}
+
+function linkStyle(type) {
+  switch(type) {
+    case "flow":  return { stroke: "#304560", width: 1.8, dash: null,  marker: "arr-flow" };
+    case "save":  return { stroke: "#7c2d12", width: 1,   dash: null,  marker: "arr-save", opacity: 0.45 };
+    case "read":  return { stroke: "#b45309", width: 1,   dash: "5,4", marker: "arr-read", opacity: 0.4 };
+    case "maint": return { stroke: "#7c2d12", width: 1.3, dash: null,  marker: "arr-maint", opacity: 0.6 };
+  }
+}
+
+// ── DRAW LINKS ───────────────────────────────────────────────────────────────
+
+const linkG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+const linkElements = [];
+
+// Draw save-type links first (below everything)
+[...LINKS].sort((a, b) => {
+  const order = { save: 0, maint: 1, read: 2, flow: 3 };
+  return order[a.type] - order[b.type];
+}).forEach(lk => {
+  const src = nodeMap[lk.from], tgt = nodeMap[lk.to];
+  if (!src || !tgt) return;
+
+  const st = linkStyle(lk.type);
+  const e1 = edgePt(src, tgt.x, tgt.y);
+  const e2 = edgePt(tgt, src.x, src.y);
+
+  let el;
+  if (lk.curve) {
+    const mx = Math.min(e1.x, e2.x) - 40;
+    const my = (e1.y + e2.y) / 2;
+    el = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    el.setAttribute("d", `M ${e1.x} ${e1.y} Q ${mx} ${my} ${e2.x} ${e2.y}`);
+    el.setAttribute("fill", "none");
+  } else {
+    el = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    el.setAttribute("x1", e1.x); el.setAttribute("y1", e1.y);
+    el.setAttribute("x2", e2.x); el.setAttribute("y2", e2.y);
+  }
+
+  el.setAttribute("stroke", st.stroke);
+  el.setAttribute("stroke-width", st.width);
+  if (st.dash) el.setAttribute("stroke-dasharray", st.dash);
+  if (st.opacity) el.setAttribute("opacity", st.opacity);
+  el.setAttribute("marker-end", `url(#${st.marker})`);
+  linkG.appendChild(el);
+  linkElements.push({ from: lk.from, to: lk.to, type: lk.type, el, st });
+});
+svg.appendChild(linkG);
+
+const BRIGHT = { flow: "#6baad8", save: "#ea6a2f", read: "#f59e0b", maint: "#f97316" };
+
+function highlightLinks(nodeId) {
+  linkElements.forEach(({ from, to, type, el, st }) => {
+    const connected = from === nodeId || to === nodeId;
+    if (connected) {
+      el.setAttribute("stroke", BRIGHT[type]);
+      el.setAttribute("stroke-width", st.width * 1.5);
+      el.setAttribute("opacity", "1");
+    }
+  });
+}
+
+function resetLinks() {
+  linkElements.forEach(({ el, st }) => {
+    el.setAttribute("stroke", st.stroke);
+    el.setAttribute("stroke-width", st.width);
+    if (st.opacity) el.setAttribute("opacity", st.opacity);
+    else el.removeAttribute("opacity");
+  });
+}
+
+// ── DRAW NODES ───────────────────────────────────────────────────────────────
+
+const nodeG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+NODES.forEach(n => {
+  const cat = CATS[n.category];
+  const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  g.setAttribute("class", "node-g");
+  g.setAttribute("data-id", n.id);
+
+  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  rect.setAttribute("class", "node-rect");
+  rect.setAttribute("x", n.x - n.w / 2);
+  rect.setAttribute("y", n.y - n.h / 2);
+  rect.setAttribute("width", n.w);
+  rect.setAttribute("height", n.h);
+  rect.setAttribute("rx", "8");
+  rect.setAttribute("fill", cat.fill);
+  rect.setAttribute("stroke", cat.stroke);
+  rect.setAttribute("stroke-width", n.category === "db" ? "2" : "1.5");
+  g.appendChild(rect);
+
+  const lines = n.label.split("\n");
+  const lh = 13;
+  lines.forEach((line, i) => {
+    const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    const dy = (i - (lines.length - 1) / 2) * lh;
+    t.setAttribute("x", n.x);
+    t.setAttribute("y", n.y + dy);
+    t.setAttribute("text-anchor", "middle");
+    t.setAttribute("dominant-baseline", "central");
+    t.setAttribute("font-size", n.category === "db" ? "10" : "10");
+    t.setAttribute("font-weight", "600");
+    t.setAttribute("fill", cat.text);
+    t.setAttribute("font-family", "'Segoe UI', system-ui, sans-serif");
+    t.setAttribute("pointer-events", "none");
+    t.textContent = line;
+    g.appendChild(t);
+  });
+
+  g.addEventListener("click", (e) => { e.stopPropagation(); toggleNode(n, g, rect); });
+  nodeG.appendChild(g);
+});
+svg.appendChild(nodeG);
+
+// ── INTERACTION ──────────────────────────────────────────────────────────────
+
+let selG = null, selRect = null, selNode = null;
+
+function toggleNode(n, g, rect) {
+  if (selNode && selNode.id === n.id) {
+    deselect(); return;
+  }
+  deselect();
+  selG = g; selRect = rect; selNode = n;
+  g.classList.add("selected");
+  rect.setAttribute("filter", `url(#glow-${n.category})`);
+  rect.setAttribute("stroke-width", n.category === "db" ? "3" : "2.5");
+  highlightLinks(n.id);
+  showDetail(n);
+}
+
+function deselect() {
+  if (!selG) return;
+  selG.classList.remove("selected");
+  selRect.setAttribute("filter", "");
+  selRect.setAttribute("stroke-width", selNode.category === "db" ? "2" : "1.5");
+  selG = null; selRect = null; selNode = null;
+  resetLinks();
+  document.getElementById("panel-hint").style.display = "";
+  document.getElementById("panel-detail").style.display = "none";
+}
+
+function showDetail(n) {
+  const cat = CATS[n.category];
+  document.getElementById("panel-hint").style.display = "none";
+  document.getElementById("panel-detail").style.display = "block";
+  document.getElementById("pd-name").textContent = n.id;
+
+  const badge = document.getElementById("pd-badge");
+  badge.textContent = cat.label;
+  badge.style.cssText = `background:${cat.fill};color:${cat.text};border:1px solid ${cat.stroke}`;
+
+  document.getElementById("pd-desc").textContent = n.desc;
+
+  const inEl = document.getElementById("pd-inputs");
+  inEl.innerHTML = n.inputs?.length
+    ? `<h4>Входные данные</h4><ul>${n.inputs.map(i => `<li>${i}</li>`).join("")}</ul>` : "";
+
+  const outEl = document.getElementById("pd-outputs");
+  outEl.innerHTML = n.outputs?.length
+    ? `<h4>Выходные данные</h4><ul>${n.outputs.map(o => `<li>${o}</li>`).join("")}</ul>` : "";
+}
+
+svg.addEventListener("click", deselect);
+</script>
+</body>
+</html>
