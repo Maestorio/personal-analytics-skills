@@ -1,0 +1,1947 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Деньги · Личный кабинет</title>
+<!-- иконка кабинета (вкладка и экран «Домой»): шесть ромбов — цвета разделов --c-1…--c-6 -->
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/hub-32.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/hub-180.png?v=2">
+<meta name="apple-mobile-web-app-title" content="Кабинет">
+<!-- Светлая тема по умолчанию: системную prefers-color-scheme НЕ подхватываем
+     (правило кабинета 2026-07-13) — тёмная только при явном hub-theme==="dark". -->
+<script>(function(){try{if(localStorage.getItem("hub-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<!-- Своего <style> у страницы НЕТ: шапка, карточки, плитки, графики и
+     выпадающий список — общие компоненты ui-kit.css (раздел «Страница
+     раздела», v1.11.0). Макет — tools/design-reference/Деньги.dc.html. -->
+<link rel="stylesheet" href="assets/ui-kit.css?v=1.72.0">
+</head>
+<body style="--sec-acc:var(--c-6);"><!-- акцент раздела и для общих компонентов вне .ui-page (нижняя панель в body) -->
+<div id="app"></div>
+
+<script src="assets/ui-kit.js?v=1.72.0"></script>
+<script>
+(function(){
+"use strict";
+
+/* ── Деньги: итоги месяцев и поездок из ZenMoney ─────────────────────────────
+   Только чтение. Данные готовит скилл zenmoney-analyst (scripts/audit_history.py
+   — единственный писатель ZenMoney/audit/): history.json (аудит учёта),
+   spending.json (итоги месяцев), trips.json (поездки), facts.json (факты «на что
+   взглянуть» — страница их НЕ считает, только показывает: формулы и пороги живут
+   в scripts/history_query.py, чтобы не разойтись), site-audit.json (проверки сайта
+   при загрузке выгрузки — только агрегаты; необязателен, пишет hub-notify). Контракты —
+   docs/zenmoney/money-page-brief.md. Отдельных операций и счетов здесь нет и
+   быть не должно: исправления делаются в приложении ZenMoney.
+   ZenMoney/* под паролем: запросы несут Authorization из localStorage
+   ["hub-auth"] (его пишет login.html), без него — тихий 403 → login.html. */
+var VERSION = "money v2.6.2";
+var DATA = "../ZenMoney/audit/";
+var FILES = { H: "history.json", S: "spending.json", T: "trips.json", F: "facts.json", SA: "site-audit.json" };
+
+var NOM = UI_MONTHS_NOM, GEN = UI_MONTHS_GEN, SH = UI_MONTHS_SHORT;   // месяцы — общие, ui-kit
+// Подписи типов замечаний — только русские, кодов на странице нет (бриф §1).
+var LBL = { A1: "Переводы, записанные расходом и доходом", A2: "Корректировки", A3: "Без категории",
+            A4: "Поездка основной категорией вместо тега", A5: "Одинаковые операции (вопрос)" };
+var EXCL = { corrections: "корректировки", investments: "инвестиции", cashback: "кешбэк",
+             partner: "расчёты с партнёром", refund_category: "возвраты", loans: "долги" };
+var CUR = { VND: ["донги","₫"], USD: ["доллары","$"], EUR: ["евро","€"], CNY: ["юани","¥"], TRY: ["лиры","₺"],
+            GEL: ["лари","₾"], KZT: ["тенге","₸"], RUB: ["рубли","₽"] };
+var BUCKETS = ["до месяца","1–3 месяца","3–6 месяцев","больше 6 месяцев"];
+var BUCKET_SHORT = { "до месяца": "до 1 мес", "1–3 месяца": "1–3 мес", "3–6 месяцев": "3–6 мес", "больше 6 месяцев": "> 6 мес" };
+// Сравнение поездок: группы типов и их насыщенность (классы .lv1–.lv5).
+var GROUPS = [["Билеты", ["Билеты"], 1], ["Жильё", ["Жильё"], 2], ["Еда", ["Еда"], 3],
+              ["Развлечения", ["Экскурсии и развлечения"], 4], ["Прочее", null, 5]];
+var TABS = [["overview", "Обзор", "Обзор"], ["quality", "Качество учёта", "Качество"], ["spend", "Траты", "Траты"], ["trips", "Поездки", "Поездки"], ["csv", "Загрузка", "Загрузка"]];
+var ICONS = {
+  overview: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></svg>',
+  quality: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+  spend:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  trips:   '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V4h6v3M4 12h16"/></svg>',
+  csv:     '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>',
+};
+
+/* ── форматирование ── */
+function ym(s){ var p = s.split("-").map(Number); return [p[0], p[1] - 1]; }
+var cap = uiCap;
+function mTitle(s){ var a = ym(s); return cap(NOM[a[1]]) + " " + a[0]; }
+function dGen(s){ var p = s.split("-").map(Number); return p[2] + " " + GEN[p[1] - 1]; }
+function num(v, d){ return v.toFixed(d == null ? 1 : d).replace(".", ","); }
+// колонки «тыс. ₽»: ненулевая сумма меньше 50 ₽ — «<0,1», а не «0,0» (покупка на 30 ₽ — не ноль)
+function k1(v){ var a = Math.abs(v); return a > 0 && a < 50 ? (v < 0 ? "−" : "") + "<0,1" : (v < 0 ? "−" : "") + num(a / 1000); }
+// меньше тысячи — в рублях («3,80 ₽», «476 ₽»): в тысячах 3,80 ₽ превращались в «0,0 тыс. ₽»
+function K(v){
+  var a = Math.abs(v);
+  if (a < 999.5) return (v < 0 && a >= 0.005 ? "−" : "") + (a > 0 && a < 10 ? num(a, 2) : String(Math.round(a))) + " ₽";
+  return k1(v) + " тыс. ₽";
+}
+function pct(v){ var s = (v * 100).toFixed(1); if (s.slice(-2) === ".0") s = s.slice(0, -2); return s.replace(".", ",") + "%"; }
+function pl(n, f){ var a = Math.abs(n) % 100, b = a % 10; return n + " " + (a > 10 && a < 20 ? f[2] : b === 1 ? f[0] : b >= 2 && b <= 4 ? f[1] : f[2]); }
+function days(n){ return pl(n, ["день", "дня", "дней"]); }
+function shortCat(s){ return s === "Одежда, обувь, аксессуары" ? "Одежда" : s; }
+function range(list){
+  if (!list.length) return "";
+  var a = ym(list[0].month), b = ym(list[list.length - 1].month);
+  return list.length === 1 ? NOM[a[1]] : NOM[a[1]] + "–" + NOM[b[1]];
+}
+function dRange(s, e){
+  var a = s.split("-").map(Number), b = e.split("-").map(Number);
+  if (a[0] === b[0] && a[1] === b[1]) return a[2] + "–" + b[2] + " " + GEN[a[1] - 1] + " " + a[0];
+  if (a[0] === b[0]) return a[2] + " " + GEN[a[1] - 1] + " – " + b[2] + " " + GEN[b[1] - 1] + " " + a[0];
+  return dGen(s) + " " + a[0] + " – " + dGen(e) + " " + b[0];
+}
+function w(p){ return ' style="width:' + Math.max(0, Math.min(100, p)).toFixed(1) + '%"'; }
+function cols(c){ return ' style="--cols:' + c + '"'; }
+
+/* ── состояние ── */
+var S = { theme: "light", tab: "overview", month: null, period: "month", tripId: null,
+          merchAll: false, cmpAll: false, chart: "spend", catOpen: {}, catFresh: null, yoy: [], H: null, Sp: null, T: null, F: null,
+          loading: true, error: null, missing: [], dynScrolled: false };
+try { if (localStorage.getItem("hub-theme") === "dark") S.theme = "dark"; } catch(e){}
+try { var savedTab = localStorage.getItem("money-tab"); if (savedTab === "stmt") savedTab = "csv"; if (TABS.some(function(t){ return t[0] === savedTab; })) S.tab = savedTab; } catch(e){}
+function set(p){ for (var k in p) S[k] = p[k]; render(); }
+
+/* ── данные ── */
+/* authFetch() — общий, из ui-kit.js (там же credentials:"omit" и метка
+   отвергнутого пароля). */
+
+function load(name){
+  return authFetch(uiBust("money", DATA + name),   // метка «Обновить» — ui-kit
+                   { headers: { "Accept": "application/json" }, cache: "no-store" }).then(function(r){
+    if (r.status === 401 || r.status === 403) { var e = new Error("auth"); e.auth = true; throw e; }
+    if (r.status === 404) return null;
+    if (!r.ok) throw new Error(name + " → " + r.status);
+    return r.json();
+  });
+}
+function months(){
+  var set_ = {};
+  ((S.H && S.H.records) || []).forEach(function(r){ set_[r.month] = 1; });
+  ((S.Sp && S.Sp.months) || []).forEach(function(m){ set_[m.month] = 1; });
+  return Object.keys(set_).sort();
+}
+function start(){
+  if (!authToken()) { S.loading = false; S.error = "auth"; render(); goLogin(); return; }
+  uiDataReset();
+  function tally(p){ return p.then(function(v){ uiDataDone(true); return v; }, function(e){ uiDataDone(false); throw e; }); }   // подвал: источник прочитан или нет
+  Promise.all([tally(load(FILES.H)), tally(load(FILES.S)), tally(load(FILES.T)), tally(load(FILES.F)),
+               tally(load(FILES.SA)).catch(function(e){ if (e.auth) throw e; return null; })]).then(function(r){
+    uiLoginOk("money");
+    S.H = r[0]; S.Sp = r[1]; S.T = r[2]; S.F = r[3]; S.SA = r[4];   // facts.json и site-audit.json необязательны — в «Нет файла» не пишем
+    S.missing = [[r[0], FILES.H], [r[1], FILES.S], [r[2], FILES.T]].filter(function(x){ return !x[0]; }).map(function(x){ return x[1]; });
+    var ms = months();
+    S.month = ms.length ? ms[ms.length - 1] : null;
+    S.loading = false;
+    render();
+  }).catch(function(e){
+    S.loading = false;
+    if (e.auth) { S.error = "auth"; render(); goLogin(); return; }
+    S.error = "Не удалось загрузить данные: " + e.message;
+    render();
+  });
+}
+
+/* ── вход ── форму не рисуем: единая точка входа кабинета — login.html.
+   Уход и страховка от петли — общий uiGoLogin (ui-kit): только что уводили, а
+   данные опять не отдаются — второй раз не уводим, объясняем здесь. */
+function goLogin(){
+  uiGoLogin("money", function(hasTok){
+    S.error = !hasTok ? "auth"
+      : "Вход выполнен, но файлы ZenMoney/audit/ не отдаются — дело не в пароле. " +
+        "Проверь, что в Caddyfile путь /ZenMoney/* не попал в публичные исключения и что файлы лежат на NAS.";
+    render();
+  });
+}
+
+/* Прошлый месяц закрыт? null — да; иначе — что сказать человеку. Общая для
+   «Обзора»; хаб повторяет ту же проверку (moneyMeta). */
+/* Открытые замечания по месяцам — из `issues` истории (статус меняет «закрой месяц»:
+   принято/исправлено). Снимок аудита месяца (`by_check`) остаётся «что нашлось тогда». */
+function openByMonth(H){
+  var o = {};
+  Object.keys((H && H.issues) || {}).forEach(function(k){ var i = H.issues[k]; if (i.status === "open") o[i.month] = (o[i.month] || 0) + 1; });
+  return Object.keys(o).sort().map(function(m){ return { month: m, n: o[m] }; });
+}
+/* Сколько открыто сейчас и как давно — по статусам `issues` (их меняет любое «закрой месяц»,
+   в том числе повторное закрытие старого месяца). `open_total` записи — снимок на момент её
+   записи: перезакрытый январь не обновляет число в октябрьской записи. Возраст — как в
+   audit_month.age_bucket (от first_seen до сегодня: <31 дня, ≤92, дольше). Нет `issues`
+   (старый файл) — число из последней записи. */
+function openStats(H){
+  var iss = (H && H.issues) || {}, recs = (H && H.records) || [], ks = Object.keys(iss);
+  if (!ks.length){ var l = recs[recs.length - 1] || {}, a = l.open_by_age || {};
+    return { total: l.open_total || 0, lt_1m: a.lt_1m || 0, "1_3m": a["1_3m"] || 0, gt_3m: a.gt_3m || 0 }; }
+  var o = { total: 0, lt_1m: 0, "1_3m": 0, gt_3m: 0 }, now = Date.now();
+  ks.forEach(function(k){
+    var i = iss[k]; if (i.status !== "open") return;
+    var days = Math.floor((now - Date.parse((i.first_seen || "") + "T00:00:00")) / 864e5);
+    o.total++; o[!(days >= 31) ? "lt_1m" : days <= 92 ? "1_3m" : "gt_3m"]++;
+  });
+  return o;
+}
+function openMonthsHTML(H){
+  return openByMonth(H).map(function(x){
+    return '<button type="button" class="ui-link" data-act="quality-month" data-v="' + x.month + '">' + esc(mTitle(x.month)) + ' — ' + x.n + '</button>';
+  }).join(" · ");
+}
+
+/* Аудит сайта (site-audit.json): проверки, которые сайт прогнал при загрузке выгрузки; только агрегаты.
+   Аудит скилла (history.json) главнее и при появлении заменяет его. */
+var SITE_HINT = "проверки сайта при загрузке выгрузки; аудит скилла полнее и при появлении заменит этот";
+function siteAuditOf(m){ var x = S.SA && S.SA.months && S.SA.months[m]; return x && Array.isArray(x.checks) ? x : null; }
+function siteTag(){ return '<span class="ui-tag" title="' + esc(SITE_HINT) + '">аудит сайта</span>'; }
+function siteN(sa){ return (sa.checks || []).reduce(function(n, c){ return n + (c.count || 0); }, 0); }
+function unclosed(m){
+  var sp = ((S.Sp && S.Sp.months) || []).some(function(x){ return x.month === m; });
+  var au = ((S.H && S.H.records) || []).some(function(x){ return x.month === m; });
+  var nm = NOM[ym(m)[1]];
+  if (sp && au) return null;
+  if (sp && siteAuditOf(m)) return null;       // закрыт «по сайту»: итоги трат и проверки сайта
+  if (!sp && !au) return uiAiMode() === "off" ? cap(nm) + " ещё не закрыт." : cap(nm) + " ещё не закрыт — скажи Claude «закрой " + nm + "».";
+  return cap(nm) + " закрыт не полностью: нет " + (sp ? "аудита учёта" : "итогов трат") + '<span class="noai-hide"> — ' + (sp ? "«проверь учёт за " + nm + "»" : "«закрой " + nm + "»") + "</span>.";
+}
+
+/* ── факты «на что взглянуть» ── facts.json пишет скилл (audit_history.py) на
+   последний закрытый месяц. Страница ничего не считает: только подписи. Факты
+   старше последнего месяца итогов (файл не пересчитан) — не показываем. */
+function facts(){
+  var all = (S.Sp && S.Sp.months) || [];
+  if (!S.F || !S.F.facts || !all.length || S.F.month !== all[all.length - 1].month) return null;
+  return S.F;
+}
+function flagOf(cat){ var f = facts(); return f && f.flagged_categories ? f.flagged_categories[cat] || null : null; }
+// со знаком; от 10% — целыми процентами («+171%», а не «+171,3%»)
+function sgn(v){ var a = Math.abs(v); return (v > 0 ? "+" : v < 0 ? "−" : "") + (a >= 0.1 ? Math.round(a * 100) + "%" : pct(a)); }
+var FLAG_WHY = { jump: "последние 3 месяца выше обычного", growth: "растёт быстрее остальных обычных трат" };
+function flagMark(cat){
+  var k = flagOf(cat); if (!k) return "";
+  var t = "заметно: " + k.map(function(x){ return FLAG_WHY[x] || x; }).join("; ");
+  return ' <b class="ui-up" title="' + esc(t) + '" aria-label="' + esc(t) + '">●</b>';
+}
+/* Пояснение к факту по категории: чаще или дороже, за счёт каких подкатегорий.
+   Новая подкатегория — «новая статья с <месяц>», без процента (часто это
+   перестановка учёта, а не новые траты). */
+function explainTxt(e){
+  if (!e) return "";
+  var out = [];
+  if (e.count_change != null && Math.abs(e.count_change) >= 0.1)
+    out.push("покупок " + num(e.count_per_month[0]) + " → " + num(e.count_per_month[1]) + " в месяц");
+  if (e.avg_check_change != null && Math.abs(e.avg_check_change) >= 0.05) out.push("средний чек " + sgn(e.avg_check_change));
+  (e.sub || []).filter(function(x){ return x.new_since; }).slice(0, 2).forEach(function(x){
+    out.push("новая статья «" + x.name + "» с " + GEN[ym(x.new_since)[1]]);
+  });
+  var up = (e.sub || []).filter(function(x){ return !x.new_since && x.change != null && x.change > 0.1 && x.per_month - x.per_month_base >= 1000; })
+                        .sort(function(a, b){ return (b.per_month - b.per_month_base) - (a.per_month - a.per_month_base); })[0];
+  if (up) out.push("«" + up.name + "» " + sgn(up.change));
+  return out.join(" · ");
+}
+function monRange(w){ return SH[ym(w[0])[1]] + " ’" + w[0].slice(2, 4) + " – " + SH[ym(w[1])[1]] + " ’" + w[1].slice(2, 4); }
+/* Подпись факта: { t — что, s — подробности, act/v — куда перейти }. */
+function factText(f){
+  if (f.kind === "unrecorded_rising")
+    return { t: "Незаписанные траты растут " + pl(f.series.length, ["месяц", "месяца", "месяцев"]) + " подряд",
+             s: f.series.map(function(x){ return pct(x.share); }).join(" → ") + " от трат · " + f.series.map(function(x){ return NOM[ym(x.month)[1]]; }).join(", "),
+             act: "tab", v: "quality", link: "Качество учёта →" };
+  if (f.kind === "minus_months")
+    return { t: pl(f.count, ["месяц", "месяца", "месяцев"]) + " из 12 с минусом — год назад " + f.count_prev,
+             s: f.months.map(function(x){ return NOM[ym(x.month)[1]] + (x.with.length ? " (" + x.with.map(function(k){ return k === "trips" ? "поездка" : "разовая"; }).join(", ") + ")" : ""); }).join(", "),
+             act: "go-net", v: "", link: "Остаток →" };
+  if (f.kind === "acceleration")
+    return { t: "Обычные траты растут быстрее, чем год назад",
+             s: "за 12 мес. (" + monRange(f.window) + ") " + sgn(f.growth) + ", годом ранее " + sgn(f.growth_prev) + " · в месяц " + K(f.per_month_prev) + " → " + K(f.per_month),
+             act: "yoy-fact", v: "", link: "Сравнить с прошлым годом →" };
+  var ex = explainTxt(f.explain);
+  if (f.kind === "growth")
+    return { t: f.category + ": " + sgn(f.growth) + " к тем же месяцам год назад",
+             s: "остальные обычные траты " + sgn(f.others_growth) + " · в месяц " + K(f.per_month_base) + " → " + K(f.per_month) + (ex ? " · " + ex : ""),
+             act: "yoy-fact", v: "", link: "Сравнить с прошлым годом →" };
+  return { t: f.category + ": последние 3 месяца выше обычного",
+           s: K(f.recent_avg_rub) + " в месяц при обычных " + K(f.median_rub) + " (×" + num(f.ratio) + ")" + (ex ? " · " + ex : ""),
+           act: "yoy-fact", v: "", link: "Сравнить с прошлым годом →" };
+}
+function factsCard(){
+  var f = facts(); if (!f || !f.facts.length || S.month !== f.month) return "";
+  return '<div class="ui-card ui-mt-m"><div class="ui-kicker">На что взглянуть</div>' +
+    f.facts.slice(0, 3).map(function(x, i){
+      // факты о тратах открывают окно «к прошлому году» поверх Обзора (номер факта)
+      var q = factText(x); if (q.act === "yoy-fact") q.v = String(i);
+      // вся строка — кнопка (без ссылки справа: на телефоне она сжимала текст,
+      // на компьютере в неё приходилось целиться); куда ведёт — в подсказке
+      return '<div class="ui-row pick"' + cols("auto minmax(0,1fr) auto") + ' data-act="' + q.act + '" data-v="' + esc(q.v) + '" role="button" tabindex="0" title="' + esc(q.link.replace(" →", "")) + '">' +
+        '<span class="ui-dot warn"></span><span class="ui-two"><span>' + esc(q.t) + '</span><span class="ui-note">' + esc(q.s) + '</span></span><span class="ui-chev">›</span></div>';
+    }).join("") +
+    '<div class="ui-note ui-mt-s">факты, а не оценки: что изменилось сильнее обычного по твоей же истории</div></div>';
+}
+
+/* ═══ вкладка «Обзор» ═════════════════════════════════════════════════════
+   Ответы на 4 вопроса за 5 секунд: всё ли закрыто, сколько ушло на жизнь,
+   сколько осталось от дохода, в порядке ли учёт — и куда ушло / поездки.
+   Своих расчётов нет: те же функции, что у вкладок (spendWindow, catRows,
+   tripSegs, colChart), поэтому цифры обзора и вкладок не расходятся. */
+function tabOverview(){
+  var all = (S.Sp && S.Sp.months) || [], recs = (S.H && S.H.records) || [];
+  if (!all.length && !recs.length) return empty("Данных пока нет", "Скажи Claude «закрой месяц» — итоги появятся здесь.", "noai-hide");
+  var month = S.month, i = all.map(function(m){ return m.month; }).indexOf(month);
+  var m = i >= 0 ? all[i] : null;
+  var r = recs.filter(function(x){ return x.month === month; })[0];
+
+  // статус: что сделать — или «всё закрыто»
+  var now = new Date(), exp = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  var expected = exp.getFullYear() + "-" + String(exp.getMonth() + 1).padStart(2, "0");
+  // «Закрыт» = есть и итоги трат, и аудит учёта (их пишет одно «закрой месяц»).
+  // Смотрим ПРОШЛЫЙ КАЛЕНДАРНЫЙ месяц, а не последний закрытый: с пропусками
+  // в истории «сентябрь закрыт» не значит, что закрыт август.
+  var ms = months(), lastClosed = ms[ms.length - 1];
+  var todo = [], unc = unclosed(expected);
+  if (unc) todo.push('<span class="ui-grow">' + unc + '</span>');
+  var open = openStats(S.H).total;
+  var om = openMonthsHTML(S.H);
+  if (open) todo.push('<span class="ui-grow">' + pl(open, ["замечание", "замечания", "замечаний"]) + ' в учёте открыто' + (om ? ' (' + om + ')' : '') + ' — исправляются в приложении ZenMoney.</span><button type="button" class="ui-link" data-act="tab" data-v="quality">Качество учёта →</button>');
+  var lastRec = recs.filter(function(x){ return x.month === lastClosed; })[0];
+  var lastSite = !lastRec && siteAuditOf(lastClosed);
+  var status = '<div class="ui-card ui-status">' + (todo.length
+    ? todo.map(function(t){ return '<div class="ui-kv flat"><span class="ui-dot warn"></span>' + t + '</div>'; }).join("")
+    : '<div class="ui-kv flat"><span class="ui-dot"></span><span class="ui-grow">' + mTitle(lastClosed) + ' закрыт' + (lastRec ? ' ' + dGen(lastRec.as_of) : lastSite ? ' по сайту ' + dGen(lastSite.as_of) : '') +
+      (lastSite ? ' · проверок сайта: отметок ' + siteN(lastSite) + ' ' + siteTag() : ' · учёт в порядке') + '</span></div>') + '</div>';
+
+  // плитка 1 — обычные траты
+  var t1, t2;
+  if (m){
+    var win = spendWindow(all, i, "month"), reg = m.totals.expense_regular_rub || 0;
+    var avg = win.prior.length ? regSum(win.prior) / win.prior.length : 0, d = avg ? reg / avg - 1 : 0;
+    t1 = '<div class="ui-card ui-tile">' +
+      '<div class="ui-head split flat"><span class="ui-kicker">Обычные траты</span><button type="button" class="ui-link" data-act="tab" data-v="spend">Траты →</button></div>' +
+      '<div class="ui-big">' + K(reg) + '</div>' +
+      '<div class="ui-sub">' + (avg ? '<b class="ui-strong' + (d > 0.05 ? " ui-up" : d < -0.05 ? " ui-down" : "") + '">' + (d > 0 ? "+" : d < 0 ? "−" : "") + Math.round(Math.abs(d) * 100) + '%</b> к среднему за ' + range(win.prior) + ' (' + K(avg) + ')' : 'сравнивать пока не с чем') + '</div>' +
+      colChart({ all: all, sel: [m], id: "ov-reg", mode: "reg", compact: true }) + '</div>';
+    // плитка 2 — осталось от дохода: доход − расходы (те же очищенные, что на «Тратах»)
+    var tt = m.totals, left = tt.income_rub - tt.expense_rub;
+    t2 = '<div class="ui-card ui-tile">' +
+      '<div class="ui-kicker">Осталось от дохода</div>' +
+      '<div class="ui-big' + (left < 0 ? " warn" : "") + '">' + K(left) + (tt.income_rub ? ' <span class="ui-unit">' + Math.round(left / tt.income_rub * 100) + '% дохода</span>' : '') + '</div>' +
+      '<div class="ui-sub">доходы ' + K(tt.income_rub) + ' · расходы ' + K(tt.expense_rub) + '</div>' +
+      colChart({ all: all, sel: [m], id: "ov-left", mode: "net", compact: true, noLegend: true }) +
+      '<div class="ui-note">расходы — все, с поездками и разовыми; без инвестиций, кешбэка и расчётов с партнёром</div></div>';
+  } else {
+    t1 = '<div class="ui-card ui-tile"><div class="ui-kicker">Обычные траты</div><div class="ui-sub">итогов за ' + NOM[ym(month)[1]] + ' нет<span class="noai-hide"> — «закрой ' + NOM[ym(month)[1]] + '»</span></div></div>';
+    t2 = '<div class="ui-card ui-tile"><div class="ui-kicker">Осталось от дохода</div><div class="ui-sub">итогов за месяц нет</div></div>';
+  }
+  // плитка 3 — качество учёта
+  var t3 = '<div class="ui-card ui-tile">' +
+    '<div class="ui-head split flat"><span class="ui-kicker">Качество учёта</span><button type="button" class="ui-link" data-act="tab" data-v="quality">Подробно →</button></div>' +
+    (r ? '<div class="ui-big">' + pct(r.clean_share_rub || 0) + ' <span class="ui-unit">без замечаний</span></div>' +
+         '<div class="ui-kv"><span class="ui-grow">Незаписанные траты</span><span class="ui-r ui-strong">' + (r.correction_rub ? K(r.correction_rub) + ' · ' + pct(r.correction_share_of_expense || 0) : '0 ₽') + '</span></div>' +
+         '<div class="ui-kv"><span class="ui-grow">Открыто замечаний</span><span class="ui-r ui-strong' + (open ? ' ui-up' : '') + '">' + open + '</span></div>' +
+         '<div class="ui-kv"><span class="ui-grow">Выведено вне учёта</span><span class="ui-r">' + (r.correction_transfer_out_rub ? K(r.correction_transfer_out_rub) : '0 ₽') + '</span></div>' +
+         '<div class="ui-note">аудит ' + dGen(r.as_of) + ' · ' + pl(r.operations, ["операция", "операции", "операций"]) + '</div>'
+       : '<div class="ui-sub">аудита за ' + NOM[ym(month)[1]] + ' нет — «проверь учёт за ' + NOM[ym(month)[1]] + '»</div>') + '</div>';
+
+  // куда ушло — топ-5 категорий обычных трат
+  var where;
+  if (m){
+    var wn = spendWindow(all, i, "month"), cr = catRows(agg([m]).cats, wn.prior, 1), cmax = cr.length ? cr[0][1] : 1;
+    var C = "minmax(84px,1fr) minmax(0,1.6fr) 56px 50px";
+    where = '<div class="ui-card"><div class="ui-head split flat"><span class="ui-kicker">Куда ушло · обычные траты</span><button type="button" class="ui-link" data-act="tab" data-v="spend">все категории →</button></div>' +
+      cr.slice(0, 5).map(function(c){
+        return '<div class="ui-row tight"' + cols(C) + '><span class="ui-ell" title="' + esc(c[0]) + '">' + esc(shortCat(c[0])) + '</span><span class="ui-bar"><i' + w(c[1] / cmax * 100) + '></i></span>' +
+          '<span class="ui-r ui-strong">' + k1(c[1]) + '</span><span class="ui-r ui-note ' + c[3] + '">' + c[2] + '</span></div>';
+      }).join("") +
+      '<div class="ui-note ui-mt-s">тыс. ₽' + (wn.prior.length >= 3 ? ' · стрелки — к среднему за ' + range(wn.prior) : ' · сравнение — когда будет 3 месяца до') + '</div></div>';
+  } else where = '<div class="ui-card"><div class="ui-kicker">Куда ушло</div><div class="ui-sub ui-mt-s">итогов за месяц нет</div></div>';
+
+  // поездки — 2 последние закрытые + незакрытые (по «Тратам», ещё без карточки)
+  var closed = ((S.T && S.T.trips) || []).slice().sort(function(x, y){ return y.period.end.localeCompare(x.period.end); });
+  var closedNames = {}; closed.forEach(function(x){ closedNames[x.trip.name] = 1; });
+  // Поездки без итогов (нет в trips.json): только недавние — в выбранном месяце
+  // или в месяце до него; старые без итогов живут во вкладке «Траты».
+  var openTrips = {}, recent = {};
+  all.forEach(function(mm){ (mm.trips || []).forEach(function(x){
+    if (closedNames[x.name]) return;
+    openTrips[x.name] = (openTrips[x.name] || 0) + x.rub;
+    if (mm.month === month || mm.month === addM(month, -1)) recent[x.name] = 1;
+  }); });
+  var trips = '<div class="ui-card"><div class="ui-head split flat"><span class="ui-kicker">Поездки</span><button type="button" class="ui-link" data-act="tab" data-v="trips">все поездки →</button></div>' +
+    closed.slice(0, 2).map(function(x){
+      return '<div class="ui-trip" data-act="trip-open" data-v="' + esc(x.trip.id) + '" role="button" tabindex="0">' +
+        '<div class="ui-kv flat"><span class="ui-two"><span class="ui-two-t">' + esc(x.trip.name) + '</span><span class="ui-note">' + dRange(x.period.start, x.period.end) + ' · ' + days(x.period.days) + '</span></span>' +
+        '<span class="ui-two ui-r"><span class="ui-strong">' + K(x.totals.spent_rub) + '</span><span class="ui-note">≈ ' + K(x.totals.per_day_during_rub) + ' в день</span></span></div>' +
+        '<div class="ui-stack sm">' + tripSegs(x) + '</div></div>';
+    }).join("") +
+    Object.keys(recent).filter(function(n){ return openTrips[n] > 0; }).map(function(n){
+      return '<div class="ui-kv"><span class="ui-two"><span>' + esc(n) + '</span><span class="ui-note">итогов поездки ещё нет — «посчитай траты на поездку»</span></span><span class="ui-r">' + K(openTrips[n]) + ' по месяцам</span></div>';
+    }).join("") +
+    (closed.length ? '<div class="ui-legend">' + GROUPS.map(function(g){ return '<span><i class="ui-sw wide lv' + g[2] + '"></i>' + g[0] + '</span>'; }).join("") + '</div>'
+                   : '<div class="ui-sub ui-mt-s">закрытых поездок пока нет</div>') + '</div>';
+
+  return status + factsCard() +
+    '<div class="ui-grid kpi ui-mt-m">' + t1 + t2 + t3 + '</div>' +
+    '<div class="ui-grid ui-mt-m">' + where + trips + '</div>';
+}
+
+/* ═══ вкладка «Качество учёта» ═══════════════════════════════════════════ */
+/* «Качество учёта» по аудиту сайта — когда аудита скилла за месяц нет */
+function siteQuality(month, sa){
+  var nm = NOM[ym(month)[1]], cks = sa.checks || [];
+  var h = '<div class="ui-card" id="site-audit">' +
+    '<div class="ui-head split flat"><span class="ui-kicker">Проверки сайта · ' + esc(mTitle(month)) + '</span>' + siteTag() + '</div>' +
+    '<div class="ui-note ui-mt-s">' + esc(SITE_HINT.charAt(0).toUpperCase() + SITE_HINT.slice(1)) + '. Проверено ' + esc(dGen(sa.as_of)) + '.</div>' +
+    (cks.length ? cks.map(function(c){
+      return '<div class="ui-kv"><span class="ui-dot' + (c.cls === "warn" ? " warn" : "") + '"></span><span class="ui-grow">' + esc(c.text) +
+        (c.cls === "warn" ? ' <span class="ui-tag need">важно</span>' : '') + '</span><span class="ui-muted ui-r ui-num">' + (c.count || 0) + '</span></div>';
+    }).join("") : '<div class="ui-text ui-muted ui-mt-s">Сайт при загрузке ничего не отметил.</div>') + '</div>' +
+    '<p class="ui-note ui-mt-m">Это подсказки к выгрузке, не полный аудит учёта' +
+    '<span class="noai-hide">: скажи Claude «проверь учёт за ' + nm + '» — аудит скилла заменит этот</span>.</p>';
+  return h;
+}
+function tabQuality(){
+  var H = S.H, month = S.month;
+  var skillRec = ((H && H.records) || []).some(function(x){ return x.month === month; });
+  var siteA = siteAuditOf(month);
+  if (!skillRec && siteA) return siteQuality(month, siteA);
+  if (!H || !H.records || !H.records.length)
+    return empty("Аудитов учёта пока нет", "Скажи Claude «закрой месяц» — скилл zenmoney-analyst проверит учёт и запишет итог сюда.", "noai-hide");
+  var recs = H.records;
+  var r = recs.filter(function(x){ return x.month === month; })[0];
+  if (!r) return empty("Аудита за " + NOM[ym(month)[1]] + " нет", "Есть только статистика трат. Скажи Claude «проверь учёт за " + NOM[ym(month)[1]] + "».");
+  // открытые по всей истории — по статусам issues (openStats), не по снимку open_total записи
+  var ost = openStats(H);
+  var sp = S.Sp && (S.Sp.months || []).filter(function(m){ return m.month === month; })[0];
+  var inTrip = sp && (sp.trips || []).some(function(t){ return t.rub > 0; });
+  var age = ost;
+  var codes = ["A1", "A2", "A3", "A4", "A5"];
+  var bc = r.by_check || {};
+  var tot = codes.reduce(function(s, c){ return s + ((bc[c] || {}).rub || 0); }, 0);
+  var flagged = codes.reduce(function(s, c){ return s + ((bc[c] || {}).count || 0); }, 0);
+  var issues = Object.keys(H.issues || {}).map(function(k){ return H.issues[k]; });
+  var here = issues.filter(function(i){ return i.month === month; });
+  // Аудит месяца проверяет все A1–A5 всегда; audit_month.py кладёт в by_check
+  // только сработавшие типы (A2–A4 — всегда, A1/A5 — если что-то нашлось),
+  // поэтому нет ключа = ноль, а не «проверка не шла» (так ошибался макет).
+  // Число и сумма в строках — что нашёл аудит месяца; открыто ли — по статусам `issues`
+  // (решения «это норма» / «исправил» приходят позже снимка). Нет записей в issues — считаем открытым.
+  var tracked = here.length > 0;
+  var openOf = function(c){ return tracked ? here.filter(function(i){ return i.check === c && i.status === "open"; }).length : ((bc[c] || {}).count || 0); };
+  var openHere = codes.reduce(function(s, c){ return s + openOf(c); }, 0);
+  var checks = codes.map(function(c){
+    var v = bc[c] || { count: 0, rub: 0 }, op = openOf(c);
+    return { label: LBL[c] + (v.count && !op ? " · разобрано" : v.count && op < v.count ? " · открыто " + op : ""), count: v.count, sum: v.rub ? K(v.rub) : "—", w: tot ? v.rub / tot * 100 : 0, on: op > 0 };
+  });
+  var acc = here.filter(function(i){ return i.status === "accepted"; }).length;
+  var fix = here.filter(function(i){ return i.status === "fixed"; }).length;
+  var closed = [acc ? "принято как есть " + acc : "", fix ? "исправлено " + fix : ""].filter(Boolean).join(", ");
+  var caption = openHere
+    ? pl(openHere, ["замечание", "замечания", "замечаний"]) + (openHere === flagged ? " на " + K(tot) : "") + " открыто — исправить в приложении ZenMoney" + (closed ? " · " + closed : "") + "."
+    : "Замечаний нет — всё разобрано" + (closed ? " · за месяц " + closed : "") + "."; 
+  var corr = r.correction_rub || 0, share = r.correction_share_of_expense || 0;
+  var openTotal = ost.total;
+
+  var tiles =
+    '<div class="ui-grid tiles">' +
+      tile("Без замечаний",
+        '<div class="ui-big">' + pct(r.clean_share_count) + ' <span class="ui-unit">операций</span></div>',
+        '<div class="ui-sub">' + pct(r.clean_share_rub) + ' оборота · ' + pl(r.operations, ["операция", "операции", "операций"]) + '</div>') +
+      // Сначала рубли, потом доля: «5,8%» первым читается как «незаписанного 5,8% учёта».
+      tile("Незаписанные траты",
+        '<div class="ui-big">' + (corr ? K(corr) : "0 ₽") + '</div>',
+        '<div class="ui-sub">' + pct(share) + ' от ' + K(r.expense_rub || 0) + ' трат с корректировками</div>' +
+        '<div class="ui-note">' + (corr ? (inTrip ? "корректировки кошелька в поездке" : "корректировки остатков") : "корректировок не было") + '</div>') +
+      tile("Открыто замечаний",
+        '<div class="ui-big' + (openTotal ? " warn" : "") + '">' + openTotal + '</div>',
+        '<div class="ui-sub">до месяца ' + (age.lt_1m || 0) + ' · 1–3 мес ' + (age["1_3m"] || 0) + ' · дольше ' + (age.gt_3m || 0) + '</div>' +
+        '<div class="ui-note">по всей истории' + (openTotal && openMonthsHTML(H) ? ': ' + openMonthsHTML(H) : '') + '</div>') +
+      tile("Выведено вне учёта",
+        '<div class="ui-big">' + (r.correction_transfer_out_rub ? K(r.correction_transfer_out_rub) : "0 ₽") + '</div>',
+        '<div class="ui-note">переводы себе на счета, которых нет в ZenMoney — не траты, в долю не входят</div>') +
+    '</div>';
+
+  var cmax = Math.max(0.1, Math.max.apply(null, recs.map(function(x){ return (x.correction_share_of_expense || 0) * 1.3; })));
+  var charts =
+    '<div class="ui-grid">' +
+      spark(recs, month, "Без замечаний, % оборота", function(x){ return x.clean_share_rub || 0; }, 1, "100%",
+        function(x){ return pct(x.clean_share_rub || 0) + " оборота · " + pct(x.clean_share_count || 0) + " операций"; }) +
+      spark(recs, month, "Незаписанные траты, % трат", function(x){ return x.correction_share_of_expense || 0; }, cmax, pct(cmax),
+        function(x){ return (x.correction_rub ? K(x.correction_rub) : "0 ₽") + " · " + pct(x.correction_share_of_expense || 0) + " трат"; }) +
+    '</div>';
+
+  var C = "minmax(0,1fr) 44px 86px minmax(40px,90px)";
+  var table =
+    '<div class="ui-card acc">' +
+      (flagged ?
+        '<div class="ui-row head"' + cols(C) + '><span>Тип</span><span class="ui-r">Число</span><span class="ui-r">Сумма</span><span></span></div>' +
+        checks.map(function(x){
+          return '<div class="ui-row"' + cols(C) + '><span>' + esc(x.label) + '</span>' +
+            '<span class="ui-r' + (x.on ? " ui-strong" : "") + '">' + x.count + '</span>' +
+            '<span class="ui-r ui-muted">' + x.sum + '</span>' +
+            '<span class="ui-bar thin"><i' + w(x.w) + '></i></span></div>';
+        }).join("") : "") +
+      '<div class="ui-text ui-muted' + (flagged ? " ui-mt-m" : "") + '">' + esc(caption) + '</div>' +
+    '</div>';
+
+  var unc = Object.keys(r.unconverted || {});
+  var complete = [
+    ["Траты вне баланса без тега поездки", r.b7_count ? r.b7_count + " на " + K(r.b7_rub) : "нет", !!r.b7_count],
+    ["Банки синхронизируются", r.b6_count ? "молчат: " + r.b6_count : "без пауз", !!r.b6_count],
+    ["Валютные суммы", unc.length ? "не пересчитаны: " + unc.map(function(c){ return c + " " + r.unconverted[c]; }).join(", ") : "по курсу на дату", unc.length > 0]
+  ];
+  // места платежа месяца (скилл 2.15.0, handoff 2.3): только числа; списки — в чате по
+  // «закрой месяц» / «проверь места платежа» (длинные, меняются после каждой правки)
+  var pc = r.places_counts, pn = function(k){ return (pc && pc[k]) || 0; };
+  var pMerge = pn("twins") + pn("split"), pRen = pn("rename") + pn("bank_text"), pFree = pn("unlinked");
+  var pAll = pMerge + pRen + pFree;
+  complete.push(["Места платежа", !pc ? "не проверялись" : pAll ? pl(pAll, ["место", "места", "мест"]) + " поправить" : "в порядке", pAll > 0]);
+  var placesNote = pAll ? '<div class="ui-note">' + [pMerge ? "совместить " + pMerge : "", pRen ? "переименовать " + pRen : "", pFree ? "без места " + pFree : ""]
+      .filter(Boolean).join(", ") + ' — в приложении ZenMoney<span class="noai-hide">; список — скажи Claude «проверь места платежа»</span></div>' : "";
+  var cc = r.c_counts;
+  var qtr = [["Похожие названия", "C9"], ["Неиспользуемые категории", "C11"], ["Поездки не убраны в «Путешествия»", "C12"]];
+  var lower =
+    '<div class="ui-grid ui-mt-m">' +
+      '<div class="ui-card"><div class="ui-kicker">Полнота учёта</div>' +
+        complete.map(function(x){
+          return '<div class="ui-kv"><span class="ui-dot' + (x[2] ? " warn" : "") + '"></span><span class="ui-grow">' + esc(x[0]) + '</span><span class="ui-muted ui-r">' + esc(x[1]) + '</span></div>';
+        }).join("") + placesNote +
+      '</div>' +
+      '<details class="ui-card ui-fold"><summary><span class="ui-grow"><span class="ui-kicker">Структура категорий</span>' +
+        '<span class="ui-sub ui-faint ui-block">' + (cc ? "квартальная проверка · " + mTitle(month) : "проверка раз в квартал, ещё не проводилась") + '</span></span>' +
+        '<span class="ui-chev">▾</span></summary>' +
+        '<div class="ui-mt-s">' + qtr.map(function(x){
+          return '<div class="ui-kv first"><span>' + x[0] + '</span><span class="ui-muted ui-num">' + (cc ? String(cc[x[1]] == null ? 0 : cc[x[1]]) : "—") + '</span></div>';
+        }).join("") + '</div>' +
+      '</details>' +
+    '</div>';
+
+  return tiles + sechead("По месяцам") + charts + sechead("Замечания по типам") + table + lower +
+    (siteA ? '<p class="ui-note ui-mt-m" id="site-audit-line">сайт при загрузке отметил: ' + siteN(siteA) + '</p>' : '') +
+    '<p class="ui-note ui-mt-l">Замечания исправляются в приложении ZenMoney; при следующем аудите они закроются здесь сами.</p>';
+}
+
+function tile(k, big, rest){ return '<div class="ui-card ui-tile"><div class="ui-kicker">' + k + '</div>' + big + rest + '</div>'; }
+function sechead(t, aside){ return '<div class="ui-sechead"><h3>' + t + '</h3><span class="ui-rule"></span>' + (aside ? '<span class="ui-note">' + aside + '</span>' : '') + '</div>'; }
+function empty(t, s, cls){ return '<div class="ui-empty"><div class="ui-empty-t">' + esc(t) + '</div><div class="ui-sub ui-mt-s' + (cls ? " " + cls : "") + '">' + esc(s) + '</div></div>'; }
+
+/* мини-график: точки — кнопки (клик выбирает месяц), подсказка — title */
+function spark(series, month, title, val, ymax, top, text){
+  // ось — календарь: пропущенный месяц (аудита не было) оставляет место
+  var cal = calRange(series[0].month, series[series.length - 1].month), n = series.length, nc = cal.length;
+  var pts = series.map(function(x){
+    var ci = cal.indexOf(x.month);
+    var xx = nc === 1 ? 50 : 6 + ci * (88 / (nc - 1));
+    var yy = 100 - Math.min(1, val(x) / ymax) * 100;
+    return [xx, yy];
+  });
+  var hi = Math.max(0, series.map(function(x){ return x.month; }).indexOf(month));
+  var sel = series[hi];
+  return '<div class="ui-card acc"><div class="ui-sub ui-strong">' + title + '</div>' +
+    '<div class="ui-spark">' +
+      '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="' + pts.map(function(q){ return q[0] + "," + q[1]; }).join(" ") + '"/></svg>' +
+      '<span class="ui-spark-top">' + top + '</span>' +
+      series.map(function(x, i){
+        return '<button type="button" class="ui-spark-pt' + (i === hi ? " on" : "") + '" data-act="month" data-v="' + x.month + '" style="left:' + pts[i][0] + '%; top:' + pts[i][1] + '%" title="' + esc(mTitle(x.month) + ": " + text(x)) + '" aria-label="' + esc(mTitle(x.month) + ": " + text(x)) + '"></button>';
+      }).join("") +
+      (n === 1 ? '<span class="ui-spark-empty">одна точка — тренда пока нет</span>' : '') +
+    '</div>' +
+    '<div class="ui-spark-x">' + cal.map(function(m){ var has = series.some(function(x){ return x.month === m; }); return '<span' + (has ? '' : ' class="ui-faint"') + '>' + SH[ym(m)[1]] + '</span>'; }).join("") + '</div>' +
+    '<div class="ui-sep-top ui-text ui-num"><span><b class="ui-strong">' + mTitle(sel.month) + ':</b> <span class="ui-muted">' + esc(text(sel)) + '</span></span></div>' +
+  '</div>';
+}
+
+/* ═══ вкладка «Траты» ══════════════════════════════════════════════════ */
+/* id строки и графика категории — по названию, не по месту в списке: список
+   сортируется по сумме выбранного месяца, и после клика по столбику «cat-3»
+   оказывался другой категорией — якорь терялся, страница прыгала. */
+function catKey(name){ return encodeURIComponent(name).replace(/%/g, "_"); }
+function agg(list){
+  var t = {}, cats = {}, subs = {}, trips = {}, mer = {}, rest = {}, ex = {}, ms = 0, me = 0, oneOff = [], kinds = true;
+  list.forEach(function(m){
+    Object.keys(m.totals).forEach(function(k){ t[k] = (t[k] || 0) + m.totals[k]; });
+    (m.categories_regular || []).forEach(function(c){ cats[c.name] = (cats[c.name] || 0) + c.rub; });
+    // подкатегории обычных трат (с 2026-10-06; в старых записях нет — блока не будет)
+    (m.subcategories_regular || []).forEach(function(c){ var o = subs[c.parent] || (subs[c.parent] = {}); o[c.name] = (o[c.name] || 0) + c.rub; });
+    (m.trips || []).forEach(function(c){ trips[c.name] = (trips[c.name] || 0) + c.rub; });
+    /* С 2026-10 у места есть kind: обычное и разовое — разные строки, места
+       поездок не пишутся. В старых записях kind нет — места общие. */
+    if (!m.one_off) kinds = false;
+    (m.merchants || []).forEach(function(c){
+      if (c.kind === "one_off") return;
+      /* «прочие» категории (с 2026-10-06): остальные места и траты без места —
+         чтобы места категории в сумме давали её итог */
+      if (c.rest){ var q = rest[c.category] || (rest[c.category] = { rub: 0, count: 0 }); q.rub += c.rub; q.count += c.count; return; }
+      var key = c.name.toLowerCase().replace(/ё/g, "е") + "|" + c.category;
+      var o = mer[key] || (mer[key] = { name: c.name, category: c.category, rub: 0, count: 0 });
+      o.rub += c.rub; o.count += c.count;
+    });
+    var exm = m.excluded || {};
+    Object.keys(exm).forEach(function(k){ var o = ex[k] || (ex[k] = { e: 0, i: 0 }); o.e += exm[k].expense_rub || 0; o.i += exm[k].income_rub || 0; });
+    ms += (m.merchant_share_of_expense || 0) * m.totals.expense_rub; me += m.totals.expense_rub;
+    // Разовые поштучно — из записи; в старых записях угадываем: одна покупка,
+    // её место платежа совпадает с суммой.
+    var oo = m.totals.expense_one_off_rub;
+    if (m.one_off) m.one_off.forEach(function(c){ if (oneOff.indexOf(c.name) < 0) oneOff.push(c.name); });
+    else if (oo > 0) (m.merchants || []).forEach(function(c){ if (Math.abs(c.rub - oo) < 1) oneOff.push(c.name); });
+  });
+  var merList = Object.keys(mer).map(function(k){ return mer[k]; }).sort(function(a, b){ return b.rub - a.rub; });
+  return { t: t, cats: cats, subs: subs, trips: trips, mer: merList, ex: ex, mshare: me ? ms / me : 0, oneOff: oneOff, kinds: kinds, rest: rest };
+}
+
+/* Подпись отрезка месяцев: «Сентябрь 2026», «Июль–сентябрь 2026»,
+   «Ноябрь 2025 – январь 2026». */
+function span(list){
+  var a = ym(list[0].month), b = ym(list[list.length - 1].month);
+  if (list.length === 1) return mTitle(list[0].month);
+  if (a[0] === b[0]) return cap(NOM[a[1]]) + "–" + NOM[b[1]] + " " + a[0];
+  return cap(NOM[a[1]]) + " " + a[0] + " – " + NOM[b[1]] + " " + b[0];
+}
+/* Окно периода, который кончается месяцем all[i]: что показываем (sel), с чем
+   сравниваем (prior) и как называем. Месяц — к среднему за 3 прошлых; 3 месяца —
+   к трём перед ними; год — календарный, к прошлому году (в среднем за месяц). */
+var FULL = { month: 1, "3m": 3, year: 12 };
+/* Месяцы считаются ПО КАЛЕНДАРЮ, а не по записям: история бывает с пропусками
+   (не закрыт март — в spending.json его нет). «3 месяца до» = три календарных
+   месяца до, из них — те, что закрыты; соседние записи «февраль, апрель» —
+   не соседние месяцы. */
+function addM(m, k){ var a = ym(m), d = a[0] * 12 + a[1] + k; return Math.floor(d / 12) + "-" + String(d % 12 + 1).padStart(2, "0"); }
+function inCal(all, from, to){ return all.filter(function(x){ return x.month >= from && x.month <= to; }); }
+function calRange(from, to){ var out = []; for (var m = from; m <= to; m = addM(m, 1)) out.push(m); return out; }
+function calLabel(from, to){
+  var a = ym(from), b = ym(to);
+  if (from === to) return mTitle(from);
+  if (a[0] === b[0]) return cap(NOM[a[1]]) + "–" + NOM[b[1]] + " " + a[0];
+  return cap(NOM[a[1]]) + " " + a[0] + " – " + NOM[b[1]] + " " + b[0];
+}
+function spendWindow(all, i, period){
+  var m = all[i].month;
+  if (period === "3m"){
+    return { sel: inCal(all, addM(m, -2), m), prior: inCal(all, addM(m, -5), addM(m, -3)), label: calLabel(addM(m, -2), m), full: 3 };
+  }
+  if (period === "year"){
+    var y = ym(all[i].month)[0];
+    return { sel: all.filter(function(m){ return ym(m.month)[0] === y; }),
+             prior: all.filter(function(m){ return ym(m.month)[0] === y - 1; }), label: y + " год", year: y };
+  }
+  return { sel: [all[i]], prior: inCal(all, addM(m, -3), addM(m, -1)), label: mTitle(m) };
+}
+function regSum(list){ return list.reduce(function(s, m){ return s + (m.totals.expense_regular_rub || 0); }, 0); }
+
+function tabSpend(){
+  var all = (S.Sp && S.Sp.months) || [];
+  if (!all.length) return empty("Статистики трат пока нет", "Скажи Claude «закрой месяц» — итоги месяца появятся здесь.");
+  if (S.period === "years") return tabYears(all);
+  var si = all.map(function(m){ return m.month; }).indexOf(S.month);
+  if (si < 0) return head(mTitle(S.month)) + empty("Итогов за " + NOM[ym(S.month)[1]] + " нет", "Есть только аудит учёта. Скажи Claude «закрой " + NOM[ym(S.month)[1]] + "».");
+  var multi = S.period !== "month";
+  var win = spendWindow(all, si, S.period), sel = win.sel, prior = win.prior;
+  var a = agg(sel), t = a.t, nm = sel.length;
+  var reg = t.expense_regular_rub || 0;
+  var avgPrior = prior.length ? regSum(prior) / prior.length : 0;
+  var d = avgPrior ? (reg / nm) / avgPrior - 1 : 0;
+  var hasTrip = sel.some(function(m){ return (m.trips || []).some(function(x){ return x.rub > 0; }); });
+  var vs = S.period === "3m" ? "в месяц к трём месяцам до"
+         : S.period === "year" ? "в месяц к " + (win.year - 1) + " году"
+         : "к среднему за " + range(prior);
+  var perMonth = multi ? (nm < FULL[S.period] ? "данных за " + pl(nm, ["месяц", "месяца", "месяцев"]) + " · " : "") + "в среднем " + K(reg / nm) + " в месяц" : "";
+
+  // ── 3 плитки: обычные · все расходы · доходы и остаток ──
+  var cmpNote = hasTrip && d < 0 ? "часть времени в поездке — еда и транспорт шли в поездку"
+              : (!hasTrip && t.expense_one_off_rub > 0 ? "разовые покупки в сравнение не входят" : "");
+  var left = t.income_rub - t.expense_rub;
+  var tiles = '<div class="ui-grid kpi">' +
+    '<div class="ui-card ui-tile acc"><div class="ui-kicker">Обычные траты</div>' +
+      '<div class="ui-big">' + K(reg) + '</div>' +
+      (perMonth ? '<div class="ui-sub">' + perMonth + '</div>' : '<div class="ui-sub">без поездок и разовых покупок</div>') +
+      (prior.length ? '<div class="ui-sub"><b class="ui-strong' + (d > 0.05 ? " ui-up" : d < -0.05 ? " ui-down" : "") + '">' + (d > 0 ? "+" : d < 0 ? "−" : "") + Math.round(Math.abs(d) * 100) + '%</b> ' + vs + ' (' + K(avgPrior) + ')</div>'
+                    : '<div class="ui-sub">сравнивать пока не с чем</div>') +
+      (cmpNote ? '<div class="ui-note">' + cmpNote + '</div>' : '') + '</div>' +
+    '<div class="ui-card ui-tile"><div class="ui-kicker">Все расходы</div>' +
+      '<div class="ui-big">' + K(t.expense_rub) + '</div>' +
+      '<div class="ui-sub">поездки ' + K(t.expense_trips_rub || 0) + ' · разовые ' + K(t.expense_one_off_rub || 0) + '</div>' +
+      '<div class="ui-note">как в приложении (только счета в балансе) — ' + K(t.expense_in_balance_rub || 0) + '</div></div>' +
+    '<div class="ui-card ui-tile"><div class="ui-kicker">Доходы и остаток</div>' +
+      '<div class="ui-big">' + K(t.income_rub) + '</div>' +
+      '<div class="ui-sub">осталось <b class="ui-strong' + (left < 0 ? " ui-up" : "") + '">' + K(left) + '</b>' + (t.income_rub ? ' · ' + Math.round(left / t.income_rub * 100) + '% дохода' : '') + '</div>' +
+      '<div class="ui-note">расходы без инвестиций, кешбэка, корректировок и расчётов с партнёром</div></div>' +
+  '</div>';
+
+  // ── один график месяцев: «Траты | Остаток» ──
+  // строка выбранного периода: разбивка, которую в столбик не вписать (и на
+  // телефоне — единственный способ увидеть части без наведения)
+  // числа — жирным того же размера, подписи — приглушённые
+  function bv(x){ return '<b class="ui-strong">' + x + '</b>'; }
+  var read = S.chart === "net"
+    ? '<b class="ui-strong">' + win.label + ':</b> <span class="ui-muted">осталось</span> ' + bv(K(left)) + (t.income_rub ? ' <span class="ui-muted">·</span> ' + bv(Math.round(left / t.income_rub * 100) + '%') + ' <span class="ui-muted">дохода</span>' : '') +
+      ' <span class="ui-muted">· доходы</span> ' + bv(K(t.income_rub)) + ' <span class="ui-muted">· расходы</span> ' + bv(K(t.expense_rub))
+    : '<b class="ui-strong">' + win.label + ':</b> <span class="ui-muted">всего</span> ' + bv(K(t.expense_rub)) + ' <span class="ui-muted">· обычные</span> ' + bv(K(reg)) +
+      ' <span class="ui-muted">· поездки</span> ' + bv(K(t.expense_trips_rub || 0)) + ' <span class="ui-muted">· разовые</span> ' + bv(K(t.expense_one_off_rub || 0)) +
+      (!multi && prior.length ? ' <span class="ui-muted">· среднее обычных</span> ' + bv(K(avgPrior)) : '');
+  var chart = '<div class="ui-card">' +
+    '<div class="ui-head split flat"><span class="ui-text">' + (S.chart === "net"
+        ? '<b class="ui-strong">Осталось от дохода по месяцам</b>'
+        : '<b class="ui-strong">Траты по месяцам</b>') + '</span>' +
+      segHTML("chart", [["spend", "Траты"], ["net", "Остаток"]], S.chart, true) + '</div>' +
+    '<div class="ui-text ui-num ui-mt-s">' + read + '</div>' +
+    colChart({ all: all, sel: sel, id: "dyn", mode: S.chart === "net" ? "net" : "spend" }) +
+    (S.chart === "net" ? "" : '<div class="ui-r ui-mt-s"><button type="button" class="ui-link" data-act="yoy" data-v="" data-end="' + sel[sel.length - 1].month + '" data-sel="' + sel.map(function(m){ return m.month; }).join(",") + '">Обычные траты к прошлому году →</button></div>') + '</div>';
+
+  // ── категории: ₽, доля, мини-тренд, отклонение; клик — история и места ──
+  var cr = catRows(a.cats, prior, nm), cmax = cr.length ? cr[0][1] : 1;
+  var devShow = prior.length >= 3;
+  var trend = calRange(addM(sel[sel.length - 1].month, -5), sel[sel.length - 1].month);
+  var byM = {}; all.forEach(function(m){ byM[m.month] = m; });
+  // метки фактов — когда период доходит до месяца, на который они посчитаны
+  var F_ = facts(), showFlags = !!F_ && sel.some(function(m){ return m.month === F_.month; });
+  var cats = '<div class="ui-card flush">' +
+    '<div class="ui-row ui-catrow head"><span>Категория</span><span class="c-bar"></span><span class="ui-r">тыс. ₽</span><span class="ui-r c-share">доля</span><span class="c-trend">6 мес.</span><span class="ui-r">' + (devShow ? "к среднему" : "") + '</span>' +
+      // стрелка «все»: раскрыта хоть одна — свернуть все, иначе раскрыть все
+      (function(){ var any = cr.some(function(c){ return S.catOpen[c[0]]; });
+        return '<button type="button" class="ui-chev ui-chev-all" id="cat-all" data-act="cat-all" data-v="' + (any ? "close" : "open") + '" aria-label="' + (any ? "Свернуть все категории" : "Раскрыть все категории") + '" title="' + (any ? "Свернуть все" : "Раскрыть все") + '">' + (any ? "▴" : "▾") + '</button>'; })() + '</div>' +
+    cr.map(function(c, ci){
+      var open = !!S.catOpen[c[0]];   // раскрытых может быть несколько — соседние не схлопываются
+      var tr = trend.map(function(mm){
+        var m = byM[mm]; if (!m) return { gap: true };
+        var x = (m.categories_regular || []).filter(function(q){ return q.name === c[0]; })[0];
+        return { v: x ? x.rub : 0, on: mm === sel[sel.length - 1].month || sel.some(function(q){ return q.month === mm; }) };
+      });
+      var tmax = Math.max.apply(null, tr.map(function(q){ return q.gap ? 0 : q.v; })) || 1;
+      var devTxt = c[4] != null && c[2] !== "≈" ? (c[4] > 0 ? "+" : "−") + k1(Math.abs(c[4])) + ' тыс. <span class="ui-faint">' + c[2].replace(/[↑↓] /, c[4] > 0 ? "+" : "−") + '</span>' : c[2];
+      var row = '<div class="ui-row ui-catrow pick' + (open ? " on" : "") + '" id="cr-' + catKey(c[0]) + '" data-act="cat" data-v="' + esc(c[0]) + '" role="button" tabindex="0" aria-expanded="' + open + '">' +
+        '<span class="ui-ell" title="' + esc(c[0]) + '">' + esc(shortCat(c[0])) + (showFlags ? flagMark(c[0]) : "") + '</span>' +
+        '<span class="ui-bar c-bar"><i' + w(c[1] / cmax * 100) + '></i></span>' +
+        '<span class="ui-r ui-strong">' + k1(c[1]) + '</span>' +
+        '<span class="ui-r ui-note c-share">' + Math.round(c[1] / (reg || 1) * 100) + '%</span>' +
+        '<span class="ui-minibars c-trend">' + tr.map(function(q){ return q.gap ? '<i class="gap"></i>' : '<i class="' + (q.on ? "on" : "") + '" style="height:' + (q.v / tmax * 100).toFixed(1) + '%"></i>'; }).join("") + '</span>' +
+        '<span class="ui-r ui-note ' + c[3] + '">' + devTxt + '</span>' +
+        '<span class="ui-chev">' + (open ? "▴" : "▾") + '</span></div>';
+      if (!open) return row;
+      var mer = a.mer.filter(function(m){ return m.category === c[0]; });
+      // за период: 6 крупнейших, остальное — одной строкой «прочие» вместе с тратами без места
+      var oth = { rub: 0, count: 0 }, rc = a.rest[c[0]];
+      if (rc){ oth.rub += rc.rub; oth.count += rc.count; }
+      mer.slice(6).forEach(function(m){ oth.rub += m.rub; oth.count += m.count; });
+      var merRow = function(name, m, cls){ return '<div class="ui-kv' + (cls || "") + '"><span class="ui-ell">' + esc(name) + '</span><span class="ui-r"><span class="ui-sub">' + pl(m.count, ["покупка", "покупки", "покупок"]) + '</span> <b class="ui-strong">' + k1(m.rub) + '</b></span></div>'; };
+      return '<div class="ui-catopen' + (S.catFresh && S.catFresh[c[0]] ? " fresh" : "") + '">' + row + '<div class="ui-catdetail">' + (showFlags ? catFacts(c[0]) : "") + '<div class="ui-grid">' +
+        '<div><div class="ui-head split flat"><span class="ui-kicker">' + esc(shortCat(c[0])) + ' по месяцам</span>' +
+          '<button type="button" class="ui-link" data-act="yoy" data-v="' + esc(c[0]) + '" data-end="' + sel[sel.length - 1].month + '" data-sel="' + sel.map(function(m){ return m.month; }).join(",") + '">к прошлому году →</button></div>' + colChart({ all: all, sel: sel, id: "cat-" + catKey(c[0]), mode: "cat", cat: c[0], compact: true }) +
+          subList(a.subs[c[0]], c[1]) + '</div>' +
+        '<div><div class="ui-kicker">Где платил</div>' +
+          (mer.length ? mer.slice(0, 6).map(function(m){ return merRow(m.name, m); }).join("")
+                      : '<div class="ui-sub ui-mt-s">мест платежа у этой категории нет</div>') +
+          (oth.count ? merRow("прочие места и без места", oth, " ui-faint") : "") +
+          '<div class="ui-note ui-mt-s">' + (rc ? 'в сумме — вся категория: 6 крупнейших мест за период, остальные и траты без места — одной строкой' : 'места — из топ-15 месяца' + (a.kinds ? ', только обычные траты' : ', вместе с поездками и разовыми')) + '</div></div>' +
+      '</div></div></div>';
+    }).join("") +
+    '<div class="ui-note ui-mt-s">без поездок и разовых покупок · доля — от обычных трат' + (showFlags && Object.keys(F_.flagged_categories || {}).length ? ' · <b class="ui-up">●</b> — заметно (раскрой категорию)' : '') + (devShow ? ' · к среднему — в месяц, за ' + range(prior) : ' · сравнение — когда будет 3 месяца до периода') + '</div>' +
+  '</div>';
+
+  // ── вне обычных: поездки, разовые, что не вошло ──
+  var closedTrips = {}; ((S.T && S.T.trips) || []).forEach(function(x){ closedTrips[x.trip.name] = x.totals.spent_rub; });
+  var spTrips = Object.keys(a.trips).map(function(name){
+    var rub = a.trips[name];
+    var note = rub < 0 ? "возврат по прошлой поездке"
+      : closedTrips[name] != null ? (multi ? "за период" : "в этом месяце") + " · вся поездка " + K(closedTrips[name])
+      : "итогов поездки ещё нет — «посчитай траты на поездку»";
+    return '<div class="ui-kv"><span class="ui-two"><span>' + esc(name) + '</span><span class="ui-note">' + note + '</span></span><span class="ui-r ui-strong">' + K(rub) + '</span></div>';
+  });
+  var excl = Object.keys(EXCL).filter(function(k){ return a.ex[k] && (a.ex[k].e || a.ex[k].i); }).map(function(k){
+    var v = a.ex[k];
+    return EXCL[k] + " " + (v.e && v.i ? "−" + k1(v.e) + " / +" + k1(v.i) + " тыс." : k1(v.e || v.i) + " тыс.");
+  }).join(" · ") || "ничего";
+  var outside = '<div class="ui-card"><div class="ui-head split flat"><span class="ui-kicker">Вне обычных</span><button type="button" class="ui-link" data-act="tab" data-v="trips">Поездки →</button></div>' +
+    (spTrips.length ? spTrips.join("") : '<div class="ui-sub ui-mt-s">поездок не было</div>') +
+    '<div class="ui-kv"><span class="ui-two"><span>Разовые покупки</span><span class="ui-note">' + (a.oneOff.length ? esc(a.oneOff.join(", ")) : (t.expense_one_off_rub ? "" : "не было")) + '</span></span><span class="ui-r ui-strong">' + K(t.expense_one_off_rub || 0) + '</span></div>' +
+    '<div class="ui-note ui-mt-s">Не вошло в расходы: ' + excl + '</div></div>';
+
+  // ── где тратил ──
+  var merch = a.mer.map(function(m){
+    return '<div class="ui-row base"' + cols("minmax(0,1fr) auto 64px") + '><span class="ui-two"><span class="ui-ell">' + esc(m.name) + '</span><span class="ui-note">' + esc(shortCat(m.category)) + '</span></span>' +
+      '<span class="ui-r ui-sub">' + pl(m.count, ["покупка", "покупки", "покупок"]) + '</span><span class="ui-r ui-strong">' + k1(m.rub) + '</span></div>';
+  });
+  var where = '<div class="ui-card"><div class="ui-kicker">Где тратил</div>' +
+    (S.merchAll ? merch : merch.slice(0, 6)).join("") +
+    '<div class="ui-head split flat ui-mt-s"><span class="ui-note">' + (a.kinds ? 'обычные траты, разовые — в «Вне обычных»' : 'все траты, вместе с поездками и разовыми') + ' · место платежа есть у ' + Math.round(a.mshare * 100) + '% расходов' +
+      (hasTrip && a.mshare < 0.8 ? " — в поездке платили наличными" : "") + '</span>' +
+      (merch.length > 6 ? '<button type="button" class="ui-link" data-act="merch">' + (S.merchAll ? "свернуть" : "все " + merch.length) + '</button>' : '') +
+    '</div></div>';
+
+  return tiles +
+    '<div class="ui-mt-m">' + chart + '</div>' +
+    sechead("Обычные траты по категориям") + cats +
+    '<div class="ui-grid ui-mt-m">' + outside + where + '</div>';
+}
+/* Подкатегории категории за период — пояснение «за счёт чего». */
+function subList(sub, total){
+  if (!sub) return "";
+  var names = Object.keys(sub).filter(function(n){ return sub[n]; }).sort(function(x, y){ return sub[y] - sub[x]; });
+  if (names.length < 2 && (names[0] === "без подкатегории" || !names.length)) return "";
+  return '<div class="ui-kicker ui-mt-m">Подкатегории</div>' + names.map(function(n){
+    return '<div class="ui-kv"><span class="ui-ell">' + esc(n) + '</span><span class="ui-r"><span class="ui-sub">' + Math.round(sub[n] / (total || 1) * 100) + '%</span> <b class="ui-strong">' + k1(sub[n]) + '</b></span></div>';
+  }).join("") + '<div class="ui-note ui-mt-s">тыс. ₽ за период; трата прямо в категории — «без подкатегории»</div>';
+}
+/* Факт по категории в раскрытой строке: что заметно и за счёт чего. */
+function catFacts(cat){
+  var f = facts(); if (!f) return "";
+  var mine = f.facts.filter(function(x){ return x.category === cat; });
+  if (!mine.length) return "";
+  return mine.map(function(x){ var q = factText(x);
+    return '<div class="ui-kv flat"><span class="ui-dot warn"></span><span class="ui-two ui-grow"><span class="ui-strong">' + esc(q.t) + '</span><span class="ui-note">' + esc(q.s) + '</span></span></div>'; }).join("");
+}
+
+/* ═══ Окно «к прошлому году» ═══════════════════════════════════════════════
+   12 последних месяцев (не календарный год — решение 2026-10-07) рядом с теми же
+   месяцами годом раньше. Окна стопкой (S.yoy — массив): «Обычные траты» —
+   кнопкой под графиком «Траты по месяцам» и фактом об ускорении; категория —
+   кнопкой «к прошлому году →» в раскрытой категории, фактом о категории на
+   Обзоре и нажатием на категорию в окне «Обычные траты» (тогда — поверх него,
+   с теми же выбранными месяцами). Нажатие на столбик выбирает месяц (несколько,
+   повторное — снимает; «все 12 месяцев» — сброс); без выбора — все 12. Под выбор
+   пересчитываются итог, строки «сейчас / год назад» (у «обычных» — категории, у
+   категории — подкатегории) и места подкатегории (нажатие на подкатегорию): сверху
+   где выросло больше всего, снизу где упало. База — обычные траты (без поездок и
+   разовых), как у фактов; сравниваются только пары месяцев, где закрыты оба. */
+function yoyVal(m, cat){
+  if (!m) return null;
+  return cat ? ((m.categories_regular || []).filter(function(c){ return c.name === cat; })[0] || { rub: 0 }).rub : (m.totals.expense_regular_rub || 0);
+}
+function chg(x){ return '<b class="ui-strong' + (x > 0.05 ? " ui-up" : x < -0.05 ? " ui-down" : "") + '">' + (x >= 3 ? "×" + num(x + 1) : sgn(x)) + '</b>'; }
+function yoyModal(i){
+  var Y = S.yoy[i], all = (S.Sp && S.Sp.months) || [], by = {};
+  all.forEach(function(m){ by[m.month] = m; });
+  var cat = Y.cat || null, F = facts(), fact = Y.fi != null && F ? F.facts[Y.fi] : null;
+  var slots = calRange(addM(Y.end, -11), Y.end), pick = Y.sel || {};
+  var chosen = slots.filter(function(m){ return pick[m]; }), base = chosen.length ? chosen : slots;
+  var use = base.filter(function(m){ return by[m] && by[addM(m, -12)]; });
+  var miss = base.filter(function(m){ return !(by[m] && by[addM(m, -12)]); });
+  var y1 = ym(slots[0])[0], y2 = ym(Y.end)[0], yl = y1 === y2 ? String(y2) : y1 + "–" + String(y2).slice(2);
+  var py = (y1 - 1) === (y2 - 1) ? String(y2 - 1) : (y1 - 1) + "–" + String(y2 - 1).slice(2);
+
+  // график: столбики-кнопки, выбранные — .win
+  var rows = slots.map(function(mm){ return { mm: mm, cur: yoyVal(by[mm], cat), prev: yoyVal(by[addM(mm, -12)], cat) }; });
+  var hi = (Math.max.apply(null, rows.map(function(r){ return Math.max(r.cur || 0, r.prev || 0); })) || 1) * 1.18;
+  function bar(v, cls){ return '<span class="ui-col-exp' + cls + '" style="height:' + (v == null ? 0 : v / hi * 100).toFixed(2) + '%"><i style="height:100%"></i></span>'; }
+  var cs = rows.map(function(r){
+    // без года в подписи: на телефоне колонка ~27px, «янв ’26» наезжает на соседей — годы в легенде
+    var mi = ym(r.mm), top = Math.max(r.cur || 0, r.prev || 0);
+    var val = r.cur != null ? '<span class="ui-col-val" style="bottom:' + (top / hi * 100).toFixed(2) + '%">' + k1(r.cur) + '</span>' : '';
+    var tip = cap(NOM[mi[1]]) + " " + mi[0] + ": " + (r.cur != null ? K(r.cur) : "месяц не закрыт") + "; год назад — " + (r.prev != null ? K(r.prev) : "нет итогов") + (pick[r.mm] ? " (выбран)" : "");
+    return '<button type="button" class="ui-col' + (pick[r.mm] ? " win" : "") + '" data-act="yoy-m" data-i="' + i + '" data-v="' + r.mm + '" aria-pressed="' + !!pick[r.mm] + '" aria-label="' + esc(tip) + '">' +
+      '<span class="ui-col-plot">' + bar(r.prev, " prev") + bar(r.cur, "") + val + '</span><span class="ui-col-lbl">' + SH[mi[1]] + '</span></button>';
+  }).join("");
+  var chart = '<div class="ui-cols-scroll fit"><div class="ui-cols yoy pick" style="--cols-n:12">' + cs + '</div></div>' +
+    '<div class="ui-legend"><span><i class="ui-sw"></i>' + yl + '</span><span><i class="ui-sw prev"></i>' + py + '</span>' +
+      '<span>' + (chosen.length ? 'выбрано: ' + pl(chosen.length, ["месяц", "месяца", "месяцев"]) + ' · <button type="button" class="ui-link" data-act="yoy-m" data-i="' + i + '" data-v="">все 12 месяцев</button>'
+                                  : 'нажми на месяцы, чтобы сравнить только их') + '</span></div>';
+
+  // суммы за выбор: итог, остальные обычные, строки (категории / подкатегории), места подкатегорий
+  var sc = 0, sb = 0, tc = 0, tb = 0, part = {}, plc = {};
+  function add(m, side){
+    if (cat) (m.subcategories_regular || []).forEach(function(x){ if (x.parent !== cat) return; var o = part[x.name] || (part[x.name] = [0, 0]); o[side] += x.rub; });
+    else (m.categories_regular || []).forEach(function(x){ var o = part[x.name] || (part[x.name] = [0, 0]); o[side] += x.rub; });
+    if (cat) (m.merchants || []).forEach(function(x){
+      if (x.kind !== "regular" || x.category !== cat) return;
+      var o = plc[x.sub || "без подкатегории"] || (plc[x.sub || "без подкатегории"] = {}), q = o[x.name] || (o[x.name] = [0, 0, !!x.rest]);
+      q[side] += x.rub;
+    });
+  }
+  use.forEach(function(mm){
+    var a = by[mm], b = by[addM(mm, -12)];
+    sc += yoyVal(a, cat); sb += yoyVal(b, cat); tc += a.totals.expense_regular_rub || 0; tb += b.totals.expense_regular_rub || 0;
+    add(a, 0); add(b, 1);
+  });
+  function KN(v){ return K(v).replace(/ /g, " "); }   // сумма не рвётся на две строки (телефон)
+  var lbl = chosen.length ? chosen.map(function(m){ return SH[ym(m)[1]]; }).join(", ") : calLabel(slots[0], slots[11]);
+  // факт — над графиком (он не меняется); итог выбранного — ПОД графиком: его строки
+  // переносятся по-разному при каждом выборе, и над графиком он двигал столбики (телефон)
+  var factHTML = fact ? (function(q){ return '<div class="ui-kv flat"><span class="ui-dot warn"></span><span class="ui-two ui-grow"><span class="ui-strong">' + esc(q.t) + '</span><span class="ui-note">' + esc(q.s) + '</span></span></div>'; })(factText(fact)) : "", head = "";
+  if (!use.length) head += '<div class="ui-sub ui-mt-s">Сравнить не с чем: итогов за те же месяцы годом раньше нет.</div>';
+  else head += '<div class="ui-text ui-num ui-mt-s"><b class="ui-strong">' + esc(cap(lbl)) + ':</b> <b class="ui-strong">' + KN(sc) + '</b> <span class="ui-muted">· годом раньше</span> <b class="ui-strong">' + KN(sb) + '</b>' +
+      (sb ? ' <span class="ui-muted">·</span> ' + chg(sc / sb - 1) : '') + '</div>' +
+    (cat && tb - sb > 0 ? '<div class="ui-sub">остальные обычные траты за те же месяцы: ' + chg((tc - sc) / (tb - sb) - 1) + '</div>' : '');
+  if (miss.length) head += '<div class="ui-note ui-mt-s">без ' + miss.map(function(m){ return NOM[ym(m)[1]] + " " + ym(m)[0]; }).join(", ") + ': нет итогов этого месяца или того же месяца год назад</div>';
+
+  // места подкатегории: сверху — где выросло, снизу — где упало, середина одной строкой
+  // сумма и доля в итоге окна (просьба 2026-10-07): «12,3 (14%)»; доля — не жирным, как
+  // «доля» на экране «Траты»; колонки шире, на телефоне 360px строка помещается
+  var C = "minmax(0,1fr) 78px 78px 48px";
+  function sh(v, t){ if (!(v > 0 && t > 0)) return ""; var r = Math.round(v / t * 100);
+    return ' <span class="ui-note">(' + (r < 1 ? "<1" : r) + '%)</span>'; }
+  function places(sn){
+    // по сумме за выбранные месяцы (просьба 2026-10-07: по разнице крупное место с падением
+    // «225 → 144» уезжало в самый низ); изменение — в %, как у подкатегорий
+    var o = plc[sn] || {}, list = Object.keys(o).map(function(n){ return { n: n, a: o[n][0], b: o[n][1], rest: o[n][2] }; })
+      .filter(function(x){ return x.a || x.b; }).sort(function(p, q){ return q.a - p.a || q.b - p.b; });
+    if (!list.length) return '<div class="ui-note ui-catplace">мест нет</div>';
+    var shown = list.length > 10 ? list.slice(0, 8) : list, more = list.length > 10 ? list.slice(8) : [];
+    function row(n, a, b, cls){
+      return '<div class="ui-row ui-catplace' + (cls || "") + '"' + cols(C) + '><span class="ui-ell" title="' + esc(n) + '">' + esc(n) + '</span>' +
+        '<span class="ui-r ui-num">' + k1(a) + sh(a, sc) + '</span><span class="ui-r ui-sub ui-num">' + k1(b) + sh(b, sb) + '</span>' +
+        '<span class="ui-r ui-note">' + (b >= 50 ? chg(a / b - 1) : (a ? '<span class="ui-strong">новое</span>' : '')) + '</span></div>';
+    }
+    return shown.map(function(x){ return row(x.n, x.a, x.b, x.rest ? " ui-faint" : ""); }).join("") +
+      (more.length ? row("ещё " + pl(more.length, ["место", "места", "мест"]), more.reduce(function(s, x){ return s + x.a; }, 0), more.reduce(function(s, x){ return s + x.b; }, 0), " ui-faint") : "");
+  }
+  var names = Object.keys(part).filter(function(n){ return part[n][0] || part[n][1]; }).sort(function(p, q){ return part[q][0] - part[p][0] || part[q][1] - part[p][1]; });
+  var onlyDirect = cat && (!names.length || (names.length === 1 && names[0] === "без подкатегории"));
+  var thead = '<div class="ui-row head"' + cols(C) + '><span>' + (!cat ? "Категории" : onlyDirect ? "Места" : "Подкатегории") + '</span><span class="ui-r">сейчас</span><span class="ui-r">год назад</span><span class="ui-r">изм.</span></div>';
+  var body = onlyDirect ? places("без подкатегории") : names.map(function(n){
+    var a = part[n][0], b = part[n][1], open = cat && Y.subOpen && Y.subOpen[n];
+    var act = cat ? 'data-act="yoy-sub" data-i="' + i + '" data-v="' + esc(n) + '" aria-expanded="' + !!open + '"' : 'data-act="yoy-cat" data-i="' + i + '" data-v="' + esc(n) + '"';
+    return '<div class="ui-row pick' + (open ? " on" : "") + '"' + cols(C) + ' ' + act + ' role="button" tabindex="0">' +
+        '<span class="ui-ell" title="' + esc(n) + '">' + (cat ? (open ? "▴ " : "▾ ") : "") + esc(cat ? n : shortCat(n)) + (cat ? "" : " ›") + '</span>' +
+        '<span class="ui-r ui-num"><b class="ui-strong">' + k1(a) + '</b>' + sh(a, sc) + '</span><span class="ui-r ui-sub ui-num">' + k1(b) + sh(b, sb) + '</span>' +
+        '<span class="ui-r ui-note">' + (b >= 50 ? chg(a / b - 1) : (a ? '<span class="ui-strong">новая</span>' : '')) + '</span></div>' +
+      (open ? '<div class="ui-catplaces">' + places(n) + '</div>' : '');
+  }).join("");
+  var parts = use.length && (names.length || onlyDirect) ? '<div class="ui-mt-m">' + thead + body + '</div>' +
+    '<div class="ui-note ui-mt-s">тыс. ₽ за выбранные месяцы, в скобках — доля в ' + (cat ? 'категории' : 'обычных тратах') + '; ' + (!cat ? 'нажми на категорию — откроется её сравнение' : (onlyDirect ? 'места' : 'нажми на подкатегорию — её места') + ' по сумме') + '</div>' : '';
+
+  // окна стопкой: каждое следующее — слоем выше (z — ui-kit 1.33.0)
+  return uiModalHTML({ title: (cat ? cat : "Обычные траты") + " — к прошлому году",
+    sub: calLabel(slots[0], Y.end) + " и те же месяцы годом раньше · без поездок и разовых покупок",
+    body: factHTML + chart + '<div class="ui-mt-s">' + head + '</div>' + parts + '<div class="ui-note ui-mt-m">в номинале, без поправки на инфляцию</div>',
+    close: "yoy-close", width: 720, bodyId: "yoyb-" + i, z: 210 + i,
+    // окна стопкой (ui-kit 1.36.0 uiStackCls): нижнее — «позади» (сдвинуто и чуть меньше,
+    // видно, что под верхним есть окно); новое — плавно въезжает; только что сдвинутое — плавно
+    cls: "tall " + uiStackCls(i, S.yoy.length, S.yoyFresh) }).replace(/data-act="yoy-close"/g, 'data-act="yoy-close" data-i="' + i + '"');
+}
+
+/* ═══ «Траты» → «Все годы» ═══════════════════════════════════════════════
+   Годы рядом: в среднем в месяц по закрытым месяцам года (неполный год так
+   сравним с полными), итог года — в подписи. Столбик года — обычные + поездки +
+   разовые, линия — доход в месяц. Клик по году — режим «Год» на этом годе.
+   Ниже — крупные категории по годам маленькими графиками (метка — факт). */
+function yearRows(all){
+  var by = {}; all.forEach(function(m){ var y = m.month.slice(0, 4); (by[y] || (by[y] = [])).push(m); });
+  return Object.keys(by).sort().map(function(y){
+    var ms = by[y], a = agg(ms), t = a.t, n = ms.length;
+    return { y: y, ms: ms, n: n, a: a, reg: (t.expense_regular_rub || 0) / n, trips: Math.max(0, t.expense_trips_rub || 0) / n,
+             one: (t.expense_one_off_rub || 0) / n, exp: t.expense_rub / n, inc: t.income_rub / n, last: ms[n - 1].month };
+  });
+}
+function yearCols(rows, o){
+  var vals = rows.map(function(r){ return o.cat ? (r.a.cats[o.cat] || 0) / r.n : r.reg + r.trips + r.one; });
+  // линии: доход и остаток (доход − все расходы) в месяц; остаток в минусе ушёл бы под ось —
+  // за год такого не было, на этот случай линия просто опускается к нулю (подпись — в таблице)
+  var hiD = Math.max.apply(null, vals.concat(o.cat ? [] : rows.map(function(r){ return r.inc; }))) || 1;
+  var hi = hiD * 1.14, n = rows.length;
+  function yPct(v){ return ((hi - v) / hi * 100).toFixed(2); }
+  var svg = o.cat ? "" : '<svg class="ui-cols-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
+    (n > 1 ? '<path d="' + smoothPath(rows.map(function(r, i){ return [(i + 0.5) / n * 100, +yPct(r.inc)]; })) + '" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke"/>' +
+             '<path class="alt" d="' + smoothPath(rows.map(function(r, i){ return [(i + 0.5) / n * 100, +yPct(Math.max(0, r.inc - r.exp))]; })) + '" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="5 4" vector-effect="non-scaling-stroke"/>' : '') + '</svg>';
+  var cs = rows.map(function(r, i){
+    // в маленьком графике подписаны только первый и последний год — иначе «’20’21’22» слипаются
+    var v = vals[i], lbl = o.compact ? "’" + r.y.slice(2) : r.y + (r.n < 12 ? "*" : "");
+    var bar = o.cat ? '<span class="ui-col-exp" style="height:' + (v / hi * 100).toFixed(2) + '%"><i style="height:100%"></i></span>'
+      : '<span class="ui-col-exp" style="height:' + (v / hi * 100).toFixed(2) + '%">' +
+        [[r.reg, ""], [r.trips, "lv-trip"], [r.one, "lv-oneoff"]].filter(function(q){ return q[0] > 0; }).map(function(q){ return '<i class="' + q[1] + '" style="height:' + (q[0] / (v || 1) * 100).toFixed(2) + '%"></i>'; }).join("") + '</span>';
+    var tip = r.y + (r.n < 12 ? " (" + pl(r.n, ["месяц", "месяца", "месяцев"]) + ")" : "") + ": " + (o.cat ? o.cat + " " + K(v) : "все расходы " + K(v) + ", обычные " + K(r.reg) + ", доход " + K(r.inc) + ", остаток " + K(r.inc - r.exp)) + " в месяц";
+    var val = !o.compact ? '<span class="ui-col-val" style="bottom:' + (v / hi * 100).toFixed(2) + '%">' + k1(v) + '</span>' : '';
+    // в маленьком графике плитки столбики не кнопки: нажимается вся плитка (окно категории)
+    return o.compact ? '<span class="ui-col" aria-label="' + esc(tip) + '"><span class="ui-col-plot">' + bar + val + '</span><span class="ui-col-lbl">' + lbl + '</span></span>'
+      : '<button type="button" class="ui-col" data-act="year-open" data-v="' + r.last + '" aria-label="' + esc(tip) + '">' +
+      '<span class="ui-col-plot">' + bar + val + '</span><span class="ui-col-lbl">' + lbl + '</span></button>';
+  }).join("");
+  return '<div class="ui-cols-scroll fit"' + (o.id ? ' id="' + o.id + '"' : '') + '><div class="ui-cols' + (o.compact ? " sm" : "") + '" style="--cols-n:' + n + '">' + svg + cs + '</div></div>';
+}
+function tabYears(all){
+  var rows = yearRows(all), full = rows.filter(function(r){ return r.n === 12; });
+  if (!rows.length) return empty("Итогов пока нет", "Скажи Claude «закрой месяц».");
+  var L = full[full.length - 1], P = L ? full[full.length - 2] : null, cur = rows[rows.length - 1];
+  // рост трат — цветом «вверх», рост дохода — без цвета (оценок страница не ставит)
+  function ch(a, b, y, plain){ var x = a / b - 1; return b ? '<b class="ui-strong' + (plain ? "" : x > 0.05 ? " ui-up" : x < -0.05 ? " ui-down" : "") + '">' + sgn(x) + '</b> к ' + y : ''; }
+  var tiles = L ? '<div class="ui-grid kpi">' +
+    '<div class="ui-card ui-tile acc"><div class="ui-kicker">Обычные траты · ' + L.y + '</div><div class="ui-big">' + K(L.reg) + ' <span class="ui-unit">в месяц</span></div>' +
+      '<div class="ui-sub">' + (P ? ch(L.reg, P.reg, P.y) + ' (' + K(P.reg) + ')' : 'сравнивать пока не с чем') + '</div>' +
+      (cur !== L ? '<div class="ui-sub">' + cur.y + ' (' + pl(cur.n, ["месяц", "месяца", "месяцев"]) + '): <b class="ui-strong">' + K(cur.reg) + '</b> · ' + ch(cur.reg, L.reg, L.y) + '</div>' : '') +
+      '<div class="ui-note">за ' + L.y + ' год ' + K(L.reg * 12) + '</div></div>' +
+    '<div class="ui-card ui-tile"><div class="ui-kicker">Доход · ' + L.y + '</div><div class="ui-big">' + K(L.inc) + ' <span class="ui-unit">в месяц</span></div>' +
+      '<div class="ui-sub">' + (P ? ch(L.inc, P.inc, P.y, true) + ' (' + K(P.inc) + ')' : '') + '</div></div>' +
+    '<div class="ui-card ui-tile"><div class="ui-kicker">Остаток от дохода · ' + L.y + '</div><div class="ui-big' + (L.inc - L.exp < 0 ? " warn" : "") + '">' + K(L.inc - L.exp) + ' <span class="ui-unit">в месяц</span></div>' +
+      '<div class="ui-sub">' + (L.inc ? Math.round((L.inc - L.exp) / L.inc * 100) + '% дохода' : '') + ' · расходы с поездками и разовыми</div></div>' +
+  '</div>' : '';
+  var chart = '<div class="ui-card ui-mt-m"><div class="ui-text"><b class="ui-strong">Годы: в среднем в месяц</b></div>' +
+    yearCols(rows, { id: "yrs" }) +
+    '<div class="ui-legend"><span><i class="ui-sw"></i>обычные</span><span><i class="ui-sw lv-trip"></i>поездки</span><span><i class="ui-sw lv-oneoff"></i>разовые</span><span><i class="ui-sw-line"></i>доход в месяц</span><span><i class="ui-sw-line alt"></i>остаток в месяц</span>' + (cur.n < 12 ? '<span>* ' + cur.y + ' — ' + pl(cur.n, ["месяц", "месяца", "месяцев"]) + '</span>' : '') + '</div></div>';
+  var tbl = '<table class="ui-table"><thead><tr><th>в месяц, тыс. ₽</th>' + rows.map(function(r){ return '<th>' + r.y + (r.n < 12 ? '*' : '') + '</th>'; }).join("") + '</tr></thead><tbody>' +
+    '<tr><td>Обычные траты</td>' + rows.map(function(r){ return '<td>' + k1(r.reg) + '</td>'; }).join("") + '</tr>' +
+    '<tr class="quiet"><td>изменение</td>' + rows.map(function(r, i){ return '<td>' + (i && rows[i - 1] ? sgn(r.reg / rows[i - 1].reg - 1) : "—") + '</td>'; }).join("") + '</tr>' +
+    '<tr><td>Поездки и разовые</td>' + rows.map(function(r){ return '<td>' + k1(r.trips + r.one) + '</td>'; }).join("") + '</tr>' +
+    '<tr><td>Доход</td>' + rows.map(function(r){ return '<td>' + k1(r.inc) + '</td>'; }).join("") + '</tr>' +
+    '<tr class="total"><td>Остаток</td>' + rows.map(function(r){ return '<td>' + k1(r.inc - r.exp) + (r.inc ? ' <span class="ui-faint">' + Math.round((r.inc - r.exp) / r.inc * 100) + '%</span>' : '') + '</td>'; }).join("") + '</tr>' +
+    '</tbody></table>';
+  var table = '<details class="ui-card ui-fold ui-mt-m"><summary><span class="ui-grow ui-text ui-strong ui-muted">Таблица по годам</span><span class="ui-chev">▾</span></summary>' +
+    '<div class="ui-scroll-x ui-mt-s">' + tbl + '</div>' +
+    (cur.n < 12 ? '<div class="ui-note ui-mt-s">* ' + cur.y + ' — данных за ' + pl(cur.n, ["месяц", "месяца", "месяцев"]) + ', среднее по закрытым</div>' : '') + '</details>';
+  // крупные категории последнего полного года (доля ≥ 3% обычных), по убыванию
+  var base = L || cur, names = Object.keys(base.a.cats).filter(function(c){ return base.a.cats[c] / base.n >= 0.03 * base.reg; })
+    .sort(function(x, y){ return base.a.cats[y] - base.a.cats[x]; }).slice(0, 9);
+  var first = full[0];
+  var mult = '<div class="ui-grid">' + names.map(function(c){
+    var v = (base.a.cats[c] || 0) / base.n, f0 = first && first !== base ? (first.a.cats[c] || 0) / first.n : 0;
+    return '<div class="ui-card ui-tile pick" data-act="yoy-tile" data-v="' + esc(c) + '" role="button" tabindex="0" title="К прошлому году">' +
+      '<div class="ui-kv flat"><span class="ui-ell ui-strong">' + esc(shortCat(c)) + flagMark(c) + '</span><span class="ui-r ui-sub">' + k1(v) + ' тыс.</span></div>' +
+      yearCols(rows, { cat: c, compact: true }) +
+      '<div class="ui-note">' + (f0 ? first.y + ' → ' + base.y + ': ' + sgn(v / f0 - 1) : 'тыс. ₽ в месяц') + '</div></div>';
+  }).join("") + '</div>';
+  var incG = first && first !== base && first.inc ? ' · доход за то же время ' + sgn(base.inc / first.inc - 1) : '';
+  return tiles + chart + table +
+    sechead("Крупные категории по годам") + mult +
+    '<div class="ui-note ui-mt-s">обычные траты в месяц; в номинале, без поправки на инфляцию' + incG + (facts() ? ' · <b class="ui-up">●</b> — заметно сейчас' : '') + '</div>';
+}
+
+/* Окно компактных графиков: до 12 последних календарных месяцев, выбранный
+   период всегда в окне. */
+function monthSpan(all, sel){
+  var first = all[0].month, lastData = all[all.length - 1].month, selLast = sel[sel.length - 1].month;
+  var end = lastData, start = addM(end, -11) < first ? first : addM(end, -11);
+  if (selLast < start){ start = selLast; end = addM(start, 11) > lastData ? lastData : addM(start, 11); }
+  return calRange(start, end);
+}
+/* Монотонное сглаживание (метод Штеффена, как d3.curveMonotoneX): кривая
+   проходит через каждую точку и между соседними НЕ выходит за их значения —
+   обычное сглаживание (Catmull-Rom) «перелетает» резкие переходы и рисует
+   среднее, которого не было. Шаг по x внутри отрезка постоянный, координаты —
+   в единицах viewBox (растяжение SVG аффинное, плавность сохраняется). */
+function smoothPath(pts){
+  var n = pts.length, f = function(v){ return v.toFixed(2); };
+  if (n === 2) return "M" + f(pts[0][0]) + "," + f(pts[0][1]) + "L" + f(pts[1][0]) + "," + f(pts[1][1]);
+  var d = [], h = [], m = [];
+  for (var i = 0; i < n - 1; i++){ h[i] = pts[i + 1][0] - pts[i][0]; d[i] = (pts[i + 1][1] - pts[i][1]) / h[i]; }
+  for (i = 1; i < n - 1; i++){
+    var p = (d[i - 1] * h[i] + d[i] * h[i - 1]) / (h[i - 1] + h[i]);
+    m[i] = (Math.sign(d[i - 1]) + Math.sign(d[i])) * Math.min(Math.abs(d[i - 1]), Math.abs(d[i]), 0.5 * Math.abs(p)) || 0;
+  }
+  m[0] = (3 * d[0] - m[1]) / 2; m[n - 1] = (3 * d[n - 2] - m[n - 2]) / 2;
+  // концы тоже без перелёта: наклон не круче и не против хорды
+  if (Math.sign(m[0]) !== Math.sign(d[0])) m[0] = 0; else if (Math.abs(m[0]) > 3 * Math.abs(d[0])) m[0] = 3 * d[0];
+  if (Math.sign(m[n - 1]) !== Math.sign(d[n - 2])) m[n - 1] = 0; else if (Math.abs(m[n - 1]) > 3 * Math.abs(d[n - 2])) m[n - 1] = 3 * d[n - 2];
+  var out = "M" + f(pts[0][0]) + "," + f(pts[0][1]);
+  for (i = 0; i < n - 1; i++){
+    var x0 = pts[i][0], y0 = pts[i][1], x1 = pts[i + 1][0], y1 = pts[i + 1][1], t = h[i] / 3;
+    out += "C" + f(x0 + t) + "," + f(y0 + m[i] * t) + " " + f(x1 - t) + "," + f(y1 - m[i + 1] * t) + " " + f(x1) + "," + f(y1);
+  }
+  return out;
+}
+/* Один график месяцев на всю страницу: столбики + линия скользящего среднего —
+   среднее за 3 ПРЕДЫДУЩИХ календарных месяца (из закрытых; меньше истории —
+   сколько есть; у первого месяца точки нет). Режимы:
+     spend — столбик = обычные + поездки + разовые, линия — по обычным;
+     reg   — только обычные (компактный, «Обзор»);
+     net   — «осталось» = доходы − расходы, вверх и вниз от нуля, минус красным;
+     cat   — обычные траты одной категории (раскрытая строка категорий).
+   Пропущенный месяц — пустое место с подписью. Колонки без зазора (отступ —
+   внутри), поэтому центр i-й колонки ровно (i + .5) / n — по нему идёт линия.
+   Клик по столбику — выбрать месяц (график остаётся на месте экрана). */
+function colChart(o){
+  var all = o.all, by = {}; all.forEach(function(m){ by[m.month] = m; });
+  var on = {}; o.sel.forEach(function(m){ on[m.month] = 1; });
+  var slots = o.compact ? monthSpan(all, o.sel) : calRange(all[0].month, all[all.length - 1].month);
+  function val(m){
+    var t = m.totals;
+    if (o.mode === "net") return t.income_rub - t.expense_rub;
+    if (o.mode === "cat") return ((m.categories_regular || []).filter(function(c){ return c.name === o.cat; })[0] || { rub: 0 }).rub;
+    return t.expense_regular_rub || 0;
+  }
+  var rows = slots.map(function(mm){
+    var m = by[mm]; if (!m) return { mm: mm, gap: true };
+    var pr = inCal(all, addM(mm, -3), addM(mm, -1));
+    var r = { mm: mm, m: m, v: val(m), avg: pr.length ? pr.reduce(function(s, x){ return s + val(x); }, 0) / pr.length : null, pr: pr };
+    if (o.mode === "spend"){ var t = m.totals; r.parts = [[t.expense_regular_rub || 0, ""], [Math.max(0, t.expense_trips_rub || 0), "lv-trip"], [t.expense_one_off_rub || 0, "lv-oneoff"]]; r.total = r.parts.reduce(function(s, q){ return s + q[0]; }, 0); }
+    return r;
+  });
+  var data = rows.filter(function(r){ return !r.gap; });
+  var hiD = Math.max.apply(null, data.map(function(r){ return Math.max(r.total != null ? r.total : r.v, r.avg || 0, 0); })) || 1;
+  var loD = o.mode === "net" ? Math.min.apply(null, data.map(function(r){ return Math.min(r.v, r.avg || 0, 0); })) : 0;
+  // запас сверху (и снизу у «Остатка») — под подписи значений над столбиками
+  var pad = (hiD - loD) * (o.mode === "net" ? 0.24 : 0.14);
+  var hi = hiD + pad, lo = loD < 0 ? loD - pad : 0;
+  var span = (hi - lo) || 1, z = hi / span;             // z — доля высоты над нулём
+  function yPct(v){ return ((hi - v) / span * 100).toFixed(2); }   // от верха
+  var n = rows.length;
+  // линия: разрывы — где нет точки (первый месяц, пропуски)
+  var segs = [], cur = [];
+  rows.forEach(function(r, i){
+    if (!r.gap && r.avg != null) cur.push([(i + 0.5) / n * 100, +yPct(r.avg)]);
+    else if (cur.length){ segs.push(cur); cur = []; }
+  });
+  if (cur.length) segs.push(cur);
+  var svg = '<svg class="ui-cols-line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' +
+    // fill="none" и обводка — атрибутами, не только из CSS: если страница уже
+    // новая, а ui-kit.css на NAS ещё старый (синк Drive отстаёт на секунды),
+    // SVG-кривая без стиля заливается ЧЁРНЫМ (так и случилось 2026-10-06)
+    segs.map(function(sg){ return sg.length > 1 ? '<path d="' + smoothPath(sg) + '" fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke"/>' : ''; }).join("") + '</svg>' +
+    (o.mode === "net" ? '<span class="ui-cols-zero" style="top:calc(var(--plot-h) * ' + z.toFixed(4) + ')"></span>' : '');
+  // год — у января и у первой колонки; в компактном графике колонки узкие —
+  // года нет вовсе, иначе «янв ’26» наезжает на «фев»
+  function lbl(mm, i){ var mi = ym(mm); return SH[mi[1]] + (!o.compact && (mi[1] === 0 || i === 0) ? " ’" + String(mi[0]).slice(2) : ""); }
+  var cols_ = rows.map(function(r, i){
+    if (r.gap) return '<span class="ui-col gap" title="' + esc(mTitle(r.mm) + " — месяц не закрыт") + '"><span class="ui-col-plot"></span><span class="ui-col-lbl">' + lbl(r.mm, i) + '</span></span>';
+    var mi = ym(r.mm), name = cap(NOM[mi[1]]);
+    var avgTxt = r.avg != null ? "; среднее за " + range(r.pr) + " — " + K(r.avg) : "";
+    var tip = o.mode === "net" ? name + ": осталось " + K(r.v) + (r.m.totals.income_rub ? " (" + Math.round(r.v / r.m.totals.income_rub * 100) + "% дохода)" : "") + avgTxt
+            : o.mode === "spend" ? name + ": обычные " + K(r.v) + ", поездки " + K(r.parts[1][0]) + ", разовые " + K(r.parts[2][0]) + avgTxt
+            : name + ": " + K(r.v) + avgTxt;
+    var bar;
+    if (o.mode === "net"){
+      var h = (Math.abs(r.v) / span * 100).toFixed(2);
+      bar = r.v >= 0 ? '<i class="ui-col-net" style="bottom:' + ((1 - z) * 100).toFixed(2) + '%; height:' + h + '%"></i>'
+                     : '<i class="ui-col-net neg" style="top:' + (z * 100).toFixed(2) + '%; height:' + h + '%"></i>';
+    } else if (o.mode === "spend"){
+      bar = '<span class="ui-col-exp" style="height:' + (r.total / span * 100).toFixed(2) + '%">' +
+        r.parts.filter(function(q){ return q[0] > 0; }).map(function(q){ return '<i class="' + q[1] + '" style="height:' + (q[0] / (r.total || 1) * 100).toFixed(2) + '%"></i>'; }).join("") + '</span>';
+    } else bar = '<span class="ui-col-exp" style="height:' + (r.v / span * 100).toFixed(2) + '%"><i style="height:100%"></i></span>';
+    // подпись значения у вершины столбика (у «Остатка» в минусе — под ним);
+    // в компактном графике колонки узкие — подписан только выбранный месяц
+    var val = "";
+    if (!o.compact || on[r.mm]){
+      var top_ = o.mode === "spend" ? r.total : r.v, inc = r.m.totals.income_rub;
+      var txt = k1(top_) + (o.mode === "net" && inc ? '<small>' + Math.round(r.v / inc * 100) + '%</small>' : '');
+      val = top_ >= 0 ? '<span class="ui-col-val" style="bottom:' + ((1 - z) * 100 + top_ / span * 100).toFixed(2) + '%">' + txt + '</span>'
+                      : '<span class="ui-col-val below" style="top:' + (z * 100 + Math.abs(top_) / span * 100).toFixed(2) + '%">' + txt + '</span>';
+    }
+    // без title: при наведении числа не всплывают (просьба 2026-10-06) — они уже
+    // над столбиком и в строке периода; текст остаётся для экранного диктора
+    return '<button type="button" class="ui-col' + (on[r.mm] ? " on" : "") + '" data-act="month-at" data-anchor="' + o.id + '" data-v="' + r.mm + '" aria-label="' + esc(tip) + '">' +
+      '<span class="ui-col-plot">' + bar + val + '</span><span class="ui-col-lbl">' + lbl(r.mm, i) + '</span></button>';
+  }).join("");
+  var legend = o.mode === "spend" ? '<span><i class="ui-sw"></i>обычные</span><span><i class="ui-sw lv-trip"></i>поездки</span><span><i class="ui-sw lv-oneoff"></i>разовые</span><span><i class="ui-sw-line"></i>среднее обычных за 3 предыдущих мес.</span>'
+             : o.mode === "net" ? '<span><i class="ui-sw"></i>осталось</span><span><i class="ui-sw neg"></i>минус</span><span><i class="ui-sw-line"></i>среднее за 3 предыдущих мес.</span>'
+             : '<span><i class="ui-sw"></i>' + (o.mode === "cat" ? "категория" : "обычные") + '</span><span><i class="ui-sw-line"></i>среднее за 3 предыдущих мес.</span>';
+  return '<div class="ui-cols-scroll' + (o.compact ? " fit" : "") + '" id="' + o.id + '"><div class="ui-cols' + (o.compact ? " sm" : "") + (o.mode === "net" ? " net" : "") + '" style="--cols-n:' + rows.length + '">' +
+      svg + cols_ + '</div></div>' + (o.noLegend ? '' : '<div class="ui-legend">' + legend + '</div>');
+}
+/* Категории обычных трат периода по убыванию: [имя, ₽, отклонение, класс].
+   Отклонение — к среднему за месяц по prior, только если в prior ≥3 месяцев
+   (так же на «Тратах» и на «Обзоре» — одна функция, цифры не разойдутся). */
+function catRows(cats, prior, nm){
+  var pc = {};
+  prior.forEach(function(m){ (m.categories_regular || []).forEach(function(c){ pc[c.name] = (pc[c.name] || 0) + c.rub / prior.length; }); });
+  // [имя, ₽ за период, «↑ 33%», класс, разница ₽/мес к среднему или null]. Шумовой
+  // порог: меньше 5% ИЛИ меньше 1 тыс. ₽ в месяц — «≈» (иначе «Счета ↑143%»
+  // на копеечной базе кричат громче «Питания −33%» на десятках тысяч).
+  return Object.keys(cats).map(function(k){ return [k, cats[k]]; }).sort(function(x, y){ return y[1] - x[1]; }).map(function(c){
+    var dev = "", cls = "ui-faint", diff = null;
+    if (prior.length >= 3){
+      var av = pc[c[0]] || 0;
+      if (!av) dev = "новая";
+      else {
+        var x = c[1] / nm / av - 1; diff = c[1] / nm - av;
+        if (Math.abs(x) < 0.05 || Math.abs(diff) < 1000) dev = "≈";
+        else { dev = (x > 0 ? "↑ " : "↓ ") + Math.round(Math.abs(x) * 100) + "%"; cls = x > 0 ? "ui-up" : "ui-down"; }
+      }
+    }
+    return [c[0], c[1], dev, cls, diff];
+  });
+}
+/* Состав поездки полосой: группы GROUPS с насыщенностью lv1–lv5. */
+function tripSegs(x){
+  var sp = x.totals.spent_rub || 1;
+  return GROUPS.map(function(g){
+    var rub = x.by_type.filter(function(b){ return g[1] ? g[1].indexOf(b.type) >= 0 : !GROUPS.some(function(G){ return G[1] && G[1].indexOf(b.type) >= 0; }); })
+                       .reduce(function(s, b){ return s + b.rub; }, 0);
+    return rub > 0 ? '<i class="lv' + g[2] + '"' + w(rub / sp * 100) + ' title="' + esc(g[0] + " " + K(rub) + " · " + Math.round(rub / sp * 100) + "%") + '"></i>' : '';
+  }).join("");
+}
+function head(t, aside){ return '<div class="ui-head split"><h2 class="ui-h2">' + esc(t) + '</h2>' + (aside || "") + '</div>'; }
+
+/* ═══ вкладка «Поездки» ════════════════════════════════════════════════ */
+function tripsAll(){ return ((S.T && S.T.trips) || []).slice().sort(function(x, y){ return y.period.start.localeCompare(x.period.start); }); }
+function tripCur(all){ return all.filter(function(x){ return x.trip.id === S.tripId; })[0] || all[0]; }
+/* Выбор поездки — справа в строке вкладок, как месяц на других вкладках:
+   под вкладками он съедал строку. */
+function tripPicker(){
+  var all = tripsAll();
+  if (!all.length) return "";
+  var cur = tripCur(all);
+  return uiSelectHTML({ name: "trip", label: "Выбрать поездку", compact: true,
+    cur: { t: cur.trip.name, s: dRange(cur.period.start, cur.period.end) + " · " + K(cur.totals.spent_rub) },
+    options: all.map(function(x){
+      return { value: x.trip.id, t: x.trip.name, s: dRange(x.period.start, x.period.end) + " · " + days(x.period.days),
+               aside: K(x.totals.spent_rub), selected: x === cur };
+    }) });
+}
+function tabTrips(){
+  var all = tripsAll();
+  if (!all.length) return empty("Поездок пока нет", "Итоги поездки появляются, когда закрывается месяц, в котором она кончилась, — или по просьбе «посчитай траты на поездку».");
+  var cur = tripCur(all);
+  var tt = cur.totals, spent = tt.spent_rub;
+
+  var ref = (tt.refunds_rub || 0) + (tt.compensations_rub || 0);
+  var stats = [["Всего", K(spent)], ["В день на месте", "≈ " + K(tt.per_day_during_rub)], ["Операций", String(tt.operations)], ["Возвраты", ref ? K(ref) : "—"]];
+  var types = cur.by_type.slice().sort(function(a, b){ return b.rub - a.rub; });
+  var tmax = types.length ? types[0].rub : 1;
+  var C = "minmax(90px,1.3fr) minmax(0,1.6fr) 54px 38px";
+  var typesHTML =
+    '<div><div class="ui-row head tight"' + cols(C) + '><span>На что</span><span></span><span class="ui-r">тыс. ₽</span><span class="ui-r">доля</span></div>' +
+      types.map(function(x){
+        var un = x.type === "Незаписанные траты";
+        return '<div class="ui-row tight"' + cols(C) + '><span' + (un ? ' class="ui-muted"' : '') + '>' + esc(x.type) + '</span>' +
+          '<span class="ui-bar"><i' + (un ? ' class="quiet"' : '') + w(x.rub / tmax * 100) + '></i></span>' +
+          '<span class="ui-r ui-strong">' + k1(x.rub) + '</span><span class="ui-r ui-note">' + (x.rub / spent < 0.005 ? "&lt;1%" : Math.round(x.rub / spent * 100) + "%") + '</span></div>';
+      }).join("") + '</div>';
+
+  var ph = cur.by_phase || { before: 0, during: 0, after: 0 }, ps = (ph.before + ph.during + ph.after) || 1;
+  var phases = [["до поездки", ph.before, "lv1"], ["на месте", ph.during, "lv-mid"], ["после", ph.after, "lv-low"]];
+  var lead = (new Date(cur.period.start) - new Date(cur.first_purchase)) / 864e5 / 30.44;
+  var lr = Math.round(lead * 2) / 2;
+  var leadTxt = lr >= 0.5 ? "за " + (lr % 1 === 0 ? pl(lr, ["месяц", "месяца", "месяцев"]) : num(lr) + " месяца") : "меньше чем за месяц";
+  var fp = cur.first_purchase.split("-").map(Number);
+  var firstType = (cur.type_by_phase || []).filter(function(x){ return x.before > 0; }).sort(function(a, b){ return b.before - a.before; })[0];
+  var bm = {}; (cur.prepaid_by_lead || []).forEach(function(b){ bm[b.bucket] = (bm[b.bucket] || 0) + b.rub; });
+  var curs = (cur.currencies || []).map(function(c){
+    var m = CUR[c.instrument] || [c.instrument, c.instrument];
+    var amt = c.instrument === "RUB" ? "" : (c.amount >= 1e6 ? num(c.amount / 1e6) + " млн " + m[1] : c.amount.toLocaleString("ru-RU", { maximumFractionDigits: 0 }) + " " + m[1]);
+    return '<div class="ui-kv ui-num"><span>' + esc(cap(m[0])) + ' <span class="ui-muted">' + esc(amt) + '</span></span><span class="ui-strong ui-r">' + K(c.rub) + '</span></div>';
+  }).join("");
+
+  var right =
+    '<div class="ui-stack-col">' +
+      '<div><div class="ui-kicker">Когда платил</div>' +
+        '<div class="ui-stack ui-mt-m">' + phases.map(function(p){ return '<i class="' + p[2] + '"' + w(p[1] / ps * 100) + '></i>'; }).join("") + '</div>' +
+        '<div class="ui-grid q3 ui-mt-m">' + phases.map(function(p){
+          return '<div><div class="ui-sub"><i class="ui-sw ' + p[2] + '"></i> ' + p[0] + '</div><div class="ui-strong ui-num">' + K(p[1]) + '</div></div>';
+        }).join("") + '</div>' +
+        '<div class="ui-sub ui-mt-m">Первая покупка — ' + fp[2] + ' ' + GEN[fp[1] - 1] + (firstType ? ' (' + esc(firstType.type.toLowerCase()) + ')' : '') + ', ' + leadTxt + ' до поездки.</div>' +
+        '<div class="ui-note ui-strong ui-mt-m">Предоплаты по сроку</div>' +
+        '<div class="ui-grid q4 ui-mt-s">' + BUCKETS.map(function(l){
+          return '<div class="ui-stat sm ' + (bm[l] ? "on" : "off") + '"><div class="ui-stat-k">' + BUCKET_SHORT[l] + '</div><div class="ui-stat-v">' + (bm[l] ? k1(bm[l]) : "—") + '</div></div>';
+        }).join("") + '</div>' +
+      '</div>' +
+      '<div><div class="ui-kicker">Валюты</div>' + curs + '</div>' +
+    '</div>';
+
+  var card =
+    '<div class="ui-card acc lg">' +
+      '<div class="ui-head flat"><h2 class="ui-h2 lg">' + esc(cur.trip.name) + '</h2><span class="ui-sub">' + dRange(cur.period.start, cur.period.end) + ' · ' + days(cur.period.days) + '</span></div>' +
+      '<div class="ui-grid stats ui-mt-l">' + stats.map(function(s){ return '<div class="ui-stat"><div class="ui-stat-k">' + s[0] + '</div><div class="ui-stat-v">' + s[1] + '</div></div>'; }).join("") + '</div>' +
+      '<div class="ui-note ui-mt-s">стоимость общая — на всех, кто ехал, без вычета доли партнёра</div>' +
+      '<div class="ui-grid wide ui-mt-l">' + typesHTML + right + '</div>' +
+      '<div class="ui-sep-top ui-sub">' +
+        '<span>' + (ref ? "Возвраты " + K(ref) + " уже вычтены" : "Возвратов не было") + (tt.partner_rub ? " · доля партнёра " + K(tt.partner_rub) + " не вычитается" : "") + '.</span>' +
+        (tt.unrecorded_rub > 0 ? '<span>Незаписанные траты ' + K(tt.unrecorded_rub) + ' — наличные в отпуске, восстановить нельзя.</span>' : '') +
+      '</div>' +
+    '</div>';
+
+  var cmp;
+  if (all.length > 1){
+    var pdMax = Math.max.apply(null, all.map(function(x){ return x.totals.per_day_during_rub; })) || 1;
+    var CC = "minmax(110px,150px) minmax(0,1fr) 64px minmax(70px,120px)";
+    var CMP_N = 5;
+    var rowsCmp = (S.cmpAll ? all : all.slice(0, CMP_N)).map(function(x){
+      var sp = x.totals.spent_rub;
+      var segs = tripSegs(x);
+      return '<div class="ui-row pick' + (x === cur ? " on" : "") + '"' + cols(CC) + ' data-act="trip" data-v="' + esc(x.trip.id) + '" role="button" tabindex="0">' +
+        '<span class="ui-two"><span class="ui-two-t ui-ell">' + esc(x.trip.name) + '</span><span class="ui-note">' + x.period.start.slice(0, 7).split("-").reverse().join(".") + ' · ' + days(x.period.days) + '</span></span>' +
+        '<span class="ui-stack sm">' + segs + '</span>' +
+        '<span class="ui-r ui-strong">' + k1(sp) + '</span>' +
+        '<span class="ui-r"><span class="ui-pace" style="width:' + Math.round(x.totals.per_day_during_rub / pdMax * 60) + 'px"></span> ' + k1(x.totals.per_day_during_rub) + '</span></div>';
+    }).join("");
+    var order = [];
+    all.forEach(function(x){ x.by_type.slice().sort(function(a, b){ return b.rub - a.rub; }).forEach(function(b){ if (order.indexOf(b.type) < 0) order.push(b.type); }); });
+    var tbl = '<table class="ui-table"><thead><tr><th>тыс. ₽</th>' + all.map(function(x){ return '<th>' + esc(x.trip.name) + '</th>'; }).join("") + '</tr></thead><tbody>' +
+      order.map(function(tp){ return '<tr><td>' + esc(tp) + '</td>' + all.map(function(x){ var f = x.by_type.filter(function(b){ return b.type === tp; })[0]; return '<td>' + (f ? k1(f.rub) : "—") + '</td>'; }).join("") + '</tr>'; }).join("") +
+      '<tr class="total"><td>Всего</td>' + all.map(function(x){ return '<td>' + k1(x.totals.spent_rub) + '</td>'; }).join("") + '</tr>' +
+      '<tr class="quiet"><td>Дней</td>' + all.map(function(x){ return '<td>' + x.period.days + '</td>'; }).join("") + '</tr>' +
+      '<tr class="total"><td>В день на месте</td>' + all.map(function(x){ return '<td>' + k1(x.totals.per_day_during_rub) + '</td>'; }).join("") + '</tr>' +
+      '</tbody></table>';
+    cmp =
+      '<div class="ui-card acc flush">' +
+        '<div class="ui-row head"' + cols(CC) + '><span>Поездка</span><span>Из чего сложилась</span><span class="ui-r">тыс. ₽</span><span class="ui-r">в день</span></div>' +
+        rowsCmp +
+        (all.length > CMP_N ? '<button type="button" class="ui-link ui-mt-s" data-act="cmp">' + (S.cmpAll ? "свернуть" : "все " + pl(all.length, ["поездка", "поездки", "поездок"])) + '</button>' : '') +
+        '<div class="ui-legend">' + GROUPS.map(function(g){ return '<span><i class="ui-sw wide lv' + g[2] + '"></i>' + g[0] + '</span>'; }).join("") + '</div>' +
+      '</div>' +
+      '<details class="ui-card ui-fold ui-mt-m"><summary><span class="ui-grow ui-text ui-strong ui-muted">Таблица по типам трат</span><span class="ui-chev">▾</span></summary>' +
+        '<div class="ui-scroll-x ui-mt-s">' + tbl + '</div></details>';
+  } else cmp = '<div class="ui-text ui-faint">Сравнение появится, когда закроется вторая поездка.</div>';
+
+  return card + sechead("Сравнение поездок") + cmp;
+}
+
+/* ── общие куски ── */
+function segHTML(name, list, cur, sm){
+  return '<div class="ui-seg' + (sm ? " sm" : "") + '" role="group">' + list.map(function(x){
+    return '<button type="button" class="ui-seg-btn" data-act="' + name + '" data-v="' + x[0] + '" aria-pressed="' + (x[0] === cur) + '">' + x[1] + '</button>';
+  }).join("") + '</div>';
+}
+function monthPicker(){
+  var ms = months();
+  if (!ms.length || S.tab === "trips") return "";
+  var recs = (S.H && S.H.records) || [], sps = (S.Sp && S.Sp.months) || [];
+  function info(m){
+    var r = recs.filter(function(x){ return x.month === m; })[0], s = sps.filter(function(x){ return x.month === m; })[0];
+    // число операций — из аудита, а у месяца без аудита (история из CSV) — из итогов: оно то же
+    var n = r ? r.operations : s && s.totals.operations;
+    // месяц переписан после закрытия (правка в ZenMoney) — видно в подписи
+    return { s: (r ? "аудит " + dGen(r.as_of) : s ? "итоги " + dGen(s.as_of) : "") + (n ? " · " + pl(n, ["операция", "операции", "операций"]) : "") +
+                (s && s.recomputed_at ? " · пересчитан " + dGen(s.recomputed_at) : ""),
+             aside: s ? K(s.totals.expense_regular_rub) : "" };
+  }
+  // «Все годы»: выбирать нечего, но блок той же высоты — иначе при смене режима всё ниже прыгает
+  if (S.tab === "spend" && S.period === "years"){
+    var yy = sps.length ? sps[0].month.slice(0, 4) + "–" + sps[sps.length - 1].month.slice(0, 4) : "";
+    var cy = { t: "Все годы · " + yy, s: pl(sps.length, ["месяц", "месяца", "месяцев"]) + " итогов · в среднем в месяц" };
+    return uiSelectHTML({ name: "years", label: "Все годы", compact: true, search: false, cur: cy, options: [{ value: "all", t: cy.t, s: cy.s, selected: true }] });
+  }
+  if (S.tab === "spend" && S.period !== "month" && sps.length) return periodPicker(sps);
+  var c = info(S.month);
+  return uiSelectHTML({ name: "month", label: "Выбрать месяц", compact: true, search: false,   // месяцы листают, не ищут (решение владельца)
+    cur: { t: mTitle(S.month), s: c.s },
+    options: ms.slice().reverse().map(function(m){ var i = info(m); return { value: m, t: mTitle(m), s: i.s, aside: i.aside, selected: m === S.month }; }) });
+}
+/* Список периодов для «3 месяца» и «Год». Значение пункта — последний месяц
+   периода: выбор просто ставит S.month, окно строит spendWindow. */
+function periodPicker(all){
+  var opts = [], cur = null, seen = {};
+  for (var i = all.length - 1; i >= 0; i--){
+    var w = spendWindow(all, i, S.period);
+    if (S.period === "year"){ if (seen[w.year]) continue; seen[w.year] = 1; }
+    var n = w.sel.length;
+    var o = { value: all[i].month, t: w.label,
+              s: (S.period === "year" ? span(w.sel) + " · " : "") + (n < FULL[S.period] ? "данных за " + pl(n, ["месяц", "месяца", "месяцев"]) : "в среднем " + K(regSum(w.sel) / n) + " в месяц"),
+              aside: K(regSum(w.sel)) };
+    o.selected = S.period === "year" ? w.year === ym(S.month)[0] : all[i].month === S.month;
+    if (o.selected) cur = o;
+    opts.push(o);
+  }
+  cur = cur || opts[0];
+  return uiSelectHTML({ name: "month", label: S.period === "year" ? "Выбрать год" : "Выбрать период", compact: true, search: false,   // месяцы листают, не ищут (решение владельца)
+    cur: { t: cur.t, s: cur.s }, options: opts });
+}
+function topBar(){ return uiTopHTML({ page: "money", name: "Деньги", tag: "приватный" }); }   // шапка — общая, ui-kit
+/* Фон-узор раздела: монеты, стопка, рубль, график — рисунок из макета. Цвет
+   штриха — токен --c-6 текущей темы (своих цветов страница не держит). */
+function paper(){
+  var c = "";
+  try { c = getComputedStyle(document.documentElement).getPropertyValue("--c-6").trim(); } catch(e){}
+  if (!c) return "none";
+  var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><g fill='none' stroke='" + c + "' stroke-opacity='.15' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'>" +
+    "<circle cx='58' cy='62' r='14'/><circle cx='58' cy='62' r='9'/>" +
+    "<g transform='translate(196 40)'><ellipse cx='0' cy='0' rx='15' ry='5'/><path d='M-15 0v8a15 5 0 0 0 30 0v-8M-15 8v8a15 5 0 0 0 30 0v-8'/></g>" +
+    "<g transform='translate(122 132)'><path d='M0 22V0h8a6 6 0 0 1 0 12H-4M-4 17h13'/></g>" +
+    "<path d='M24 248h16v-12h16v-10h16v-16h16'/><path d='M196 238l14-11 12 7 20-19m0 0h-8m8 0v8'/>" +
+    "<g transform='translate(236 120)'><rect x='0' y='0' width='30' height='22' rx='3'/><path d='M0 8h30M6 15h8'/></g>" +
+    "<path d='M112 260h34M112 268h22M112 276h28'/>" +
+    "<circle cx='150' cy='70' r='2.2'/><circle cx='42' cy='158' r='2.2'/><circle cx='272' cy='272' r='2.2'/><path d='M152 196v12M146 202h12'/>" +
+    "</g></svg>";
+  // Одинарные кавычки: значение уходит в атрибут style в двойных — свои двойные оборвали бы
+  // атрибут, и фон молча стал бы однотонным (так и было в v1.0.0). Апострофы
+  // самого SVG экранированы в %27, поэтому url('…') они не порвут.
+  return "url('data:image/svg+xml," + encodeURIComponent(svg).replace(/'/g, "%27") + "')";
+}
+
+/* Набранное в полях отчёта («что это», даты новой поездки) переживает полную пересборку страницы (ошибка в другой строке,
+   смена темы, поздний ответ): до пересборки снимаем изменённые значения и фокус с курсором, после — возвращаем в те же поля.
+   Только пока отчёт тот же объект: новый отчёт меняет состав и номера строк — тогда чужой текст в поля не подставляем. */
+var KEEP_FOR = null;
+function formKeep(){
+  var app = document.getElementById("app"), cur = S.csv.report;
+  if (!app || !cur || cur !== KEEP_FOR) return null;
+  var out = { f: [], focus: null }, els = app.querySelectorAll("input[id], textarea[id]");
+  for (var i = 0; i < els.length; i++){
+    var e = els[i], t = e.type;
+    if (t === "file" || t === "button" || t === "submit") continue;
+    if (t === "hidden" ? /^f-csvt[se]\d+$/.test(e.id) : e.value !== e.defaultValue) out.f.push({ id: e.id, v: e.value });
+  }
+  var a = document.activeElement;
+  if (a && a.id && app.contains(a) && (a.tagName === "INPUT" || a.tagName === "TEXTAREA"))
+    try { out.focus = { id: a.id, s: a.selectionStart, e: a.selectionEnd }; } catch (x) { out.focus = { id: a.id }; }
+  return out;
+}
+function formRestore(k){
+  if (!k) return;
+  k.f.forEach(function(x){ var e = document.getElementById(x.id); if (e && e.value !== x.v) e.value = x.v; });
+  if (k.focus){
+    var e = document.getElementById(k.focus.id);
+    if (e){ try { e.focus({ preventScroll: true }); if (k.focus.s != null) e.setSelectionRange(k.focus.s, k.focus.e); } catch (x) {} }
+  }
+}
+function render(){
+  var kept = formKeep();
+  document.documentElement.setAttribute("data-theme", S.theme === "dark" ? "dark" : "light");
+  var body, navOn = false;
+  if (S.tab === "csv" && !S.loading && !S.error && S.csv.state === undefined) csvLoadState();
+  if (S.error === "auth")
+    body = '<div class="ui-empty ui-mt-l"><div class="ui-empty-t">Раздел приватный</div><div class="ui-sub ui-mt-s">Итоги по деньгам под паролем. Открываю страницу входа…</div>' +
+      '<div class="ui-mt-l"><a class="ui-btn" href="' + esc(loginUrl("money")) + '">Войти</a></div></div>';
+  else if (S.loading) body = '<div class="ui-sub ui-mt-l">Загружаю данные…</div>';
+  else if (S.error) body = '<div class="ui-alert">' + esc(S.error) + '</div>';
+  else {
+    var tab = S.tab === "csv" ? tabUpload() : S.tab === "spend" ? tabSpend() : S.tab === "trips" ? tabTrips() : S.tab === "quality" ? tabQuality() : tabOverview();
+    var miss = S.missing.length ? '<p class="ui-note">Нет файла: ' + S.missing.map(function(f){ return DATA.replace("../", "") + f; }).join(", ") + ' — соответствующая вкладка пуста.</p>' : "";
+    body =
+      // справа колонка: тип анализа на уровне вкладок, под ним список (месяц/период/поездка) —
+      // заголовка периода слева нет: он уже в списке (просьба 2026-10-06)
+      '<div class="ui-toolbar stack"><span class="ui-hide-m">' + segHTML("tab", TABS.map(function(t){ return [t[0], t[1]]; }), S.tab) + '</span>' +
+        // время — в одном месте: период «Траты» рядом со списком месяца/периода
+        '<span class="ui-toolbar-r">' + (S.tab === "spend" ? segHTML("period", [["month", "Месяц"], ["3m", "3 мес."], ["year", "Год"], ["years", "Все годы"]], S.period, true) : "") + (S.tab === "csv" ? "" : S.tab === "trips" ? tripPicker() : monthPicker()) + '</span></div>' +
+      miss + tab;
+    navOn = true;
+  }
+  // Вкладка перерисовывается целиком: без этого клик по столбику сбрасывал бы
+  // их прокрутку вбок, а смена высоты блоков над графиком (строки сравнения,
+  // пояснения, разовые покупки бывают не у каждого месяца) сдвигала бы страницу
+  // вверх-вниз. Запоминаем положение графика и после перерисовки возвращаем
+  // его на то же место экрана — по клику по графику (S.anchor = id графика из
+  // data-anchor: на телефоне графики стоят под текстом, и текст меняет высоту).
+  // прокрутка окон: перерисовка (выбор месяца, подкатегория) не сбрасывает её
+  var yoyScroll = uiStackKeepScroll("yoyb-", S.yoy.length);
+  var old = document.getElementById("dyn"), anc = S.anchor && document.getElementById(S.anchor);
+  var oldTop = anc ? anc.getBoundingClientRect().top : null, oldLeft = old ? old.scrollLeft : null;
+  document.getElementById("app").innerHTML =
+    '<div class="ui-page has-mnav anchor-js" style="--sec-acc:var(--c-6); background-image:' + paper() + '">' +
+      topBar() +
+      '<main class="ui-main">' +
+        '<h1 class="ui-h1">Деньги</h1>' +
+        '<p class="ui-lead">Итоги месяцев и поездок из ZenMoney. Отдельных операций здесь нет — их правят в приложении.</p>' +
+        body +
+        uiFootHTML({ page: "money", version: VERSION, src: "Synology · ZenMoney/audit" }) +
+      '</main>' +
+      (navOn ? S.yoy.map(function(_, i){ return yoyModal(i); }).join("") : '') +
+    '</div>';
+  // под открытым окном страница не прокручивается (как у справки ui-kit)
+  document.documentElement.style.overflow = S.yoy.length && navOn ? "hidden" : "";
+  S.yoyFresh = null;
+  yoyScroll();
+  // раскрытие категории — плавно и один раз, не на каждой перерисовке
+  if (S.catFresh) [].forEach.call(document.querySelectorAll(".ui-catopen.fresh .ui-catdetail"), function(d){ uiExpandIn(d); });
+  S.catFresh = null;
+  // нижняя панель — общая ui-kit, монтируется один раз в body (не пересоздаётся)
+  if (navOn) uiNavMount(TABS.map(function(t){ return { k: t[0], label: t[1], short: t[2], icon: ICONS[t[0]] }; }),
+                        S.tab, { act: "tab", key: "data-v", title: "Вкладки" });
+  else uiNavHide(true);
+  // Столбики по месяцам — к последнему месяцу при первом показе вкладки.
+  var dyn = document.getElementById("dyn");
+  // и когда графика до перерисовки не было («Все годы» → «Месяц»): помнить нечего —
+  // иначе он открывался с 2020 года, а не с последнего месяца (замечено 2026-10-07)
+  if (dyn && (!S.dynScrolled || oldLeft == null)){ dyn.scrollLeft = dyn.scrollWidth; S.dynScrolled = true; }
+  else if (dyn && oldLeft != null) dyn.scrollLeft = oldLeft;
+  var anc2 = S.anchor && document.getElementById(S.anchor);
+  if (anc2 && oldTop != null) window.scrollBy(0, anc2.getBoundingClientRect().top - oldTop);
+  S.anchor = null;
+  csvMountSlot();
+  stmtMountSlot();
+  formRestore(kept);
+  KEEP_FOR = S.csv.report;
+}
+
+/* подписи отчёта выгрузки: действие и поля расхождения — словами (строки приходят из diff_month как «ключ: было X, CSV Y») */
+var CSV_ACT = { add: "новый", replace: "будет перезаписан", same: "без изменений" };
+var CSV_KEY = { expense_rub: "расход", income_rub: "доход", refunds_rub: "возвраты", expense_regular_rub: "обычные траты",
+  expense_trips_rub: "поездки", expense_one_off_rub: "разовые", expense_in_balance_rub: "расход в балансе",
+  income_in_balance_rub: "доход в балансе", expense_off_balance_rub: "расход вне баланса", spent_rub: "потрачено" };
+function csvChange(x){
+  x = String(x).replace(/^categories_regular /, "категория ").replace(/^trips /, "поездка ").replace(/, CSV /, ", в выгрузке ")
+    .replace(/(\d),(?=\d{3})/g, "$1\u202f");          /* 121,942 → 121 942: запятая читалась как дробь */
+  var i = x.indexOf(":"), k = i > 0 ? x.slice(0, i) : "";
+  return CSV_KEY[k] ? CSV_KEY[k] + x.slice(i) : x;
+}
+function csvChanges(list){
+  return (list || []).length ? '<ul class="ui-sub">' + list.map(function(x){ return "<li>" + esc(csvChange(x)) + "</li>"; }).join("") + "</ul>" : "";
+}
+/* ── Выгрузка CSV: загрузить → отчёт → «Записать» (маршруты /api/zm/*, docs/zenmoney/csv-site.md) ── */
+var ZM = "../api/zm/";
+S.csv = { state: undefined, stateErr: null, busy: null, err: null, up: null, report: null, applied: null };
+function zmPost(path, body){
+  return authFetch(ZM + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }).then(function(r){
+    return r.json().catch(function(){ return {}; }).then(function(j){ return { status: r.status, j: j || {} }; });
+  });
+}
+function zmErr(x){ var j = x.j || {}; return (j.detail || j.error || j.message || ("ошибка " + x.status)) + ""; }
+function csvLoadState(){
+  S.csv.state = null; S.csv.stateErr = null;
+  authFetch(uiBust("money", ZM + "csv-state"), { cache: "no-store", headers: { "Accept": "application/json" } }).then(function(r){
+    if (!r.ok) throw new Error("csv-state → " + r.status);
+    return r.json();
+  }).then(function(j){ S.csv.state = j; }).catch(function(e){ S.csv.state = false; S.csv.stateErr = e.message; }).then(function(){ render(); });
+}
+function csvB64(file){
+  return new Promise(function(res, rej){
+    var fr = new FileReader();
+    fr.onload = function(){ var s = String(fr.result), i = s.indexOf(","); res(i >= 0 ? s.slice(i + 1) : s); };
+    fr.onerror = function(){ rej(new Error("файл не прочитан")); };
+    fr.readAsDataURL(file);
+  });
+}
+function csvReport(id){
+  S.csv.busy = "Строю отчёт…"; S.csv.err = null; S.csv.report = null; S.csv.applied = null; render();
+  return zmPost("csv-report", { id: id }).then(function(x){
+    S.csv.busy = null;
+    if (x.status === 200 && x.j && x.j.schema) S.csv.report = x.j; else S.csv.err = "Отчёт не построен: " + zmErr(x);
+    render();
+  }).catch(function(e){ S.csv.busy = null; S.csv.err = "Отчёт не построен: " + e.message; render(); });
+}
+function csvUpload(file){
+  S.csv.busy = "Читаю файл…"; S.csv.err = null; S.csv.report = null; S.csv.applied = null; S.csv.up = null; render();
+  csvB64(file).then(function(b64){
+    S.csv.busy = "Загружаю " + file.name + "…"; render();
+    return zmPost("csv", { name: file.name, b64: b64 });
+  }).then(function(x){
+    if (x.status !== 200 || !x.j || !x.j.id){ S.csv.busy = null; S.csv.err = "Выгрузка не принята: " + zmErr(x); render(); return; }
+    S.csv.up = x.j;
+    return csvReport(x.j.id);
+  }).catch(function(e){ S.csv.busy = null; S.csv.err = "Выгрузка не принята: " + (e && e.message || e); render(); });
+}
+function csvToWrite(r){
+  var m = (r.months || []).filter(function(x){ return x.action === "add" || x.action === "replace"; });
+  var t = (r.trips || []).filter(function(x){ return x.action && x.action !== "same"; });
+  return { months: m, trips: t };
+}
+function csvApply(){
+  var r = S.csv.report; if (!r) return;
+  var w = csvToWrite(r);
+  var nothing = !w.months.length && !w.trips.length;
+  uiConfirm({ title: nothing ? "Принять выгрузку?" : "Записать выгрузку?", danger: false, ok: nothing ? "Принять" : "Записать", cancel: "Отмена",
+    text: nothing ? "Итоги месяцев и поездок не меняются. Выгрузка станет базой сравнения: следующая покажет, что добавлено, изменено и удалено."
+      : "Будут перезаписаны " + pl(w.months.length, ["месяц", "месяца", "месяцев"]) + " и " + pl(w.trips.length, ["поездка", "поездки", "поездок"]) + ", копии в .versions/." }).then(function(yes){
+    if (!yes) return;
+    S.csv.busy = "Записываю…"; S.csv.err = null; render();
+    zmPost("csv-apply", { id: r.id, confirm: true }).then(function(x){
+      S.csv.busy = null;
+      if (x.status === 200){
+        var wr = (x.j && x.j.written) || {};
+        var cnt = function(v){ return Array.isArray(v) ? v.length : (v || 0); };
+        S.csv.applied = nothing ? "выгрузка принята как база сравнения" : "записано: " + pl(cnt(wr.months), ["месяц", "месяца", "месяцев"]) + ", " + pl(cnt(wr.trips), ["поездка", "поездки", "поездок"]);
+        S.csv.report = null; S.csv.state = undefined; if (CSV_SLOT) CSV_SLOT.clear();
+        render(); start();
+      } else { S.csv.err = "Не записано: " + zmErr(x); render(); }
+    }).catch(function(e){ S.csv.busy = null; S.csv.err = "Не записано: " + e.message; render(); });
+  });
+}
+function csvPostEdit(path, body, failText){
+  S.csv.busy = "Пересчитываю отчёт…"; S.csv.err = null; render();
+  zmPost(path, body).then(function(x){
+    S.csv.busy = null;
+    if (x.status === 200 && x.j && x.j.schema) S.csv.report = x.j; else S.csv.err = failText + ": " + zmErr(x);
+    render();
+  }).catch(function(e){ S.csv.busy = null; S.csv.err = failText + ": " + e.message; render(); });
+}
+/* «Разовая»: кандидат (месяц, номер) → правило сайта; «что это» обязательно */
+function csvRule(v){
+  var r = S.csv.report, p = String(v).split("|"), m = (r.months || []).filter(function(x){ return x.month === p[0]; })[0];
+  var c = m && (m.candidates || [])[+p[1]]; if (!c) return;
+  var inp = document.getElementById("csv-note-" + p[0] + "-" + p[1]), note = inp ? inp.value.trim() : "";
+  if (!note){ S.csv.err = "Напиши, что это за трата, — поле «что это» обязательно."; render(); if (inp) inp.focus(); return; }
+  csvPostEdit("rule", { id: r.id, month: p[0], date: c.date, account: c.account, amount: c.amount, payee: c.payee || "", note: note }, "Отметка не записана");
+}
+function csvRuleRemove(ruleId){
+  var r = S.csv.report; if (!r) return;
+  /* удаление — всегда с подтверждением (решение владельца 2026-11-10) */
+  uiConfirm({ title: "Снять отметку «разовая»?", text: "Трата снова попадёт в обычные траты месяца при пересчёте.", ok: "Снять" })
+    .then(function(ok){ if (ok) csvPostEdit("rule", { id: r.id, remove: true, rule_id: ruleId }, "Отметка не снята"); });
+}
+uiDateWire();   /* даты новой поездки — стандартное поле ui-kit с календарём */
+function csvDay(v){ var d = String(v || "").slice(0, 10); return /^\d{4}-\d\d-\d\d$/.test(d) ? dGen(d) + " " + d.slice(0, 4) : d; }   /* «10 ноября 2026» */
+function csvTrip(v){
+  var r = S.csv.report, t = (r.new_trips || [])[+v]; if (!t) return;
+  var a = document.getElementById("f-csvts" + v), b = document.getElementById("f-csvte" + v);   /* dateField ui-kit: ISO в скрытом f-<имя> */
+  var st = a ? a.value : t.start, en = b ? b.value : t.end;
+  if (!st || !en || st > en){ S.csv.err = "Укажи даты поездки: начало не позже конца."; render(); return; }
+  csvPostEdit("trip", { id: r.id, name: t.name, start: st, end: en }, "Поездка не добавлена");
+}
+function nf(v){ return String(v == null ? 0 : v).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+function csvStatePanel(){
+  var st = S.csv.state, h = "";
+  if (st === undefined || st === null) return '<div class="ui-sub ui-mt-m">Смотрю, что уже загружено…</div>';
+  if (st === false) return '<div class="ui-alert tight">Состояние выгрузок не получено: ' + esc(S.csv.stateErr || "") + '</div>';
+  h += '<div class="ui-card ui-mt-m" id="csv-state"><div class="ui-kicker">Последняя записанная выгрузка</div><div class="ui-sub ui-mt-s">' +
+    (st.last ? 'записана ' + esc(csvDay(st.last.written_at)) + (String(st.last.written_at || "").length >= 16 ? " в " + esc(String(st.last.written_at).slice(11, 16)) : "") +
+       (st.last.rows ? ' · ' + nf(st.last.rows) + ' операций' : '') + (st.last.last_op ? ', последняя — ' + esc(csvDay(st.last.last_op)) : '') +
+       '<div class="ui-sub">с ней будет сравниваться следующая выгрузка</div>' : 'выгрузок ещё не было') + '</div></div>';
+  if (st.aux_ok === false)
+    h += '<div class="ui-alert warn tight ui-mt-m" id="csv-aux-warn">Пересчёт месяцев недоступен: на NAS нет вспомогательных файлов <code>ZenMoney/csv/aux/</code> — скопируй их с Mac (см. справку).</div>';
+  var inc = st.incoming || [];
+  if (inc.length) h += '<div class="ui-card ui-mt-m" id="csv-incoming"><div class="ui-kicker">Незавершённые загрузки</div>' + inc.map(function(id){
+    return '<div class="ui-row ui-mt-s"><span>загружена ' + esc(csvDay(id)) + '</span> <button type="button" class="ui-btn ghost sm" data-act="csv-show" data-v="' + esc(id) + '">Показать отчёт</button></div>'; }).join("") + '</div>';
+  return h;
+}
+function csvTbl(head, rows){
+  return '<div class="ui-table-wrap"><table class="ui-table"><thead><tr>' + head.map(function(x){ return "<th>" + esc(x) + "</th>"; }).join("") + '</tr></thead><tbody>' +
+    rows.map(function(r){ return "<tr>" + r.map(function(x){ return "<td>" + esc(x) + "</td>"; }).join("") + "</tr>"; }).join("") + '</tbody></table></div>';
+}
+function csvSamples(title, list){
+  if (!list || !list.length) return "";
+  return '<details class="ui-fold ui-mt-s"><summary>' + esc(title) + " (" + list.length + ")</summary><div class=\"ui-sub\">" + list.map(function(o){
+    return '<div class="ui-num">' + esc(typeof o === "string" ? o : [o.date, o.amount, o.account, o.payee, o.tag].filter(function(x){ return x != null && x !== ""; }).join(" · ")) + "</div>"; }).join("") + "</div></details>";
+}
+/* крупные обычные траты месяца: «Разовая» заводит правило сайта (id site-…); отметки сайта можно снять */
+function csvCandidates(m){
+  var h = "", off = S.csv.busy ? " disabled" : "";
+  (m.site_rules || []).forEach(function(x){
+    h += '<div class="ui-row ui-mt-s csv-siterule"><span class="ui-grow">Отмечено с сайта как разовая: ' + esc(x.note) + ' · ' + esc(x.date || "") + ' · ' + esc(x.account || "") + ' ' + nf(x.amount) +
+      '</span><button type="button" class="ui-btn danger sm" data-act="csv-rule-remove" data-v="' + esc(x.id) + '"' + off + '>Снять</button></div>';
+  });
+  var cs = m.candidates || [];
+  if (cs.length) h += '<div class="ui-kicker ui-mt-s">Крупные траты — отметить разовой?</div>' + cs.map(function(c, i){
+    var id = "csv-note-" + m.month + "-" + i;
+    return '<div class="ui-sep-top ui-mt-s csv-cand"><div class="ui-sub"><b class="ui-num">' + esc(K(c.rub)) + '</b> · ' + esc(c.date) + ' · ' + esc(c.category) +
+      (c.payee ? ' · ' + esc(c.payee) : '') + (c.comment ? ' · ' + esc(c.comment) : '') + ' · ' + esc(c.account) + '</div>' +
+      '<div class="pf-actions">' + uiFieldHTML({ id: id, label: "Что это", hint: "обязательно", ph: "например, ремонт или подарок", extra: 'maxlength="200"', span: true }) +
+      '<button type="button" class="ui-btn ghost sm" data-act="csv-rule" data-v="' + esc(m.month + "|" + i) + '"' + off + '>Разовая</button></div></div>';
+  }).join("");
+  return h;
+}
+/* поездки с тегом, но без ID в trip-ids.json: добавить с датами (id «site:имя», позже заменится настоящим) */
+function csvNewTrips(r){
+  var nt = r.new_trips || [];
+  if (!nt.length) return "";
+  var off = S.csv.busy ? " disabled" : "";
+  return '<div class="ui-card ui-mt-m" id="csv-newtrips"><div class="ui-kicker">Новые поездки</div>' +
+    '<div class="ui-sub ui-mt-s">Тег есть, а поездки в списке нет — без неё она не попадёт в статистику. Проверь даты и добавь.</div>' +
+    nt.map(function(t, i){
+      return '<div class="ui-sep-top ui-mt-s csv-newtrip"><b>' + esc(t.name) + '</b> · операций ' + t.ops + ' · с ' + esc(t.first) + ' по ' + esc(t.last) +
+        '<div class="ui-daterow ui-mt-s"><label><span class="ui-kicker">Начало</span>' + dateField("csvts" + i, t.start) + '</label>' +
+        '<label><span class="ui-kicker">Конец</span>' + dateField("csvte" + i, t.end) + '</label>' +
+        '<button type="button" class="ui-btn ghost sm" data-act="csv-trip" data-v="' + i + '"' + off + '>Добавить поездку</button></div></div>';
+    }).join("") + '</div>';
+}
+function csvReportHTML(r){
+  var c = r.completeness || {}, d = r.diff || {}, a = r.aux || {}, stops = r.stops || [], h = "";
+  h += '<div class="ui-card ui-mt-m" id="csv-complete"><div class="ui-kicker">Полнота</div><div class="ui-sub ui-mt-s">Строк: <b class="ui-num">' + nf(r.rows) + '</b>' +
+    (c.prev_rows != null ? ' (в прошлой выгрузке ' + nf(c.prev_rows) + ')' : '') + ' · период ' + esc(r.first || "?") + ' — ' + esc(r.last || "?") + '</div>' +
+    ((c.warnings || []).length ? '<ul class="ui-sub ui-mt-s">' + c.warnings.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "") +
+    ((c.stops || []).length ? '<ul class="ui-alert tight ui-mt-s">' + c.stops.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "") + '</div>';
+  h += '<div class="ui-card ui-mt-m" id="csv-diff"><div class="ui-kicker">Что изменилось с прошлой выгрузки</div>';
+  if (!d.prev) h += '<div class="ui-sub ui-mt-s">Прошлой выгрузки нет — сравнивать не с чем.</div>';
+  else {
+    h += '<div class="ui-sub ui-mt-s">Добавлено <b class="ui-num">' + nf(d.added) + '</b> · удалено <b class="ui-num">' + nf(d.deleted) + '</b> · изменено <b class="ui-num">' + nf(d.changed) + '</b></div>';
+    var bm = Object.keys(d.by_month || {}).sort();
+    if (bm.length) h += csvTbl(["Месяц", "Добавлено", "Удалено", "Изменено"], bm.map(function(m){ var x = d.by_month[m]; return [m, x.added || 0, x.deleted || 0, x.changed || 0]; }));
+    if ((d.lost_trip_tags || []).length) h += '<div class="ui-alert tight ui-mt-s" id="csv-lost"><b>Потеряны теги поездок:</b><ul>' + d.lost_trip_tags.map(function(o){
+      return "<li>" + esc([o.date, o.amount, o.account, o.payee, o.tag].filter(Boolean).join(" · ")) + "</li>"; }).join("") + "</ul></div>";
+    h += csvSamples("Удалённые операции", (d.samples || {}).deleted) + csvSamples("Изменённые операции", (d.samples || {}).changed);
+  }
+  h += '</div>';
+  var w = csvToWrite(r);
+  h += '<div class="ui-card ui-mt-m" id="csv-towrite"><div class="ui-kicker">К записи</div>';
+  if (r.months_unavailable || r.unavailable) h += '<div class="ui-sub ui-mt-s">' + esc(r.unavailable || "Пересчёт месяцев недоступен") + '</div>';
+  else if (!w.months.length && !w.trips.length) h += '<div class="ui-sub ui-mt-s">Записывать нечего: месяцы и поездки совпадают с историей.</div>';
+  /* в списке — только месяцы и поездки с изменениями: «без изменений» (на реальной истории их 80+) — одной строкой */
+  var ms = (r.months || []).filter(function(m){ return m.action !== "same"; }), ts = (r.trips || []).filter(function(t){ return t.action !== "same"; });
+  var sameM = (r.months || []).length - ms.length, sameT = (r.trips || []).length - ts.length;
+  ms.forEach(function(m){
+    h += '<div class="ui-sep-top ui-mt-s"><b>' + esc(mTitle(m.month)) + '</b> — ' + (CSV_ACT[m.action] || esc(m.action)) + ' · ' + (m.explained === false ? '<b>расхождение не объяснено</b>' : 'объяснимо') +
+      (m.ops_changed_after ? ' · операций изменено после записи: ' + m.ops_changed_after : '') + csvChanges(m.changes) + csvCandidates(m) + '</div>';
+  });
+  ts.forEach(function(t){
+    h += '<div class="ui-sep-top ui-mt-s"><b>' + esc(t.name) + '</b> — ' + (CSV_ACT[t.action] || esc(t.action)) + csvChanges(t.changes) + '</div>';
+  });
+  if (sameM || sameT) h += '<div class="ui-sub ui-mt-s" id="csv-same">Без изменений: ' +
+    [sameM ? pl(sameM, ["месяц", "месяца", "месяцев"]) : "", sameT ? pl(sameT, ["поездка", "поездки", "поездок"]) : ""].filter(Boolean).join(", ") + '.</div>';
+  h += '</div>';
+  h += csvNewTrips(r);
+  /* «на что взглянуть»: проверки месяцев к записи (zm_checks) — подсказки, записи не мешают */
+  var cks = r.checks || [];
+  if (cks.length) h += '<div class="ui-card ui-mt-m" id="csv-checks"><div class="ui-kicker">На что взглянуть до записи</div>' +
+    '<div class="ui-sub ui-mt-s">Подсказки по месяцам, которые будут записаны. Записи не мешают; правится в приложении ZenMoney, затем новая выгрузка.</div>' +
+    cks.map(function(c){
+      return '<details class="ui-fold ui-mt-s"><summary><b>' + esc(mTitle(c.month)) + '</b> · ' + esc(c.text) + ' · ' + c.count +
+        (c.cls === "warn" ? ' <span class="ui-tag need">важно</span>' : '') + '</summary><ul class="ui-sub">' +
+        (c.sample || []).map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") +
+        (c.count > (c.sample || []).length ? "<li>… и ещё " + (c.count - c.sample.length) + "</li>" : "") + '</ul></details>';
+    }).join("") + '</div>';
+  if (stops.length) h += '<div class="ui-alert ui-mt-m" id="csv-stops"><b>Стопы</b><ul>' + stops.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + '</ul></div>';
+  h += '<div class="ui-card ui-mt-m" id="csv-aux"><div class="ui-kicker">Вспомогательные файлы</div><div class="ui-sub ui-mt-s">' +
+    (a.ok === false ? 'не хватает: ' + esc((a.missing || []).join(", ") || "файлов") : 'на месте') +
+    ((a.payee_unmapped || 0) > 0 ? '<br><b>Мест без словаря: ' + a.payee_unmapped + '</b> — на страницах окажутся тексты банка<span class="noai-hide">; словарь обновляет только Claude Code — скажи «пересчитай историю из csv»</span>.' : '') + '</div></div>';
+  /* нечего записывать, но отчёт чист — выгрузку можно принять: она станет базой сравнения (last.csv) для следующей */
+  var nothing = !w.months.length && !w.trips.length;
+  var can = !stops.length && !(r.months_unavailable || r.unavailable);
+  h += '<div class="ui-mt-l"><button type="button" class="ui-btn lg" id="csv-apply" data-act="csv-apply"' + (can && !S.csv.busy ? "" : " disabled") + '>' + (nothing ? "Принять выгрузку" : "Записать") + '</button> ' +
+    (can && nothing ? '<span class="ui-sub">итоги не меняются; выгрузка станет базой сравнения для следующей</span>' : "") +
+    (stops.length ? '<span class="ui-sub" id="csv-stop-hint">Устрани причины в ZenMoney и загрузи новую выгрузку</span>' : "") + '</div>';
+  return h;
+}
+/* Слот файла — один узел на страницу (ui-kit uiFileSlot): переживает перерисовки, input хранит выбранный файл */
+var CSV_SLOT = null;
+function csvSlot(){
+  if (!CSV_SLOT) CSV_SLOT = uiFileSlot({ key: "csv", id: "csv-file", label: "Выгрузка ZenMoney (CSV)", need: true, accept: ".csv",
+    hint: "Экспорт: приложение ZenMoney → Настройки → Экспорт данных → CSV, за всё время.",
+    onChange: function(f){ var b = document.getElementById("csv-pick"); if (b) b.disabled = !f || !!S.csv.busy; } });
+  return CSV_SLOT;
+}
+function tabCsv(){
+  var c = S.csv, h = csvStatePanel();
+  h += '<div class="ui-file-box ui-mt-m"><div class="ui-files" id="csv-slot-host"></div>' +
+    '<div class="pf-actions ui-mt-m"><button type="button" class="ui-btn lg" id="csv-pick" data-act="csv-pick" disabled>Проверить выгрузку</button>' +
+    '<div class="ui-file-msg" id="csv-msg" role="status">' + (c.busy ? '<span id="csv-busy">' + esc(c.busy) + '</span>' : "") + '</div></div></div>';
+  if (c.err) h += '<div class="ui-alert tight ui-mt-m" id="csv-err">' + esc(c.err) + '</div>';
+  if (c.applied) h += '<div class="ui-alert info tight ui-mt-m" id="csv-done">' + esc(c.applied) + '</div>';
+  if (c.report) h += csvReportHTML(c.report);
+  return h;
+}
+function csvMountSlot(){
+  var host = document.getElementById("csv-slot-host");
+  if (!host) return;
+  var s = csvSlot(); host.appendChild(s.node);
+  var b = document.getElementById("csv-pick"); if (b) b.disabled = !s.input.files[0] || !!S.csv.busy;
+}
+
+/* ── Сверка выписки банка: файл → отчёт zm-stmt-report@1 (маршруты /api/zm/stmt, stmt-report; docs/zenmoney/stmt-site.md).
+   Только чтение: в ZenMoney, историю и карту ничего не пишется; файл на сервере стирается сразу после отчёта. ── */
+var STMT_MAX = 8 * 1024 * 1024;
+S.stmt = { busy: null, err: null, report: null };
+/* числа по-русски: тысячи — неразрывным пробелом, дробная часть — запятой, минус настоящий; «1 → 2» (обмен) форматируется по числам */
+function mf(v){
+  if (v == null || v === "") return "—";
+  return String(v).replace(/-?\d+(?:\.\d+)?/g, function(t){
+    var neg = t.charAt(0) === "-", p = (neg ? t.slice(1) : t).split(".");
+    return (neg ? "−" : "") + p[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ") + (p[1] ? "," + p[1] : "");
+  });
+}
+function stmtDate(d){ return /^\d{4}-\d\d-\d\d$/.test(d || "") ? d.slice(8) + "." + d.slice(5, 7) + "." + d.slice(0, 4) : (d || "без даты"); }
+function stmtUpload(file){
+  S.stmt.err = null; S.stmt.report = null;
+  if (file.size > STMT_MAX){ S.stmt.err = "Файл больше 8 МБ — выписка банка обычно в разы меньше. Проверь, тот ли файл выбран."; render(); return; }
+  S.stmt.busy = "Читаю файл…"; render();
+  csvB64(file).then(function(b64){
+    S.stmt.busy = "Загружаю " + file.name + "…"; render();
+    return zmPost("stmt", { name: file.name, b64: b64 });
+  }).then(function(x){
+    if (!x) return;
+    if (x.status !== 200 || !x.j || !x.j.id){
+      S.stmt.busy = null; S.stmt.err = "Выписка не принята: " + (x.status === 413 ? "файл слишком большой" : zmErr(x)); render(); return;
+    }
+    S.stmt.busy = "Разбираю выписку…"; render();
+    return zmPost("stmt-report", { id: x.j.id }).then(function(y){
+      S.stmt.busy = null;
+      if (y.status === 200 && y.j && y.j.schema) S.stmt.report = y.j; else S.stmt.err = "Выписка не разобрана: " + zmErr(y);
+      render();
+    });
+  }).catch(function(e){ S.stmt.busy = null; S.stmt.err = "Выписка не разобрана: " + (e && e.message || e); render(); });
+}
+var STMT_SLOT = null;
+function stmtSlot(){
+  if (!STMT_SLOT) STMT_SLOT = uiFileSlot({ key: "stmt", id: "stmt-file", label: "Выписка банка", need: true, accept: ".xlsx,.csv",
+    hint: "CSV Райффайзенбанка или XLSX Bank of Georgia из интернет-банка. Банк сайт определяет сам, по содержимому файла.",
+    onChange: function(f){ var b = document.getElementById("stmt-pick"); if (b) b.disabled = !f || !!S.stmt.busy; } });
+  return STMT_SLOT;
+}
+function stmtTbl(head, rows, numCols){
+  numCols = numCols || [];
+  return '<div class="ui-table-wrap"><table class="ui-table"><thead><tr>' + head.map(function(x){ return "<th>" + esc(x) + "</th>"; }).join("") + '</tr></thead><tbody>' +
+    rows.map(function(r){ return "<tr>" + r.map(function(x, i){ return '<td' + (numCols.indexOf(i) >= 0 ? ' class="ui-num"' : "") + '>' + esc(x) + "</td>"; }).join("") + "</tr>"; }).join("") + '</tbody></table></div>';
+}
+/* операции: описание — под датой в первой (левой, переносимой) колонке, суммы и валюта — справа в одну строку; ui-таблица прокручивается в обёртке */
+function stmtOps(list){
+  return '<div class="ui-table-wrap"><table class="ui-table"><thead><tr><th>Дата и описание</th><th>Сумма</th><th>Валюта</th></tr></thead><tbody>' +
+    list.map(function(o){
+      return '<tr><td>' + esc(stmtDate(o.date) + (o.time ? " " + o.time : "")) + '<div class="ui-note">' + esc(o.text || "") + '</div></td><td class="ui-num ui-r">' + esc(mf(o.amount)) + '</td><td>' + esc(o.currency || "") + '</td></tr>';
+    }).join("") + '</tbody></table></div>';
+}
+function stmtVerdict(r){
+  var b = (r.balances || []).filter(function(x){ return x.status !== "unavailable"; });
+  if (!b.length) return null;
+  var bad = b.filter(function(x){ return x.status === "mismatch"; });
+  if (!bad.length) return { ok: true, text: "Остатки сходятся: входящий остаток плюс сумма операций равны исходящему" + (b.length > 1 ? " по каждой валюте" : "") + "." };
+  return { ok: false, text: "Остатки не сходятся: " + bad.map(function(x){ return "расхождение на " + mf(String(x.diff).replace(/^-/, "")) + " " + x.currency; }).join("; ") + "." };
+}
+var STMT_OTHER = { differs: "сумма отличается", date_shift: "дата сдвинута", merged: "слиты в одну", partial_transfer: "перевод наполовину",
+  topup_currency: "пополнение в другой валюте", to_other_account: "на другой счёт", expense_vs_transfer: "расход вместо перевода" };
+function stmtReportHTML(r){
+  var h = "", v = stmtVerdict(r), kind = r.kind === "deposit" ? "депозитный" : r.kind === "current" ? "текущий" : "";
+  h += '<div class="ui-alert ' + ((v && !v.ok) || !r.checks_ok ? "warn" : "info") + ' tight ui-mt-m" id="stmt-sum">' +
+    '<b>' + esc(r.bank_name) + '</b>' + (r.account ? ' · счёт ' + esc(r.account) : '') + ' · ' + esc(stmtDate(r.period.from)) + ' — ' + esc(stmtDate(r.period.to)) +
+    ' · ' + pl(r.ops_count, ["операция", "операции", "операций"]) +
+    '<div>' + (v ? esc(v.text) : 'Сверка остатков: в этой выписке нет данных для неё.') + (r.checks_ok ? '' : ' Проверка арифметики разбора не сошлась.') + '</div></div>';
+  h += '<div class="ui-card ui-mt-m" id="stmt-head"><div class="ui-kicker">Выписка</div><div class="ui-sub ui-mt-s">' +
+    'Банк: <b>' + esc(r.bank_name) + '</b>' + (r.account ? '<br>Счёт: <b class="ui-num">' + esc(r.account) + '</b> (последние цифры)' : '') +
+    (kind ? '<br>Тип: ' + kind : '') + '<br>Валюты: ' + esc((r.currencies || []).join(", ") || "—") +
+    '<br>Период: ' + esc(stmtDate(r.period.from)) + ' — ' + esc(stmtDate(r.period.to)) +
+    '<br>Операций: <b class="ui-num">' + mf(r.ops_count) + '</b> · формат ' + esc(String(r.format).toUpperCase()) + '</div></div>';
+  var bal = r.balances || [];
+  h += '<div class="ui-card ui-mt-m" id="stmt-bal"><div class="ui-kicker">Сверка остатков</div>' +
+    '<div class="ui-sub ui-mt-s">Входящий остаток + сумма операций = исходящий остаток, по валютам.</div>' +
+    stmtTbl(["Валюта", "Входящий", "Операции", "Исходящий", "Итог"], bal.map(function(x){
+      return [x.currency || "—", mf(x.opening), mf(x.sum_ops), mf(x.closing),
+              x.status === "match" ? "сходится" : x.status === "mismatch" ? "расхождение на " + mf(String(x.diff).replace(/^-/, "")) : "нет данных"];
+    }), [1, 2, 3]) +
+    bal.filter(function(x){ return x.note; }).map(function(x){ return '<div class="ui-note ui-mt-s">' + esc(x.currency + ": " + x.note) + '</div>'; }).join("") +
+    (r.footer ? '<div class="ui-sub ui-mt-s" id="stmt-footer">Итоги справки: пополнения <b class="ui-num">' + mf(r.footer["in"]) + '</b>, расходы <b class="ui-num">' + mf(r.footer.out) +
+      '</b>; по операциям — ' + mf(r.footer.rows_in) + ' и ' + mf(r.footer.rows_out) + ' (' + (r.footer.match ? "совпало" : "не совпало") + ').</div>' : "") + '</div>';
+  var fl = r.flags || [];
+  h += '<div class="ui-card ui-mt-m" id="stmt-flags"><div class="ui-kicker">Что отметили скрипты</div>' + (fl.length
+    ? '<ul class="ui-sub ui-mt-s">' + fl.map(function(f){ return "<li><b>" + esc(f.title || f.kind) + "</b>" + (f.date ? " · " + esc(stmtDate(f.date)) : "") + (f.detail ? " — " + esc(f.detail) : "") + "</li>"; }).join("") + "</ul>"
+    : '<div class="ui-sub ui-mt-s">Ничего: строки распознаны, арифметика сошлась.</div>') + '</div>';
+  var c = r.compare || {};
+  h += '<div class="ui-card ui-mt-m" id="stmt-cmp"><div class="ui-kicker">Сравнение с ZenMoney</div>';
+  if (!c.available) h += '<div class="ui-sub ui-mt-s">' + esc(c.reason || "Сравнение недоступно.") + '</div>';
+  else {
+    h += '<div class="ui-sub ui-mt-s">По последней принятой выгрузке, за период выписки (' + esc(stmtDate(c.window.from)) + ' — ' + esc(stmtDate(c.window.to)) + '). Счёт ZenMoney: ' +
+      esc(Object.keys(c.accounts || {}).map(function(k){ return (c.accounts[k] || "?") + " (" + k + ")"; }).join(", ")) + '.<br>' +
+      'Операций в выписке: <b class="ui-num">' + mf(c.bank_ops) + '</b> · в ZenMoney: <b class="ui-num">' + mf(c.zen_ops) + '</b> · пар найдено: <b class="ui-num">' + mf(c.matched) + '</b>' +
+      (Object.keys(c.other || {}).length ? ' · расхождения другого рода: ' + Object.keys(c.other).map(function(k){ return mf(c.other[k]) + " (" + esc(STMT_OTHER[k] || k) + ")"; }).join(", ") : "") + '</div>';
+    [["missing_in_zen", "Есть в выписке, нет в ZenMoney"], ["missing_in_bank", "Есть в ZenMoney, нет в выписке"]].forEach(function(p){
+      var list = c[p[0]] || [], tot = c[p[0] + "_total"] || list.length;
+      h += '<details class="ui-fold ui-mt-s" id="stmt-' + p[0].replace(/_/g, "-") + '"' + (list.length ? ' open' : '') + '><summary>' + esc(p[1]) + ' (' + mf(tot) + ')</summary>' +
+        (list.length ? stmtOps(list) : '<div class="ui-sub">Таких нет.</div>') +
+        (tot > list.length ? '<div class="ui-note ui-mt-s">показано ' + mf(list.length) + ' из ' + mf(tot) + '</div>' : "") + '</details>';
+    });
+  }
+  h += '</div>';
+  var ops = r.operations || [];
+  h += '<div class="ui-card ui-mt-m" id="stmt-ops"><div class="ui-kicker">Операции выписки (' + mf(r.ops_count) + ')</div>' +
+    stmtOps(ops) +
+    (r.operations_truncated ? '<div class="ui-note ui-mt-s">показаны первые ' + mf(ops.length) + ' из ' + mf(r.ops_count) + '</div>' : "") + '</div>';
+  h += '<p class="ui-note ui-mt-m" id="stmt-note">Только чтение: в ZenMoney, историю и карту ничего не записано. Файл выписки с сервера удалён, отчёт нигде не хранится — закроешь вкладку, и он исчезнет.' +
+    '<span class="noai-hide"> Занести недостающее в ZenMoney: «/zenmoney-analyst внеси операции из выписки».</span></p>';
+  return h;
+}
+/* вкладка «Загрузка»: два независимых блока (как «Загрузка» вьюера портфеля) — у каждого свой слот, кнопка, сообщение и результат */
+function tabUpload(){
+  return '<section id="blk-csv"><h2 class="ui-h2 ui-mt-l">Выгрузка ZenMoney (CSV)</h2>' + tabCsv() + '</section>' +
+    '<section id="blk-stmt"><h2 class="ui-h2 ui-mt-l">Выписка банка (CSV, XLSX)</h2>' + tabStmt() + '</section>';
+}
+function tabStmt(){
+  var c = S.stmt, h = '<div class="ui-card ui-mt-m"><div class="ui-sub">' +
+    'Выбери выписку — сайт разберёт её сам, без ZenMoney и без Claude: операции, сверку остатков, отметки скриптов и сравнение с последней выгрузкой ZenMoney. ' +
+    'Умею: Райффайзенбанк (CSV), Bank of Georgia (XLSX). PDF на сайте не разбирается.</div></div>';
+  h += '<div class="ui-file-box ui-mt-m"><div class="ui-files" id="stmt-slot-host"></div>' +
+    '<div class="pf-actions ui-mt-m"><button type="button" class="ui-btn lg" id="stmt-pick" data-act="stmt-pick" disabled>Проверить выписку</button>' +
+    '<div class="ui-file-msg" id="stmt-msg" role="status">' + (c.busy ? '<span id="stmt-busy">' + esc(c.busy) + '</span>' : "") + '</div></div></div>';
+  if (c.err) h += '<div class="ui-alert tight ui-mt-m" id="stmt-err">' + esc(c.err) + '</div>';
+  if (c.report) h += stmtReportHTML(c.report);
+  return h;
+}
+function stmtMountSlot(){
+  var host = document.getElementById("stmt-slot-host");
+  if (!host) return;
+  var s = stmtSlot(); host.appendChild(s.node);
+  var b = document.getElementById("stmt-pick"); if (b) b.disabled = !s.input.files[0] || !!S.stmt.busy;
+}
+
+/* ── действия ── refresh/logout ловит общий делегат ui-kit (data-cache-prefix) */
+var ACTS = {
+  tab: function(v, el){ try { localStorage.setItem("money-tab", v); } catch(e){} if (v === "spend") S.dynScrolled = false; set({ tab: v }); if (!(el && el.hasAttribute("data-ui-nav"))) uiScrollTop(); },   // из меню поднимает ui-kit
+  "csv-pick": function(){ var i = csvSlot().input; if (i.files[0]) csvUpload(i.files[0]); },
+  "stmt-pick": function(){ var i = stmtSlot().input; if (i.files[0]) stmtUpload(i.files[0]); },
+  "csv-show": function(v){ csvReport(v); },
+  "csv-apply": function(){ csvApply(); },
+  "csv-rule": function(v){ csvRule(v); },
+  "csv-rule-remove": function(v){ csvRuleRemove(v); },
+  "csv-trip": function(v){ csvTrip(v); },
+  month: function(v){ set({ month: v }); },
+  "quality-month": function(v){ set({ tab: "quality", month: v }); uiScrollTop(); },
+  // столбик = период, который кончается этим месяцем (в «3 месяца» — три
+  // месяца до него включительно, в «Год» — его год); режим не сбрасываем
+  // выбор месяца кликом по графику: график остаётся на месте экрана
+  // (data-anchor — id графика: «dyn», графики обзора, раскрытой категории)
+  "month-at": function(v, el){ set({ month: v, anchor: el.getAttribute("data-anchor") }); },
+  period: function(v){ set({ period: v, merchAll: false }); },
+  trip: function(v){ set({ tripId: v }); },
+  "trip-open": function(v){ try { localStorage.setItem("money-tab", "trips"); } catch(e){} set({ tab: "trips", tripId: v }); uiScrollTop(); },
+  merch: function(){ set({ merchAll: !S.merchAll }); },
+  chart: function(v){ set({ chart: v, anchor: "dyn" }); },
+  // строка, по которой нажали, остаётся на месте экрана: иначе при переходе
+  // от раскрытой категории выше к нижней верхняя сворачивается и нижняя
+  // уезжает вверх на высоту раскрытого блока (замечено 2026-10-06)
+  // Категории раскрываются независимо (их может быть открыто несколько): клик
+  // не сворачивает соседнюю, и ничего выше нажатой строки не схлопывается.
+  // Раскрытие и сворачивание — плавно (ui-kit uiExpandIn/uiCollapseOut). При
+  // сворачивании состояние меняется сразу (без перерисовки), а страница
+  // перерисовывается, когда подробности свёрнуты, — и только если карточку за это
+  // время не перерисовали другим кликом. Так можно быстро закрыть несколько подряд.
+  cat: function(v, el){
+    var o = {}, id = el.id; for (var k in S.catOpen) o[k] = 1;
+    if (!o[v]){ o[v] = 1; var f = {}; f[v] = 1; set({ catOpen: o, catFresh: f, anchor: id }); return; }
+    delete o[v]; S.catOpen = o;
+    var card = el.closest(".ui-catopen");
+    if (!card || card.classList.contains("closing")){ if (!card) set({ anchor: id }); return; }
+    card.classList.add("closing");
+    // перерисовка — когда свернулись все закрываемые (иначе обрежет анимацию соседней)
+    uiCollapseOut(card.querySelector(".ui-catdetail"), function(){
+      card.classList.add("gone");
+      if (card.isConnected && !document.querySelector(".ui-catopen.closing:not(.gone)")) set({ anchor: id });
+    });
+  },
+  // стрелка в шапке: свернуть все раскрытые (плавно, перерисовка — когда свернулись) или раскрыть все
+  "cat-all": function(v){
+    if (v === "open"){
+      var o = {}, f = {};
+      [].forEach.call(document.querySelectorAll(".ui-catrow[data-v]"), function(r){ o[r.getAttribute("data-v")] = 1; f[r.getAttribute("data-v")] = 1; });
+      set({ catOpen: o, catFresh: f, anchor: "cat-all" }); return;
+    }
+    S.catOpen = {};
+    var cards = document.querySelectorAll(".ui-catopen:not(.closing)"), left = cards.length;
+    // кнопка остаётся под мышкой: страница перерисовывается с якорем на ней (браузерная
+    // «привязка прокрутки» отключена — она держала на месте последнюю раскрытую категорию)
+    if (!left){ set({ anchor: "cat-all" }); return; }
+    [].forEach.call(cards, function(card){
+      card.classList.add("closing");
+      uiCollapseOut(card.querySelector(".ui-catdetail"), function(){ if (--left === 0 && card.isConnected) set({ anchor: "cat-all" }); });
+    });
+  },
+  // окно «к прошлому году» — поверх страницы; data-end — последний месяц периода
+  // с «Трат» окно открывается на месяцах выбранного периода (месяц / 3 месяца / год)
+  yoy: function(v, el){
+    var o = {}; (el.getAttribute("data-sel") || "").split(",").forEach(function(m){ if (m) o[m] = 1; });
+    set({ yoy: [{ cat: v || null, end: el.getAttribute("data-end"), sel: o, subOpen: {}, fi: null }], yoyFresh: 0 }); },
+  // в окне: месяц выбрать / снять (пусто — все 12), подкатегория — её места, категория — её окно поверх
+  "yoy-m": function(v, el){ var Y = S.yoy[+el.getAttribute("data-i")], o = {}, k; for (k in Y.sel) o[k] = 1;
+    if (!v) o = {}; else if (o[v]) delete o[v]; else o[v] = 1; Y.sel = o; render(); },
+  "yoy-sub": function(v, el){ var Y = S.yoy[+el.getAttribute("data-i")], o = {}, k; for (k in Y.subOpen) o[k] = 1;
+    if (o[v]) delete o[v]; else o[v] = 1; Y.subOpen = o; render(); },
+  // окно категории поверх — со своим выбором месяцев (нижнее окно не трогает)
+  "yoy-cat": function(v, el){ var i = +el.getAttribute("data-i"), Y = S.yoy[i];
+    set({ yoy: S.yoy.slice(0, i + 1).concat([{ cat: v, end: Y.end, sel: {}, subOpen: {}, fi: null }]), yoyFresh: i + 1 }); },
+  // плитка категории в «Все годы»: окно категории; есть факт о ней — с его месяцами
+  "yoy-tile": function(v){
+    var F = facts(), fi = F ? F.facts.map(function(f){ return f.category; }).indexOf(v) : -1, all = (S.Sp && S.Sp.months) || [];
+    if (fi >= 0) return ACTS["yoy-fact"](String(fi));
+    if (all.length) set({ yoy: [{ cat: v, end: all[all.length - 1].month, sel: {}, subOpen: {}, fi: null }], yoyFresh: 0 });
+  },
+  // факт → окно поверх Обзора; у факта о категории выбраны его месяцы (если они в окне 12 месяцев)
+  "yoy-fact": function(v){
+    var F = facts(), f = F && F.facts[+v]; if (!f) return;
+    var o = {};
+    if (f.category && f.window) calRange(f.window[0], f.window[1]).forEach(function(m){ if (m > addM(F.month, -12)) o[m] = 1; });
+    set({ yoy: [{ cat: f.category || null, end: F.month, sel: o, subOpen: {}, fi: +v }], yoyFresh: 0 });
+  },
+  // закрыть окно этого слоя (и всё, что поверх него)
+  "yoy-close": function(v, el){ yoyPop(+el.getAttribute("data-i")); },
+  cmp: function(){ set({ cmpAll: !S.cmpAll }); },
+  // переходы с Обзора и из «Всех лет»: на «Траты» последнего месяца
+  "go-net": function(){ goSpend({ period: "month", chart: "net" }); },
+  "go-cat": function(v){ var o = {}; for (var k in S.catOpen) o[k] = 1; o[v] = 1; goSpend({ period: "month", catOpen: o }); },
+  "year-open": function(v){ set({ period: "year", month: v }); uiScrollTop(); }
+};
+/* Закрыть окна от слоя i и выше: верхнее плавно уходит, окно под ним плавно
+   возвращается на место (ui-kit 1.36.0 uiStackPop), потом — перерисовка. */
+function yoyPop(i){
+  uiStackPop(document.querySelectorAll(".ui-modal"), i, function(){ set({ yoy: S.yoy.slice(0, i) }); });
+}
+function goSpend(p){
+  var all = (S.Sp && S.Sp.months) || [];
+  try { localStorage.setItem("money-tab", "spend"); } catch(e){}
+  p.tab = "spend"; if (all.length) p.month = all[all.length - 1].month;
+  S.dynScrolled = false; set(p); uiScrollTop();
+}
+/* Кнопку темы ведёт ui-kit (uiSetTheme: атрибут, hub-theme, подписи); здесь —
+   перерисовка: узор фона берёт цвет из токена новой темы. */
+document.addEventListener("ui-theme", function(ev){ set({ theme: ev.detail }); });
+document.addEventListener("click", function(ev){
+  var el = ev.target.closest ? ev.target.closest("[data-act]") : null;
+  if (!el || !ACTS[el.getAttribute("data-act")]) return;
+  ev.preventDefault();
+  ACTS[el.getAttribute("data-act")](el.getAttribute("data-v"), el);
+});
+// Слой страницы (ui-kit uiLayerBind): Escape и меню при открытых окнах «к прошлому году»
+uiLayerBind({
+  depth: function(){ return S.yoy.length; },
+  closeTop: function(){ if (!S.yoy.length) return false; yoyPop(S.yoy.length - 1); },
+  closeAll: function(){ set({ yoy: [] }); }
+});
+document.addEventListener("keydown", function(ev){
+  if (ev.key !== "Enter" && ev.key !== " ") return;
+  var el = ev.target;
+  if (!el.matches || !el.matches('[role="button"][data-act]')) return;
+  ev.preventDefault();
+  ACTS[el.getAttribute("data-act")](el.getAttribute("data-v"), el);
+});
+document.addEventListener("ui-select", function(ev){
+  if (ev.detail.name === "month") set({ month: ev.detail.value });
+  else if (ev.detail.name === "trip") set({ tripId: ev.detail.value });
+});
+
+render();
+start();
+})();
+</script>
+</body>
+</html>

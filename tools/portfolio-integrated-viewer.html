@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Портфель</title>
+<!-- веб-приложение (v3-B, вьюер 3.35.0): ярлык на экран «Домой» → push-уведомления.
+     iPhone даёт push только приложению с экрана «Домой», не вкладке Safari. -->
+<link rel="manifest" href="assets/portfolio-manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/portfolio-192.png">
+<link rel="apple-touch-icon" href="assets/icons/portfolio-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Портфель">
+<meta name="theme-color" content="#f4f1ea">
+<script>(function(){try{if(localStorage.getItem("hub-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/ui-kit.css?v=1.72.0">
+<link rel="stylesheet" href="assets/viewer.css?v=5.4.3">
+</head>
+<body>
+<div id="top-chrome">
+<!-- Шапка — в одну строку, как у остальных страниц кабинета: крошка «← Хаб» ·
+     ромб и имя раздела (как на плитке хаба) · кнопки. Вид — общий ui-kit .ui-hdr
+     (та же шапка, что .ui-top, но не липкая: липнет весь #top-chrome вместе с
+     горизонтом и вкладками). Подписи кнопок (.h-btn-lbl) на узком экране
+     сворачиваются, значки и счётчики остаются. Id кнопок ведёт viewer.js. -->
+<header class="app-header ui-hdr" style="--sec-acc:var(--c-1)">
+  <a class="ui-crumb" href="hub.html"><span class="ui-crumb-arw">←</span><span class="ui-crumb-lbl"> Хаб</span></a>
+  <span class="ui-top-div"></span>
+  <div class="ui-top-sec"><span class="ui-top-dot"></span><h1 id="app-title" class="ui-top-name">Портфель</h1><span class="ui-tag">приватный</span></div>
+  <div class="ui-top-spacer"></div>
+  <div class="ctrls">
+    <button id="btn-refresh" class="chip-btn" hidden title="Сбросить кеш и обновить данные и страницу"><span id="refresh-ico" data-refresh-ico>⟳</span><span class="h-btn-lbl">Обновить</span></button>
+    <button id="btn-reports" class="chip-btn" hidden title="Отчёты советника"><span aria-hidden="true">📄</span><span class="h-btn-lbl">Отчёты</span><span>(<span id="reports-count">0</span>)</span></button>
+    <button id="btn-gate-legend" class="chip-btn" hidden title="Решения по бумагам: последнее слово, гейт, история решений"><span aria-hidden="true">🛡</span><span class="h-btn-lbl">Решения</span></button>
+    <button id="btn-notify" class="chip-btn" hidden title="Push-уведомления о событиях портфеля на этом устройстве" aria-label="Уведомления"><span aria-hidden="true">🔔</span><span class="h-btn-lbl">Уведомления</span></button>
+    <button id="btn-pfbuild" class="chip-btn" hidden aria-label="Загрузки"><span aria-hidden="true">📥</span><span class="h-btn-lbl">Загрузки</span></button>
+    <button id="btn-help" class="chip-btn" title="Справка: что гонять, в каком порядке, какая вкладка к какому скиллу" aria-label="Справка"><span aria-hidden="true">❓</span><span class="h-btn-lbl">Справка</span></button>
+    <!-- вход/выход и тема — общие ui-kit (authBtnHTML, uiSetTheme), как на всех страницах -->
+    <span id="auth-slot"></span>
+    <button id="btn-theme" class="chip-btn" data-act="theme" data-ui-theme aria-label="Переключить тему"><span aria-hidden="true">◐</span><span class="h-btn-lbl" data-theme-lbl>Тёмная тема</span></button>
+  </div>
+</header>
+<!-- строка разделов — ui-kit uiTabsHTML (viewer.js renderTabs); полоса горизонтов —
+     под ней и только в разделах, где горизонт что-то меняет (строка разделов не прыгает) -->
+<div id="tabs" hidden></div>
+<div id="horizon-bar" class="horizon-bar" hidden></div>
+</div>
+<div id="banners"></div>
+<main class="content" id="content">
+  <!-- место для «Загрузка… / нужен вход / не удалось загрузить» (viewer.js initHttpLoad); убирается после
+       загрузки. v3.48.0: вьюер только с сервера — локальной заглушки выбора файлов больше нет -->
+  <div class="dropzone" id="dropzone"><p style="padding:40px;text-align:center;color:var(--text-muted)">Загрузка вьюера…</p></div>
+</main>
+<div id="app-foot"></div>
+<div class="modal-overlay ui-fx" id="modal-overlay" hidden>
+  <div class="modal" id="modal" role="dialog">
+    <div class="modal-header">
+      <h2 id="modal-title"></h2>
+      <button id="modal-close" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+<!-- карточка бумаги — окна ui-kit стопкой (viewer.js openCard/renderCards) -->
+<div id="card-layer"></div>
+<div id="plan-layer"></div>
+
+<!-- self-host (не CDN): токен hub-auth в localStorage читается любым скриптом
+     origin'а — сторонний CDN нельзя держать в цепочке доверия к паролю. -->
+<script src="assets/js-yaml.min.js?v=2.10.0"></script>
+<script src="assets/chart.umd.min.js?v=2.10.0"></script>
+<!-- ui-kit.js — общие компоненты кабинета (выпадающий список, вход); строго
+     ДО viewer.js: вьюер берёт из него uiSelectHTML и authFetch. -->
+<script src="assets/ui-kit.js?v=1.72.0"></script>
+<script src="assets/codelists.js?v=29ef9fc4"></script>
+<script src="assets/conditions-merge.js?v=221feaa6"></script>
+<script src="assets/last-word.js?v=a96dd09a"></script>
+<script src="assets/rebalance-engine.js?v=1.10.0"></script>
+<script src="assets/viewer.js?v=5.4.3"></script>
+</body>
+</html>

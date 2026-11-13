@@ -1,0 +1,35 @@
+# tools/data-structures — подготовка цикла «машиночитаемость БД портфеля»
+
+Подготовительные и разовые скрипты шагов 0, 8 и 9 цикла (схема — `docs/investment/_cross-cutting/data-structures/schema.md`,
+решения — `decision.md`). **Не подключено к продакшену**: ни скилл, ни сайт эти файлы не вызывают.
+
+| Скрипт | Что делает | Команда (из корня репозитория) |
+|---|---|---|
+| `migrations/archive_pre_ds.py` | архив старых носителей (в списке с шага 17 ещё `macro-chain/` и `Portfolio/decision-journal/` целиком; копии `*.pre-ds.bak`, `*.bak*` и `_to_delete/` вне `.backups/`, `securities/` и этих двух папок в архив не попадают): на каждый прогон новая папка `Claude-Memory/_archive/data-structures/<дата>T<ЧЧММ>-step<N>/` с `MANIFEST.md` и `manifest.json` (§4.7); `verify` без `--dest` берёт последнюю | сухой прогон: `~/.pyenv/versions/3.12.9/bin/python3 tools/data-structures/migrations/archive_pre_ds.py [--extra]`; копирование: `… --run --step N`; сверка: `… verify` |
+| `migrations/migrate_report_frontmatter.py` | шапки 53 отчётов под `report@1` (§4.3): `mode_codes`, `kind` по варианту A, `tickers` к ключам, `schema_version`, оценка `recorded_at` | отчёт: `… migrate_report_frontmatter.py [--aliases aliases.json]`; копии: `… --out <папка>`; на месте: `… --apply` |
+| `migrations/migrate_bond_verdicts.py` | словарь вердиктов обзоров облигаций (§3.4, шаг 8): legacy → `migrate_to` кодлиста `verdict` в полях-вердиктах, слияние `summary.verdict_counts`, пометка «(без оферты)» в `advisor_verdict_basis` у `HOLD_NO_OFFER`; построчно, со сверкой разбора YAML; идемпотентна | отчёт: `… migrate_bond_verdicts.py --in <файл\|папка>`; копии: `… --out <папка>`; на месте (только при переключении): `… --apply` |
+| ~~`validators/ds_schemas.py`~~ → **`_shared-references/ds_schemas.py`** (шаг 6) | валидаторы `decision@1`, определений `conditions@2` и `conditions-state@1` (§3) переехали в канон общих модулей: их импортирует `skills/save-to-library/scripts/apply_condition.py`, в `.skill` модуль кладёт `pack.sh`; `CODELISTS` и `DEFAULTS` — чтение `_shared-references/codelists.json` (не-legacy коды; `author` — местный перечень) | `~/.pyenv/versions/3.12.9/bin/python3 _shared-references/ds_schemas.py <decision\|conditions\|state> <файл>` (код выхода 1 при ошибках) |
+| ~~`merge/conditions_merge.py`~~ → **`_shared-references/conditions_merge.py`** (шаг 5) | модуль (а) — объединение «определение + состояние» условий (§3.3) переехал в канон общих модулей; JS-близнец `tools/assets/conditions-merge.js`, паритет — `tools/tests/test_conditions_merge_parity.py`; `key_kind` и `load_yaml` валидаторы берут оттуда | `~/.pyenv/versions/3.12.9/bin/python3 _shared-references/conditions_merge.py --defs conditions.yaml --state conditions-state.json [--key GMKN,MDMG] [--today 2026-10-31] [--format json\|table] [--all]` |
+| `migrations/migrate_conditions_v2.py` | миграция `conditions@1.2` -> `conditions@2` + `conditions-state@1` с отчётом; «дата + что ждём» -> `report_published` с окном `window_end` = прежняя дата + 3 дня (`valid_until` поднимается до окна); таблица (прежняя дата, новый `window_end`) — для проверки владельцем. Результат — один YAML определений; с шага 6 его пишет сам `skills/save-to-library/scripts/apply_condition.py` (тесты гоняют его на выходе миграции этой фикстуры) | сухой прогон: `… migrations/migrate_conditions_v2.py --in conditions.yaml`; запись: `… --out <папка>` |
+| `migrations/backfill_decisions.py` | шаг 9: решения `decision@1` (`source.kind: backfill`, время — оценка `дата T00:00` с `recorded_at_estimated: true`) из архивного `gate-reviews.yaml` (текущие записи и не-авто строки `reviewed_*` истории) и `gate-reviews-archive-2026.yaml`; директивы отчётов и обзоров дают `source.doc`; 10 правил — в докстринге; отчёт `backfill-report.md`. `verify` — временная проекция гейта §3.5 (только акции) против 28 статусов архива: совпало / устаревшая запись архива / расхождение, код 1 только при расхождении (шаг 11 заменит модулем (б)) | `… backfill_decisions.py build --archive <…/_archive/data-structures/…-step1> --out <временный корень>`; `… verify --out <корень> --gates <архивный gate-reviews.yaml> --snapshot <portfolio-*.json> --today ГГГГ-ММ-ДД --types <security-types.json>` |
+| `migrations/init_security_attrs.py` | шаг 9: справочник бумаг `security-attrs@1` (§4.8) — ключи реестра типов и снапшота, классы из архивного гейта, `listed_at` акций с ISS (первая дата торгов на любой доске); отчёт `security-attrs-report.md` (класс `ipo`, «проверить владельцу») | `… init_security_attrs.py --types <security-types.json> --snapshot <portfolio-*.json> --gates <архивный gate-reviews.yaml> --reviews <архивные weekly-reviews> --out <временный корень> [--offline]` |
+| `schema_guard.py` | шаг 17: сторож «нет файлов вне схемы» — обходит `Portfolio/`, `forecasts/`, `scenarios/`, `macro-chain/`, `monitor-reports/`, `macro-snapshots/` корня Claude-Memory и сверяет путь с разрешённым списком масок `ALLOWED` (в самом скрипте, в одном месте; выведен из schema.md §2 и `claude-memory-layout.md`, при расхождении верим schema.md). Печатает «вне схемы» (путь, размер, причина: упразднённый носитель — `gate-reviews*.yaml`, `securities/`, `.backups/` кроме копий `INDEX-{дата}-{ЧЧММ}.md` от `update_index.py`, `stale_flags.yaml`, `checkpoints.yaml`; копия-бэкап — `*.pre-ds.bak`, `*.bak*`, `_to_delete/`; служебный/пробный — `.DS_Store`, `.wtest`, `write_test*`; маска не подошла) и «разрешено, но пусто» (папки схемы без файлов, на код не влияют). Код: 0 чисто, 1 есть лишнее, 2 корень не найден. Только читает, удалять не умеет. Новый носитель схемы = новая маска в `ALLOWED` + строка в `tests/test_schema_guard.py` | `~/.pyenv/versions/3.12.9/bin/python3 tools/data-structures/schema_guard.py --root <Claude-Memory> [--json]` |
+
+Скрипты шага 9 пишут только в `--out` (путь внутри рабочей Claude-Memory, кроме `_archive/`, — ошибка); в рабочую папку решения и справочник кладёт оркестратор при переключении (`decision.md` §4.2).
+
+Архиватор и миграция отчётов по умолчанию читают зеркало `~/Library/CloudStorage/SynologyDrive-home/Claude-Memory` и ничего не пишут
+без явного `--run` / `--out` / `--apply`. Скрипты условий работают с файлами, которые передаёшь аргументами, и ничего не пишут без `--out`. Только stdlib и PyYAML.
+
+## Тесты
+
+```bash
+~/.pyenv/versions/3.12.9/bin/python3 -m unittest discover -s tools/data-structures/tests -v
+```
+
+Фикстуры — синтетические отчёты в `tests/fixtures/reports/`; тест `tests/test_ds_prep.py` (валидаторы, объединение условий модулем `_shared-references/conditions_merge.py`, миграция 1.2 -> 2; фикстуры `conditions_v12.yaml`, `merge_defs.yaml`, `merge_state.json`) запускается так же или напрямую: `~/.pyenv/versions/3.12.9/bin/python3 tools/data-structures/tests/test_ds_prep.py`.
+
+## Предупреждение
+
+**Не запускать с `--apply` / `--run` без шага архивации и «да» владельца.** Порядок: сухой прогон архиватора ->
+«да» -> `archive_pre_ds.py --run` и `verify` -> сухой прогон миграции, разбор «не распознано» -> «да» -> `--apply`.
+`plan-journal.jsonl` в зеркале Мака отстаёт от NAS: архивировать его надо с NAS.

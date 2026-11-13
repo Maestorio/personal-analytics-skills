@@ -1,0 +1,1888 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ui-kit.css — общие UI-компоненты Personal Hub
+   (tools/hub.html · travel.html · games.html · food.html · health.html ·
+    login.html · portfolio-integrated-viewer.html — последние две берут
+    отсюда только шрифты, токены и базу)
+
+   Пара к assets/ui-kit.js. Подключается как внешний ассет с версией в
+   query-string — тот же паттерн, что у assets/viewer.css/viewer.js
+   (portfolio-integrated-viewer.html): `<link rel="stylesheet"
+   href="assets/ui-kit.css?v=1.1.0">`. Версия ниже — SSOT: ?v=<версия> в
+   query-string обязана совпадать на КАЖДОЙ странице, которая подключает
+   ui-kit.css/ui-kit.js, и обязана совпадать с UI_KIT_VERSION в ui-kit.js
+   (проверяется tools/tests/test_pages_contracts.py).
+
+   Толчок к выносу: пять однофайловых страниц кабинета копировали UI-компоненты
+   (топбар, кнопки Обновить/Войти-Выйти, esc(), датапикер) вручную, и копии уже
+   разошлись (см. историю плана унификации). Компоненты переезжают сюда по
+   одному, начиная с датапикера (единственный компонент, который на 2026-07-21
+   существовал только в health.html — Фаза 1, без дедупликации между
+   страницами).
+
+   v1.0.0 (2026-07-21, Фаза 0+1): каркас + перенос CSS датапикера (.dp-*,
+   .mp-grid) из health.html — маска ДД.ММ.ГГГГ, drill-down день↔месяц↔год.
+   v1.1.0 (2026-07-21, Фаза 2): esc()/attr() переехали в ui-kit.js — CSS без
+   изменений, версия синхронизирована с UI_KIT_VERSION (ui-kit.css/ui-kit.js
+   всегда одной версии, даже если конкретная фаза правит только один файл).
+   v1.2.0 (2026-07-21, Фаза 3): auth/refresh переехали в ui-kit.js — CSS без
+   изменений (кнопки Войти/Выйти/Обновить используют уже существующий
+   .chip-btn страницы-хозяина), версия синхронизирована с UI_KIT_VERSION.
+   v1.3.0 (2026-07-21, Ярус 1): @font-face (Golos Text + Spectral, идентичны
+   на всех 5 страницах) + .spin/@keyframes uikit-spin переехали сюда; страницы
+   подключают ui-kit.css. Токены — отдельным шагом (Stage B).
+   v1.3.2 (2026-08-10): ФИКС путей к шрифтам. При переезде @font-face из
+   HTML-страниц сюда пути остались в форме `assets/fonts/…` — правильной,
+   пока блок лежал в /tools/*.html, но неверной для CSS в /tools/assets/:
+   url() в CSS считается от самого CSS-файла, и запросы уходили в
+   /tools/assets/assets/fonts/ → 404. Итог: НИ ОДИН self-hosted шрифт не
+   грузился ни на одной из пяти страниц (проверено живым браузером:
+   20 запросов 404, 0 загруженных начертаний), всё рисовалось системными
+   подстановками — заголовки Georgia вместо Spectral. В assets/viewer.css,
+   откуда блок изначально копировали, путь всегда был `fonts/…` — верный.
+   v1.4.0 (2026-09-26): справка раздела — кнопка «?» в топбаре и модалка
+   .uh-* (markdown из assets/help/<раздел>.md). Акцент — доменный токен
+   страницы (--c-N), обе темы — через общие токены, отдельного
+   [data-theme="dark"] компоненту не нужно, кроме тени.
+   v1.4.1: иконка кнопки — ❓ вместо «?» в кружке (паритет с вьюером).
+   v1.6.0 (2026-10-02): ЕДИНЫЙ ФАЙЛ БАЗЫ. Здесь и только здесь живут три слоя,
+   общих для ВСЕХ страниц кабинета, включая login.html и вьюер портфеля:
+     1) шрифты — @font-face + токены стеков --font-sans / --font-serif;
+     2) токены тем — :root + [data-theme="dark"];
+     3) базовый слой — сброс, body (шрифт, ЦВЕТ, фон), наследование шрифта
+        контролами.
+   Страница добавляет только своё (фон-узор, свои токены вроде --paper у еды,
+   размер текста у вьюера) и НЕ повторяет базу. Толчок: тёмная тема «Еды»
+   (2026-10-02) — у body страницы не было color, модалки наследовали чёрный;
+   тот же баг раньше был у health. Пока база копируется по страницам, каждая
+   новая страница может её «потерять». Стеки шрифтов при этом разошлись на
+   пять вариантов записи ('Spectral',serif / "Spectral",Georgia,serif / …) —
+   теперь везде var(--font-serif) / var(--font-sans).
+   v1.7.0 (2026-10-03): стили единого читателя markdown (.rd-*, uiReader) —
+   режим чтения вьюера для справок, подборок игр и отчётов здоровья.
+   v1.8.0 (2026-10-03): .rd-act — кнопка действия раздела в читателе
+   (travel: «Сегодня»); uiTripWhen — без стилей, только расчёт.
+   v1.9.0 (2026-10-03): CSS без изменений (uiTripIsMine — только расчёт),
+   версия синхронизирована с UI_KIT_VERSION.
+   v1.10.0 (2026-10-05): .ui-docwin — окно документа по центру экрана
+   (travel: стадии поездки, games: подборки). Раньше обе страницы выезжали
+   боковой панелью справа, а health открывал отчёты окном по центру; узкая
+   панель к тому же не давала экспортному HTML стадии развернуть оглавление
+   слева. Ширина — --docwin-w у страницы; на телефоне — во весь экран.
+   v1.11.0 (2026-10-05): страница раздела целиком из ui-kit (.ui-page, .ui-top,
+   плитки, строки с полосами, мини-графики, нижняя навигация) и выпадающий
+   список .ui-select-* из макета «Деньги». Первый потребитель — money.html.
+   v1.12.0 (2026-10-06): .ui-split (текст + график сбоку) и мини-столбики со
+   средним пунктиром .ui-mbars — «Обычные траты» в money.html.
+   v1.13.0 (2026-10-06): dot plot .ui-dots (точка — месяц, кольцо — среднее,
+   отрезок — отклонение), .ui-grid.kpi, .ui-status, .ui-trip — «Обзор» money.
+   v1.14.0 (2026-10-06): один график месяцев — столбики + линия скользящего
+   среднего (.ui-cols-line, .ui-col-avg; режим «осталось» .net вверх-вниз от
+   нуля). Dot plot .ui-dots, .ui-mbars и .ui-split убраны — на странице один
+   язык графиков. Строки категорий .ui-catrow с мини-трендом .ui-minibars и
+   раскрытием .ui-catdetail; .ui-toolbar-r.
+   v1.15.0 (2026-10-06): линия среднего — плавная монотонная кривая (path) без
+   точек; подписи значений над столбиками .ui-col-val (.below — под минусом).
+   v1.53.0 (2026-10-23): .ui-tchart — график показателя во времени (≤20 замеров — вся история, больше — «полгода» с прокруткой и переключателем; разрывы пауз, медианы; uiTimeChartHTML).
+   v1.45.0 (2026-10-13): .ui-seg.sm.acc — мелкий переключатель с заметной выбранной кнопкой (цвет раздела); .ui-info — значок (i) с подсказкой, которая не исчезает сразу (наведение с задержкой
+   ухода, касание — до касания мимо или Esc), край экрана не режет (uiInfoHTML в ui-kit.js).
+   v1.44.0 (2026-10-13): .ui-table-shead > table.tl — сдвиг ведёт scroll-timeline обёртки.
+   v1.43.0 (2026-10-13): .ui-table-shead — липкая копия шапки у таблицы, прокручиваемой вбок.
+   v1.42.0 (2026-10-13): .ui-modal.fold — на телефоне шапка окна сворачивается при прокрутке (uiFoldMount); название ≤2 строк.
+   v1.41.0 (2026-10-13): .ui-table.dense — плотная таблица (текст влево, .num вправо, шапка капсом).
+   v1.40.0 (2026-10-13): нулевой уровень мини-графика — line.zero, подпись .ui-spark-zero,
+   .ui-spark.z без нижней рамки (вьюер: плитки доходности).
+   v1.39.0 (2026-10-12): вьюер портфеля на ui-kit — .ui-tabs (строка разделов с «Ещё ▾»),
+   .ui-name, .ui-ci, .ui-alert.info/.warn, сортировка/липкая шапка/tfoot у .ui-table,
+   слоты окна .ui-modal-lead/-aside/-top, .ui-pager-btn, появление .ui-in-*.
+   v1.38.0 (2026-10-07): плавные вход и уход окна документа .ui-docwin, справки .uh-overlay и
+     любого слоя .ui-fx — классы .enter/.leave (uiShow/uiHide, uiHelpClose(true)).
+   v1.37.0 (2026-10-07): боковая панель .ui-pane (uiPaneHTML; была своя у health) и её стопка —
+     .enter/.behind/.fresh/.stacked/.leave/.return, как у окон; на экране уже 820px — во весь экран.
+   v1.36.0 (2026-10-07): CSS без изменений (JS: uiStackCls/uiStackPop/uiStackKeepScroll).
+   v1.35.0 (2026-10-07): .ui-modal.tall — окно постоянной высоты (90vh): содержимое,
+     меняющееся по клику внутри (выбор месяцев), не перецентровывает окно и не двигает график.
+   v1.34.0 (2026-10-07): окна стопкой — .ui-modal.enter/.behind/.fresh/.stacked/.leave/
+     .return (плавный вход, нижнее окно сдвинуто назад и видно); .ui-page.anchor-js —
+     без браузерной привязки прокрутки (страница держит место сама, якорем); полоса
+     прокрутки графика месяцев — под подписями, а не поверх.
+   v1.33.0 (2026-10-07): CSS без изменений (JS: uiModalHTML z — окна стопкой).
+   v1.32.0 (2026-10-07): переключатель тулбара на телефоне (≤520px) — во всю ширину,
+     кнопки поровну (были шире экрана); .ui-chev-all — стрелка «раскрыть/свернуть все»
+     в шапке таблицы категорий; .ui-cols.yoy.pick — месяцы выбираются нажатием
+     (.win — выбран); .ui-catplaces/.ui-catplace — места подкатегории в карточке.
+   v1.31.0 (2026-10-07): раскрытая строка категории — карточка .ui-catopen (тень и
+     зазор; высоту раскрывает JS uiExpandIn/uiCollapseOut, .fresh/.closing — тень в такт);
+     график «к прошлому году» .ui-cols.yoy (в колонке два столбика: прошлый год
+     бледный .prev, этот год; .win — месяцы окна факта), значок .ui-sw.prev.
+   v1.30.0 (2026-10-06): .ui-toolbar-r на компьютере — одной строкой (список
+     сжимается, а не переносится: «Деньги» с 4 кнопками периода прыгали при смене
+     режима); .ui-toolbar.stack — справа колонка: переключатель на уровне вкладок,
+     список под ним (заголовок периода слева не нужен — он в списке);
+     .ui-cols-line path.alt и .ui-sw-line.alt — вторая линия графика.
+   v1.29.0 (2026-10-06): .ui-select.combo — длинный список в форме одной строкой.
+   v1.28.0 (2026-10-06): .ui-savebar — плашка сохранения (uiSaveBarHTML).
+   v1.27.0 (2026-10-06): поле формы — .fld/.fld-lbl/.fld-hint/.ui-field (uiFieldHTML).
+   v1.26.0 (2026-10-06): .ui-modal — окно формы (uiModalHTML).
+   v1.25.0 (2026-10-06): .ui-confirm — окно подтверждения (uiConfirm).
+   v1.24.0 (2026-10-06): CSS без изменений.
+   v1.23.0 (2026-10-06): навигация раздела — .ui-rail/.ui-mnav одни на кабинет; ширина,
+     высота, слои и ОДИН порог (узкий экран или портрет) — в одном месте.
+   v1.22.0 (2026-10-06): шапка и тело окна документа — общие (.ui-docwin-head/-title/-x/-body),
+     слой --docwin-z; health переведён на .ui-docwin.
+   v1.21.0 (2026-10-06): CSS без изменений.
+   v1.20.0 (2026-10-06): выпадающий список — размер md, поиск, шторка на телефоне,
+     мишени 44px; раскрытая часть ставится по экрану (ui-kit.js).
+   v1.19.0 (2026-10-06): CSS без изменений — в JS общие даты и кеш/листинги.
+   v1.18.0 (2026-10-06): .ui-hdr — та же шапка, но НЕ липкая: для страниц со
+     своим липким контейнером (вьюер портфеля: #top-chrome с горизонтом).
+   v1.17.0 (2026-10-06): шапка .ui-top — одна на кабинет (uiTopHTML), не только
+     внутри .ui-page: отступы под вырез экрана, .ui-top-brand хаба; старые
+     правила .h-top/.crumb для телефона сняты вместе с копиями шапки.
+   v1.16.0 (2026-10-06): CSS без изменений — в JS общий вход (authFetch, uiGoLogin).
+   v1.15.1 (2026-10-06): ширина графика месяцев — явно по --cols-n (Safari
+   считал max-content по видимой области, линия обрывалась).
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* ui-kit 1.30.0 */
+/* ── Шрифты: Golos Text + Spectral, кириллица, self-host (офлайн/приватность).
+   Идентичны на всех 5 страницах — вынесены сюда как есть (Ярус 1). ── */
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/golos-text-cyrillic-ext-400-normal.woff2) format('woff2'), url(fonts/golos-text-cyrillic-ext-400-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/golos-text-cyrillic-400-normal.woff2) format('woff2'), url(fonts/golos-text-cyrillic-400-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/golos-text-latin-ext-400-normal.woff2) format('woff2'), url(fonts/golos-text-latin-ext-400-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/golos-text-latin-400-normal.woff2) format('woff2'), url(fonts/golos-text-latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/golos-text-cyrillic-ext-500-normal.woff2) format('woff2'), url(fonts/golos-text-cyrillic-ext-500-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/golos-text-cyrillic-500-normal.woff2) format('woff2'), url(fonts/golos-text-cyrillic-500-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/golos-text-latin-ext-500-normal.woff2) format('woff2'), url(fonts/golos-text-latin-ext-500-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/golos-text-latin-500-normal.woff2) format('woff2'), url(fonts/golos-text-latin-500-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/golos-text-cyrillic-ext-600-normal.woff2) format('woff2'), url(fonts/golos-text-cyrillic-ext-600-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/golos-text-cyrillic-600-normal.woff2) format('woff2'), url(fonts/golos-text-cyrillic-600-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/golos-text-latin-ext-600-normal.woff2) format('woff2'), url(fonts/golos-text-latin-ext-600-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/golos-text-latin-600-normal.woff2) format('woff2'), url(fonts/golos-text-latin-600-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(fonts/golos-text-cyrillic-ext-700-normal.woff2) format('woff2'), url(fonts/golos-text-cyrillic-ext-700-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(fonts/golos-text-cyrillic-700-normal.woff2) format('woff2'), url(fonts/golos-text-cyrillic-700-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(fonts/golos-text-latin-ext-700-normal.woff2) format('woff2'), url(fonts/golos-text-latin-ext-700-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Golos Text';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(fonts/golos-text-latin-700-normal.woff2) format('woff2'), url(fonts/golos-text-latin-700-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/spectral-cyrillic-ext-400-normal.woff2) format('woff2'), url(fonts/spectral-cyrillic-ext-400-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/spectral-cyrillic-400-normal.woff2) format('woff2'), url(fonts/spectral-cyrillic-400-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/spectral-latin-ext-400-normal.woff2) format('woff2'), url(fonts/spectral-latin-ext-400-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/spectral-latin-400-normal.woff2) format('woff2'), url(fonts/spectral-latin-400-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/spectral-cyrillic-ext-500-normal.woff2) format('woff2'), url(fonts/spectral-cyrillic-ext-500-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/spectral-cyrillic-500-normal.woff2) format('woff2'), url(fonts/spectral-cyrillic-500-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/spectral-latin-ext-500-normal.woff2) format('woff2'), url(fonts/spectral-latin-ext-500-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/spectral-latin-500-normal.woff2) format('woff2'), url(fonts/spectral-latin-500-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/spectral-cyrillic-ext-600-normal.woff2) format('woff2'), url(fonts/spectral-cyrillic-ext-600-normal.woff) format('woff');
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/spectral-cyrillic-600-normal.woff2) format('woff2'), url(fonts/spectral-cyrillic-600-normal.woff) format('woff');
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/spectral-latin-ext-600-normal.woff2) format('woff2'), url(fonts/spectral-latin-ext-600-normal.woff) format('woff');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/spectral-latin-600-normal.woff2) format('woff2'), url(fonts/spectral-latin-600-normal.woff) format('woff');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ── Спиннер (кнопка «Обновить»): единый keyframe uikit-spin ── */
+@keyframes uikit-spin{ to{ transform:rotate(360deg); } }
+.spin{ animation:uikit-spin .7s linear infinite; }
+
+/* ── Дизайн-токены: общие для всех страниц кабинета и вьюера (Ярус 1b).
+   Значения сверены скриптом — 0 расхождений. food добавляет свои
+   --paper/--c2-bg локально, вьюер — свои --c-equity/--diff-* в viewer.css.
+   Стеки шрифтов — тоже токены: семейство меняется в одном месте. ── */
+:root{
+  --font-sans:"Golos Text",system-ui,-apple-system,sans-serif;
+  --font-serif:"Spectral",Georgia,serif;
+  --bg:#f4f1ea; --bg-elev:#fbf9f4; --bg-alt:#ece7dd; --bg-sunk:#e6e0d4;
+  --text:#2b2823; --text-muted:#766f63; --text-faint:#7e7666;
+  --border:#ddd6c8; --border-strong:#c8bfad;
+  --accent:#3f7c77; --accent-2:#356a66; --accent-bg:#e2ece9;
+  --warn:#a8843f; --warn-bg:#f0e6cf; --err:#a85a48; --err-bg:#f0dcd4; --success:#5f7a4f; --success-bg:#e6ead9;
+  --info:#6a6790; --info-bg:#e4e2ec;
+  --c-1:#5a948f; --c-2:#b3934f; --c-3:#7d9560; --c-4:#b57b66; --c-5:#7c789c; --c-6:#6f8ea8;
+  --shadow:0 1px 2px rgba(60,52,38,.06),0 8px 24px rgba(60,52,38,.05); --radius:9px;
+}
+[data-theme="dark"]{
+  --bg:#1c1a17; --bg-elev:#24211d; --bg-alt:#2c2823; --bg-sunk:#17150f;
+  --text:#ece6da; --text-muted:#a39a89; --text-faint:#948b7b;
+  --border:#3a352d; --border-strong:#4c463b;
+  --accent:#79b3ad; --accent-2:#8cc0ba; --accent-bg:#213330;
+  --warn:#cba35f; --warn-bg:#352b16; --err:#cd8270; --err-bg:#38211a; --success:#8aa572; --success-bg:#26301d;
+  --info:#9b97c2; --info-bg:#25232f;
+  --c-1:#79b3ad; --c-2:#cba35f; --c-3:#9bb37e; --c-4:#cf9583; --c-5:#9b97c2; --c-6:#8aabc4;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+}
+
+/* ── Базовый слой: общий для всех страниц ────────────────────────────────────
+   color и background-color на body ОБЯЗАТЕЛЬНЫ: модалки, слайд-оверы и
+   плашки страниц рендерятся соседями обёртки-темы и наследуют цвет от body.
+   Без color здесь они чернеют в тёмной теме (контраст 1.3:1) — так было у
+   health (до v1.11) и у food (до v1.18.3). Фон-узор и min-height страница
+   задаёт сама, в своём <style>. */
+*{ box-sizing:border-box; }
+[hidden]{ display:none !important; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family:var(--font-sans); color:var(--text); background-color:var(--bg);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+/* Контролы по умолчанию берут системный шрифт браузера — не наследуют. */
+button,input,select,textarea{ font-family:inherit; }
+
+/* ── Календарь выбора даты (датапикер) ───────────────────────────────────────
+   Нативный пикер браузера не стилизуется (его выпадашка — часть браузера),
+   поэтому свой: те же токены, Golos Text, акцент --c-3. Требует токены
+   дизайн-системы страницы-хозяина (--border, --bg, --text, --c-3, --err и т.д.)
+   — сама тема не задаётся, только компонент поверх неё. */
+.dp-wrap{ position:relative; }
+.dp-field{ width:100%; box-sizing:border-box; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-family:inherit; font-size:13.5px; padding:9px 11px; text-align:left; cursor:pointer; font-variant-numeric:tabular-nums; display:flex; align-items:center; gap:8px; min-height:38px; }
+@media (hover:hover){ .dp-field:hover{ border-color:var(--border-strong); } }
+.dp-field:focus-visible{ outline:2px solid var(--c-3); outline-offset:1px; }
+.dp-field .dp-ico{ margin-left:auto; color:var(--text-faint); font-size:13px; }
+.dp-field.is-empty{ color:var(--text-faint); }
+/* Поле с ручным вводом даты (dateField): текстовый <input>, а не <button> —
+   его можно печатать, а не только выбирать в календаре (жалоба владельца:
+   Tab после названия прививки перепрыгивал мимо ввода). Иконка календаря —
+   отдельная кнопка поверх поля, как значок поиска в .h-search. */
+.dp-input{ width:100%; box-sizing:border-box; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-family:inherit; font-size:13.5px; padding:9px 34px 9px 11px; font-variant-numeric:tabular-nums; min-height:38px; }
+.dp-input::placeholder{ color:var(--text-faint); }
+@media (hover:hover){ .dp-input:hover{ border-color:var(--border-strong); } }
+.dp-input:focus-visible{ outline:2px solid var(--c-3); outline-offset:1px; }
+.dp-input.is-invalid{ border-color:var(--err); }
+.dp-ico-btn{ position:absolute; right:3px; top:3px; bottom:3px; width:30px; display:inline-flex; align-items:center; justify-content:center; border:none; border-radius:6px; background:transparent; color:var(--text-faint); font-size:13px; cursor:pointer; padding:0; }
+@media (hover:hover){ .dp-ico-btn:hover{ background:var(--bg-alt); color:var(--text); } }
+.dp-pop{ z-index:230; width:274px;   /* координаты ставит JS: попап живёт в body */ background:var(--bg-elev); border:1px solid var(--border-strong); border-radius:12px; box-shadow:0 4px 10px rgba(60,52,38,.10),0 18px 44px rgba(60,52,38,.16); padding:12px; }
+[data-theme="dark"] .dp-pop{ box-shadow:0 4px 10px rgba(0,0,0,.4),0 18px 44px rgba(0,0,0,.5); }
+.dp-head{ display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+.dp-title{ flex:1; text-align:center; font-size:13.5px; font-weight:600; font-family:var(--font-serif); }
+/* Заголовок как <button> — «зум наружу» день→месяц→год (клик по месяцу и
+   году из жалобы владельца); как <div> — верхний уровень (диапазон лет),
+   ему уже некуда всплывать. */
+button.dp-title{ border:none; background:transparent; color:inherit; cursor:pointer; border-radius:6px; padding:2px 0; }
+@media (hover:hover){ button.dp-title:hover{ background:var(--bg-alt); color:var(--c-3); } }
+.mp-grid .dp-yr{ height:38px; font-size:13px; }
+.dp-nav{ background:var(--bg-alt); border:1px solid var(--border); border-radius:7px; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text); font-family:inherit; font-size:12px; }
+@media (hover:hover){ .dp-nav:hover{ border-color:var(--border-strong); } }
+.dp-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.dp-wd{ text-align:center; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--text-faint); padding:4px 0 6px; }
+.dp-day{ border:none; background:transparent; border-radius:7px; height:32px; font-family:inherit; font-size:13px; color:var(--text); cursor:pointer; font-variant-numeric:tabular-nums; transition:background .12s; }
+@media (hover:hover){ .dp-day:hover{ background:var(--bg-alt); } }
+.dp-day.dp-out{ color:var(--text-faint); }
+.dp-day.dp-today{ box-shadow:inset 0 0 0 1px var(--c-3); color:var(--c-3); font-weight:700; }
+.dp-day.dp-sel{ background:var(--c-3); color:#fff; font-weight:700; }
+[data-theme="dark"] .dp-day.dp-sel{ color:#20261a; }
+/* Пикер месяца (срок годности и т.п.): 3 колонки вместо 7 дней недели. */
+.mp-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:4px; }
+.mp-grid .dp-mon{ height:38px; font-size:13px; text-transform:capitalize; }
+.mp-grid .dp-mon.dp-past{ color:var(--text-faint); }
+.mp-grid .dp-mon.dp-past.dp-sel{ background:var(--err); color:#fff; }
+.dp-prec{ display:flex; gap:2px; padding:2px; margin-bottom:10px; background:var(--bg-alt); border:1px solid var(--border); border-radius:9px; }
+.dp-prec button{ flex:1; height:30px; border:1px solid transparent; border-radius:7px; background:transparent; color:var(--text-muted); font-family:inherit; font-size:12.5px; font-weight:600; cursor:pointer; padding:0 6px; }
+@media (hover:hover){ .dp-prec button:hover{ color:var(--c-3); } }
+.dp-prec button.on{ background:var(--bg-elev); color:var(--c-3); border-color:var(--border); box-shadow:0 1px 2px rgba(60,52,38,.12); }
+[data-theme="dark"] .dp-prec button.on{ box-shadow:0 1px 2px rgba(0,0,0,.45); }
+.dp-prec button:focus-visible{ outline:2px solid var(--c-3); outline-offset:1px; }
+.fd-hint{ min-height:16px; margin-top:4px; font-size:12px; color:var(--text-faint); }
+.fd-hint.is-bad{ color:var(--err); }
+.dp-foot{ display:flex; gap:8px; margin-top:8px; padding-top:8px; border-top:1px solid var(--border); }
+.dp-foot button{ flex:1; background:var(--bg-alt); border:1px solid var(--border); border-radius:7px; padding:6px 8px; font-size:12px; font-weight:600; font-family:inherit; color:var(--text-muted); cursor:pointer; }
+@media (hover:hover){ .dp-foot button:hover{ border-color:var(--border-strong); color:var(--text); } }
+
+/* Тач-устройства (не «узкий экран»: у iPad ширина большая, а палец тот же):
+     • поля ввода <16px заставляют iOS Safari зумить страницу при фокусе;
+     • мишени меньше ~40px промахиваются пальцем.
+   Те же правила действуют и на странице-хозяине (свой @media pointer:coarse
+   для не-датапикерных полей) — здесь только компоненты датапикера. */
+@media (pointer:coarse){
+  .dp-field, .dp-input{ font-size:16px !important; }
+  .dp-field, .dp-input{ min-height:44px; }
+  .dp-ico-btn{ width:38px; }
+  .dp-nav{ width:40px; height:40px; }
+  .dp-prec button{ height:36px; }
+  .dp-day{ height:40px; }
+  .mp-grid .dp-mon, .mp-grid .dp-yr{ height:44px; }
+  .dp-pop{ width:320px; }   /* 7 колонок по 40px + отступы */
+}
+
+/* ── Справка раздела (❓): кнопка в топбаре + модалка ─────────────────────────
+   Пара к uiHelpOpen()/helpBtnHTML() в ui-kit.js. Содержимое — markdown из
+   assets/help/<раздел>.md, рендерит uiMarkdown(). Классы md-* здесь — только
+   внутри .uh-body, чтобы не задеть одноимённые классы страниц (вьюер). Акцент
+   раздела приходит переменной --uh-acc (доменный --c-N) с самой модалки. */
+/* Иконка — эмодзи ❓ (красный вопрос), как у кнопки «❓ Справка» вьюера портфеля. */
+.uh-ico{ font-size:13px; line-height:1; flex:none; }
+.uh-overlay{ position:fixed; inset:0; z-index:900; background:rgba(28,26,23,.42); display:flex; align-items:flex-start; justify-content:center; padding:48px 16px; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+[data-theme="dark"] .uh-overlay{ background:rgba(0,0,0,.55); }
+.uh-modal{ --uh-acc:var(--accent); position:relative; width:100%; max-width:780px; background:var(--bg-elev); color:var(--text); border:1px solid var(--border-strong); border-radius:12px; box-shadow:0 4px 10px rgba(60,52,38,.10),0 18px 44px rgba(60,52,38,.16); font-family:var(--font-sans); }
+[data-theme="dark"] .uh-modal{ box-shadow:0 4px 10px rgba(0,0,0,.4),0 18px 44px rgba(0,0,0,.5); }
+.uh-head{ display:flex; align-items:center; gap:12px; padding:16px 20px 12px; border-bottom:1px solid var(--border); }
+.uh-kicker{ font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--uh-acc); }
+.uh-title{ margin:2px 0 0; font-family:var(--font-serif); font-size:22px; font-weight:600; line-height:1.2; }
+.uh-close{ margin-left:auto; flex:none; width:34px; height:34px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text-muted); font-size:15px; cursor:pointer; font-family:inherit; }
+@media (hover:hover){ .uh-close:hover{ border-color:var(--border-strong); color:var(--text); } }
+.uh-body{ padding:6px 20px 22px; font-size:14.5px; line-height:1.6; overflow-wrap:anywhere; }
+.uh-state{ padding:28px 8px; text-align:center; color:var(--text-muted); }
+.uh-err{ margin:14px 0; padding:12px 14px; border-radius:9px; background:var(--err-bg); color:var(--err); font-size:13.5px; }
+.uh-body h2{ font-family:var(--font-serif); font-size:19px; font-weight:600; margin:24px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--border); }
+.uh-body h3{ font-size:15px; font-weight:700; margin:18px 0 6px; color:var(--uh-acc); }
+.uh-body h4{ font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--text-muted); margin:14px 0 4px; }
+.uh-body p{ margin:8px 0; }
+.uh-body ul, .uh-body ol{ margin:6px 0 10px; padding-left:22px; }
+.uh-body li{ margin:3px 0; }
+.uh-body code{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.88em; background:var(--bg-alt); border:1px solid var(--border); border-radius:5px; padding:0 4px; }
+.uh-body pre{ background:var(--bg-sunk); border:1px solid var(--border); border-radius:8px; padding:10px 12px; overflow-x:auto; white-space:pre-wrap; overflow-wrap:anywhere; font-size:12.5px; line-height:1.5; }
+.uh-body pre code{ background:none; border:none; padding:0; font-size:inherit; }
+.uh-body blockquote{ margin:10px 0; padding:8px 12px; border-left:3px solid var(--uh-acc); background:var(--bg-alt); border-radius:0 8px 8px 0; color:var(--text-muted); }
+.uh-body blockquote p{ margin:4px 0; }
+.uh-body hr{ border:none; border-top:1px solid var(--border); margin:18px 0; }
+.uh-body a{ color:var(--uh-acc); text-decoration:underline; text-underline-offset:2px; }
+.uh-body strong{ font-weight:700; }
+.uh-tbl{ overflow-x:auto; margin:8px 0 12px; -webkit-overflow-scrolling:touch; }
+.uh-body table{ border-collapse:collapse; width:100%; font-size:13px; line-height:1.45; }
+.uh-body th, .uh-body td{ border:1px solid var(--border); padding:6px 8px; text-align:left; vertical-align:top; }
+.uh-body th{ background:var(--bg-alt); font-weight:700; }
+/* Слова в ячейках не рвутся по буквам (overflow-wrap:anywhere у .uh-body —
+   для длинных путей в прозе; в узкой колонке он дробил «Модель» на «Моде|ль»).
+   Рвать можно только код/пути. Узкий экран — таблица шире окна и
+   прокручивается вбок внутри .uh-tbl, страница при этом не расползается. */
+.uh-body th, .uh-body td{ overflow-wrap:normal; word-break:normal; hyphens:manual; }
+.uh-body td code{ overflow-wrap:anywhere; }
+/* Телефон: модалка — во весь экран, без внешних полей; прокручивается
+   оверлей (а не body — тот заблокирован на время показа). */
+@media (max-width:600px){
+  .uh-overlay{ padding:0; }
+  .uh-modal{ max-width:none; min-height:100%; border-radius:0; border-left:none; border-right:none; border-bottom:none; }
+  .uh-head{ position:sticky; top:0; z-index:1; background:var(--bg-elev); padding:12px 16px 10px; }
+  .uh-body{ padding:4px 16px 28px; }
+  .uh-title{ font-size:19px; }
+  .uh-body table{ min-width:560px; }
+}
+@media (pointer:coarse){
+  .uh-close{ width:40px; height:40px; }
+}
+
+/* ── крестик очистки поиска (ui-kit.js · uiSearchX, v1.5.0) ─────────────────
+   Кнопка стоит сразу за полем внутри position:relative-обёртки. Пустое поле
+   (виден placeholder) — крестика нет. Поле обязано оставить справа место
+   (padding-right ≥ 38px) — это задаёт страница у своего поля. */
+.ui-search-x{ position:absolute; right:6px; top:50%; transform:translateY(-50%);
+  width:30px; height:30px; padding:0; border:0; border-radius:50%;
+  background:transparent; color:var(--text-faint); font-family:inherit;
+  font-size:13px; line-height:1; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; }
+@media (hover:hover){ .ui-search-x:hover{ color:var(--text); background:var(--bg-alt); } }
+input:placeholder-shown + .ui-search-x{ display:none; }
+@media (pointer:coarse){ .ui-search-x{ width:38px; height:38px; right:3px; font-size:15px; } }
+
+/* ── «что сказать Claude» (1.49.0): [фраза](#copy) в markdown → .ui-say ───
+   Плашка в строке текста; нажатие копирует фразу, после — «✓ скопировано». */
+.ui-say{ display:inline; font:inherit; color:var(--text); background:var(--bg-alt); border:1px dashed var(--border-strong);
+  border-radius:6px; padding:1px 6px; margin:1px 0; text-align:left; cursor:copy; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+.ui-say::after{ content:" ⧉"; color:var(--text-faint); font-size:.85em; }
+.ui-say.copied{ border-style:solid; border-color:var(--success); }
+.ui-say.copied::after{ content:" ✓ скопировано"; color:var(--success); }
+@media (hover:hover){ .ui-say:hover{ border-style:solid; } }
+
+/* ── поле поиска в шапке карточки (1.47.0; таблицы вьюера) ────────────────
+   <div class="ui-head split"><div class="ui-head-l">заголовок + .ui-sub</div>
+   <div class="ui-qbox"><input class="ui-q" type="search" placeholder="…"> + uiSearchX</div></div>
+   Встаёт в строку заголовка справа — высоту карточки не добавляет. Поиск
+   прячет строки сам (страница), поле не пересоздаётся — каретка на месте. */
+.ui-head-l{ display:flex; align-items:baseline; gap:4px 12px; flex-wrap:wrap; min-width:0; flex:1 1 0; }
+.ui-qbox{ position:relative; flex:0 1 220px; min-width:130px; }
+.ui-q{ width:100%; height:34px; padding:0 34px 0 10px; border:1px solid var(--border); border-radius:8px;
+  background:var(--bg-elev); color:var(--text); font-family:var(--font-sans); font-size:13px; -webkit-appearance:none; appearance:none; }
+.ui-q::placeholder{ color:var(--text-faint); }
+.ui-q:focus{ outline:none; border-color:var(--sec-acc, var(--accent)); }
+.ui-q::-webkit-search-cancel-button{ -webkit-appearance:none; display:none; }
+@media (pointer:coarse){ .ui-q{ height:38px; font-size:16px; } }   /* <16px — iOS приближает страницу при фокусе */
+/* 1.48.0: строка «поиск + Фильтры + Сброс» (.ui-qrow) — кнопки рядом с полем.
+   .ui-fbtn — открыть фильтры (число включённых — .ui-fbtn-n); .ui-freset — сбросить. */
+.ui-qrow{ display:flex; align-items:center; gap:8px; flex:0 1 auto; min-width:0; }
+.ui-qrow .ui-qbox{ flex:1 1 220px; }
+.ui-fbtn, .ui-freset{ flex:none; height:34px; display:inline-flex; align-items:center; gap:6px; padding:0 12px; border:1px solid var(--border); border-radius:8px;
+  background:var(--bg-elev); color:var(--text-muted); font-family:var(--font-sans); font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; }
+.ui-fbtn.on{ color:var(--text); border-color:var(--sec-acc, var(--accent)); }
+.ui-fbtn-n{ min-width:18px; height:18px; padding:0 5px; border-radius:9px; background:var(--sec-acc, var(--accent)); color:#fff; font-size:11px; line-height:18px; text-align:center; }
+.ui-freset{ padding:0 10px; font-weight:500; }
+@media (hover:hover){ .ui-fbtn:hover, .ui-freset:hover{ color:var(--text); background:var(--bg-alt); } }
+@media (pointer:coarse){ .ui-fbtn, .ui-freset{ height:38px; } }
+
+/* ── uiReader — режим чтения длинного markdown (ui-kit 1.7.0) ───────────────
+   Порт режима чтения вьюера портфеля (viewer.css · .report-doc/.rp-*): Spectral
+   17/1.7, главы с верхней линейкой, TL;DR панелью, оглавление столбцом или
+   полосой снизу. Порог — по ширине ОКНА ЧИТАТЕЛЯ (container query), а не
+   экрана. Акцент раздела — --rd-acc (страница передаёт свой --c-N).
+   Специфичность .rd .rd-doc X (0,2,1) нарочно выше .uh-body X / .md-body X
+   страниц: читатель живёт внутри их контейнеров. */
+.rd{ --rd-acc:var(--accent); container:rd / inline-size; }
+/* прокручиваемый контейнер читателя на странице: поля по бокам, снизу 0 —
+   нижняя полоса прилипает к самому краю окна; --rd-bleed растягивает её
+   на ширину полей */
+.rd-host{ overflow-y:auto; -webkit-overflow-scrolling:touch; --rd-bleed:28px;
+  padding:22px calc(28px + env(safe-area-inset-right, 0px)) 0 calc(28px + env(safe-area-inset-left, 0px)); }
+.rd-grid{ display:block; }
+.rd-has-toc .rd-grid{ display:grid; grid-template-columns:200px minmax(0,1fr); gap:32px; align-items:start; }
+.rd-main{ min-width:0; padding-bottom:30px; }
+
+.rd .rd-doc{ font-family:var(--font-serif); font-size:17px; line-height:1.7; color:var(--text); overflow-wrap:break-word; }
+.rd .rd-doc > :first-child{ margin-top:0; }
+.rd .rd-doc p{ margin:0 0 14px; }
+.rd .rd-doc h2{ font-family:var(--font-serif); font-size:23px; font-weight:600; line-height:1.25; letter-spacing:-.005em; color:var(--text); margin:36px 0 12px; padding:14px 0 0; border:0; border-top:1px solid var(--border-strong); scroll-margin-top:var(--rd-top,12px); }
+.rd .rd-doc > h2:first-child{ border-top:0; padding-top:0; }
+.rd .rd-doc h3{ font-family:var(--font-serif); font-size:18.5px; font-weight:600; line-height:1.3; color:var(--text); margin:26px 0 8px; scroll-margin-top:var(--rd-top,12px); }
+/* h4 в живых отчётах — целые фразы: не капс, тот же ранг, что врезной лид */
+.rd .rd-doc h4{ font-family:var(--font-sans); font-size:15px; font-weight:600; letter-spacing:0; text-transform:none; color:var(--text); margin:22px 0 6px; }
+.rd .rd-doc h5{ font-family:var(--font-sans); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--text-faint); margin:18px 0 6px; }
+.rd .rd-doc ul, .rd .rd-doc ol{ margin:0 0 14px; padding-left:24px; }
+.rd .rd-doc li{ margin:0 0 6px; }
+.rd .rd-doc li > ul, .rd .rd-doc li > ol{ margin:6px 0 0; }
+.rd .rd-doc li > input[type="checkbox"]{ margin:0 6px 0 0; vertical-align:-1px; }
+.rd .rd-doc a{ color:var(--rd-acc); text-decoration:underline; text-underline-offset:2px; text-decoration-thickness:1px; overflow-wrap:anywhere; }
+.rd .rd-doc strong{ font-weight:700; }
+.rd .rd-doc code{ font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.8em; background:var(--bg-alt); border:1px solid var(--border); border-radius:5px; padding:0 4px; overflow-wrap:anywhere; }
+.rd .rd-doc pre{ background:var(--bg-sunk); border:1px solid var(--border); border-radius:8px; padding:10px 12px; margin:0 0 16px; overflow-x:auto; white-space:pre-wrap; overflow-wrap:anywhere; font-size:12.5px; line-height:1.5; }
+.rd .rd-doc pre code{ background:none; border:0; padding:0; font-size:inherit; }
+.rd .rd-doc blockquote{ margin:0 0 16px; padding:10px 14px; border-left:3px solid var(--rd-acc); background:var(--bg-alt); border-radius:0 8px 8px 0; color:var(--text-muted); font-size:16px; }
+.rd .rd-doc blockquote p{ margin:4px 0; }
+.rd .rd-doc hr{ border:0; border-top:1px solid var(--border); margin:24px 0; }
+/* таблицы — Golos: серифные цифры в плотной сетке читаются хуже; в ячейках
+   перенос только по словам, ширину набирает горизонтальная прокрутка */
+.rd .rd-doc .uh-tbl{ overflow-x:auto; margin:0 0 18px; scrollbar-width:thin; }
+.rd .rd-doc table{ display:table; border-collapse:collapse; width:100%; margin:0; font-family:var(--font-sans); font-size:13px; line-height:1.45; }
+.rd .rd-doc th, .rd .rd-doc td{ border:1px solid var(--border); padding:6px 9px; text-align:left; vertical-align:top; overflow-wrap:normal; word-break:normal; }
+.rd .rd-doc th{ background:var(--bg-alt); font-weight:700; }
+.rd .rd-doc td.rd-num{ white-space:nowrap; font-variant-numeric:tabular-nums; }
+.rd .rd-doc .rd-tldr{ background:var(--bg-alt); border-left:3px solid var(--rd-acc); border-radius:0 8px 8px 0; padding:13px 16px; margin:0 0 22px; }
+.rd .rd-doc .rd-lead{ margin-top:22px; }
+.rd .rd-doc .rd-lead > strong:first-child{ display:block; margin-bottom:3px; font-family:var(--font-sans); font-size:15px; font-weight:600; }
+
+/* карточка frontmatter: плоские поля «ключ: значение» */
+.rd-meta{ display:flex; flex-wrap:wrap; gap:5px 20px; margin:0 0 22px; padding:12px 14px; background:var(--bg-alt); border:1px solid var(--border); border-radius:9px; font-family:var(--font-sans); }
+.rd-mrow{ display:inline-flex; align-items:baseline; gap:7px; font-size:12.5px; min-width:0; }
+.rd-mk{ font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint); white-space:nowrap; }
+.rd-mv{ color:var(--text); overflow-wrap:anywhere; }
+
+/* оглавление столбцом (широкое окно) */
+.rd-toc{ position:sticky; top:var(--rd-top,12px); max-height:calc(100vh - var(--rd-top,12px) - 40px); overflow-y:auto; scrollbar-width:thin; padding-bottom:12px; font-family:var(--font-sans); }
+.rd-toc-h{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-faint); margin:0 0 9px 10px; }
+.rd-toc-list{ list-style:none; margin:0; padding:0; border-left:1px solid var(--border); }
+.rd-toc-list li{ margin:0; }
+.rd-toc-list a{ display:block; padding:5px 10px; font-family:var(--font-sans); font-size:12.5px; line-height:1.4; color:var(--text-muted); text-decoration:none; border-left:2px solid transparent; margin-left:-1px; }
+@media (hover:hover){ .rd-toc-list a:hover{ color:var(--text); background:var(--bg-alt); } }
+.rd-toc-list a.is-active{ color:var(--rd-acc); border-left-color:var(--rd-acc); font-weight:600; }
+.rd-toc-list .lvl-3 a{ padding-left:22px; font-size:12px; color:var(--text-faint); }
+.rd-toc-list .lvl-3 a.is-active{ color:var(--rd-acc); }  @media (hover:hover){ .rd-toc-list .lvl-3 a:hover{ color:var(--rd-acc); } }
+/* действие раздела (travel: «Сегодня») — над оглавлением и в полосе */
+.rd-act{ display:block; width:100%; margin:0 0 14px; padding:8px 10px; font-family:var(--font-sans); font-size:12.5px; font-weight:600; text-align:left;
+  color:var(--rd-acc); background:var(--bg-alt); border:1px solid var(--border); border-left:3px solid var(--rd-acc); border-radius:6px; cursor:pointer; }
+@media (hover:hover){ .rd-act:hover{ background:var(--bg-elev); } }
+.rd-bar-btn.rd-act-btn{ color:var(--rd-acc); font-weight:600; white-space:nowrap; }
+.rd-top{ display:block; width:100%; margin-top:12px; padding:6px 10px; font-family:var(--font-sans); font-size:12px; color:var(--text-muted); background:none; border:1px solid var(--border); border-radius:6px; cursor:pointer; }
+@media (hover:hover){ .rd-top:hover{ background:var(--bg-alt); color:var(--text); } }
+
+/* полоса снизу (узкое окно): текущая глава + шторка + прогресс + наверх.
+   До кнопки внизу дотягивается большой палец — приём nav-layer travel. */
+.rd-bar{ display:none; grid-column:1 / -1; position:sticky; bottom:0; z-index:5; gap:8px; align-items:stretch;
+  margin:0 calc(-1 * var(--rd-bleed, 0px)); padding:9px 12px calc(9px + env(safe-area-inset-bottom, 0px));
+  background:var(--bg-elev); border-top:1px solid var(--border); box-shadow:0 -6px 20px rgba(0,0,0,.07); font-family:var(--font-sans); }
+[data-theme="dark"] .rd-bar{ box-shadow:0 -6px 20px rgba(0,0,0,.35); }
+.rd-prog{ position:absolute; left:0; right:0; top:-1px; height:2px; background:var(--bg-sunk); }
+.rd-prog i{ display:block; height:100%; width:0; background:var(--rd-acc); transition:width .1s linear; }
+.rd-bar-btn{ display:flex; align-items:center; justify-content:center; gap:7px; min-height:42px; padding:0 14px;
+  font-family:var(--font-sans); font-size:13px; font-weight:500; color:var(--text);
+  background:var(--bg); border:1px solid var(--border); border-radius:8px; cursor:pointer; }
+.rd-bar-btn.rd-open{ flex:1; min-width:0; justify-content:flex-start; }
+.rd-cur{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-muted); }
+.rd-sheet{ position:absolute; left:0; right:0; bottom:100%; max-height:54vh; overflow-y:auto;
+  padding:12px; background:var(--bg-elev); border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  box-shadow:0 -10px 30px rgba(0,0,0,.14); }
+.rd-sheet[hidden]{ display:none; }
+.rd-sheet .rd-toc-list a{ padding:9px 12px; font-size:13.5px; }
+.rd-sheet .rd-toc-list .lvl-3 a{ padding-left:26px; font-size:13px; }
+
+@container rd (max-width:760px){
+  .rd-has-toc .rd-grid{ grid-template-columns:minmax(0,1fr); gap:0; display:flex; flex-direction:column; align-items:stretch; flex:1 0 auto; }
+  .rd-main{ flex:1 0 auto; }
+  .rd-toc{ display:none; }
+  .rd-bar{ display:flex; margin-top:auto; }
+  .rd .rd-doc{ font-size:16px; }
+  .rd .rd-doc h2{ font-size:20px; margin-top:30px; }
+  .rd .rd-doc h3{ font-size:17.5px; }
+}
+/* ── поиск по тексту читателя (1.58.0; uiReaderHTML({search:true})) ─────────
+   Поле .ui-qbox.rd-q: в столбце оглавления — над ним; в узком окне (оглавление
+   полосой) — липкое над текстом. mark.rd-hit — найденное, .is-cur — текущее. */
+.rd-q{ flex:none; width:auto; min-width:0; margin:0 0 12px; font-family:var(--font-sans); display:flex; align-items:center; flex-wrap:wrap; gap:0 6px; }
+.rd-q-in{ position:relative; flex:1 1 0; min-width:0; }
+.rd-q .ui-q{ height:36px; padding-right:12px; }
+/* 1.60.0: кнопки ‹ › — предыдущее/следующее совпадение (≥36 px, на касании 40) */
+.rd-q-b{ flex:none; width:36px; height:36px; padding:0; border:1px solid var(--border); border-radius:8px; background:var(--bg-elev); color:var(--text); font-family:var(--font-sans); font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center; box-sizing:border-box; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.rd-q-b:disabled{ color:var(--text-faint); opacity:.5; cursor:default; }
+.rd-q-b:focus-visible{ outline:2px solid var(--rd-acc); outline-offset:1px; }
+@media (hover:hover){ .rd-q-b:not(:disabled):hover{ background:var(--bg-alt); } }
+@media (pointer:coarse){ .rd-q .ui-q{ height:40px; } .rd-q-b{ width:40px; height:40px; } .rd-q-toc .rd-q-b{ width:auto; height:36px; } }
+.rd-q-n{ position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:11.5px; color:var(--text-faint); pointer-events:none; white-space:nowrap; }
+.rd-q-n:empty{ display:none; }
+.rd-q-main .ui-q{ padding-right:84px; }
+/* в столбце оглавления: поле на всю ширину колонки, счётчик внутри справа, кнопки ‹ › — второй строкой 50/50 (ширину колонки не трогают) */
+.rd-q-toc .rd-q-in{ flex:1 0 100%; }
+.rd-q-toc .rd-q-in .ui-q{ width:100%; padding-right:64px; }
+.rd-q-toc .rd-q-b{ flex:1 1 0; width:auto; height:30px; margin-top:6px; font-size:18px; }
+.rd-q-toc .rd-q-b + .rd-q-b{ margin-left:6px; }
+.rd-has-toc .rd-q-main{ display:none; }
+/* без вынесенной строки (родитель прокрутки не колонка окна) поле липнет в тексте — непрозрачное, на всю ширину полей */
+.rd-q-main{ position:sticky; top:var(--rd-top,0); z-index:4; padding:8px var(--rd-bleed,0px); margin:0 calc(-1 * var(--rd-bleed,0px)) 6px; background:var(--bg-elev); border-bottom:1px solid var(--border); }
+/* 1.60.0: строка поиска вынесена из прокручиваемого тела — между шапкой окна и телом (uiReaderMount, ширина ≤ 720) */
+.rd-q-dock{ position:relative; top:auto; z-index:2; flex:none; margin:0; padding:8px calc(16px + env(safe-area-inset-right, 0px)) 8px calc(16px + env(safe-area-inset-left, 0px)); background:var(--bg-elev); border-bottom:1px solid var(--border); }
+mark.rd-hit{ background:var(--warn-bg); color:inherit; border-radius:3px; padding:0 1px; box-shadow:0 0 0 1px var(--warn); }
+mark.rd-hit.is-cur{ background:var(--warn); color:var(--bg); box-shadow:none; }
+@container rd (max-width:760px){
+  .rd-has-toc .rd-q-main{ display:flex; }
+}
+/* ── сгибы, выноски, режим «по разделам» читателя (1.59.0) ─────────────────
+   Сгиб — markdown-блок <details>/<summary> (.ui-fold.rd-fold, стрелка .ui-chev);
+   выноска — цитата «> **Важно:** …» (.ui-callout warn|info); «по разделам» —
+   uiReaderHTML({sections:true}): на экране один .rd-sec, оглавление переключает. */
+.ui-callout{ margin:0 0 16px; padding:10px 14px; border:1px solid var(--info); border-left-width:3px; border-radius:8px; background:var(--info-bg); color:var(--text); font-size:15px; line-height:1.55; }
+.ui-callout.warn{ border-color:var(--warn); background:var(--warn-bg); }
+.ui-callout b{ font-family:var(--font-sans); font-weight:700; font-size:.92em; margin-right:2px; }
+.ui-callout p{ margin:4px 0; }
+.ui-callout > :first-child{ margin-top:0; }
+.ui-callout > :last-child{ margin-bottom:0; }
+.rd .rd-doc .ui-callout > p:last-child{ margin-bottom:0; }
+.rd .rd-doc .ui-callout{ font-size:16px; }
+.rd .rd-doc p.ui-note{ font-family:var(--font-sans); font-size:13px; line-height:1.5; }
+.rd .rd-doc .rd-fold{ margin:0 0 14px; border:1px solid var(--border); border-radius:8px; background:var(--bg-alt); }
+.rd .rd-doc .rd-fold > summary{ justify-content:space-between; align-items:center; padding:9px 12px; font-family:var(--font-sans); font-size:13.5px; font-weight:600; line-height:1.4; color:var(--text); border-radius:8px; }
+@media (hover:hover){ .rd .rd-doc .rd-fold > summary:hover{ background:var(--bg-sunk); } }
+.rd .rd-doc .rd-fold > summary:focus-visible{ outline:2px solid var(--rd-acc); outline-offset:1px; }
+.rd .rd-doc .rd-fold .ui-chev{ flex:none; font-size:12px; }
+.rd .rd-doc .rd-fold[open] > summary{ border-bottom:1px solid var(--border); border-radius:8px 8px 0 0; }
+.rd .rd-doc .rd-fold-body{ padding:12px 14px 2px; background:var(--bg); border-radius:0 0 8px 8px; }
+.rd .rd-doc .rd-fold-body > :first-child{ margin-top:0; }
+.rd .rd-doc .rd-fold-body h2{ font-size:18px; margin:18px 0 8px; border-top:0; padding-top:0; }
+@media (prefers-reduced-motion:reduce){ .rd-fold .ui-chev{ transition:none; } }
+@media print{ .rd-fold .ui-chev{ transition:none; } }
+.rd-sections .rd-sec{ display:none; }
+.rd-sections .rd-sec.is-on{ display:block; }
+.rd .rd-doc .rd-sec > h2:first-child{ border-top:0; padding-top:0; margin-top:0; }
+.rd .rd-doc .rd-pre + .rd-sec > h2:first-child{ border-top:1px solid var(--border-strong); padding-top:14px; margin-top:28px; }
+.rd-sections .rd-toc-list .lvl-3{ display:none; }
+.rd-sections .rd-toc-list .lvl-3.is-open{ display:block; }
+.rd-toc-list a.is-sec{ color:var(--rd-acc); border-left-color:var(--rd-acc); font-weight:600; }
+.rd-sec-n{ font-size:11px; font-weight:400; white-space:nowrap; }
+@media (max-width:640px){
+  .rd-host{ --rd-bleed:16px; padding:16px calc(16px + env(safe-area-inset-right, 0px)) 0 calc(16px + env(safe-area-inset-left, 0px)); }
+}
+/* ── окно документа (ui-kit 1.10.0): по центру, затемнение вокруг ──────────
+   Разметка: <div class="ui-docwin" hidden><div class="ui-docwin-box"
+   role="dialog" aria-modal="true">шапка + тело</div></div>. Ширину страница
+   задаёт через --docwin-w (travel 1280px: экспортному HTML стадии нужно
+   ≥ ~1200px, чтобы оглавление встало столбцом слева от листа A4). Закрытие
+   кликом по затемнению и Escape — на странице. */
+.ui-docwin{ position:fixed; inset:0; z-index:var(--docwin-z, 70); display:flex; align-items:center; justify-content:center;
+  padding:16px; background:rgba(30,26,20,.45); }
+[data-theme="dark"] .ui-docwin{ background:rgba(0,0,0,.55); }
+.ui-docwin-box{ position:relative; display:flex; flex-direction:column; overflow:hidden;
+  width:min(var(--docwin-w, 1000px), 100%); height:min(92vh, 100%);
+  background:var(--bg); border:1px solid var(--border-strong); border-radius:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.3); }
+/* Шапка и тело окна (ui-kit 1.22.0) — были копиями в travel (.vw-head…) и
+   games, health рисовал окно целиком инлайном. Надзаголовок и ссылка — цветом
+   раздела (--sec-acc); своё у страницы (стрелки, переключатели travel) — рядом.
+   Разметка: .ui-docwin-head > .ui-docwin-titles(.ui-docwin-kicker, .ui-docwin-title,
+   .ui-docwin-sub) · [.ui-docwin-link] · .ui-docwin-x; тело — .ui-docwin-body.
+   Слой — --docwin-z (health: 215 — окно открывают и поверх его форм). */
+.ui-docwin-head{ display:flex; align-items:center; gap:14px; flex:none; background:var(--bg-elev); border-bottom:1px solid var(--border);
+  padding:calc(12px + env(safe-area-inset-top,0px)) calc(20px + env(safe-area-inset-right,0px)) 12px calc(20px + env(safe-area-inset-left,0px)); }
+.ui-docwin-titles{ min-width:0; flex:1; }
+.ui-docwin-kicker{ display:block; font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--sec-acc, var(--accent)); font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ui-docwin-title{ display:block; color:var(--text); font-family:var(--font-serif); font-weight:600; font-size:19px; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ui-docwin-sub{ display:block; margin-top:2px; font-size:11.5px; color:var(--text-faint); font-variant-numeric:tabular-nums; }
+.ui-docwin-link{ font-size:12px; font-weight:600; color:var(--sec-acc, var(--accent)); white-space:nowrap; text-decoration:none; }
+@media (hover:hover){ .ui-docwin-link:hover{ text-decoration:underline; } }
+.ui-docwin-x{ flex:none; display:inline-flex; align-items:center; justify-content:center; min-width:36px; min-height:36px; padding:6px 8px; border:none; border-radius:7px; background:none; color:var(--text-muted); font:inherit; font-size:19px; line-height:1; cursor:pointer; }
+@media (hover:hover){ .ui-docwin-x:hover{ background:var(--bg-alt); color:var(--text); } }
+.ui-docwin-body{ flex:1; min-height:0; overflow:auto; }
+@media (max-width:760px){
+  .ui-docwin-x{ min-width:40px; min-height:40px; }
+  /* имя документа на телефоне не режется многоточием: отчёты здоровья вида
+     «2026-08-04 …» становились неотличимы — до двух строк */
+  .ui-docwin-title{ font-size:16px; white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+}
+@media (max-width:560px){
+  /* есть ссылка «открыть отдельно» — имени своя строка, ссылка и ✕ ниже */
+  .ui-docwin-head:has(.ui-docwin-link){ flex-wrap:wrap; }
+  .ui-docwin-head:has(.ui-docwin-link) .ui-docwin-titles{ flex:1 1 100%; }
+  .ui-docwin-head:has(.ui-docwin-link) .ui-docwin-x{ margin-left:auto; }
+}
+/* md-читатель в широком окне (travel 1280px) не растягивает строку на всю
+   ширину: та же геометрия, что у отчётов здоровья в окне 1000px */
+.ui-docwin-box .rd{ max-width:960px; margin-left:auto; margin-right:auto; }
+@media (max-width:760px){
+  .ui-docwin{ padding:0; }
+  .ui-docwin-box{ width:100%; height:100%; border:0; border-radius:0; box-shadow:none;
+    padding-bottom:env(safe-area-inset-bottom, 0px); }
+}
+/* 1.60.0: окно с читателем на телефоне — во всю высоту (100dvh): шапка и поиск неподвижны, тело прокручивается,
+   полоса глав .rd-bar прижата к низу окна; короткий раздел — пустое место внутри тела, под текстом */
+@media (max-width:760px){
+  .ui-docwin-box:has(.rd){ height:100%; height:100dvh; }
+  .ui-modal:has(.rd) .ui-modal-box{ height:100%; height:100dvh; }
+  :is(.ui-docwin-body, .ui-modal-body, .rd-host):has(> .rd){ display:flex; flex-direction:column; }
+  :is(.ui-docwin-body, .ui-modal-body, .rd-host) > .rd, .uh-body > .rd{ flex:1 0 auto; width:100%; min-width:0; display:flex; flex-direction:column; }
+  .ui-modal-body:has(> .rd){ --rd-bleed:16px; padding-bottom:0; }
+}
+/* справка с читателем — окно-колонка: шапка неподвижна, прокручивается тело (на любой ширине), поэтому «к началу раздела»
+   не уносит шапку окна за край; на телефоне окно — во всю высоту */
+.uh-overlay:has(.uh-modal .rd){ overflow:hidden; }
+.uh-modal:has(.rd){ display:flex; flex-direction:column; max-height:calc(100vh - 96px); max-height:calc(100dvh - 96px); }
+.uh-modal:has(.rd) .uh-head{ flex:none; }
+.uh-modal:has(.rd) .uh-body{ flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+@media (max-width:600px){
+  .uh-modal:has(.rd){ height:100%; height:100dvh; max-height:none; min-height:0; }
+  .uh-modal:has(.rd) .uh-head{ padding-top:calc(12px + env(safe-area-inset-top, 0px)); }
+  .uh-modal:has(.rd) .uh-body{ display:flex; flex-direction:column;
+    padding:4px calc(16px + env(safe-area-inset-right, 0px)) 0 calc(16px + env(safe-area-inset-left, 0px)); }
+}
+/* справка: читатель внутри .uh-body; с оглавлением модалке нужна ширина */
+.uh-body{ --rd-bleed:20px; }
+.uh-modal:has(.rd-has-toc){ max-width:1000px; }
+@media (max-width:640px){ .uh-body{ --rd-bleed:16px; } }
+
+/* ── Страница раздела (ui-kit 1.11.0) ─────────────────────────────────────────
+   Компоненты, из которых собирается страница раздела целиком — без своего
+   <style>: шапка, заголовки, переключатели, карточки, плитки с цифрами, строки
+   с полосами, мини-графики, сворачиваемые блоки, нижняя навигация телефона и
+   выпадающий список (uiSelectHTML в ui-kit.js). Первый потребитель — money.html.
+   Шапка .ui-top и подвал .ui-foot (uiTopHTML/uiFootHTML) с 1.17.0 общие для
+   ВСЕХ страниц кабинета, не только .ui-page: свои шапки (.h-top/.crumb) сняты.
+   .chip-btn внутри .ui-top оформляется здесь же — страничные .chip-btn (у games
+   круглые) шапку не задевают: у .ui-top .chip-btn селектор сильнее.
+   Цвета — только токены. Доменный акцент приходит переменной --sec-acc
+   (uiTopHTML/uiFootHTML ставят её сами по UI_ACC; .ui-page — style="--sec-acc:var(--c-N)"). */
+.ui-page{ --sec-acc:var(--accent); min-height:100vh; background-color:var(--bg); background-size:300px 300px; color:var(--text); font-size:14px; line-height:1.5; transition:background-color .25s, color .25s; }
+.ui-page a{ color:var(--sec-acc); text-decoration:none; }
+@media (hover:hover){ .ui-page a:hover{ text-decoration:underline; } }
+.ui-page :focus-visible{ outline:2px solid var(--sec-acc); outline-offset:3px; }
+
+/* шапка: крошка «← Хаб» · ромб и имя раздела · действия */
+.ui-top, .ui-hdr{ display:flex; align-items:center; gap:14px; padding:9px clamp(14px,4vw,40px); padding-left:max(clamp(14px,4vw,40px), env(safe-area-inset-left)); padding-right:max(clamp(14px,4vw,40px), env(safe-area-inset-right)); background:var(--bg-elev); border-bottom:1px solid var(--border); box-shadow:0 1px 2px rgba(60,52,38,.05); color:var(--text); font-size:14px; line-height:1.5; }
+.ui-top{ position:sticky; top:0; z-index:60; }
+[data-theme="dark"] .ui-top{ box-shadow:0 1px 2px rgba(0,0,0,.35); }
+:is(.ui-top, .ui-hdr, .ui-foot) .ui-crumb{ text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:var(--text-muted); font-weight:600; font-size:12.5px; white-space:nowrap; }
+@media (hover:hover){ :is(.ui-top, .ui-hdr, .ui-foot) .ui-crumb:hover{ color:var(--sec-acc); text-decoration:none; } }
+.ui-crumb-arw{ display:inline-block; transition:transform .15s; }
+@media (hover:hover){ .ui-crumb:hover .ui-crumb-arw{ transform:translateX(-3px); } }
+.ui-top-div{ width:1px; height:18px; background:var(--border); flex-shrink:0; }
+.ui-top-sec{ display:inline-flex; align-items:center; gap:9px; min-width:0; }
+.ui-top-dot{ width:14px; height:14px; border-radius:4px; background:var(--sec-acc); transform:rotate(45deg); flex-shrink:0; }
+.ui-top-name{ color:var(--text); font-weight:700; font-size:14px; letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ui-tag{ font-size:10.5px; font-weight:600; color:var(--text-faint); border:1px solid var(--border); border-radius:999px; padding:2px 8px; white-space:nowrap; flex:none; }
+.ui-top-spacer{ flex:1; }
+.ui-top-brand{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-faint); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+/* .chip-btn и .h-btn-lbl рисуют общие authBtnHTML/helpBtnHTML — здесь их вид
+   только внутри .ui-top, чтобы не задеть копии на других страницах */
+:is(.ui-top, .ui-hdr) .chip-btn{ display:inline-flex; align-items:center; gap:6px; flex:none; min-height:36px; padding:7px 11px; border:1px solid var(--border); border-radius:8px; background:var(--bg-elev); color:var(--text); font-size:12.5px; font-weight:600; white-space:nowrap; cursor:pointer; text-decoration:none; transition:background .15s,border-color .15s; }
+@media (hover:hover){ :is(.ui-top, .ui-hdr) .chip-btn:hover{ background:var(--bg-alt); border-color:var(--border-strong); text-decoration:none; } }
+:is(.ui-top, .ui-hdr) .h-btn-lbl{ font-size:12.5px; }
+:is(.ui-top, .ui-hdr) [data-refresh-ico]{ display:inline-block; line-height:1; font-size:14px; }
+:is(.ui-top, .ui-hdr) .chip-btn[disabled]{ opacity:.6; cursor:default; }
+@media (max-width:600px){
+  .ui-top, .ui-hdr{ gap:8px; }
+  :is(.ui-top, .ui-hdr) .h-btn-lbl, :is(.ui-top, .ui-hdr) .ui-tag{ display:none; }
+  :is(.ui-top, .ui-hdr) .chip-btn{ min-height:40px; justify-content:center; padding:7px 12px; }
+}
+@media (max-width:420px){
+  .ui-top, .ui-hdr{ gap:6px; }
+  .ui-crumb-lbl, .ui-crumb + .ui-top-div{ display:none; }
+  :is(.ui-top, .ui-hdr) .ui-crumb{ min-width:40px; min-height:40px; justify-content:center; }
+  :is(.ui-top, .ui-hdr) .chip-btn{ padding-left:9px; padding-right:9px; }
+}
+
+/* колонка, заголовки, подписи */
+.ui-main{ max-width:1040px; margin:0 auto; padding:26px clamp(14px,4vw,40px) 64px; }
+.ui-h1{ font-family:var(--font-serif); font-weight:600; font-size:clamp(32px,5vw,44px); line-height:1; letter-spacing:-.02em; margin:0; }
+.ui-lead{ font-family:var(--font-serif); font-style:italic; font-size:14.5px; color:var(--text-muted); margin:10px 0 0; text-wrap:pretty; }
+.ui-toolbar{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin:22px 0 26px; }
+.ui-head{ display:flex; align-items:baseline; gap:6px 12px; flex-wrap:wrap; margin-bottom:16px; }
+.ui-head.split{ align-items:center; justify-content:space-between; }
+.ui-head.mid{ align-items:center; margin-bottom:12px; }
+.ui-head.flat{ margin-bottom:0; }
+.ui-block{ display:block; }
+.ui-h2{ font-family:var(--font-serif); font-weight:600; font-size:22px; margin:0; letter-spacing:-.01em; }
+.ui-h2.lg{ font-size:24px; }
+.ui-sechead{ display:flex; align-items:center; gap:14px; margin:36px 0 12px; }
+.ui-sechead h3{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:var(--text-muted); margin:0; }
+.ui-rule{ flex:1; height:1px; background:var(--border); }
+.ui-kicker{ font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); }
+.ui-sub{ font-size:12.5px; color:var(--text-muted); font-variant-numeric:tabular-nums; text-wrap:pretty; }
+.ui-note{ font-size:11.5px; color:var(--text-faint); text-wrap:pretty; }
+.ui-text{ font-size:13px; text-wrap:pretty; }
+.ui-num{ font-variant-numeric:tabular-nums; }
+.ui-muted{ color:var(--text-muted); }
+.ui-faint{ color:var(--text-faint); }
+.ui-strong{ font-weight:600; }
+.ui-up{ color:var(--warn); }
+.ui-down{ color:var(--success); }
+.ui-mt-s{ margin-top:6px; } .ui-mt-m{ margin-top:12px; } .ui-mt-l{ margin-top:18px; }
+.ui-sep-top{ margin-top:16px; padding-top:14px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:4px; }
+
+/* переключатель-сегменты (вкладки, период); .sm — компактный */
+.ui-seg{ display:inline-flex; max-width:100%; overflow-x:auto; gap:3px; padding:4px; background:var(--bg-sunk); border:1px solid var(--border); border-radius:999px; }
+.ui-seg-btn{ border:none; border-radius:999px; padding:8px 16px; min-height:38px; background:transparent; color:var(--text-muted); font-size:13px; font-weight:600; white-space:nowrap; cursor:pointer; }
+.ui-seg-btn[aria-pressed="true"]{ background:var(--bg-elev); color:var(--text); box-shadow:0 1px 2px rgba(60,52,38,.14); }
+[data-theme="dark"] .ui-seg-btn[aria-pressed="true"]{ box-shadow:0 1px 2px rgba(0,0,0,.4); }
+.ui-seg.sm{ gap:2px; padding:3px; border-radius:8px; }
+.ui-seg.sm .ui-seg-btn{ border-radius:6px; padding:5px 12px; min-height:32px; font-size:12.5px; }
+/* v1.45.0: .ui-seg.sm.acc — мелкий переключатель, заметный на любой подложке (подвкладки
+   карточки вьюера): выбранная кнопка — подложка и рамка цвета раздела, остальные — обычный
+   текст; размер как у .sm, чтобы пять вкладок помещались на телефоне. */
+.ui-seg.sm.acc{ background:transparent; border-color:var(--border-strong); }
+.ui-seg.sm.acc .ui-seg-btn{ color:var(--text-muted); }
+@media (hover:hover){ .ui-seg.sm.acc .ui-seg-btn:hover{ color:var(--text); background:var(--bg-sunk); } }   /* на касании :hover залипает */
+.ui-seg.sm.acc .ui-seg-btn[aria-pressed="true"]{ color:var(--text); background:color-mix(in srgb, var(--sec-acc, var(--accent)) 20%, var(--bg-elev));
+  box-shadow:inset 0 0 0 1.5px var(--sec-acc, var(--accent)); }
+
+/* карточки и сетки */
+.ui-card{ background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px 18px; }
+.ui-card.acc{ border-left:3px solid var(--sec-acc); }
+.ui-card.lg{ padding:20px 22px; }
+.ui-card.flush{ padding-top:4px; padding-bottom:8px; }
+.ui-empty{ background:var(--bg-elev); border:1px dashed var(--border-strong); border-radius:var(--radius); padding:34px 22px; text-align:center; }
+.ui-empty-t{ font-family:var(--font-serif); font-size:18px; }
+.ui-alert{ margin:28px 0; padding:16px 18px; background:var(--err-bg); border:1px solid var(--err); border-radius:var(--radius); font-size:13.5px; }
+.ui-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:12px; align-items:start; }
+.ui-grid.tiles{ grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); align-items:stretch; }
+.ui-grid.stats{ grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; }
+.ui-grid.wide{ grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:28px; }
+.ui-grid.q4{ grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; }
+.ui-grid.q3{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.ui-stack-col{ display:flex; flex-direction:column; gap:22px; }
+
+/* плитка с главной цифрой */
+.ui-tile{ display:flex; flex-direction:column; gap:6px; padding:15px 17px; }
+.ui-big{ font-size:26px; font-weight:600; line-height:1.05; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.ui-big.xl{ font-size:clamp(34px,6vw,44px); line-height:1; letter-spacing:-.025em; }
+.ui-big .ui-unit{ font-size:13px; font-weight:500; letter-spacing:0; color:var(--text-muted); }
+.ui-big.warn{ color:var(--warn); }
+/* малая плитка внутри карточки; .on — с данными, .off — пустая */
+.ui-stat{ background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:11px 13px; }
+.ui-stat-k{ font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--text-faint); line-height:1.25; }
+.ui-stat-v{ font-size:19px; font-weight:600; margin-top:3px; font-variant-numeric:tabular-nums; }
+.ui-stat.sm{ border-radius:7px; padding:7px 8px; }
+.ui-stat.sm .ui-stat-k{ text-transform:none; letter-spacing:0; font-weight:400; }
+.ui-stat.sm .ui-stat-v{ font-size:13.5px; margin-top:0; }
+.ui-stat.on{ border-color:var(--sec-acc); background:var(--bg-elev); }
+.ui-stat.off .ui-stat-v{ color:var(--text-faint); }
+
+/* строки-таблицы: колонки задаёт страница переменной --cols */
+.ui-row{ display:grid; grid-template-columns:var(--cols, minmax(0,1fr) auto); gap:12px; align-items:center; padding:9px 0; border-bottom:1px solid var(--border); font-size:13px; }
+.ui-row.head{ border-bottom-color:var(--border-strong); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); }
+.ui-row.tight{ padding:7px 0; gap:10px; }
+.ui-row.base{ align-items:baseline; }
+.ui-row.pick{ margin:0 -8px; padding-left:8px; padding-right:8px; border-radius:6px; cursor:pointer; }
+.ui-row.pick.on{ background:var(--bg-alt); }  @media (hover:hover){ .ui-row.pick:hover{ background:var(--bg-alt); } }
+.ui-r{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.ui-ell{ min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ui-two{ min-width:0; display:flex; flex-direction:column; }
+.ui-two-t{ font-family:var(--font-serif); font-size:15px; font-weight:600; }
+.ui-kv{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+.ui-kv.first{ border-top:1px solid var(--border); border-bottom:none; }
+.ui-dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; background:var(--success); transform:translateY(-1px); }
+.ui-dot.warn{ background:var(--warn); }
+
+/* полосы: доля (.ui-bar) и состав (.ui-stack); уровни насыщенности .lv1–.lv5
+   общие для сегментов, столбиков и квадратиков легенды */
+.ui-bar{ height:8px; border-radius:4px; background:var(--bg-sunk); overflow:hidden; }
+.ui-bar.thin{ height:6px; border-radius:3px; }
+.ui-bar > i{ display:block; height:100%; background:var(--sec-acc); border-radius:inherit; }
+.ui-bar > i.quiet{ background:var(--border-strong); }
+.ui-stack{ display:flex; height:14px; gap:2px; border-radius:5px; overflow:hidden; background:var(--bg-sunk); }
+.ui-stack.sm{ height:12px; gap:1px; border-radius:4px; background:transparent; }
+.ui-stack > i{ display:block; background:var(--sec-acc); }
+.ui-pace{ display:inline-block; height:6px; max-width:60px; border-radius:3px; background:var(--sec-acc); opacity:.55; }
+.lv1{ opacity:1; } .lv2{ opacity:.75; } .lv3{ opacity:.52; } .lv4{ opacity:.32; } .lv5{ opacity:.15; }
+.lv-trip{ opacity:.5; } .lv-oneoff{ opacity:.22; } .lv-mid{ opacity:.55; } .lv-low{ opacity:.25; }
+.ui-legend{ display:flex; flex-wrap:wrap; gap:6px 16px; padding-top:10px; font-size:11.5px; color:var(--text-muted); }
+.ui-legend > span{ display:inline-flex; align-items:center; gap:6px; }
+.ui-sw{ display:inline-block; width:10px; height:10px; border-radius:2px; background:var(--sec-acc); flex-shrink:0; }
+.ui-sw.wide{ width:12px; height:8px; }
+.ui-sw.inc{ background:var(--bg-sunk); border:1px solid var(--border-strong); }
+.ui-grow{ flex:1; }
+
+/* мини-график по месяцам: линия + точки-кнопки */
+.ui-spark{ position:relative; height:110px; margin:14px 6px 0; border-top:1px dashed var(--border); border-bottom:1px solid var(--border-strong); }
+.ui-spark svg{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.ui-spark polyline{ fill:none; stroke:var(--sec-acc); stroke-width:2; vector-effect:non-scaling-stroke; stroke-linejoin:round; stroke-linecap:round; }
+.ui-spark-top{ position:absolute; right:0; top:-17px; font-size:10px; color:var(--text-faint); font-variant-numeric:tabular-nums; }
+.ui-spark-pt{ position:absolute; width:22px; height:22px; margin:-11px 0 0 -11px; padding:0; border:none; background:none; display:grid; place-items:center; cursor:pointer; }
+.ui-spark-pt::before{ content:""; width:8px; height:8px; border-radius:50%; background:var(--bg-elev); border:2px solid var(--sec-acc); }
+.ui-spark-pt.on::before{ width:11px; height:11px; background:var(--sec-acc); }
+.ui-spark-empty{ position:absolute; left:0; right:0; bottom:10px; text-align:center; font-size:12px; color:var(--text-faint); }
+.ui-spark-x{ display:flex; margin-top:6px; font-size:11px; color:var(--text-faint); }
+.ui-spark-x > span{ flex:1; text-align:center; }
+
+/* График месяцев (colChart в money.html): столбики + линия скользящего
+   среднего. Колонки БЕЗ зазора (отступ — внутри колонки), поэтому центр i-й
+   колонки — ровно (i + .5) / n ширины: через эти центры SVG-оверлей
+   .ui-cols-line ведёт плавную линию среднего — ровно над своими месяцами.
+   Высота области графика — --plot-h (общая для колонок и оверлея).
+   12 колонок на ширину (6 на телефоне), дальше — прокрутка вбок; .fit —
+   компактный, без прокрутки (все колонки в ширину карточки). */
+.ui-cols-scroll{ overflow-x:auto; margin-top:12px; scrollbar-width:thin; container-type:inline-size; }
+/* v1.34.0: место под полосу прокрутки — иначе она (на маке — поверх содержимого) пересекала
+   подписи месяцев; у .fit прокрутки нет */
+.ui-cols-scroll:not(.fit){ padding-bottom:12px; }
+/* Ширина — ЯВНО по числу колонок (--cols-n ставит страница): Safari считает
+   width:max-content у flex-контейнера по видимой области, а не по колонкам —
+   слой линии выходил уже графика, и линия кончалась за 3 месяца до края
+   (iPhone, 2026-10-06; Chrome считал верно). */
+.ui-cols{ --plot-h:150px; position:relative; display:flex; width:max(100%, calc(var(--cols-n, 12) * 100cqw / 12)); }
+.ui-cols.sm{ --plot-h:96px; }
+.ui-col{ flex:1 0 calc(100cqw / 12); min-width:0; display:flex; flex-direction:column; padding:0 2px; border:none; background:none; color:inherit; cursor:pointer; }
+@media (max-width:820px){
+  .ui-col{ flex-basis:calc(100cqw / 6); }
+  .ui-cols{ width:max(100%, calc(var(--cols-n, 6) * 100cqw / 6)); }
+}
+.ui-cols-scroll.fit .ui-col{ flex:1 1 0; }
+.ui-cols-scroll.fit .ui-cols{ width:100%; }
+.ui-col-plot{ position:relative; height:var(--plot-h); display:flex; align-items:flex-end; justify-content:center; border-radius:6px 6px 0 0; border-bottom:1px solid var(--border-strong); }
+.ui-col.on .ui-col-plot{ background:var(--bg-alt); }  @media (hover:hover){ .ui-col:hover .ui-col-plot{ background:var(--bg-alt); } }
+.ui-col-exp{ width:58%; max-width:30px; display:flex; flex-direction:column-reverse; gap:1px; border-radius:3px 3px 0 0; overflow:hidden; opacity:.55; }
+.ui-col.on .ui-col-exp{ opacity:1; }
+.ui-col-exp > i{ display:block; background:var(--sec-acc); }
+.ui-col-lbl{ padding-top:5px; text-align:center; font-size:11px; font-weight:500; color:var(--text-muted); white-space:nowrap; }
+.ui-col.on .ui-col-lbl{ color:var(--sec-acc); font-weight:700; }
+/* линия скользящего среднего (монотонная кривая) — поверх столбиков, клики не ловит */
+.ui-cols-line{ position:absolute; left:0; top:0; width:100%; height:var(--plot-h); overflow:visible; pointer-events:none; z-index:2; }
+/* polyline — для страниц до money v1.5.0: страница и ui-kit.css доезжают на NAS
+   по отдельности, и старая разметка с новым CSS не должна заливаться чёрным */
+.ui-cols-line path, .ui-cols-line polyline{ fill:none; stroke:var(--text); stroke-width:2; vector-effect:non-scaling-stroke; stroke-linejoin:round; stroke-linecap:round; opacity:.75; }
+/* подпись значения у вершины столбика (тыс. ₽; у «Остатка» — ещё % дохода
+   строкой ниже); .below — под столбиком в минусе */
+.ui-col-val{ position:absolute; left:0; right:0; margin-bottom:3px; text-align:center; font-size:10.5px; font-weight:600; line-height:1.15; color:var(--text-muted); font-variant-numeric:tabular-nums; white-space:nowrap; pointer-events:none; z-index:3; }
+.ui-col-val small{ display:block; font-size:9.5px; font-weight:500; color:var(--text-faint); }
+.ui-col-val.below{ margin:3px 0 0; }
+.ui-col.on .ui-col-val{ color:var(--text); font-weight:700; }
+/* подложка цвета фона: линия среднего уходит ПОД цифру, а не перечёркивает её */
+.ui-col-val{ text-shadow:0 0 3px var(--bg-elev), 0 0 3px var(--bg-elev), 0 0 2px var(--bg-elev), 0 0 1px var(--bg-elev); }
+.ui-col.on .ui-col-val{ text-shadow:0 0 3px var(--bg-alt), 0 0 3px var(--bg-alt), 0 0 2px var(--bg-alt), 0 0 1px var(--bg-alt); }  @media (hover:hover){ .ui-col:hover .ui-col-val{ text-shadow:0 0 3px var(--bg-alt), 0 0 3px var(--bg-alt), 0 0 2px var(--bg-alt), 0 0 1px var(--bg-alt); } }
+/* «осталось»: столбики вверх и вниз от нуля (.neg — минус), ноль — линия */
+.ui-cols.net .ui-col-plot{ display:block; border-bottom:none; }
+.ui-col-net{ position:absolute; left:21%; right:21%; display:block; background:var(--sec-acc); border-radius:3px; opacity:.55; }
+.ui-col.on .ui-col-net{ opacity:1; }
+.ui-col-net.neg{ background:var(--err); }
+.ui-cols-zero{ position:absolute; left:0; right:0; height:0; border-top:1px solid var(--border-strong); pointer-events:none; z-index:1; }
+.ui-sw-line{ display:inline-block; width:16px; height:0; border-top:2px solid var(--text); opacity:.75; }
+/* вторая линия графика (v1.30.0): акцент раздела, пунктир — «остаток» рядом с «доходом» */
+.ui-sw-line.alt{ border-top:2px dashed var(--sec-acc); opacity:1; }
+.ui-cols-line path.alt{ stroke:var(--sec-acc); stroke-dasharray:5 4; opacity:.95; }
+.ui-sw.neg{ background:var(--err); }
+/* «К прошлому году» (v1.31.0): в колонке месяца два столбика — тот же месяц
+   год назад (бледный, слева) и этот год. .win — месяцы, на которых построен
+   факт (фон колонки). Колонки не кликаются: окно только для чтения. */
+.ui-cols.yoy .ui-col{ cursor:default; }
+.ui-cols.yoy .ui-col-plot{ gap:2px; }
+.ui-cols.yoy .ui-col-exp{ width:36%; max-width:18px; opacity:1; }
+.ui-cols.yoy .ui-col-exp.prev{ opacity:.3; }
+@media (hover:hover){ .ui-cols.yoy .ui-col:hover .ui-col-plot{ background:none; } }
+.ui-cols.yoy .ui-col.win .ui-col-plot{ background:var(--bg-alt); }  @media (hover:hover){ .ui-cols.yoy .ui-col.win:hover .ui-col-plot{ background:var(--bg-alt); } }
+.ui-cols.yoy .ui-col.win .ui-col-lbl{ color:var(--text); font-weight:700; }
+@media (max-width:600px){ .ui-cols.yoy .ui-col-val{ display:none; } }
+.ui-sw.prev{ opacity:.3; }
+/* v1.32.0: месяцы выбираются нажатием (карточка категории «этот год / прошлый») */
+.ui-cols.yoy.pick .ui-col{ cursor:pointer; }
+@media (hover:hover){ .ui-cols.yoy.pick .ui-col:hover .ui-col-plot{ background:var(--bg-alt); } }
+.ui-cols.yoy.pick .ui-col.win .ui-col-plot{ background:var(--bg-sunk); box-shadow:inset 0 -2px 0 var(--sec-acc); }
+/* места подкатегории под её строкой — с отступом, мельче */
+.ui-catplaces{ padding:2px 0 8px 18px; border-bottom:1px solid var(--border); }
+.ui-row.ui-catplace{ padding:6px 0; font-size:12.5px; }
+.ui-catplaces > .ui-row.ui-catplace:last-child{ border-bottom:none; }
+/* стрелка «раскрыть / свернуть все» в шапке таблицы категорий */
+.ui-chev-all{ display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; margin:-6px -8px -6px -6px; padding:0; border:1px solid transparent; border-radius:6px; background:none; color:var(--text-muted); font:inherit; font-size:12px; cursor:pointer; }
+@media (hover:hover){ .ui-chev-all:hover{ background:var(--bg-alt); border-color:var(--border); color:var(--text); } }
+.ui-chev-all:focus-visible{ outline:2px solid var(--sec-acc); outline-offset:1px; }
+.ui-sw.win{ background:var(--bg-alt); border:1px solid var(--border-strong); }
+/* пустое место: месяц не закрыт — подпись бледная, клика нет */
+.ui-col.gap{ cursor:default; }
+.ui-col.gap .ui-col-plot{ background:none; border-bottom-style:dashed; }
+.ui-col.gap .ui-col-lbl{ color:var(--text-faint); opacity:.7; }
+/* у «Остатка» нуля внизу нет (ноль — отдельная линия) — пропуску пунктир не нужен */
+.ui-cols.net .ui-col.gap .ui-col-plot{ border-bottom:none; }
+
+/* сворачиваемая карточка */
+.ui-fold > summary{ list-style:none; cursor:pointer; display:flex; align-items:baseline; gap:10px; }
+.ui-fold > summary::-webkit-details-marker{ display:none; }
+.ui-chev{ display:inline-block; color:var(--text-faint); transition:transform .2s; }
+.ui-fold[open] > summary .ui-chev{ transform:rotate(180deg); }
+.ui-scroll-x{ overflow-x:auto; }
+.ui-table{ width:100%; min-width:420px; border-collapse:collapse; font-size:13px; }
+.ui-table th{ padding:10px 0 10px 12px; border-bottom:1px solid var(--border-strong); text-align:right; font-family:var(--font-serif); font-size:14px; font-weight:600; white-space:nowrap; }
+.ui-table th:first-child{ padding:10px 8px 10px 0; text-align:left; font-family:var(--font-sans); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); }
+.ui-table td{ padding:8px 0 8px 12px; border-bottom:1px solid var(--border); text-align:right; font-variant-numeric:tabular-nums; }
+.ui-table td:first-child{ padding:8px 8px 8px 0; text-align:left; }
+.ui-table tr.total td{ font-weight:600; }
+.ui-table tr.quiet td:first-child{ color:var(--text-muted); }
+
+/* текстовая кнопка-ссылка */
+.ui-link{ padding:0; border:none; background:none; color:var(--sec-acc); font-size:12.5px; font-weight:600; cursor:pointer; text-align:left; }
+@media (hover:hover){ .ui-link:hover{ text-decoration:underline; } }
+/* ui-kit 1.69.1: строка периода — «начало», «конец» (стандартные поля даты dateField) и кнопка в одну строку;
+   на телефоне — друг под другом */
+.ui-daterow{ display:grid; grid-template-columns:minmax(0,220px) minmax(0,220px) auto; gap:12px; align-items:end; justify-content:start; }
+.ui-daterow label{ display:flex; flex-direction:column; gap:4px; min-width:0; }
+@media (max-width:600px){ .ui-daterow{ grid-template-columns:1fr; } }
+/* ui-kit 1.68.0: кнопка действия одного цвета во всём кабинете (--btn-acc, как на «Загрузке» вьюера) — акцент раздела
+   (--sec-acc) остаётся навигации, вкладкам и выделениям; иначе «Сохранить» была то зелёной, то синей, то сиреневой. */
+:root{ --btn-acc:var(--c-1); }
+/* ui-kit 1.70.0 — концепция кнопок (tools/design-reference/buttons.md):
+   ЦВЕТ — у страницы один: ромбик шапки, полоса плитки на хабе, выбранный фильтр и кнопка действия (--btn-acc = --sec-acc
+   страницы, она стоит на body; без неё — --c-1). ФОРМА — пилюля = выбор (фильтры, переключатели), прямоугольник 8px = действие.
+   ВИДЫ действия: .ui-btn — главная (заливка цветом раздела, одна на блок/окно); .ghost — второстепенная (каёмка и текст
+   цвета раздела); .plain — нейтральная (серая каёмка: отмена, служебное, «Изменить» в строке); .danger — опасная
+   (красная каёмка), .danger.solid — только в подтверждении необратимого. Размеры: обычный, .lg (единственное главное
+   действие экрана), .sm (кнопка в строке списка). */
+body{ --btn-acc:var(--sec-acc, var(--c-1)); }
+.ui-btn{ display:inline-block; padding:10px 20px; border:none; border-radius:8px; background:var(--btn-acc); color:var(--bg-elev); font-size:13px; font-weight:600; cursor:pointer; }
+.ui-page a.ui-btn{ color:var(--bg-elev); }
+/* ui-kit 1.52.0: крупная и контурная кнопки, выключенная — бледнее; наведение — только с мышью */
+.ui-btn.lg{ padding:13px 26px; border-radius:10px; font-size:15px; }
+.ui-btn.ghost{ background:transparent; color:var(--btn-acc); box-shadow:inset 0 0 0 1.5px var(--btn-acc); }
+.ui-btn:disabled{ opacity:.5; cursor:default; background:var(--btn-acc); }   /* фон явно: чужое button:hover страницы не перекрашивает выключенную */
+.ui-btn.ghost:disabled{ background:transparent; }
+.ui-btn.sm{ padding:7px 14px; font-size:12px; border-radius:7px; }
+.ui-btn.plain{ background:transparent; color:var(--text-muted); box-shadow:inset 0 0 0 1px var(--border); }
+.ui-btn.plain:disabled{ background:transparent; }
+.ui-btn.danger{ background:transparent; color:var(--err); box-shadow:inset 0 0 0 1.5px var(--err); }
+.ui-btn.danger:disabled{ background:transparent; }
+.ui-btn.danger.solid{ background:var(--err); color:#fff; box-shadow:none; }
+.ui-page a.ui-btn.ghost, .ui-page a.ui-btn.plain, .ui-page a.ui-btn.danger{ color:inherit; }
+@media (hover:hover){
+  @media (hover:hover){ .ui-btn:not(:disabled):hover{ background:var(--btn-acc); filter:brightness(1.07); } }
+  @media (hover:hover){ .ui-btn.ghost:not(:disabled):hover, .ui-btn.plain:not(:disabled):hover, .ui-btn.danger:not(.solid):not(:disabled):hover{ background:var(--bg-alt); filter:none; } }
+  @media (hover:hover){ .ui-btn.plain:not(:disabled):hover{ color:var(--text); box-shadow:inset 0 0 0 1px var(--border-strong); } }
+  @media (hover:hover){ .ui-btn.danger.solid:not(:disabled):hover{ background:var(--err); filter:brightness(1.07); } }
+}
+
+/* подвал */
+.ui-foot{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-top:44px; padding-top:18px; border-top:1px solid var(--border); font-size:11.5px; color:var(--text-faint); }
+/* 1.70.0: правая часть подвала — «раздел vX.Y.Z · состояние данных»; путь к данным — только подсказкой (title) */
+.ui-foot-meta{ font-variant-numeric:tabular-nums; letter-spacing:.02em; }
+.ui-foot-state.warn{ color:var(--warn); }
+.ui-foot-state.err{ color:var(--err); }
+
+/* ── плашка сохранения (ui-kit 1.28.0, uiSaveBarHTML) — над окнами форм (210),
+   под подтверждением (1100); над нижней панелью — через --ui-mnav-offset ── */
+@media print{ .ui-savebar{ display:none !important; } }
+
+/* ── поле формы (ui-kit 1.27.0, uiFieldHTML) ─────────────────────────────────
+   .fld/.fld-lbl — имена, которыми страницы уже пользовались (и в своих
+   редакторах тоже): здесь единственное их определение. */
+/* поля в одной строке сетки выравниваются по низу: длинная подсказка у
+   соседа растит название вверх, а поля ввода стоят ровно */
+.ui-field{ display:flex; flex-direction:column; justify-content:flex-end; min-width:0; }
+.fld{ width:100%; box-sizing:border-box; min-height:38px; padding:9px 11px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font-family:inherit; font-size:14px; }
+.fld:focus{ outline:2px solid var(--sec-acc, var(--accent)); outline-offset:1px; }
+textarea.fld{ min-height:52px; resize:vertical; line-height:1.5; }
+.fld-lbl{ display:block; margin-bottom:5px; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--text-muted); }
+.fld-hint{ font-weight:400; letter-spacing:0; text-transform:none; color:var(--text-faint); }
+.ui-field-in{ position:relative; display:block; }
+.fld.has-sfx{ padding-right:34px; }
+.ui-field-sfx{ position:absolute; right:11px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--text-faint); pointer-events:none; }
+/* iOS Safari увеличивает страницу при фокусе в поле мельче 16px */
+@media (pointer:coarse){ .fld{ font-size:16px; } }
+
+/* ── окно формы (ui-kit 1.26.0, uiModalHTML) ─────────────────────────────────
+   Слой 210 (формы — над боковыми панелями health 200, под подтверждением 1100). */
+.ui-modal{ position:fixed; inset:0; z-index:var(--modal-z, 210); display:flex; align-items:center; justify-content:center; padding:20px; }
+.ui-modal-bg{ position:absolute; inset:0; background:rgba(23,20,12,.5); backdrop-filter:blur(2px); }
+[data-theme="dark"] .ui-modal-bg{ background:rgba(0,0,0,.6); }
+.ui-modal-box{ position:relative; width:min(var(--modal-w, 640px), 100%); max-height:90vh; display:flex; flex-direction:column; overflow:hidden; background:var(--bg-elev); color:var(--text); border:1px solid var(--border); border-radius:14px; box-shadow:var(--shadow); }
+.ui-modal-head{ flex:none; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:16px 20px; border-bottom:1px solid var(--border); }
+.ui-modal-titles{ min-width:0; }
+.ui-modal-title{ font-family:var(--font-serif); font-size:19px; font-weight:600; line-height:1.25; overflow-wrap:anywhere; }
+.ui-modal-sub{ margin-top:3px; font-size:12.5px; color:var(--text-muted); }
+.ui-modal-x{ flex:none; width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:8px; background:transparent; color:var(--text-muted); font:inherit; font-size:15px; line-height:1; cursor:pointer; }
+@media (hover:hover){ .ui-modal-x:hover{ background:var(--bg-alt); color:var(--text); } }   /* 1.46.2: на касании :hover залипает — фон оставался после листания */
+/* Окна стопкой (v1.34.0): верхнее въезжает плавно; нижнее — «позади»: сдвинуто вверх-влево,
+   чуть меньше и приглушено, чтобы было видно, что Esc вернёт к нему. Затемнение верхнего
+   окна светлее (нижнее остаётся видно). Закрытие: верхнее уходит (.leave), нижнее
+   возвращается на место (.return). Высоту и раскладку не анимируем — только transform и
+   прозрачность. */
+.ui-modal-box, .modal-overlay > .modal{ transition:transform .24s cubic-bezier(.33,1,.68,1), opacity .24s; }
+.ui-modal.enter .ui-modal-box{ animation:ui-modal-in .26s cubic-bezier(.33,1,.68,1); }
+.ui-modal.enter .ui-modal-bg{ animation:ui-modal-fade .2s ease-out; }
+.ui-modal.behind .ui-modal-box, .modal-overlay.behind > .modal{ transform:translate(-22px,-16px) scale(.965); opacity:.75; }   /* .modal-overlay — окно документа вьюера (1.66.1) */
+.ui-modal.behind.fresh .ui-modal-box{ animation:ui-modal-back .26s cubic-bezier(.33,1,.68,1); }
+.ui-modal.stacked .ui-modal-bg{ background:rgba(23,20,12,.14); backdrop-filter:none; }
+[data-theme="dark"] .ui-modal.stacked .ui-modal-bg{ background:rgba(0,0,0,.25); }
+.modal-overlay.stacked{ background:rgba(23,20,12,.14); backdrop-filter:none; }   /* окно документа вьюера над другим окном (1.70.1): нижнее видно, не размыто */
+[data-theme="dark"] .modal-overlay.stacked{ background:rgba(0,0,0,.25); }
+.ui-modal.leave .ui-modal-box{ animation:ui-modal-out .17s ease-in forwards; }
+.ui-modal.leave .ui-modal-bg{ animation:ui-modal-fade-out .17s ease-in forwards; }
+.ui-modal.return .ui-modal-box{ transform:none; opacity:1; }
+/* окно постоянной высоты (v1.35.0): окно по центру экрана, и когда содержимое по клику
+   становится короче/длиннее, оно перецентровывалось — график внутри прыгал */
+.ui-modal.tall .ui-modal-box{ height:90vh; }
+@keyframes ui-modal-in{ from{ opacity:0; transform:translate(18px,14px) scale(.985); } }
+@keyframes ui-modal-out{ to{ opacity:0; transform:translate(18px,14px) scale(.985); } }
+@keyframes ui-modal-back{ from{ transform:none; opacity:1; } }
+@keyframes ui-modal-fade{ from{ opacity:0; } }
+@keyframes ui-modal-fade-out{ to{ opacity:0; } }   /* свой кадр ухода: с общим именем .enter, оставшийся на слое, не давал уходу запуститься */
+/* телефон: окна во весь экран — «позади» не видно, верхнее въезжает справа */
+@media (max-width:600px), (max-height:500px){
+  .ui-modal.behind .ui-modal-box, .modal-overlay.behind > .modal{ transform:scale(.97); opacity:.6; }
+  @keyframes ui-modal-in{ from{ opacity:.4; transform:translateX(40px); } }
+  @keyframes ui-modal-out{ to{ opacity:0; transform:translateX(40px); } }
+}
+@media (prefers-reduced-motion:reduce){ .modal-overlay > .modal{ transition:none; } .ui-modal .ui-modal-box, .ui-modal .ui-modal-bg{ animation:none !important; transition:none; } }
+
+/* ── боковая панель (ui-kit 1.37.0, uiPaneHTML) ────────────────────────────────
+   Карточка справа поверх страницы. Слой 200 — под окнами форм (210), чтобы «Править»
+   из панели открывал форму поверх неё. Стопкой: нижняя сдвинута влево и приглушена
+   (видно, что «←» вернёт к ней), верхняя въезжает справа; только transform и прозрачность. */
+.ui-pane{ position:fixed; inset:0; z-index:200; }
+.ui-pane.over{ z-index:220; }   /* панель, открытая из окна документа (.ui-docwin, 215), — поверх него */
+.ui-pane-bg{ position:absolute; inset:0; background:rgba(23,20,12,.44); cursor:pointer; }
+.ui-pane-box{ position:absolute; top:0; right:0; height:100%; width:min(var(--pane-w, 560px), 94vw); display:flex; flex-direction:column; background:var(--bg-elev); color:var(--text); border-left:1px solid var(--border); box-shadow:-12px 0 48px rgba(0,0,0,.22); transition:transform .24s cubic-bezier(.33,1,.68,1), opacity .24s; }
+.ui-pane-head{ flex:none; display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid var(--border); }
+.ui-pane-titles{ min-width:0; flex:1; }
+.ui-pane-eyebrow{ font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--sec-acc, var(--accent)); font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ui-pane-title{ font-family:var(--font-serif); font-size:19px; font-weight:600; line-height:1.15; margin-top:2px; overflow-wrap:anywhere; }
+.ui-pane-title.one{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ui-pane-x{ flex:none; width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:8px; background:transparent; color:var(--text-muted); font:inherit; font-size:15px; line-height:1; cursor:pointer; }
+@media (hover:hover){ .ui-pane-x:hover{ color:var(--text); background:var(--bg-alt); } }
+.ui-pane-back{ flex:0 1 auto; min-width:0; max-width:min(300px, 48vw); height:32px; display:inline-flex; align-items:center; gap:7px; padding:0 12px; border:1px solid var(--border); border-radius:8px; background:var(--bg-alt); color:var(--text); font:inherit; font-size:12.5px; font-weight:600; cursor:pointer; }
+.ui-pane-back-ar{ flex:none; font-size:13px; color:var(--sec-acc, var(--accent)); }
+.ui-pane-back-sub{ flex:none; color:var(--text-muted); font-weight:500; font-variant-numeric:tabular-nums; }
+.ui-pane-nav{ flex:none; display:flex; gap:6px; }
+.ui-pane-nav button{ width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:8px; background:var(--bg-alt); color:var(--text); font:inherit; cursor:pointer; }
+.ui-pane-nav button:disabled{ opacity:.3; pointer-events:none; }
+.ui-pane-body{ flex:1; min-height:0; overflow-y:auto; padding:22px 24px 32px; }
+.ui-pane.enter .ui-pane-box{ animation:ui-pane-in .28s cubic-bezier(.33,1,.68,1); }
+.ui-pane.enter .ui-pane-bg{ animation:ui-modal-fade .2s ease-out; }
+.ui-pane.behind .ui-pane-box{ transform:translateX(-28px); opacity:.7; }
+.ui-pane.behind.fresh .ui-pane-box{ animation:ui-modal-back .26s cubic-bezier(.33,1,.68,1); }
+.ui-pane.stacked .ui-pane-bg{ background:rgba(23,20,12,.14); }
+[data-theme="dark"] .ui-pane.stacked .ui-pane-bg{ background:rgba(0,0,0,.25); }
+.ui-pane.leave .ui-pane-box{ animation:ui-pane-out .17s ease-in forwards; }
+.ui-pane.leave .ui-pane-bg{ animation:ui-modal-fade-out .17s ease-in forwards; }
+.ui-pane.return .ui-pane-box{ transform:none; opacity:1; }
+@keyframes ui-pane-in{ from{ opacity:0; transform:translateX(48px); } }
+@keyframes ui-pane-out{ to{ opacity:0; transform:translateX(48px); } }
+/* телефон и планшет в портрете: панель во весь экран — нижнюю не видно, она чуть меньше */
+@media (max-width:820px){
+  .ui-pane-box{ width:100vw; }
+  .ui-pane.behind .ui-pane-box{ transform:scale(.97); opacity:.6; }
+}
+@media (prefers-reduced-motion:reduce){ .ui-pane .ui-pane-box, .ui-pane .ui-pane-bg{ animation:none !important; transition:none; } }
+
+/* ── вход и уход окна документа, справки и слоя .ui-fx (ui-kit 1.38.0) ─────────
+   Слой — сам затемнение, окно — его дочерний [role="dialog"]. .enter ставит uiShow
+   (или страница при открытии), .leave — uiHide / uiHelpClose(true). Ключевые кадры —
+   те же, что у окон форм (на телефоне окно въезжает справа). */
+:is(.ui-docwin, .uh-overlay, .ui-fx).enter{ animation:ui-modal-fade .2s ease-out; }
+:is(.ui-docwin, .uh-overlay, .ui-fx).enter > [role="dialog"]{ animation:ui-modal-in .26s cubic-bezier(.33,1,.68,1); }
+:is(.ui-docwin, .uh-overlay, .ui-fx).leave{ animation:ui-modal-fade-out .17s ease-in forwards; pointer-events:none; }
+:is(.ui-docwin, .uh-overlay, .ui-fx).leave > [role="dialog"]{ animation:ui-modal-out .17s ease-in forwards; }
+@media (prefers-reduced-motion:reduce){ :is(.ui-docwin, .uh-overlay, .ui-fx), :is(.ui-docwin, .uh-overlay, .ui-fx) > [role="dialog"]{ animation:none !important; } }
+/* страница сама держит место экрана (якорем): браузерная привязка прокрутки сдвигала
+   экран к последней раскрытой строке при сворачивании всех (v1.34.0) */
+.ui-page.anchor-js, .ui-page.anchor-js *{ overflow-anchor:none; }
+.ui-modal-body{ flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:20px; }
+.ui-modal-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px 16px; align-content:start; }
+.ui-modal-foot{ flex:none; display:flex; align-items:center; gap:10px; padding:14px 20px; border-top:1px solid var(--border); background:var(--bg-elev); }
+.ui-modal-sp{ flex:1; }
+.ui-modal-cancel, .ui-modal-save{ min-height:40px; padding:10px 18px; border-radius:8px; font:inherit; font-size:13.5px; font-weight:600; cursor:pointer; }
+.ui-modal-cancel{ background:transparent; border:1px solid var(--border); color:var(--text-muted); }
+@media (hover:hover){ .ui-modal-cancel:hover{ background:var(--bg-alt); color:var(--text); } }
+.ui-modal-save{ border:1px solid transparent; background:var(--btn-acc); color:#fff; }
+[data-theme="dark"] .ui-modal-save{ color:var(--bg); }
+@media (hover:hover){ .ui-modal-save:hover{ filter:brightness(.93); } }
+.ui-modal-save:focus-visible, .ui-modal-cancel:focus-visible, .ui-modal-x:focus-visible{ outline:2px solid var(--sec-acc, var(--accent)); outline-offset:2px; }
+/* телефон (и телефон лёжа) — во весь экран, поля в одну колонку */
+@media (max-width:600px), (max-height:500px){
+  .ui-modal{ padding:0; }
+  .ui-modal-box{ width:100%; height:100%; max-height:none; border:0; border-radius:0; box-shadow:none; }
+  .ui-modal.tall .ui-modal-box{ height:100%; }   /* 1.39.0: окно постоянной высоты тоже во весь экран (было 90vh с полосами) */
+  .ui-modal-head{ padding:calc(12px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-right,0px)) 12px calc(16px + env(safe-area-inset-left,0px)); }
+  .ui-modal-body{ padding:16px calc(16px + env(safe-area-inset-right,0px)) 20px calc(16px + env(safe-area-inset-left,0px)); }
+  .ui-modal-foot{ padding:10px calc(16px + env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px)); }
+  .ui-modal-x{ width:40px; height:40px; }
+  .ui-modal-cancel, .ui-modal-save{ min-height:44px; }
+}
+@media (max-width:600px){ .ui-modal-grid{ grid-template-columns:1fr; } }
+/* 1.48.0: .ui-modal.sheet — небольшое окно-шторка снизу на телефоне (фильтры таблицы):
+   не во весь экран, высота по содержимому; на широком экране — обычное окно по центру. */
+@media (max-width:600px), (max-height:500px){
+  .ui-modal.sheet{ align-items:flex-end; }
+  .ui-modal.sheet .ui-modal-box{ height:auto; max-height:82vh; border-radius:14px 14px 0 0; border-top:1px solid var(--border); }
+  .ui-modal.sheet .ui-modal-body{ padding-bottom:calc(20px + env(safe-area-inset-bottom,0px)); }
+}
+
+/* 1.67.4: .ui-modal.compact — небольшое окно по центру и на телефоне (как uiConfirm): не во весь экран,
+   высота по содержимому до 82vh, поля вокруг; на широком экране — обычное окно по центру. */
+@media (max-width:600px), (max-height:500px){
+  .ui-modal.compact{ padding:16px; align-items:center; }
+  .ui-modal.compact .ui-modal-box{ width:min(var(--modal-w, 640px), 100%); height:auto; max-height:82vh; border:1px solid var(--border); border-radius:14px; box-shadow:0 18px 44px rgba(0,0,0,.18); }
+  .ui-modal.compact .ui-modal-head{ padding:14px 16px 12px; }
+  .ui-modal.compact .ui-modal-body{ padding:16px 16px 20px; }
+  .ui-modal.compact .ui-modal-foot{ padding:12px 16px 16px; }   /* окно не у края — без safe-area снизу */
+}
+
+/* ── подтверждение (ui-kit 1.25.0, uiConfirm) — поверх всего, по центру ── */
+.ui-confirm{ position:fixed; inset:0; z-index:1100; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(23,20,12,.5); }
+[data-theme="dark"] .ui-confirm{ background:rgba(0,0,0,.6); }
+.ui-confirm-box{ width:min(460px,100%); max-height:90vh; overflow:auto; padding:20px 22px 18px; background:var(--bg-elev); color:var(--text); border:1px solid var(--border); border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.3); font-size:13.5px; line-height:1.6; }
+.ui-confirm-t{ font-family:var(--font-serif); font-size:20px; font-weight:600; line-height:1.25; }
+.ui-confirm-t.danger{ color:var(--err); }
+.ui-confirm-n{ margin-top:10px; font-family:var(--font-serif); font-size:18px; font-weight:600; overflow-wrap:anywhere; }
+.ui-confirm-x{ margin-top:8px; color:var(--text-muted); }
+.ui-confirm-w{ margin-top:12px; padding:10px 12px; border-radius:8px; background:var(--warn-bg); color:var(--text); }
+.ui-confirm-f{ display:flex; justify-content:flex-end; gap:10px; margin-top:18px; padding-top:14px; border-top:1px solid var(--border); }
+/* 1.67.5: появление подтверждения — как у окон ui-kit (.ui-modal.enter), а не рывком */
+.ui-confirm.enter{ animation:ui-modal-fade .2s ease-out; }
+.ui-confirm.enter .ui-confirm-box{ animation:ui-modal-in .26s cubic-bezier(.33,1,.68,1); }
+@media (prefers-reduced-motion:reduce){ .ui-confirm.enter, .ui-confirm.enter .ui-confirm-box{ animation:none !important; } }
+.ui-confirm-f button{ min-height:40px; padding:9px 18px; border-radius:8px; font:inherit; font-size:13.5px; font-weight:600; cursor:pointer; }
+.ui-confirm-no{ background:transparent; color:var(--text); border:1px solid var(--border); }
+@media (hover:hover){ .ui-confirm-no:hover{ background:var(--bg-alt); } }
+.ui-confirm-ok{ background:var(--btn-acc); color:#fff; border:1px solid transparent; }
+.ui-confirm-ok.danger{ background:var(--err); }
+@media (hover:hover){ .ui-confirm-ok:hover{ filter:brightness(.93); } }
+.ui-confirm-f button:focus-visible{ outline:2px solid var(--sec-acc, var(--accent)); outline-offset:2px; }
+@media (max-width:480px){ .ui-confirm-f button{ flex:1; min-height:44px; } }
+
+/* ═══ Навигация раздела: боковая (рельс) и нижняя панель (ui-kit 1.23.0) ══════
+   Одна на кабинет (games, health, food, «Деньги» — нижняя панель). Раньше: три
+   копии рельса шириной 212/232/236, нижняя панель с 760/820/860px, слои
+   60/70/80, и только «Еда» знала лечение iPhone (см. .ui-mnav). Всё, что
+   правят, — здесь, в одном месте:
+     --ui-rail-w   ширина рельса;
+     --ui-mnav-h   высота нижней панели (без выреза);
+     порог         ОДИН медиазапрос ниже: «узкий экран ИЛИ портрет» —
+                   ≤ 960px (любой телефон, и лёжа: самый широкий iPhone —
+                   932px) или портрет до 1100px (все iPad портретом: 744–1024).
+                   iPad горизонтально (от 1024px) и компьютер — рельс. Делить
+                   только шириной нельзя: 1024px — и iPad Pro 12.9 портретом,
+                   и обычный iPad лёжа.
+     слои          шапка 60 → нижняя панель 65 → окно документа 70 →
+                   формы страниц 200+ → шторка списка 1000.
+   Страницы не повторяют порог: что должно подняться над панелью (плашка
+   сохранения), берёт отступ из --ui-mnav-offset (0, а при панели — её высота). */
+:root{ --ui-rail-w:224px; --ui-mnav-h:58px; --ui-mnav-offset:0px; }
+.ui-shell{ grid-template-columns:var(--ui-rail-w) minmax(0,1fr); }
+.ui-rail{ display:flex; flex-direction:column; position:sticky; top:66px; align-self:start; }
+.ui-rail-lbl{ font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--text-faint); padding:2px 12px 12px; }
+.ui-rail-item{ display:flex; align-items:center; gap:11px; width:100%; padding:10px 12px; border:1px solid transparent; border-radius:9px; background:transparent; font-family:inherit; font-size:13.5px; font-weight:600; text-align:left; color:var(--text-muted); cursor:pointer; text-decoration:none; transition:background .14s,color .14s,box-shadow .14s; }
+@media (hover:hover){ .ui-rail-item:hover{ background:var(--bg-alt); color:var(--text); text-decoration:none; } }
+.ui-rail-ic{ display:inline-flex; width:20px; justify-content:center; color:inherit; flex-shrink:0; }
+.ui-rail-ic svg, .ui-mnav-ic svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.ui-rail-txt{ display:flex; flex-direction:column; line-height:1.2; min-width:0; }
+.ui-rail-sub{ font-size:11px; font-weight:500; color:var(--text-faint); }
+.ui-rail-n{ margin-left:auto; padding-left:8px; font-size:11.5px; font-weight:600; color:var(--text-faint); font-variant-numeric:tabular-nums; }
+.ui-rail-item.on{ background:var(--bg-elev); color:var(--sec-acc, var(--accent)); box-shadow:inset 3px 0 0 var(--sec-acc, var(--accent)),var(--shadow); }
+.ui-rail-item.on .ui-rail-n{ color:var(--sec-acc, var(--accent)); }
+/* Нижняя панель: монтируется ОДИН раз в <body> (uiNavMount) и не
+   пересоздаётся — дальше только подсветка (uiNavSet). translateZ(0) — свой
+   слой композитора. Оба приёма — лечение iOS Safari: при подмене разметки и
+   восстановлении прокрутки fixed-панель дорисовывалась посреди экрана
+   («Еда», 2026-08). */
+.ui-mnav{ display:none; grid-template-columns:repeat(var(--n,3),1fr); position:fixed; left:0; right:0; bottom:0; z-index:65; transform:translateZ(0); background:var(--bg-elev); border-top:1px solid var(--border); box-shadow:0 -2px 12px rgba(60,52,38,.08); padding-bottom:env(safe-area-inset-bottom,0px); }
+[data-theme="dark"] .ui-mnav{ box-shadow:0 -2px 12px rgba(0,0,0,.4); }
+.ui-mnav[hidden]{ display:none !important; }
+.ui-mnav-btn{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; min-height:var(--ui-mnav-h); padding:8px 2px; border:none; background:transparent; color:var(--text-muted); font-family:inherit; font-size:10.5px; font-weight:600; line-height:1.15; text-align:center; cursor:pointer; }
+.ui-mnav-ic{ display:inline-flex; }
+.ui-mnav-ic svg{ width:21px; height:21px; }
+.ui-mnav-btn svg{ width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.ui-mnav-btn.on{ color:var(--sec-acc, var(--accent)); }
+@media (max-width:400px){ .ui-mnav-btn{ font-size:9.5px; letter-spacing:-.01em; } }
+@media print{ .ui-mnav, .ui-rail{ display:none !important; } }
+/* ── ПОРОГ навигации — единственное место ── */
+@media (max-width:960px), (orientation:portrait) and (max-width:1100px){
+  :root{ --ui-mnav-offset:calc(var(--ui-mnav-h) + 4px); }
+  .ui-shell{ grid-template-columns:minmax(0,1fr); gap:0; padding-bottom:calc(var(--ui-mnav-h) + 28px + env(safe-area-inset-bottom,0px)); }
+  .ui-rail{ display:none; }
+  .ui-mnav{ display:grid; }
+  .ui-page.has-mnav .ui-main{ padding-bottom:calc(var(--ui-mnav-h) + 38px + env(safe-area-inset-bottom,0px)); }
+  .ui-hide-m{ display:none !important; }
+}
+
+/* ── Выпадающий список (ui-kit 1.11.0, uiSelectHTML) ─────────────────────────
+   Из макета «Деньги»: кнопка-карточка с полоской акцента, заголовком и
+   подписью; список — карточки с галочкой у выбранного и цифрой справа.
+   Поведение — в ui-kit.js (клавиатура, Esc, клик мимо, событие ui-select). */
+.ui-select{ position:relative; flex:1 1 280px; max-width:440px; }
+.ui-select.compact{ flex:0 1 300px; }
+.ui-select-btn{ width:100%; min-height:48px; display:flex; align-items:center; gap:12px; padding:8px 14px; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-elev); color:var(--text); box-shadow:var(--shadow); text-align:left; cursor:pointer; }
+@media (hover:hover){ .ui-select-btn:hover{ border-color:var(--border-strong); } }
+/* страничное button:hover (вьюер) не перекрашивает кнопку списка */
+@media (hover:hover){ .ui-select .ui-select-btn:hover{ background:var(--bg-elev); } }
+@media (hover:hover){ .ui-select.md .ui-select-btn:hover{ background:var(--bg); } }
+.ui-select-btn[aria-expanded="true"]{ border-color:var(--sec-acc, var(--accent)); }
+.ui-select-bar{ width:3px; align-self:stretch; border-radius:2px; background:var(--sec-acc, var(--accent)); flex-shrink:0; }
+.ui-select-txt{ flex:1; min-width:0; display:flex; flex-direction:column; line-height:1.25; }
+.ui-select-t{ font-family:var(--font-serif); font-size:16px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ui-select-s{ font-size:11.5px; color:var(--text-muted); font-variant-numeric:tabular-nums; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ui-select-chev{ display:inline-flex; flex:none; color:var(--text-muted); transition:transform .2s; }
+.ui-select-btn[aria-expanded="true"] .ui-select-chev{ transform:rotate(180deg); }
+.ui-select-pop{ position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:81; max-height:340px; overflow-y:auto; padding:6px; background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); box-shadow:0 2px 4px rgba(60,52,38,.10),0 14px 34px rgba(60,52,38,.14); }
+[data-theme="dark"] .ui-select-pop{ box-shadow:0 2px 4px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.5); }
+.ui-opt{ width:100%; min-height:48px; display:grid; grid-template-columns:16px minmax(0,1fr) auto; gap:10px; align-items:center; padding:9px 10px; border:none; border-radius:7px; background:transparent; color:var(--text); text-align:left; cursor:pointer; }
+.ui-opt:focus-visible, .ui-opt[aria-selected="true"]{ background:var(--bg-alt); }  @media (hover:hover){ .ui-opt:hover{ background:var(--bg-alt); } }
+.ui-opt:focus-visible{ outline:2px solid var(--sec-acc, var(--accent)); outline-offset:-2px; }
+.ui-opt-check{ color:var(--sec-acc, var(--accent)); font-size:13px; font-weight:700; }
+.ui-opt-txt{ min-width:0; display:flex; flex-direction:column; line-height:1.3; }
+.ui-opt-t{ font-size:13.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ui-opt-s{ font-size:11.5px; color:var(--text-faint); }
+.ui-opt-aside{ font-size:13px; font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.ui-opt[hidden]{ display:none; }
+@media (pointer:coarse){ .ui-select-pop{ max-height:60vh; } }
+
+/* v1.20.0 — один список на кабинет. Обычный размер (md): в формах и панелях
+   фильтров — как поле ввода рядом (.fld: 38px, радиус 8, фон --bg, 13.5px),
+   без полоски акцента и подписи. block — во всю ширину поля формы. */
+.ui-select.block{ flex:none; width:100%; max-width:none; }
+.ui-select.md{ flex:0 1 auto; min-width:0; }
+.ui-select.md.block{ flex:none; }
+.ui-select.md .ui-select-btn{ min-height:38px; gap:8px; padding:7px 11px; border-radius:8px; background:var(--bg); box-shadow:none; font:inherit; }
+.ui-select.md .ui-select-bar, .ui-select.md .ui-select-s{ display:none; }
+.ui-select.md .ui-select-t{ font-family:inherit; font-size:14px; font-weight:500; }   /* как .fld рядом */
+.ui-select.md .ui-opt{ min-height:36px; padding:7px 10px; gap:8px; }
+.ui-select.md .ui-opt-t{ font-weight:500; }
+.ui-select-btn:focus-visible{ outline:2px solid var(--sec-acc, var(--accent)); outline-offset:1px; }
+/* поиск в длинном списке — липнет сверху раскрытой части */
+.ui-select-search{ position:sticky; top:-6px; z-index:1; margin:-6px -6px 6px; padding:6px; background:var(--bg-elev); border-bottom:1px solid var(--border); display:flex; gap:6px; align-items:center; }
+.ui-select-close{ flex:none; width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:8px; background:var(--bg-elev); color:var(--text-muted); font-size:14px; cursor:pointer; }
+@media (hover:hover){ .ui-select-close:hover{ background:var(--bg-alt); color:var(--text); } }
+.ui-select-q{ width:100%; box-sizing:border-box; min-height:36px; padding:7px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); font:inherit; font-size:13.5px; }
+.ui-select-q:focus{ outline:2px solid var(--sec-acc, var(--accent)); outline-offset:0; }
+.ui-select-none{ padding:12px 10px; color:var(--text-faint); font-size:13px; }
+/* Телефон — не отдельный размер: мишень ≥ 44px; шрифт поиска 16px (иначе
+   iPhone увеличивает страницу при касании); длинный список — шторкой у
+   верха экрана (снизу его закрыла бы клавиатура), подложка — тень. */
+@media (max-width:600px), (pointer:coarse){
+  .ui-select-btn, .ui-select.md .ui-select-btn{ min-height:44px; }
+  .ui-opt{ min-height:44px; }
+  .ui-select.md .ui-opt{ min-height:38px; }   /* строки списков в формах — как подсказки «Еды» */
+  .ui-select-q{ font-size:16px; min-height:44px; }
+  .ui-select-close{ width:44px; height:44px; }
+}
+/* combo (v1.29.0): длинный список в форме — одна строка. Открыт: поле ввода
+   встаёт на место кнопки, подсказки — под ним ПОВЕРХ содержимого (v1.62.0: кнопка
+   остаётся невидимой и держит высоту ряда; положение по экрану ставит
+   uiSelectPlace); строки — одной линией. */
+.ui-select.combo.open .ui-select-btn{ visibility:hidden; }
+.ui-select.combo .ui-select-pop{ position:absolute; top:0; left:0; right:0; z-index:81; max-height:300px; overflow-y:auto; padding:0; border:1px solid var(--sec-acc, var(--accent)); border-radius:8px; background:var(--bg-elev); box-shadow:0 2px 4px rgba(60,52,38,.10),0 14px 34px rgba(60,52,38,.14); }
+[data-theme="dark"] .ui-select.combo .ui-select-pop{ box-shadow:0 2px 4px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.5); }
+.ui-select.combo .ui-select-search{ position:sticky; top:0; margin:0; padding:0; gap:0; border-bottom:1px solid var(--border); background:var(--bg); }
+.ui-select.combo .ui-select-q{ min-height:38px; border:0; border-radius:8px 0 0 0; background:var(--bg); }
+.ui-select.combo .ui-select-q:focus{ outline:none; }
+.ui-select.combo .ui-select-close{ width:40px; height:auto; align-self:stretch; border:0; border-left:1px solid var(--border); border-radius:0 8px 0 0; background:var(--bg); }
+.ui-select.combo .ui-opt{ min-height:0; padding:8px 12px; border-radius:0; border-top:1px solid var(--border); }
+.ui-select.combo .ui-opt:first-of-type{ border-top:0; }
+.ui-select.combo .ui-opt-txt{ flex-direction:row; align-items:baseline; gap:8px; }
+.ui-select.combo .ui-opt-s{ white-space:nowrap; }
+@media (max-width:600px), (pointer:coarse){
+  .ui-select.combo .ui-select-q{ min-height:44px; }
+  .ui-select.combo .ui-select-close{ width:44px; height:auto; }
+}
+.ui-select.sheet .ui-select-pop{ position:fixed; left:8px; right:8px; top:max(8px, env(safe-area-inset-top)); bottom:auto; width:auto; max-height:min(58vh, 480px); z-index:1000; border-radius:14px; box-shadow:0 0 0 100vmax rgba(23,20,12,.42), 0 14px 34px rgba(0,0,0,.25); }
+
+/* ── Обзор и строки категорий (ui-kit 1.13.0–1.14.0) ───────────────────────────
+   .ui-grid.kpi — плитки главных чисел; .ui-status — строка «что сделать»;
+   .ui-trip — поездка строкой с полосой состава; .ui-catrow — строка категории
+   (на телефоне без полосы, доли и мини-тренда); .ui-minibars — мини-тренд по
+   месяцам в строке; .ui-catdetail — раскрытая категория; .ui-toolbar-r —
+   правая группа тулбара (период + список). */
+.ui-grid.kpi{ grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); align-items:stretch; }
+.ui-kv.flat{ border-bottom:none; padding:4px 0; align-items:center; }
+.ui-status{ padding-top:8px; padding-bottom:8px; }
+.ui-trip{ padding:10px 0; border-bottom:1px solid var(--border); cursor:pointer; }
+@media (hover:hover){ .ui-trip:hover{ background:var(--bg-alt); margin:0 -8px; padding-left:8px; padding-right:8px; border-radius:6px; } }
+.ui-trip .ui-stack{ margin-top:8px; }
+.ui-toolbar-r{ flex:1 1 auto; display:flex; flex-wrap:wrap; justify-content:flex-end; gap:10px; align-items:center; }
+/* компьютер: переключатель и список — всегда одной строкой, список сжимается
+   (перенос зависел от режима, и при смене режима всё ниже прыгало) */
+/* компьютер (≥961px, где тулбар целиком помещается): одной строкой, сжимается
+   список, а не переносится блок — иначе перенос зависел от режима (нажатая «Год»
+   жирнее на 5px) и при смене режима всё ниже прыгало. Уже — перенос как раньше. */
+.ui-toolbar.stack{ align-items:flex-start; }
+.ui-toolbar.stack .ui-toolbar-r{ flex-direction:column; align-items:flex-end; flex-wrap:nowrap; }
+.ui-toolbar.stack .ui-toolbar-r > .ui-seg{ margin-top:4px; }            /* по центру строки вкладок */
+.ui-toolbar.stack .ui-toolbar-r > .ui-select{ flex:none; width:300px; max-width:100%; }
+@media (max-width:820px){ .ui-toolbar.stack .ui-toolbar-r{ align-items:stretch; } .ui-toolbar.stack .ui-toolbar-r > .ui-seg{ margin-top:0; align-self:flex-end; } .ui-toolbar.stack .ui-toolbar-r > .ui-select{ width:auto; } }
+/* телефон (v1.32.0): переключатель во всю ширину, кнопки делят её поровну и ужимают поля —
+   четыре кнопки «Месяц · 3 мес. · Год · Все годы» были шире экрана до ~400px, и вместе с
+   ними вбок уезжал список месяца (iPhone, 2026-10-07) */
+@media (max-width:520px){
+  .ui-toolbar.stack .ui-toolbar-r{ min-width:0; max-width:100%; }
+  .ui-toolbar.stack .ui-toolbar-r > .ui-seg{ align-self:stretch; display:flex; }
+  .ui-toolbar.stack .ui-toolbar-r > .ui-seg .ui-seg-btn{ flex:1 1 auto; padding-left:6px; padding-right:6px; }
+}
+@media (min-width:961px){ .ui-toolbar{ flex-wrap:nowrap; } .ui-toolbar-r{ flex:1 1 0; min-width:0; flex-wrap:nowrap; } .ui-toolbar-r .ui-select.compact{ min-width:200px; } }
+.ui-row.ui-catrow{ grid-template-columns:minmax(90px,1.2fr) minmax(0,1.3fr) 56px 38px 64px minmax(96px,auto) 14px; }
+.ui-catrow .ui-chev{ font-size:11px; }
+@media (max-width:640px){
+  .ui-row.ui-catrow{ grid-template-columns:minmax(0,1fr) 56px minmax(84px,auto) 14px; }
+  .ui-catrow .c-bar, .ui-catrow .c-share, .ui-catrow .c-trend{ display:none; }
+}
+.ui-minibars{ display:flex; align-items:flex-end; gap:2px; height:20px; }
+.ui-minibars > i{ flex:1; min-height:1px; background:var(--sec-acc); opacity:.4; border-radius:1px; }
+.ui-minibars > i.on{ opacity:1; }
+.ui-minibars > i.gap{ height:0; min-height:0; border-top:1px dashed var(--border-strong); background:none; opacity:1; }
+.ui-catdetail{ padding:6px 0 16px; border-bottom:1px solid var(--border); }
+/* Раскрытая категория (v1.31.0): строка и её подробности — одна карточка,
+   приподнятая тенью над соседними строками и отделённая зазором (как раскрытая
+   панель Material). Иначе линии подкатегорий внутри сливаются с линиями между
+   категориями и не видно, где раскрытая часть кончается. Плавность — только
+   при раскрытии и сворачивании (.fresh/.closing), не на каждой перерисовке
+   (клик по столбику внутри): строка, по которой нажали, стоит на месте,
+   раскрытие растёт вниз. */
+.ui-catopen{ margin:10px -10px; padding:0 10px; border:1px solid var(--border-strong); border-radius:12px; background:var(--bg-elev);
+  box-shadow:0 1px 2px rgba(60,52,38,.08),0 8px 22px rgba(60,52,38,.12); }
+[data-theme="dark"] .ui-catopen{ box-shadow:0 1px 2px rgba(0,0,0,.45),0 10px 26px rgba(0,0,0,.5); }
+.ui-catopen > .ui-row.pick.on{ background:none; }
+.ui-catopen > .ui-catdetail{ border-bottom:none; }
+/* высоту подробностей раскрывает и сворачивает JS (uiExpandIn/uiCollapseOut);
+   здесь — тень, рамка и нижний зазор в такт ему */
+.ui-catopen.fresh{ animation:ui-catopen-in .32s cubic-bezier(.33,1,.68,1); }
+@keyframes ui-catopen-in{ from{ box-shadow:none; border-color:transparent; margin-bottom:0; } }
+.ui-catopen{ transition:box-shadow .22s, border-color .22s, margin-bottom .22s; }
+.ui-catopen.closing{ box-shadow:none; border-color:transparent; margin-bottom:0; }
+@media (prefers-reduced-motion:reduce){ .ui-catopen.fresh{ animation:none; } .ui-catopen{ transition:none; } }
+
+/* ═══ Вьюер портфеля на ui-kit (ui-kit 1.39.0) ═══════════════════════════════
+   Компоненты, которых не было, а переделке вьюера (TODO_design §1, 2026-10-12)
+   они нужны; годятся любой странице.
+   .ui-tabs — строка разделов на 10+ пунктов: прокрутка вбок без полосы, активный
+     подводится в видимую часть, хвост — пункт «Ещё ▾» со списком (uiTabsHTML /
+     uiTabsMount в ui-kit.js). У «Денег» вкладки — .ui-seg, но на 11 пунктов
+     сегмент не годится.
+   .ui-name — ячейка «название, под ним тикер бледнее».
+   .ui-ci — интервал рядом с крупным числом (CI рядом с каждым ожиданием).
+   .ui-alert.info / .warn — плашки уровня «к сведению» и «внимание» (была только ошибка).
+   .ui-table: сортировка (th[aria-sort]), липкая шапка (.sticky, отступ — переменной
+     --ui-sticky-top: высота закреплённого блока страницы меняется), итоговая строка
+     tfoot, обёртка .ui-table-wrap с местом под полосу прокрутки (полоса не ложится
+     на последнюю строку).
+   .ui-modal-lead / .ui-modal-aside / .ui-modal-top — слоты окна: слева от заголовка
+     (стрелки листания), справа от него (счётчик), закреплённая полоса под шапкой
+     (плитки и подвкладки карточки — не прокручиваются с телом).
+   .ui-pager-btn — кнопка листания ← →. Сдвиг содержимого при листании и короткое
+     появление при смене подвкладки — uiAnimIn(el, kind) в ui-kit.js. */
+.ui-tabs{ display:flex; align-items:stretch; gap:2px; padding:0 clamp(8px,2.4vw,24px); background:var(--bg-elev); border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; overscroll-behavior-x:contain; }
+.ui-tabs::-webkit-scrollbar{ display:none; }
+.ui-tab{ flex:none; display:inline-flex; align-items:center; gap:6px; margin:0; padding:12px 12px 10px; min-height:46px; border:none; border-bottom:2px solid transparent; border-radius:0; background:transparent; color:var(--text-muted); font:inherit; font-size:13.5px; font-weight:500; white-space:nowrap; cursor:pointer; transition:color .15s, background .15s, border-color .15s; }
+@media (hover:hover){ .ui-tab:hover{ color:var(--text); background:var(--bg-alt); } }
+.ui-tab[aria-current="page"]{ color:var(--text); font-weight:600; border-bottom-color:var(--sec-acc); }
+.ui-tab:focus-visible{ outline:2px solid var(--sec-acc); outline-offset:-2px; }
+.ui-tab-n{ font-size:11px; font-weight:600; font-variant-numeric:tabular-nums; color:var(--text-faint); }
+.ui-tab-n.alert{ color:var(--err); }
+.ui-tab-chev{ width:6px; height:6px; margin:0 2px 3px 2px; border-right:1.6px solid currentColor; border-bottom:1.6px solid currentColor; transform:rotate(45deg); transition:transform .15s; }
+.ui-tab[aria-expanded="true"] .ui-tab-chev{ transform:translateY(3px) rotate(225deg); }
+.ui-tabs-pop{ position:fixed; z-index:150; min-width:220px; max-width:calc(100vw - 16px); max-height:min(70vh, 460px); overflow-y:auto; padding:6px; background:var(--bg-elev); border:1px solid var(--border-strong); border-radius:10px; box-shadow:0 2px 4px rgba(60,52,38,.1),0 14px 34px rgba(60,52,38,.18); animation:ui-modal-fade .14s ease-out; }
+[data-theme="dark"] .ui-tabs-pop{ box-shadow:0 2px 4px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.5); }
+.ui-tabs-pop .ui-tab{ display:flex; width:100%; min-height:40px; padding:9px 12px; border-bottom:none; border-radius:7px; text-align:left; }
+.ui-tabs-pop-h{ padding:10px 12px 4px; font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--text-muted); }
+.ui-tabs-pop .ui-tab[aria-current="page"]{ background:var(--bg-sunk); box-shadow:inset 3px 0 0 var(--sec-acc); }
+
+.ui-name{ display:flex; flex-direction:column; gap:1px; min-width:0; line-height:1.25; }
+.ui-name > b, .ui-name > strong{ font-weight:600; color:var(--text); overflow-wrap:anywhere; }
+.ui-name > .ui-sub{ font-size:11.5px; color:var(--text-faint); letter-spacing:.02em; }
+.ui-ci{ font-size:12px; font-weight:500; letter-spacing:0; color:var(--text-faint); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.ui-big .ui-ci{ margin-left:4px; }
+.ui-big.good, .ui-good{ color:var(--success); }
+.ui-big.bad, .ui-bad{ color:var(--err); }
+
+.ui-alert.info{ background:var(--info-bg); border-color:var(--info); }
+.ui-alert.warn{ background:var(--warn-bg); border-color:var(--warn); }
+.ui-alert.tight{ margin:0 0 14px; padding:10px 14px; font-size:13px; }
+/* отступ сверху у плашки задаётся явно: .tight обнулял margin и перебивал .ui-mt-* (сообщение липло к кнопке) */
+.ui-alert.ui-mt-s{ margin-top:6px; } .ui-alert.ui-mt-m{ margin-top:12px; } .ui-alert.ui-mt-l{ margin-top:18px; }
+
+.ui-table-wrap{ overflow-x:auto; scrollbar-width:thin; }
+.ui-table-wrap:has(> .ui-table){ padding-bottom:10px; }
+/* .flow — таблица помещается: обёртка не прокручивается и не мешает липкой шапке
+   (липкий элемент внутри прокручиваемого контейнера липнет к нему, а не к странице);
+   ставит страница, сверяя ширину */
+.ui-table-wrap.flow{ overflow-x:visible; padding-bottom:0; }
+.ui-table th[aria-sort]{ cursor:pointer; user-select:none; }
+@media (hover:hover){ .ui-table th[aria-sort]:hover{ color:var(--text); } }
+.ui-table th[aria-sort]::after{ content:" ⇅"; font-size:10px; color:var(--text-faint); }
+.ui-table th[aria-sort="ascending"]::after{ content:" ↑"; color:var(--sec-acc); }
+.ui-table th[aria-sort="descending"]::after{ content:" ↓"; color:var(--sec-acc); }
+.ui-table.sticky thead th{ position:sticky; top:var(--ui-sticky-top, 0px); z-index:3; background:var(--bg-elev); }
+.ui-table tfoot td{ padding:9px 0 9px 12px; border-top:1px solid var(--border-strong); border-bottom:none; font-weight:600; text-align:right; font-variant-numeric:tabular-nums; }
+.ui-table tfoot td:first-child{ padding-left:0; text-align:left; }
+.ui-table tr.pick{ cursor:pointer; }
+@media (hover:hover){ .ui-table tr.pick:hover td{ background:var(--bg-alt); } }
+.ui-table td.l, .ui-table th.l{ text-align:left; }
+
+.ui-modal-lead, .ui-modal-aside{ flex:none; display:flex; align-items:center; gap:6px; }
+.ui-modal-head .ui-modal-titles{ flex:1; }
+.ui-modal-top{ flex:none; padding:14px 20px 0; border-bottom:1px solid var(--border); background:var(--bg-elev); }
+.ui-pager-btn{ width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; padding:0; border:1px solid var(--border); border-radius:8px; background:var(--bg-elev); color:var(--text-muted); font:inherit; font-size:16px; line-height:1; cursor:pointer; }
+@media (hover:hover){ .ui-pager-btn:hover:not([disabled]){ background:var(--bg-alt); color:var(--text); } }   /* 1.46.2: на касании :hover залипает — фон оставался после листания */
+.ui-pager-btn[disabled]{ opacity:.35; cursor:default; }
+.ui-pager-n{ font-size:11.5px; color:var(--text-faint); font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+/* листание и смена вкладки: только transform и прозрачность — высота не прыгает */
+.ui-in-next{ animation:ui-in-next .24s cubic-bezier(.33,1,.68,1); }
+.ui-in-prev{ animation:ui-in-prev .24s cubic-bezier(.33,1,.68,1); }
+.ui-in-fade{ animation:ui-in-fade .18s ease-out; }
+@keyframes ui-in-next{ from{ opacity:0; transform:translateX(28px); } }
+@keyframes ui-in-prev{ from{ opacity:0; transform:translateX(-28px); } }
+@keyframes ui-in-fade{ from{ opacity:0; transform:translateY(4px); } }
+@media (prefers-reduced-motion:reduce){ .ui-in-next, .ui-in-prev, .ui-in-fade, .ui-tabs-pop{ animation:none; } }
+@media (max-width:600px){
+  .ui-modal-top{ padding:10px 14px 0; }
+  .ui-pager-n{ display:none; }
+}
+/* ═══ Сворачивание шапки окна на телефоне (ui-kit 1.42.0) ════════════════════
+   Окно с закреплённой полосой (.ui-modal-top: плитки + подвкладки) на телефоне
+   занимало полэкрана, и тело листалось в оставшемся окошке. .ui-modal.fold — на
+   ≤600px прокручивается ВСЁ окно (.ui-modal-box), а не тело:
+     шапка (название, стрелки, ✕) — липкая сверху;
+     .ui-modal-fold (внутри top: плитки, метки) — уезжает обычной прокруткой и по
+       пути гаснет и чуть уменьшается: animation-timeline: view() — анимация идёт
+       от самой прокрутки, без JS на кадр (Chrome 115+, Safari 26+); где её нет —
+       просто уезжает;
+     .ui-modal-stick (подвкладки) — липнет под шапкой (--ui-fold-top — высота шапки,
+       меряет uiFoldMount);
+     .ui-modal-sub.alt — сжатая сводка; когда .ui-modal-fold ушёл под шапку,
+       uiFoldMount ставит окну .folded, и строка под названием плавно сменяется
+       сводкой (обе в одной ячейке сетки — высота шапки не прыгает).
+   Название — не больше 2 строк, строка под ним — одна (многоточие).
+   На компьютере .fold ничего не меняет. */
+.ui-modal-sub.alt{ display:none; }
+@media (max-width:600px){
+  .ui-modal-title{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .ui-modal-sub{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ui-modal.fold .ui-modal-box{ display:block; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+  .ui-modal.fold .ui-modal-head{ position:sticky; top:0; z-index:4; background:var(--bg-elev); }
+  .ui-modal.fold .ui-modal-titles{ display:grid; grid-template-columns:minmax(0,1fr); }
+  .ui-modal.fold .ui-modal-titles > .ui-modal-sub{ grid-row:2; grid-column:1; transition:opacity .2s ease, transform .2s ease; }
+  .ui-modal.fold .ui-modal-sub.alt{ display:block; opacity:0; transform:translateY(4px); pointer-events:none; color:var(--text); font-variant-numeric:tabular-nums; }
+  .ui-modal.fold.folded .ui-modal-sub:not(.alt){ opacity:0; transform:translateY(-4px); }
+  .ui-modal.fold.folded .ui-modal-sub.alt{ opacity:1; transform:none; }
+  .ui-modal.fold .ui-modal-top{ display:contents; }
+  .ui-modal.fold .ui-modal-top > .ui-modal-topin{ display:contents; }
+  .ui-modal.fold .ui-modal-fold{ padding:10px 14px 0; transform-origin:50% 0; }
+  .ui-modal.fold .ui-modal-stick{ position:sticky; top:var(--ui-fold-top, 64px); z-index:3; margin:0; padding:8px 14px; background:var(--bg-elev); border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+  .ui-modal.fold .ui-modal-stick::-webkit-scrollbar{ display:none; }
+  .ui-modal.fold .ui-modal-body{ overflow:visible; min-height:calc(100% - var(--ui-fold-top, 64px)); }
+  @supports (animation-timeline: view()){
+    .ui-modal.fold .ui-modal-fold{ animation:ui-fold-out linear both; animation-timeline:view(block var(--ui-fold-top, 64px) 0px); animation-range:exit 0% exit 100%; }
+  }
+}
+@keyframes ui-fold-out{ to{ opacity:.15; transform:scale(.96); } }
+@media (prefers-reduced-motion:reduce){ .ui-modal.fold .ui-modal-fold{ animation:none !important; } .ui-modal.fold .ui-modal-titles > .ui-modal-sub{ transition:none; } }
+/* мини-график в плитке и опорные линии (1.39.0): .ui-spark.sm — в плитке KPI;
+   line.ref — пунктир уровня (моя средняя), .alt — второй уровень акцентом (цель);
+   .ui-sw.ref — их образец в легенде; .ui-spark-x.ends — подписи только краёв оси */
+.ui-spark.sm{ height:54px; margin:12px 2px 0; border-top:none; }
+.ui-spark line.ref{ stroke:var(--text-faint); stroke-width:1.5; stroke-dasharray:5 4; vector-effect:non-scaling-stroke; }
+.ui-spark line.ref.alt{ stroke:var(--sec-acc); opacity:.75; }
+.ui-spark-pt.dot{ pointer-events:auto; cursor:default; }
+/* 1.45.1: точки-метки мини-графика в плитке — чуть толще линии, без жирного кружка с обводкой */
+.ui-spark-pt.dot::before{ width:5px; height:5px; border:none; background:var(--sec-acc); }
+.ui-spark-pt.dot.on::before{ width:6px; height:6px; }
+.ui-sw.ref{ width:14px; height:0; border-top:2px dashed var(--text-faint); background:none; border-radius:0; }
+.ui-sw.ref.alt{ border-top-color:var(--sec-acc); }
+.ui-spark-x.ends{ justify-content:space-between; }
+/* плотная таблица данных (1.41.0): много колонок вперемешку — текст влево, числа (.num)
+   вправо, вся шапка мелким капсом; вьюер: «Акции», «Облигации», стресс, вердикты */
+.ui-table.dense th, .ui-table.dense th:first-child{ padding:9px 10px; text-align:left; font-family:var(--font-sans); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); }
+.ui-table.dense td, .ui-table.dense td:first-child{ padding:10px; text-align:left; vertical-align:middle; }
+.ui-table.dense tfoot td, .ui-table.dense tfoot td:first-child{ padding:10px; text-align:left; }
+.ui-table.dense :is(th, td).num{ text-align:right; white-space:nowrap; }
+.ui-table.dense :is(th, td):first-child{ padding-left:0; }
+@media (max-width:600px){ .ui-table.dense th, .ui-table.dense td{ padding:8px 7px; } }
+/* имя в плотной таблице переносится по словам, не по буквам (anywhere ужимал колонку до
+   «Сбербан/к»); липкая шапка внутри прокручиваемой обёртки — без отступа страницы:
+   там она липнет к обёртке, и top:--ui-sticky-top уводил шапку в середину строк */
+.ui-table.dense .ui-name > :is(b, strong){ overflow-wrap:break-word; }
+.ui-table.dense td:first-child{ min-width:7.5em; }
+.ui-table-wrap:not(.flow) > .ui-table.sticky thead th{ top:0; }
+/* копия шапки таблицы, прокручиваемой вбок (1.43.0, uiTableStickyHead): липнет к странице,
+   лежит поверх настоящей шапки (отрицательный margin-bottom ставит JS), едет вбок с таблицей */
+.ui-table-shead{ position:sticky; top:var(--ui-sticky-top, 0px); z-index:6; overflow:hidden; background:var(--bg-elev); pointer-events:auto; }
+.ui-table-shead > table{ min-width:0; margin:0; will-change:transform; }
+.ui-table-shead th{ background:var(--bg-elev); box-sizing:border-box; }
+.ui-table-shead > table.tl{ animation:ui-shead-x linear both; animation-timeline:var(--ui-shead-tl); }
+@keyframes ui-shead-x{ from{ transform:translateX(0); } to{ transform:translateX(calc(-1 * var(--ui-shead-max, 0px))); } }
+/* нулевой уровень (1.40.0): line.zero — еле видная сплошная линия 0 и подпись .ui-spark-zero
+   слева, чтобы мини-график без оси читался в масштабе; нижняя рамка при нём не рисуется
+   (её легко принять за ноль) — класс .z на .ui-spark */
+.ui-spark.z{ border-bottom-color:transparent; }
+.ui-spark line.zero{ stroke:var(--text-faint); stroke-width:1; opacity:.55; vector-effect:non-scaling-stroke; }
+.ui-spark-zero{ position:absolute; left:0; transform:translateY(-100%); font-size:10px; line-height:1; padding-bottom:2px; color:var(--text-faint); pointer-events:none; }
+.ui-spark-x.ends > span{ flex:none; }
+a.ui-tile, button.ui-tile{ display:flex; align-items:stretch; justify-content:flex-start; width:100%; color:inherit; text-decoration:none; text-align:left; font:inherit; cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+@media (hover:hover){ a.ui-tile:hover, button.ui-tile:hover{ border-color:var(--border-strong); } }
+a.ui-tile:focus-visible, button.ui-tile:focus-visible{ outline:2px solid var(--sec-acc); outline-offset:2px; }
+/* график только для чтения (1.39.0): колонки не кликаются (вьюер: «Выплаты») */
+.ui-cols.ro .ui-col{ cursor:default; }
+@media (hover:hover){ .ui-cols.ro .ui-col:hover .ui-col-plot{ background:none; } }
+.ui-cols.ro .ui-col-exp{ opacity:.85; }
+.ui-cols.ro .ui-col.dim{ opacity:.45; }
+
+/* ── v1.45.0: .ui-info — значок (i) с подсказкой ─────────────────────────────
+   Пояснение к графику/числу без лишнего текста на экране. Компьютер: наведение
+   открывает, уход — с задержкой (успеть довести курсор и дочитать); касание и клик —
+   открыто, пока не нажмёшь мимо или Esc. Сдвиг от края экрана ставит uiInfoPlace
+   (--ui-info-dx). Разметка — uiInfoHTML(text) в ui-kit.js. */
+.ui-info{ position:relative; display:inline-flex; align-items:center; vertical-align:middle; margin-left:6px; font-family:var(--font-sans); line-height:1; }
+.ui-info-glue{ white-space:nowrap; }   /* последнее слово заголовка + (i) не разрываются */
+.ui-info-btn{ position:relative; flex:none; box-sizing:border-box; width:20px; height:20px; min-height:0; min-width:0; gap:0; padding:0; border-radius:50%; border:1px solid var(--border-strong); background:var(--bg-elev); color:var(--text-muted); font:italic 600 12px/1 var(--font-serif); cursor:help; display:inline-grid; place-items:center; }
+.ui-info-btn::after{ content:""; position:absolute; inset:-10px; }   /* палец попадает с запасом */
+.ui-info.open .ui-info-btn{ color:var(--text); border-color:var(--sec-acc, var(--accent)); }  @media (hover:hover){ .ui-info-btn:hover{ color:var(--text); border-color:var(--sec-acc, var(--accent)); } }
+.ui-info-pop{ position:absolute; top:calc(100% + 8px); left:calc(-8px + var(--ui-info-dx, 0px)); z-index:60; width:max-content; max-width:min(360px, calc(100vw - 24px));
+  padding:10px 12px; background:var(--bg-elev); border:1px solid var(--border-strong); border-radius:8px;
+  box-shadow:0 2px 4px rgba(60,52,38,.1),0 12px 28px rgba(60,52,38,.16); color:var(--text);
+  font:400 12.5px/1.5 var(--font-sans); letter-spacing:0; text-transform:none; text-align:left; white-space:normal;
+  display:none; visibility:hidden; opacity:0; transition:opacity .15s ease .4s, visibility 0s linear .55s, display 0s linear .55s allow-discrete; }   /* скрытая подсказка не занимает место: display:none, иначе (i) у правого края раздвигал страницу (Динамика, телефон) */
+.ui-info-pop::before{ content:""; position:absolute; left:0; right:0; top:-10px; height:10px; }   /* мостик для курсора */
+.ui-info-pop p{ margin:0 0 6px; } .ui-info-pop p:last-child{ margin-bottom:0; }
+[data-theme="dark"] .ui-info-pop{ box-shadow:0 2px 4px rgba(0,0,0,.4),0 12px 28px rgba(0,0,0,.5); }
+.ui-info.open .ui-info-pop{ display:block; visibility:visible; opacity:1; transition:opacity .12s ease, visibility 0s, display 0s allow-discrete; }
+@media (hover:hover){ .ui-info:hover .ui-info-pop{ display:block; visibility:visible; opacity:1; transition:opacity .12s ease .15s, visibility 0s linear .15s, display 0s linear .15s allow-discrete; } }
+@starting-style{ .ui-info.open .ui-info-pop{ opacity:0; } }
+@media (hover:hover){ @starting-style{ .ui-info:hover .ui-info-pop{ opacity:0; } } }
+@media (prefers-reduced-motion:reduce){ .ui-info-pop{ transition:none; } }
+
+
+/* ── v1.53.0: .ui-tchart — график показателя во времени ──────────────────────
+   Разметку собирает uiTimeChartHTML (ui-kit.js): длинная плотная история шире
+   экрана (.ui-tchart-sc.wide, прокрутка вбок, ~полгода на экран), паузы — разрыв
+   text.brk с бледным пунктиром path.gap, плотные недели — медиана с усиком line.wh,
+   вторая серия — .alt пунктиром. Переключатель «полгода · вся история» .ui-tchart-top
+   (.ui-seg.sm) — только у истории больше 20 замеров, что не влезает в экран. Цвет — --tc. */
+.ui-tchart{ --tc:var(--sec-acc, var(--accent)); background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:16px 14px 10px; }
+.ui-tchart-lg{ display:flex; align-items:center; gap:6px 14px; flex-wrap:wrap; margin:0 4px 8px; font-size:11px; color:var(--text-muted); }
+.ui-tchart-lg > span{ display:inline-flex; align-items:center; gap:6px; }
+.ui-tchart-sw{ display:inline-block; width:16px; height:0; border-top:2px solid var(--tc); }
+.ui-tchart-sw.alt{ border-top-style:dashed; }
+.ui-tchart-sw.band{ height:8px; border:0; border-radius:3px; background:var(--tc); opacity:.4; }
+.ui-tchart-sw.wh{ width:0; height:12px; border-top:0; border-left:2px solid var(--tc); opacity:.5; margin:0 7px; }
+.ui-tchart-top{ display:flex; align-items:center; gap:10px; margin:0 0 10px; }
+.ui-tchart-more{ margin-left:auto; font-size:11px; color:var(--text-faint); }
+.ui-tchart-sc{ overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:thin; }
+.ui-tchart-sc svg{ display:block; height:auto; max-width:none; font-family:var(--font-sans); }
+
+.ui-tchart .band{ fill:var(--tc); opacity:.15; }
+.ui-tchart .band-edge{ stroke:var(--tc); stroke-width:1; opacity:.5; stroke-dasharray:4 5; }
+.ui-tchart .ln{ fill:none; stroke:var(--tc); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+.ui-tchart .ln.alt{ stroke-width:2; stroke-dasharray:7 5; }
+.ui-tchart .gap{ fill:none; stroke:var(--text-faint); stroke-width:1.5; stroke-dasharray:2 5; opacity:.7; }
+.ui-tchart .wh{ stroke:var(--tc); stroke-width:2; stroke-linecap:round; opacity:.45; }
+.ui-tchart .pt{ fill:var(--text-faint); stroke:var(--bg); stroke-width:2; }
+.ui-tchart .ax{ fill:var(--text-faint); font-size:13px; }
+.ui-tchart .brk{ fill:var(--text-faint); font-size:11px; }
+.ui-tchart .lv{ fill:var(--text); font-size:15px; font-weight:700; }
+
+/* ═══ Общее уведомление внизу (ui-kit 1.56.0) ═══════════════════════════════════
+   .ui-toast — «нет связи», сохранение (uiSaveBarHTML), «отправлено»: почти во всю ширину (до 720px), низкое,
+   крестик по центру. Над нижней навигацией телефона (--ui-mnav-offset). .stack — над «нет связи».
+   .ui-toast-chip — свёрнутое «нет связи» после крестика: метка «офлайн» в правом нижнем углу. */
+.ui-toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(12px + var(--ui-mnav-offset) + env(safe-area-inset-bottom,0px)); z-index:1050; box-sizing:border-box; width:min(720px, calc(100vw - 24px)); display:flex; align-items:center; gap:10px; padding:7px 7px 7px 14px; background:var(--bg-elev); color:var(--text); border:1px solid var(--border-strong); border-radius:12px; box-shadow:0 2px 6px rgba(60,52,38,.08),0 10px 28px rgba(60,52,38,.14); font-family:var(--font-sans); font-size:13px; line-height:1.35; }
+[data-theme="dark"] .ui-toast{ box-shadow:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.45); }
+.ui-toast[hidden], .ui-toast-chip[hidden]{ display:none; }
+.ui-toast.stack{ z-index:1051; }
+.ui-offline-on .ui-toast.stack{ bottom:calc(64px + var(--ui-mnav-offset) + env(safe-area-inset-bottom,0px)); }
+.ui-toast-txt{ flex:1; min-width:0; padding:4px 0; overflow-wrap:anywhere; }
+.ui-toast-dot{ flex:none; width:8px; height:8px; border-radius:50%; background:var(--text-faint); }
+.ui-toast.warn{ background:var(--warn-bg); border-color:var(--warn); }
+.ui-toast.warn .ui-toast-dot{ background:var(--warn); }
+.ui-toast.ok{ border-color:var(--sec-acc, var(--accent)); }
+.ui-toast.ok .ui-toast-dot{ background:var(--sec-acc, var(--accent)); }
+.ui-toast.err{ background:var(--err-bg); border-color:var(--err); }
+.ui-toast.err .ui-toast-dot{ background:var(--err); }
+.ui-toast.busy .ui-toast-dot{ background:var(--sec-acc, var(--accent)); animation:ui-toast-pulse 1s ease-in-out infinite alternate; }
+@keyframes ui-toast-pulse{ from{ opacity:.35; } to{ opacity:1; } }
+.ui-toast-act{ flex:none; padding:6px 12px; margin:0; border:1px solid var(--border-strong); border-radius:8px; background:var(--bg-alt); color:var(--text); font:inherit; font-size:13px; font-weight:600; line-height:1.2; cursor:pointer; }
+.ui-toast.warn .ui-toast-act{ border-color:var(--warn); }
+@media (hover:hover){ .ui-toast-act:hover{ background:var(--bg-elev); } }
+@media (pointer:coarse){ .ui-toast-act{ min-height:36px; } }
+.ui-toast-x{ flex:none; display:grid; place-items:center; width:30px; height:30px; padding:0; margin:0; border:1px solid var(--border); border-radius:8px; background:transparent; color:var(--text-muted); font:inherit; font-size:13px; line-height:1; cursor:pointer; }
+.ui-toast.warn .ui-toast-x{ border-color:var(--warn); }
+@media (hover:hover){ .ui-toast-x:hover{ background:var(--bg-alt); color:var(--text); } }
+@media (pointer:coarse){ .ui-toast-x{ width:36px; height:36px; } }
+.ui-toast-chip{ position:fixed; right:12px; bottom:calc(12px + var(--ui-mnav-offset) + env(safe-area-inset-bottom,0px)); z-index:1050; display:inline-flex; align-items:center; gap:7px; padding:6px 11px; background:var(--warn-bg); color:var(--text); border:1px solid var(--warn); border-radius:999px; box-shadow:0 2px 8px rgba(60,52,38,.12); font-family:var(--font-sans); font-size:12px; font-weight:600; cursor:pointer; }
+.ui-toast-chip .ui-toast-dot{ background:var(--warn); }
+@media print{ .ui-toast, .ui-toast-chip{ display:none !important; } }
+
+/* ═══ Уведомления кабинета (ui-kit 1.57.0): uiPushMount / uiPushOpen ═══════
+   hub — устройство, режим, все виды; страница раздела — свои виды и журнал.
+   Перенесено из viewer.css (.push-*, вьюер 3.36–3.40) без изменения вида. */
+.ui-push-lead{ margin:0 0 14px; line-height:1.5; }
+.ui-push-grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px; align-items:stretch; margin-bottom:16px; }
+.ui-push-col{ display:flex; flex-direction:column; }
+.ui-push-col > .ui-push-card:last-child{ margin-bottom:0; flex:1; }
+@media (max-width:860px){ .ui-push-grid{ grid-template-columns:minmax(0,1fr); gap:0; margin-bottom:0; } .ui-push-col > .ui-push-card:last-child{ margin-bottom:16px; } }
+.ui-push-card{ margin-bottom:16px; }
+.ui-push-card > .ui-h2{ margin-bottom:10px; }
+.ui-push-card .ui-seg + .ui-note{ margin:8px 0 0; }
+.ui-push-sub{ margin:0 0 6px; }
+.ui-push-btns{ margin:10px 0 12px; display:flex; flex-wrap:wrap; gap:8px; }
+.ui-push-last, .ui-push-devs{ text-align:right; }
+.ui-push-prune{ display:block; margin:4px 0 0 auto; font-size:12.5px; }
+.ui-push-hub{ display:inline-block; margin-top:10px; }
+.ui-push-rows > .ui-push-card{ margin-bottom:0; }
+@media (max-width:860px){ .ui-push-rows > .ui-push-card{ margin-bottom:16px; } }
+.ui-push-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:10px; }
+.ui-push-head > .ui-h2{ margin:0; }
+.ui-push-kind{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.ui-push-kind:last-child{ border-bottom:none; }
+.ui-push-kind-t{ font-size:13.5px; font-weight:600; }
+.ui-push-kind .ui-seg{ flex:none; }
+.ui-push-log-row{ padding:8px 0; border-bottom:1px solid var(--border); }
+.ui-push-log-row:last-child{ border-bottom:none; }
+.ui-push-log-row.pick{ cursor:pointer; }
+@media (hover:hover){ .ui-push-log-row.pick:hover .ui-push-log-t{ color:var(--sec-acc, var(--accent)); } }
+.ui-push-log-t{ font-size:13.5px; font-weight:600; margin-top:2px; overflow-wrap:anywhere; }
+.ui-push-log-b{ font-size:12.5px; line-height:1.45; margin-top:2px; overflow-wrap:anywhere; }
+/* сгиб группы видов: на телефоне свёрнут по умолчанию, на широком экране раскрыт и не нажимается */
+.ui-push-fold > summary{ justify-content:space-between; align-items:center; margin-bottom:10px; }
+.ui-push-fold > summary > .ui-h2{ margin:0; }
+.ui-push-fold:not([open]) > summary{ margin-bottom:0; }
+.ui-push-ahead-h{ margin:14px 0 0; font-weight:600; }
+@media (min-width:861px){ .ui-push-fold > summary{ pointer-events:none; cursor:default; } .ui-push-fold > summary .ui-chev{ display:none; } }
+.ui-push-modal .uh-body{ padding-top:16px; font-size:14px; line-height:1.5; }
+.ui-push-modal .uh-body h2{ font-family:inherit; font-size:inherit; margin:0; padding:0; border:none; }
+.ui-push-modal .ui-push-card > .ui-h2{ margin-bottom:10px; }
+
+/* ── кнопка команды для Claude (1.66.0): контур + значок; залитые .ui-btn/кнопки записи — пишут на сайт ── */
+.ui-claude-cmd{ display:inline-flex; align-items:center; gap:6px; min-height:28px; padding:3px 10px; border:1.5px solid var(--border-strong); border-radius:8px;
+  background:transparent; color:var(--text); font:inherit; font-size:12.5px; font-weight:600; cursor:pointer; vertical-align:middle; }
+.ui-claude-cmd .ui-cc-ico{ flex:none; }
+.ui-claude-cmd.copied{ border-color:var(--success); }
+@media (hover:hover){ .ui-claude-cmd:hover{ background:var(--bg-alt); } }
+.ui-claude-cmd:focus-visible{ outline:2px solid var(--sec-acc, var(--accent)); outline-offset:2px; }
+@media (max-width:820px){ .ui-claude-cmd{ min-height:40px; padding:6px 14px; } }
+
+/* ═══ Режим сайта «без ИИ» (ui-kit 1.67.0): html[data-noai] ═══════════════════
+   Команды и подсказки для Claude скрыты; страницы помечают свои подсказки классом .noai-hide,
+   серые плашки LLM-файлов — .noai-grey. Кнопка режима в шапке хаба подсвечена при «без ИИ». */
+html[data-noai] .ui-claude-cmd, html[data-noai] .ui-say, html[data-noai] .act-say, html[data-noai] .gate-say,
+html[data-noai] .cond-say, html[data-noai] .fc-hp, html[data-noai] .noai-hide{ display:none !important; }
+.noai-grey{ color:var(--text-faint) !important; background:var(--surface-2, transparent) !important; border-color:var(--border) !important; }
+.chip-btn.is-off{ border-color:var(--warn); color:var(--warn); }
+.ui-noai-head{ font-weight:600; margin-bottom:8px; }
+.ui-noai-kinds{ list-style:none; margin:0 0 12px; padding:0; }
+.ui-noai-kinds li{ display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px solid var(--border); font-size:13.5px; }
+.ui-noai-kinds li b{ font-variant-numeric:tabular-nums; }
+.ui-noai-files{ display:block; font-size:11.5px; color:var(--text-faint); margin-top:2px; }
+.ui-noai-warn{ font-size:12.5px; color:var(--text-muted, var(--text-faint)); margin:0; }
+.ui-state.err{ color:var(--err); }
+
+/* ui-kit 1.69.0: слот файла (uiFileSlot) — карточка с пунктирной рамкой, как на «Загрузке» вьюера; крупная кнопка и строка статуса под ней */
+.ui-file-box{ display:block; }
+.ui-files{ display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:12px; margin-top:14px; }
+.ui-file{ position:relative; display:flex; flex-direction:column; gap:6px; padding:16px 18px; border:1.5px dashed var(--border-strong); border-radius:var(--radius); background:var(--bg); cursor:pointer; transition:border-color .15s, background-color .15s; }
+@media (hover:hover){ .ui-file:hover{ border-color:var(--sec-acc); } }
+.ui-file.drag{ border-color:var(--sec-acc); background:var(--bg-alt); }
+.ui-file:focus-within{ outline:2px solid var(--sec-acc); outline-offset:2px; }
+.ui-file[data-state="set"]{ border-style:solid; border-color:var(--sec-acc); background:var(--bg-elev); }
+.ui-file-in{ position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+.ui-file-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.ui-file-t{ font-size:15px; font-weight:600; }
+.ui-file .ui-tag.need{ color:var(--sec-acc); border-color:var(--sec-acc); }
+.ui-file-name{ font-size:14px; color:var(--text-muted); overflow-wrap:anywhere; }
+.ui-file[data-state="set"] .ui-file-name{ color:var(--text); font-weight:600; }
+.ui-file-meta{ font-size:13px; font-weight:600; color:var(--sec-acc); }
+.ui-file-rm{ font-size:13px; }
+.ui-file-hint{ margin-top:2px; line-height:1.45; }
+.ui-file-msg{ font-size:14px; color:var(--text-muted); }
+.ui-file-msg.err{ color:var(--err); font-weight:600; }

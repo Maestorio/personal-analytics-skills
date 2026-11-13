@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вход · Личный кабинет</title>
+<!-- иконка кабинета (вкладка и экран «Домой»): шесть ромбов — цвета разделов --c-1…--c-6 -->
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/hub-32.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/hub-180.png?v=2">
+<meta name="apple-mobile-web-app-title" content="Кабинет">
+<script>(function(){try{if(localStorage.getItem("hub-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/ui-kit.css?v=1.72.0">
+<style>
+/* Шрифты, токены тем и база (сброс, шрифт, цвет и фон body) — в assets/ui-kit.css;
+   здесь только своё: центровка карточки входа. */
+body{
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center; padding:24px;
+}
+a{ color:var(--c-1); text-decoration:none; }
+:focus-visible{ outline:2px solid var(--c-1); outline-offset:3px; }
+.wrap{ width:min(420px,100%); }
+.eyebrow{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-muted); font-weight:700; text-align:center; }
+h1{ font-family:var(--font-serif); font-weight:600; font-size:40px; line-height:1; letter-spacing:-.02em; margin:12px 0 0; text-align:center; }
+.sub{ font-family:var(--font-serif); font-style:italic; font-size:14px; color:var(--text-muted); margin:12px 0 0; text-align:center; }
+.card{
+  margin-top:26px; background:var(--bg-elev); border:1px solid var(--border);
+  border-radius:var(--radius); box-shadow:var(--shadow); padding:24px 26px;
+}
+.lbl{ font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; display:block; }
+.fld{
+  width:100%; border:1px solid var(--border); border-radius:8px; background:var(--bg);
+  color:var(--text); font-family:inherit; font-size:14px; padding:11px 12px;
+}
+.fld:focus{ outline:2px solid var(--c-1); outline-offset:1px; }
+.btn{
+  width:100%; margin-top:14px; border:none; border-radius:8px; padding:12px 18px;
+  font-size:14px; font-weight:600; font-family:inherit; cursor:pointer;
+  background:var(--c-1); color:#fff; transition:filter .15s;
+}
+[data-theme="dark"] .btn{ color:#12201f; }
+@media (hover:hover){ .btn:hover{ filter:brightness(.94); } }
+.btn[disabled]{ opacity:.55; pointer-events:none; }
+.err{ font-size:12.5px; line-height:1.5; color:var(--err); margin-top:10px; min-height:17px; }
+.note{ font-size:12px; line-height:1.5; color:var(--text-faint); margin-top:16px; }
+.foot{ margin-top:18px; text-align:center; font-size:12px; }
+.foot a{ color:var(--text-muted); font-weight:600; }
+@media (hover:hover){ .foot a:hover{ color:var(--c-1); } }
+.ok{ color:var(--c-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Личный кабинет</div>
+  <h1>Вход</h1>
+  <p class="sub" id="why">Портфель и здоровье под паролем.</p>
+
+  <div class="card">
+    <form id="f" autocomplete="on">
+      <!-- логин скрыт, но присутствует: без него менеджеры паролей не предлагают
+           сохранить пару и не автозаполняют (ради этого весь вход и делался формой). -->
+      <input type="text" name="username" id="user" autocomplete="username" hidden readonly>
+      <label class="lbl" for="pass">Пароль</label>
+      <input class="fld" type="password" id="pass" name="password" autocomplete="current-password" placeholder="Пароль" autofocus>
+      <button class="btn" type="submit" id="go">Войти</button>
+      <div class="err" id="err"></div>
+    </form>
+    <div class="note">Вход сохраняется в этом браузере и действует на все разделы кабинета. Сбросить — кнопкой «Выйти» в шапке.</div>
+  </div>
+
+  <div class="foot"><a href="hub.html">← В кабинет без входа</a></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Страница входа кабинета                                        login v1.14
+
+   Единая точка входа: hub / вьюер портфеля / health ведут сюда, когда данные
+   требуют пароля, и возвращают обратно через ?next=.
+
+   Почему форма, а не нативное окно браузера:
+     • нативный диалог basic_auth не автозаполняется менеджером паролей и
+       всплывает непредсказуемо (в т.ч. поверх публичных страниц);
+     • Caddy настроен НИКОГДА не слать WWW-Authenticate (приватное без
+       Authorization → тихий 403), поэтому попапа не бывает в принципе, а
+       пароль спрашиваем мы сами — здесь.
+
+   Токен: localStorage["hub-auth"] = btoa("hubuser:пароль") — единый ключ
+   origin'а, его же читают вьюер, health и edit-слой travel.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+"use strict";
+
+var USER = "hubuser";
+var VERSION = "login v1.20";
+
+var qs = new URLSearchParams(location.search);
+// ?next= — куда вернуть после входа. Только СВОЙ origin и только путь:
+// открытый редирект на чужой сайт недопустим даже в домашнем кабинете.
+function safeNext(){
+  var raw = qs.get("next") || "hub.html";
+  try {
+    var u = new URL(raw, location.href);
+    if (u.origin !== location.origin) return "hub.html";
+    return u.pathname + u.search + u.hash;
+  } catch(e){ return "hub.html"; }
+}
+var NEXT = safeNext();
+
+// Зачем просят пароль — подставляется вызывающей страницей (?why=).
+var WHY = { portfolio: "Финансовые данные под паролем.",
+            health: "Медицинские данные под паролем.",
+            money: "Личные финансы под паролем.",
+            hub: "Портфель и здоровье под паролем." };
+var why = document.getElementById("why");
+if (why && WHY[qs.get("why")]) why.textContent = WHY[qs.get("why")];
+var u = document.getElementById("user"); if (u) u.value = USER;
+
+function setToken(pass){ try { localStorage.setItem("hub-auth", btoa(USER + ":" + pass)); } catch(e){} }
+function clearToken(){ try { localStorage.removeItem("hub-auth"); } catch(e){} }
+
+/* Проба доступа. Приватный путь, который есть всегда: корень Portfolio.
+   401/403 = пароль не тот. Любой другой код (200, 404, 301…) означает, что
+   basic_auth нас пропустил → пароль верный. */
+function probe(){
+  return fetch("../Portfolio/", {
+    credentials: "omit",             // гасит обработку 401-челленджа браузером
+    cache: "no-store",
+    headers: { "Authorization": "Basic " + (localStorage.getItem("hub-auth") || ""),
+               "Accept": "application/json" }
+  }).then(function(r){ return r.status; }).catch(function(){ return 0; });
+}
+
+var form = document.getElementById("f");
+var pass = document.getElementById("pass");
+var btn = document.getElementById("go");
+var err = document.getElementById("err");
+
+function fail(msg){ err.textContent = msg; err.classList.remove("ok"); btn.disabled = false; btn.textContent = "Войти"; pass.focus(); pass.select(); }
+
+form.addEventListener("submit", function(ev){
+  ev.preventDefault();
+  var p = pass.value;
+  if (!p){ fail("Введите пароль."); return; }
+  err.textContent = ""; btn.disabled = true; btn.textContent = "Проверяю…";
+  setToken(p);
+  probe().then(function(st){
+    if (st === 401 || st === 403){ clearToken(); fail("Неверный пароль — попробуйте ещё раз."); return; }
+    if (st === 0){ clearToken(); fail("Сервер недоступен. Проверьте, что кабинет открыт по сети."); return; }
+    // пароль принят — метка «сервер отверг токен» (ui-kit authFetch) больше не верна
+    try { localStorage.removeItem("hub-auth-rejected"); } catch(e){}
+    err.textContent = "Готово, открываю…"; err.classList.add("ok");
+    location.replace(NEXT);
+  });
+});
+
+// Уже вошли и пришли сюда руками — не мучаем формой.
+if (localStorage.getItem("hub-auth")){
+  probe().then(function(st){
+    if (st !== 401 && st !== 403 && st !== 0) location.replace(NEXT);
+  });
+}
+})();
+</script>
+</body>
+</html>

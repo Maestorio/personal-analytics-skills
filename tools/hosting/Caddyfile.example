@@ -1,0 +1,271 @@
+# Caddyfile.example — Personal Hub на Synology NAS (Caddy + write-API sidecar)
+#
+# Скопируй как Caddyfile (без .example), подставь свой bcrypt-хэш пароля
+# (sudo docker exec -it portfolio-viewer caddy hash-password), свой VPN-IP и
+# свой хост. Caddyfile с реальным хэшем — НЕ коммитить (он в .gitignore).
+# ⚠ ЗАМЕНИ <VPN_IP> (обе строки client_ip), <BCRYPT_HASH_HERE> (все basic_auth)
+#   и <HOST>/<BASE_DOMAIN>.
+#
+# Зоны (решение 2026-07-11, здоровье добавлено 2026-07-17, еда — 2026-07-20):
+#   ПУБЛИЧНО (без пароля, любой IP): хаб, travel, games, еда + их данные + assets.
+#     Еда публична сознательно: список покупок открывают в магазине с телефона,
+#     вдвоём и с мобильного интернета — пароль там только мешал бы, а
+#     чувствительность данных нулевая. ЗАПИСЬ при этом закрыта (см. /api/fd/*).
+#   ПОРТФЕЛЬ + ЗДОРОВЬЕ + всё приватное: пароль ВСЕГДА (LAN, VPN, снаружи) —
+#     финансовые и медицинские данные под паролем откуда угодно.
+#   /api/fd/* (правка раздела «Еда») — ПОЛНОСТЬЮ ПУБЛИЧНА, и чтение, и запись
+#     (решение 2026-07-20). Причина: списком пользуются вдвоём и из магазина с
+#     мобильного интернета; требование входа убивало бы сценарий целиком —
+#     галочку «куплено» надо ставить мокрой рукой за секунду, а не после
+#     ввода пароля. Размен принят сознательно: любой, кто знает адрес, может
+#     не только прочитать, но и ИЗМЕНИТЬ список покупок и каталог рецептов.
+#     Смягчающее: данные не чувствительные, сайдкар бэкапит каждую запись в
+#     .versions/, схема проверяется перед записью (структурно битое отлетает).
+#     Откат — убрать строку `reverse_proxy @api_food` ниже: зона сразу вернётся
+#     под общее правило /api/* (доверенный IP свободно, извне по токену).
+#   /api/moex/* (живые цены MOEX для вьюера портфеля) — ПУБЛИЧНО, с любого IP и
+#     без Authorization (решение 2026-10-13). Только чтение публичных рыночных
+#     данных; состав портфеля в запросе не передаётся (запрашиваются целые доски
+#     TQBR/TQOB/TQCB), записи нет. Откат — убрать `reverse_proxy @api_moex` ниже.
+#   /api/* (правка travel Stage 3/4/5/6): свободно с ДОВЕРЕННЫХ IP
+#     (LAN + личный VPN); с прочих IP — по ТОКЕНУ hub-auth (явный Authorization),
+#     а фоновый fetch без креда → ТИХИЙ 403 (edit-слой Stage-3 у гостя остаётся
+#     статичной витриной, без нативного попапа пароля). Парольный ПОПАП для
+#     правок с чужого IP убран (по дизайну — правят доверенные IP или токен).
+#   /api/push/* (push-уведомления вьюера портфеля, контейнер hub-notify, решение
+#     2026-10-16) — пароль с ЛЮБОГО IP, как здоровье: в уведомлениях события
+#     портфеля, подписать своё устройство без пароля нельзя и из LAN. Идёт НЕ в
+#     hub-api, а в hub-notify:8001. Фоновый скрипт /tools/portfolio-sw.js публичен
+#     (браузер грузит его без Authorization), секретов в нём нет.
+#   /api/pf/* (сборка снапшота портфеля с вьюера, hub-notify, 2026-10-21) — пароль с
+#     ЛЮБОГО IP, как /api/push/*: в теле — выгрузки брокерских счетов. В hub-notify:8001.
+#   /tools/sw.js + /tools/sw-offline.js (офлайн всех страниц, 2026-10-23) — публичны по той же причине:
+#     браузер грузит фоновый скрипт без Authorization. Секретов нет: данные он только пересылает.
+#   /api/pv/* (вьюер портфеля одним запросом, hub-api, 2026-10-23) — пароль с ЛЮБОГО IP:
+#     отдаёт содержимое файлов портфеля, а они под паролем откуда угодно.
+#   /api/hd/* (правка аптечки/прививок/веса) — ИСКЛЮЧЕНИЕ из правила выше:
+#     пароль с ЛЮБОГО IP, включая LAN. Иначе дыра: устройство в домашней сети
+#     не может ПРОЧИТАТЬ аптечку (данные под паролем), но может её ПЕРЕЗАПИСАТЬ.
+#     Поэтому @api_trusted явно исключает /api/hd/*.
+#   /health-data/* — медданные с отдельного тома (/srv-health =
+#     homes/hubuser/Claude-Memory/Health — НЕ та Claude-Memory, что в
+#     поддерево единого Claude-Memory, вне облачных синков). Под @private.
+#   HTTPS-only: прямой внешний HTTP редиректится на HTTPS-домен.
+#     Внешний вход — https://<HOST> (DSM reverse proxy
+#     443 → localhost:8080; hostname именно portfolio.*, голый
+#     <BASE_DOMAIN> прокси-правила НЕ имеет и отдаёт DSM-404).
+#     ГЛАВНОЕ — на роутере НЕ пробрасывать порт 8080 наружу: снаружи доступен
+#     только DSM :443. Тогда внешний HTTP недостижим в принципе, а редирект
+#     ниже — страховка.
+#
+# Доверенный VPN-IP: <VPN_IP> (вписан 2026-07-11, обе строки client_ip
+#   @api_trusted/@api_untrusted). Сменится IP — поправить здесь и docker restart.
+#
+# После правки на NAS: docker restart portfolio-viewer
+#
+# Служебное (2026-10-23): _nas/ (стек контейнеров, .env с паролем DSM) — 404 всем;
+#   .versions, черновики сайдкара, @eaDir, #recycle, .env — спрятаны у file_server.
+# (Caddy падает с понятной ошибкой при кривом конфиге — смотри docker logs)
+
+{
+    servers {
+        # X-Forwarded-For от DSM reverse proxy (ходит с приватного IP) — доверяем,
+        # чтобы видеть РЕАЛЬНЫЙ client_ip (в т.ч. IP личного VPN снаружи).
+        trusted_proxies static private_ranges
+    }
+}
+
+:8080 {
+    root * /srv
+    encode gzip
+
+    # ─── Свежесть страниц ───────────────────────────────────────────────────
+    # Страницы кабинета — single-file HTML без ?v=-бастера, поэтому браузеру
+    # нужно явно сказать «перепроверяй». Без Cache-Control Caddy шлёт только
+    # ETag + Last-Modified, а по ним браузер кеширует ЭВРИСТИЧЕСКИ (обычно 10%
+    # возраста файла) и может не ходить на сервер вовсе — выложенная правка не
+    # видна ни после deploy, ни после кнопки «Обновить» (она делает reload, а он
+    # берёт HTML из кеша). Реальный случай 2026-07-20: страницы выложены, а на
+    # телефоне и на компе старый вид.
+    # no-cache = «можно хранить, но перед показом спроси сервер»: с ETag это
+    # 304 без тела, трафик почти нулевой. НЕ no-store — тот убил бы кеш совсем.
+    # Ассеты вьюера (assets/*) сюда не входят: у них есть ?v= в ссылке.
+    @pages path *.html *.md /tools/portfolio-sw.js /tools/sw.js /tools/sw-offline.js
+    header @pages Cache-Control "no-cache"
+    # Фоновый скрипт кабинета — на весь сайт (2026-10-26): страницы поездок /travel-planner/… открываются без
+    # связи и их правки идут через очередь записи. Браузер разрешает область шире папки скрипта (/tools/)
+    # только с этим заголовком; без него ui-kit откатывается на область /tools/.
+    header /tools/sw.js Service-Worker-Allowed "/"
+
+    # ─── Матчеры ────────────────────────────────────────────────────────────
+    # Прямой внешний HTTP: не из LAN и без X-Forwarded-Proto: https (DSM его
+    # ставит для HTTPS). Такой запрос редиректим на HTTPS-домен.
+    @http_external {
+        not client_ip private_ranges
+        not header X-Forwarded-Proto https
+    }
+
+    # Зона «Еда»: публична целиком (см. шапку). Матчер отдельный, потому что
+    # порядок в route решает — этот reverse_proxy стоит ДО @api_noauth,
+    # иначе запрос без Authorization ловил бы тихий 403.
+    @api_food path /api/fd/*
+
+    # Котировки MOEX: публичны с любого IP, без Authorization. Эндпоинт только
+    # читает публичные рыночные данные, состав портфеля в запросе не передаётся
+    # (запрашиваются целые доски). Стоит ДО @api_noauth по той же причине, что
+    # @api_food.
+    @api_moex path /api/moex/*
+
+    # /api с ДОВЕРЕННОГО IP (LAN + личный VPN) → правка travel без пароля.
+    # /api/hd/* (здоровье) СЮДА НЕ ВХОДИТ: медданные требуют пароль с любого IP,
+    # иначе LAN-устройство писало бы аптечку, не имея права её прочитать.
+    # /api/gm/* (оверлей игр Gaming/user-state.json, hub-api) — пароль с любого IP: список и оценки — личные данные.
+    # /api/zm/* (выгрузка CSV ZenMoney, hub-api → hub-notify: загрузка файла, отчёт, запись истории) — тоже пароль с любого IP:
+    # это личные финансы целиком и запись в историю итогов, из LAN без пароля — нельзя.
+    # /api/games/* (кнопка «Обновить цены», поиск nsuid, hub-api → hub-notify) — тоже пароль с любого IP.
+    # /api/hub/* (режим сайта «с ИИ / без ИИ», hub-api) — тоже пароль с любого IP:
+    # переключатель запрещает скиллам писать в Claude-Memory, щёлкать им из LAN без пароля нельзя.
+    @api_trusted {
+        path /api/*
+        not path /api/hd/* /api/push/* /api/pf/* /api/pv/* /api/hub/* /api/gm/* /api/zm/* /api/games/*
+        client_ip private_ranges <VPN_IP>
+    }
+    # Всё остальное /api: есть Authorization → валидируем; нет → тихий 403.
+    # (Разделения untrusted/health больше не нужно: «здоровье под паролем даже
+    # из LAN» обеспечивает `not path /api/hd/*` в @api_trusted выше.)
+    @api_auth {
+        path /api/*
+        header Authorization *
+    }
+    @api_noauth {
+        path /api/*
+        not header Authorization *
+    }
+    # push-уведомления: после проверки пароля (basic_auth @api_auth) — в hub-notify
+    @api_push {
+        path /api/push/*
+        header Authorization *
+    }
+    # сборка снапшота портфеля с вьюера (hub-notify pf_build.py, 2026-10-21): входы — выгрузки
+    # брокерских счетов, пароль с ЛЮБОГО IP, как /api/push/* и /api/hd/*
+    @api_pf {
+        path /api/pf/*
+        header Authorization *
+    }
+    # /api/pv/* (вьюер портфеля одним запросом, hub-api, 2026-10-23) отдельного матчера не
+    # требует: он исключён из @api_trusted, поэтому из LAN без токена — тихий 403
+    # (@api_noauth), с токеном — basic_auth @api_auth и в hub-api. Содержимое портфеля —
+    # под паролем с ЛЮБОГО IP, как сами файлы /Portfolio/*.
+
+    # ─── Служебное: никогда наружу (2026-10-23) ─────────────────────────────
+    # _nas/ — стек контейнеров внутри отдаваемого дерева: .env с паролем DSM и рабочий
+    # Caddyfile с bcrypt-хэшем. Был доступен любому, кто знает пароль кабинета (проверка
+    # на NAS 23.10: 200 с паролем, 403 без). 404 — для всех, с паролем и без, до любых
+    # других правил route. Служебные файлы внутри дерева прячет `hide` у file_server.
+    @internal path /_nas /_nas/*
+
+    # ─── Приватная зона: НИКОГДА не challenge'им ────────────────────────────
+    # Правило простое и НЕ зависит от заголовков запроса:
+    #   есть Authorization → basic_auth валидирует;
+    #   нет Authorization  → тихий 403, страницы сами ведут на /tools/login.html.
+    # Так WWW-Authenticate не уходит ВООБЩЕ никогда → нативного окна пароля
+    # не бывает ни при переходе по ссылке, ни при фоновом запросе.
+    #
+    # Почему отказались от прежней схемы (@private_fetch по Sec-Fetch-Dest +
+    # @private_fetch_json по Accept): она угадывала «это фоновый запрос» по
+    # заголовкам, а браузеры НЕ шлют Sec-Fetch-* по простому http:// (не-secure
+    # контекст — а LAN-адрес именно такой). Любой приватный запрос без
+    # Accept: application/json проваливался мимо обоих матчеров в basic_auth и
+    # ловил попап (воспроизведено 2026-07-17). Заголовкам верить нельзя —
+    # верим только наличию Authorization.
+    #
+    # Публичны ОБОЛОЧКИ страниц (hub/travel/games/health/вьюер/login) — данные
+    # к ним подтягиваются с явным Authorization из localStorage["hub-auth"].
+    # ⚠ Списки в @private_auth и @private_noauth обязаны совпадать СТРОКА В СТРОКУ.
+    # Забыть один — значит получить путь, который то требует пароль, то нет, в
+    # зависимости от наличия заголовка (ровно так потерялся login.html 2026-07-17).
+    @private_auth {
+        not path /tools/hub.html /tools/travel.html /tools/games.html /tools/assets/*
+        not path /tools/portfolio-integrated-viewer.html /tools/viewer-help.md
+        not path /tools/health.html /tools/login.html /tools/food.html /tools/money.html
+        not path /tools/portfolio-sw.js /tools/sw.js /tools/sw-offline.js
+        not path /travel-planner/* /Gaming/* /Food/* /favicon.ico
+        not path /api/*
+        header Authorization *
+    }
+    @private_noauth {
+        not path /tools/hub.html /tools/travel.html /tools/games.html /tools/assets/*
+        not path /tools/portfolio-integrated-viewer.html /tools/viewer-help.md
+        not path /tools/health.html /tools/login.html /tools/food.html /tools/money.html
+        not path /tools/portfolio-sw.js /tools/sw.js /tools/sw-offline.js
+        not path /travel-planner/* /Gaming/* /Food/* /favicon.ico
+        not path /api/*
+        not header Authorization *
+    }
+
+    # ─── Порядок обработки (route фиксирует последовательность) ──────────────
+    route {
+        # 0) служебное (_nas/: .env с паролем DSM, Caddyfile с хэшем) — 404 всем, первым
+        respond @internal 404
+        # 1) HTTPS-only: прямой внешний HTTP → на HTTPS-домен
+        redir @http_external https://<HOST>{uri} permanent
+        # 2) корень → хаб
+        redir / /tools/hub.html
+        # 2.5) /api/fd/* → sidecar БЕЗ каких-либо проверок, с любого IP.
+        #      Стоит здесь намеренно: ниже по маршруту @api_noauth отдаёт 403,
+        #      и любая перестановка этой строки вниз тихо сломает раздел «Еда»
+        #      для всех, кроме домашней сети.
+        reverse_proxy @api_food hub-api:8000
+        # 2.6) /api/moex/* — то же: публично, без проверок (см. @api_moex).
+        reverse_proxy @api_moex hub-api:8000
+        # 3) /api с доверенного IP → sidecar без пароля (правка travel Stage 3/4).
+        #    /api/hd/* сюда не входит → здоровье требует пароль даже из LAN.
+        reverse_proxy @api_trusted hub-api:8000
+        # 3.5) /api без Authorization (и не с доверенного IP) → ТИХИЙ 403.
+        #      Гость (ссылка ?trip=) видит edit-слой Stage-3 как статику; страница
+        #      «Здоровье» из LAN без входа получает 403 и ведёт на login.html.
+        respond @api_noauth 403
+        # 4) /api с токеном → валидация пароля, затем sidecar
+        basic_auth @api_auth {
+            hubuser <BCRYPT_HASH_HERE>
+        }
+        reverse_proxy @api_push hub-notify:8001
+        reverse_proxy @api_pf hub-notify:8001
+        reverse_proxy @api_auth hub-api:8000
+        # 5) приватное БЕЗ Authorization → тихий 403 (страница уведёт на login.html).
+        #    Именно здесь гасится нативный попап — challenge не отправляется никогда.
+        respond @private_noauth 403
+        # 6) приватное С Authorization → валидация пароля
+        basic_auth @private_auth {
+            hubuser <BCRYPT_HASH_HERE>
+        }
+        # 7) медданные — с отдельного тома (ro-проекция Health/). Сюда доходят
+        #    только запросы, прошедшие (5)/(6), т.е. с паролем или токеном.
+        handle /health-data/* {
+            root * /srv-health
+            uri strip_prefix /health-data
+            file_server {
+                browse
+                hide .versions .hub-api-staging @eaDir "#recycle" .env .DS_Store
+            }
+        }
+        # 7.5) данные «Еды» — с того же несинхронизируемого тома, что здоровье,
+        #      но БЕЗ пароля: /Food/* исключён из обоих приватных матчеров и
+        #      доходит сюда напрямую. Список покупок открывают у полки.
+        handle /Food/* {
+            root * /srv-food
+            uri strip_prefix /Food
+            file_server {
+                browse
+                hide .versions .hub-api-staging @eaDir "#recycle" .env .DS_Store
+            }
+        }
+        # 8) публичное + аутентифицированное приватное → отдаём файлом.
+        #    hide: копии версий сайдкара, его черновики записи, служебные папки Synology,
+        #    секреты — как будто их нет (ни файлом, ни в листинге). Страницы их не читают.
+        file_server {
+            browse
+            hide .versions .hub-api-staging @eaDir "#recycle" .env .DS_Store
+        }
+    }
+}

@@ -1,0 +1,124 @@
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: portfolio-viewer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      # ЕДИНОЕ дерево Claude-Memory (миграция 2026-08-13): всё живёт в
+      # homes/hubuser/Claude-Memory, вне Google-синка. Старое дерево
+      # homes/hubuser/Ext_gDrive/Claude-Memory выведено из работы
+      # (переименовано в *-MIGRATED после cutover, демонтаж — Фаза 5).
+      - /volume1/homes/hubuser/Claude-Memory:/srv:ro
+      # Health и Food — поддеревья того же дерева. Отдельные тома оставлены
+      # сознательно (решение 2.6 плана миграции): ro/rw-разделение — фича.
+      # Здоровье отдаётся по /health-data/* под паролем.
+      - /volume1/homes/hubuser/Claude-Memory/Health:/srv-health:ro
+      # «Еда» отдаётся по /Food/* БЕЗ пароля: список покупок открывают
+      # в магазине с телефона.
+      - /volume1/homes/hubuser/Claude-Memory/Food:/srv-food:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+
+  # Write-API sidecar (единственный писатель со стороны веба).
+  # Порт наружу НЕ публикуется — доступ только через Caddy (reverse_proxy /api/*).
+  hub-api:
+    image: python:3.12-alpine
+    container_name: hub-api
+    restart: unless-stopped
+    command: ["python", "/app/server.py"]
+    # File Station-гибрид: файл на место ставит DSM (host-событие → Synology
+    # Drive доставляет правку в зеркала сразу, вотчер слеп к записям контейнера).
+    # Креды — в .env рядом с compose (НЕ в репозитории; шаблон — .env.example).
+    #
+    # ⚠ АДРЕС DSM — НЕ ВПИСЫВАТЬ IP. Звонящий здесь не человек, а сам контейнер,
+    # и звонит он в DSM на ЭТОЙ ЖЕ машине: трафик не покидает NAS. Прибитый IP
+    # (было `http://192.168.1.10:5000`) умер при переезде NAS в другую подсеть —
+    # File Station отвалился, sidecar молча перешёл на локальный os.replace,
+    # вотчер Drive таких записей не видит, и 13 дней web-правки не доезжали до
+    # зеркал. Итог — прогон health-meds прочитал протухшее зеркало и затёр им
+    # NAS (инцидент 2026-09-02, потеряно 20 препаратов и сроки годности).
+    # `host-gateway` докер резолвит сам — переезды и смена подсети ему безразличны.
+    extra_hosts:
+      - "dsm:host-gateway"
+    environment:
+      HUB_API_DSM_URL: "http://dsm:5000"
+      HUB_API_FS_ROOT: "/home/Claude-Memory"
+      HUB_API_FS_HEALTH_ROOT: "/home/Claude-Memory/Health"
+      HUB_API_FS_FOOD_ROOT: "/home/Claude-Memory/Food"
+    env_file:
+      - .env
+    volumes:
+      - /volume1/homes/hubuser/Claude-Memory:/srv
+      # Health на ЗАПИСЬ: страница правит аптечку/прививки/вес
+      # (meds.json, vaccinations.json, vitals.json — whitelist в server.py).
+      - /volume1/homes/hubuser/Claude-Memory/Health:/srv-health
+      # «Еда» на ЗАПИСЬ: страница правит список покупок, каталог и рецепты.
+      - /volume1/homes/hubuser/Claude-Memory/Food:/srv-food
+      - ./api/server.py:/app/server.py:ro
+      # кодлисты (план: допустимые user_plan / user_status); кладёт deploy.zsh рядом с server.py.
+      # Новая строка тома требует `docker compose up -d hub-api` (не restart); до того server.py читает
+      # копию с тома /srv/_nas/api/codelists.json.
+      - ./api/codelists.json:/app/codelists.json:ro
+      # правила скилла health-labs для записи со страницы (отчёт .md, справка маркера): одна реализация со скиллом;
+      # кладёт deploy.zsh рядом с server.py. hub_settings.py — зависимость обоих модулей (импорт на верхнем уровне).
+      - ./api/validate_report.py:/app/validate_report.py:ro
+      - ./api/validate_labs_info.py:/app/validate_labs_info.py:ro
+      # правила labs.json (ручная точка анализа при ai_mode off): общий модуль скилла и сервера
+      - ./api/labs_rules.py:/app/labs_rules.py:ro
+      - ./api/hub_settings.py:/app/hub_settings.py:ro
+
+  # Push-уведомления вьюера портфеля (v3-B, 2026-10-16): подписки устройств +
+  # проверяльщик по расписанию (раз в день — даты/вердикты/монитор/свежесть,
+  # раз в час в торговые часы — ценовые условия). Порт наружу НЕ публикуется —
+  # Caddy проксирует /api/push/* (с паролем с любого IP).
+  # Зависимости (cryptography — шифрование Web Push, PyYAML) ставятся ОДИН раз в
+  # том notify_deps; сменил версии — поменяй метку .ok-… (переустановятся).
+  # Холодный старт без PyPI: сначала колёса из _nas/wheels/ (кладёт deploy.zsh, шаг «колёса»),
+  # и только если их нет — PyPI. Версии пакетов — одно место: строка command ниже (deploy.zsh читает её).
+  # openpyxl и numbers-parser (с 2026-10-21) — сборка снапшота портфеля с вьюера (pf_build.py):
+  # колёса musllinux есть для x86_64 и aarch64, компиляции нет.
+  # Claude-Memory — только чтение; ключи VAPID, подписки, «уже сообщено» и журнал —
+  # в своём томе notify_data (в Claude-Memory контейнер не пишет).
+  hub-notify:
+    image: python:3.12-alpine
+    container_name: hub-notify
+    restart: unless-stopped
+    # Предел памяти (2026-10-23): «Собрать снапшот» (pf_build.py → build_snapshot.py) — сотни МБ на
+    # NAS с 2 ГБ; 22.10 пять сборок подряд вытеснили в своп 765 МБ, NAS переставал отвечать по SSH.
+    # Упрётся — ядро убьёт сборку внутри контейнера (вьюер скажет «не хватило памяти»), а не NAS.
+    # Обычная работа (проверки, push, задачи сайта) — ~35 МБ.
+    mem_limit: 900m
+    command: ["sh", "-c", "[ -f /deps/.ok-c46.0.7-y6.0.3-ox3.1.5-np4.18.5 ] || ((pip install -q --no-index --find-links /wheels --disable-pip-version-check --target /deps cryptography==46.0.7 pyyaml==6.0.3 openpyxl==3.1.5 numbers-parser==4.18.5 || pip install -q --no-cache-dir --disable-pip-version-check --target /deps cryptography==46.0.7 pyyaml==6.0.3 openpyxl==3.1.5 numbers-parser==4.18.5) && touch /deps/.ok-c46.0.7-y6.0.3-ox3.1.5-np4.18.5) && PYTHONPATH=/deps exec python -u /app/notifier.py"]
+    environment:
+      TZ: "Europe/Moscow"
+      NOTIFY_ROOT: "/srv"
+      NOTIFY_DATA: "/data"
+      # первая неделя — тихий режим (журнал «было бы отправлено»); дальше переключатель
+      # во вьюере («Уведомления» → «Отправлять»), env — только начальное значение
+      NOTIFY_MODE: "quiet"
+      NOTIFY_DAILY_AT: "08:30"
+      NOTIFY_QUOTES_URL: "http://hub-api:8000/api/moex/quotes?boards=TQBR,TQOB,TQCB"
+      # задачи сайта (API-1, пробный месяц до 2026-11-21): цены US eShop ежедневно и макросрез
+      # по будням в NOTIFY_DAILY_AT, неудача — повтор в JOBS_RETRY_AT. Откат без пересборки:
+      # JOBS_OFF: "eshop,macro" и `docker compose up -d hub-notify`.
+      JOBS_RETRY_AT: "09:00"
+      JOBS_OFF: ""
+    volumes:
+      - /volume1/homes/hubuser/Claude-Memory:/srv:ro
+      # Папка целиком (с 2026-10-21): notifier.py + задачи сайта jobs.py / eshop.py /
+      # macro_job.py и macro/ — копия build_macro.py и fetch_macro.py скилла macro-ru-watcher
+      # (кладёт deploy.zsh). Результат задач пишет hub-api (/api/job/*), том /srv — только чтение.
+      # pdl/ — копия скриптов portfolio-data-loader для «Собрать снапшот» (pf_build.py); входы и
+      # рабочие папки сборок — в notify_data (pf/runs/), сохранённый снапшот — Portfolio/snapshots/auto/.
+      - ./notify:/app:ro
+      # колёса зависимостей (musllinux, под архитектуру NAS) — холодный старт без PyPI; папки нет → PyPI
+      - ./wheels:/wheels:ro
+      - notify_data:/data
+      - notify_deps:/deps
+
+volumes:
+  caddy_data:
+  notify_data:
+  notify_deps:

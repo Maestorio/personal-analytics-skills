@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Игры — Личный кабинет</title>
+<!-- иконка кабинета (вкладка и экран «Домой»): шесть ромбов — цвета разделов --c-1…--c-6 -->
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/hub-32.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/hub-180.png?v=2">
+<meta name="apple-mobile-web-app-title" content="Кабинет">
+<script>(function(){try{if(localStorage.getItem("hub-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/ui-kit.css?v=1.72.0">
+<!-- ui-kit.js — в <head>: шапку (uiTopHTML) страница вставляет прямо при
+     разборе, без мигания; при загрузке ui-kit только вешает обработчики. -->
+<script src="assets/ui-kit.js?v=1.72.0"></script>
+<script src="assets/codelists.js?v=29ef9fc4"></script>
+<style>
+
+
+/* База (сброс, шрифт, цвет и фон body) — в assets/ui-kit.css; здесь только своё. */
+/* акцент раздела для общих компонентов ui-kit (окно документа и др.) */
+body{ --sec-acc:var(--c-5); }
+body{
+  min-height:100vh;
+  background-image:var(--game-bg,none); background-size:240px 240px;
+  transition:background-color .25s,color .25s;
+}
+a{ color:var(--accent); text-decoration:none; }
+@media (hover:hover){ a:hover{ color:var(--accent-2); } }
+/* фон «геймпады» */
+body{ --game-bg:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='240'%20height='240'%3E%3Cg%20fill='none'%20stroke='%237c789c'%20stroke-opacity='.19'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cg%20transform='translate(18%2026)%20rotate(-8)'%3E%3Crect%20x='0'%20y='0'%20width='44'%20height='26'%20rx='12'/%3E%3Cpath%20d='M12%208v10M7%2013h10'/%3E%3Ccircle%20cx='31'%20cy='10'%20r='2'/%3E%3Ccircle%20cx='37'%20cy='16'%20r='2'/%3E%3C/g%3E%3Cg%20transform='translate(160%2020)%20rotate(6)'%3E%3Crect%20x='0'%20y='0'%20width='24'%20height='38'%20rx='4'/%3E%3Crect%20x='4'%20y='4'%20width='16'%20height='12'%20rx='1.5'/%3E%3Cpath%20d='M8%2024v8M4%2028h8'/%3E%3Ccircle%20cx='18'%20cy='26'%20r='1.6'/%3E%3Ccircle%20cx='18'%20cy='31'%20r='1.6'/%3E%3C/g%3E%3Cg%20transform='translate(30%20160)%20rotate(-5)'%3E%3Crect%20x='0'%20y='20'%20width='34'%20height='14'%20rx='7'/%3E%3Ccircle%20cx='10'%20cy='10'%20r='6'/%3E%3Ccircle%20cx='24'%20cy='10'%20r='6'/%3E%3C/g%3E%3Cg%20transform='translate(150%20150)%20rotate(7)'%3E%3Cpath%20d='M0%2016a16%2016%200%200%201%2032%200v14a6%206%200%200%201-12%200v-6H12v6a6%206%200%200%201-12%200z'/%3E%3C/g%3E%3Ccircle%20cx='120'%20cy='90'%20r='2'/%3E%3Ccircle%20cx='210'%20cy='120'%20r='2'/%3E%3Ccircle%20cx='60'%20cy='110'%20r='2'/%3E%3Cpath%20d='M100%20200v10M95%20205h10'/%3E%3C/g%3E%3C/svg%3E"); }
+[data-theme="dark"] body{ --game-bg:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='240'%20height='240'%3E%3Cg%20fill='none'%20stroke='%239b97c2'%20stroke-opacity='.12'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cg%20transform='translate(18%2026)%20rotate(-8)'%3E%3Crect%20x='0'%20y='0'%20width='44'%20height='26'%20rx='12'/%3E%3Cpath%20d='M12%208v10M7%2013h10'/%3E%3Ccircle%20cx='31'%20cy='10'%20r='2'/%3E%3Ccircle%20cx='37'%20cy='16'%20r='2'/%3E%3C/g%3E%3Cg%20transform='translate(160%2020)%20rotate(6)'%3E%3Crect%20x='0'%20y='0'%20width='24'%20height='38'%20rx='4'/%3E%3Crect%20x='4'%20y='4'%20width='16'%20height='12'%20rx='1.5'/%3E%3Cpath%20d='M8%2024v8M4%2028h8'/%3E%3Ccircle%20cx='18'%20cy='26'%20r='1.6'/%3E%3Ccircle%20cx='18'%20cy='31'%20r='1.6'/%3E%3C/g%3E%3Cg%20transform='translate(30%20160)%20rotate(-5)'%3E%3Crect%20x='0'%20y='20'%20width='34'%20height='14'%20rx='7'/%3E%3Ccircle%20cx='10'%20cy='10'%20r='6'/%3E%3Ccircle%20cx='24'%20cy='10'%20r='6'/%3E%3C/g%3E%3Cg%20transform='translate(150%20150)%20rotate(7)'%3E%3Cpath%20d='M0%2016a16%2016%200%200%201%2032%200v14a6%206%200%200%201-12%200v-6H12v6a6%206%200%200%201-12%200z'/%3E%3C/g%3E%3Ccircle%20cx='120'%20cy='90'%20r='2'/%3E%3Ccircle%20cx='210'%20cy='120'%20r='2'/%3E%3Ccircle%20cx='60'%20cy='110'%20r='2'/%3E%3Cpath%20d='M100%20200v10M95%20205h10'/%3E%3C/g%3E%3C/svg%3E"); }
+
+/* шапка раздела (.ui-top) — общая, ui-kit uiTopHTML; своих стилей шапки нет */
+
+
+@keyframes hub-fade{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+
+:focus-visible{ outline:2px solid var(--c-5); outline-offset:3px; }
+
+/* ── раскладка: боковая навигация + контент ── */
+.shell{
+  display:grid; gap:34px; align-items:start; max-width:1180px; margin:0 auto;
+  padding:26px clamp(16px,4vw,42px) 60px;   /* колонки и порог — ui-kit .ui-shell */
+}
+.sc-content{ min-width:0; }
+/* рельс и нижняя панель — общие ui-kit (.ui-rail, .ui-mnav; ширина, слои, порог — там) */
+
+/* ── экраны ── */
+.screen{ display:none; }
+[data-screen="overview"] .sc-overview,
+[data-screen="taste"] .sc-taste,
+[data-screen="library"] .sc-library,
+[data-screen="watch"] .sc-watch,
+[data-screen="picks"] .sc-picks{ display:block; animation:hub-fade .24s ease; }
+.sc-head{ margin:0 0 6px; }
+.hub-masthead{ font-family:var(--font-serif); font-weight:600; font-size:clamp(42px,6vw,58px); line-height:1; letter-spacing:-.02em; margin:12px 0 0; }
+.sec-eyebrow{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--c-5); font-weight:700; }
+.screen > .group-head:first-child{ margin-top:22px; }
+.g-summary{ display:flex; align-items:center; flex-wrap:wrap; gap:6px 0; margin:16px 0 30px; font-size:12.5px; color:var(--text-faint); }
+.g-summary .v{ padding:0 14px; }
+.g-summary .v:first-child{ padding-left:0; }
+.g-summary .v b{ color:var(--text-muted); font-weight:600; font-variant-numeric:tabular-nums; }
+.g-summary .div{ width:1px; height:12px; background:var(--border); }
+
+/* ── плитки обзора ── */
+.gotile-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:16px; }
+.gotile{
+  display:flex; flex-direction:column; text-align:left; font-family:inherit; color:inherit; cursor:pointer;
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:20px 22px; transition:border-color .16s,box-shadow .16s,transform .16s;
+}
+@media (hover:hover){ .gotile:hover{ border-color:var(--border-strong); box-shadow:0 2px 4px rgba(60,52,38,.10),0 12px 30px rgba(60,52,38,.08); transform:translateY(-2px); } }
+@media (hover:hover){ .gotile:hover .gt-open{ gap:11px; } }
+.gotile.t-taste{ border-left:3px solid var(--c-5); }
+.gotile.t-library{ border-left:3px solid var(--c-3); }
+.gotile.t-picks{ border-left:3px solid var(--c-6); }
+.gotile.t-watch{ border-left:3px solid var(--c-2); }
+.gt-eyebrow{ font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; font-weight:700; }
+.t-taste .gt-eyebrow,.t-taste .gt-open{ color:var(--c-5); }
+.t-library .gt-eyebrow,.t-library .gt-open{ color:var(--c-3); }
+.t-picks .gt-eyebrow,.t-picks .gt-open{ color:var(--c-6); }
+.t-watch .gt-eyebrow,.t-watch .gt-open{ color:var(--c-2); }
+.gt-open{ display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; margin-top:16px; transition:gap .16s; }
+.gt-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:14px 0 8px; }
+.gt-name{ font-family:var(--font-serif); font-size:22px; font-weight:600; }
+.gt-num{ font-family:var(--font-serif); font-size:30px; font-weight:600; color:var(--c-5); font-variant-numeric:tabular-nums; line-height:1; }
+.gt-big{ font-family:var(--font-serif); font-size:44px; font-weight:600; line-height:.9; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.gt-title{ font-family:var(--font-serif); font-size:21px; font-weight:600; letter-spacing:-.01em; margin:14px 0 6px; line-height:1.2; }
+.gt-note{ font-size:12px; color:var(--text-muted); margin:11px 0 0; }
+.gt-count{ display:flex; align-items:baseline; gap:10px; margin:14px 0 12px; }
+.gt-count .w{ font-size:12.5px; color:var(--text-muted); }
+
+.group-head{ display:flex; align-items:center; gap:14px; margin:40px 0 14px; }
+.group-head h2{ font-family:var(--font-sans); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:var(--text-muted); margin:0; }
+.group-head .line{ flex:1; height:1px; background:var(--border); }
+.group-head .note{ font-size:11px; color:var(--text-faint); }
+
+/* профиль вкуса */
+.taste-card{
+  background:var(--bg-elev); border:1px solid var(--border); border-left:3px solid var(--c-5);
+  border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 26px;
+  display:flex; flex-direction:column; gap:8px;
+}
+.cl-row{ border-radius:8px; padding:8px; margin:2px -8px; cursor:pointer; transition:background .15s; }
+@media (hover:hover){ .cl-row:hover{ background:var(--bg-alt); } }
+.cl-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.cl-name{ font-family:var(--font-serif); font-size:19px; font-weight:600; }
+.cl-num{ font-family:var(--font-serif); font-size:30px; font-weight:600; color:var(--c-5); font-variant-numeric:tabular-nums; line-height:1; }
+.moodbar{ height:8px; background:var(--bg-sunk); border-radius:5px; overflow:hidden; margin:9px 0 8px; }
+.moodbar i{ display:block; height:100%; background:var(--c-5); border-radius:5px; }
+.cl-top{ font-size:12.5px; color:var(--text-muted); font-variant-numeric:tabular-nums; }
+.cl-row.open .cl-top{ display:none; }
+.cl-detail{ margin:2px 0 6px; padding:0 8px 4px; }
+.cl-note{
+  display:flex; align-items:flex-start; gap:9px; font-size:12.5px; line-height:1.5;
+  background:var(--info-bg); color:var(--text); border-left:3px solid var(--info);
+  border-radius:8px; padding:9px 13px; margin:0 0 12px;
+}
+.game-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(172px,1fr)); gap:10px; }
+.gcard{ background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column; }
+.gcard .gt{ border-top:3px solid var(--c-5); background:var(--bg-alt); padding:12px 13px 11px; min-height:48px; display:flex; align-items:flex-end; }
+.gcard .gt span{ font-family:var(--font-serif); font-size:15.5px; font-weight:600; line-height:1.15; }
+.gcard .gm{ padding:9px 12px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.gcard .gm .sub{ font-size:11px; color:var(--text-muted); font-variant-numeric:tabular-nums; }
+.vbadge{ font-size:10px; font-weight:700; border-radius:999px; padding:2px 7px; white-space:nowrap; }
+.vbadge.love{ color:var(--success); background:var(--success-bg); }
+.vbadge.like{ color:var(--info); background:var(--info-bg); }
+.vbadge.ok{ color:var(--warn); background:var(--warn-bg); }
+.vbadge.dropped{ color:var(--err); background:var(--err-bg); }
+.vbadge.meh{ color:var(--err); background:var(--bg-alt); }
+.vbadge.other{ color:var(--text-muted); background:var(--bg-alt); }
+
+/* анти-паттерны */
+.ap-chip{
+  display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:500;
+  color:var(--text-muted); background:var(--bg-alt); border:1px solid var(--border);
+  border-radius:999px; padding:6px 13px; min-height:32px; cursor:pointer; font-family:inherit;
+  transition:border-color .15s,color .15s; text-align:left;
+}
+@media (hover:hover){ .ap-chip:hover{ border-color:var(--border-strong); color:var(--text); } }
+.ap-chip.on{ border-color:var(--err); color:var(--err); }
+.ap-chip .x{ color:var(--err); font-weight:700; }
+.ap-panel{
+  margin-top:12px; background:var(--bg-elev); border:1px solid var(--border);
+  border-left:3px solid var(--err); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px 20px;
+}
+.ap-panel h3{ font-family:var(--font-serif); font-size:17px; font-weight:600; margin:0 0 10px; }
+.ap-panel .ev{ font-size:13px; color:var(--text-muted); line-height:1.55; }
+
+/* библиотека */
+.lib-head{ display:flex; align-items:flex-end; gap:26px; flex-wrap:wrap; margin-bottom:18px; }
+.lib-total{ font-family:var(--font-serif); font-size:clamp(44px,7vw,56px); font-weight:600; line-height:.9; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+.plat-bar{ display:flex; height:12px; border-radius:6px; overflow:hidden; border:1px solid var(--border); }
+.plat-legend{ display:flex; justify-content:space-between; margin-top:8px; font-size:12.5px; color:var(--text-muted); font-variant-numeric:tabular-nums; }
+.plat-legend .sw{ display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:6px; }
+.vchip{
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:999px; padding:6px 14px;
+  font-size:12.5px; font-weight:600; color:var(--text-muted); cursor:pointer; min-height:32px; font-family:inherit;
+  transition:background .15s,border-color .15s,color .15s;
+}
+@media (hover:hover){ .vchip:hover{ border-color:var(--border-strong); color:var(--text); } }
+.vchip.on{ background:var(--bg-alt); border-color:var(--c-5); color:var(--c-5); }
+.vchip{ font-variant-numeric:tabular-nums; }
+.vchip.zero:not(.on){ opacity:.5; }
+.vchip[hidden]{ display:none; }
+.vchip.w-sale{ margin-left:6px; }   /* второй фильтр — поверх статуса */
+.lib-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
+.lib-note{ font-size:11.5px; color:var(--text-faint); margin:12px 0 0; }
+
+/* присматриваюсь: обсуждено с советником, но не куплено */
+.wcard{ border-left:3px solid var(--c-2); }
+.wcard .gt{ border-top-color:var(--c-2); }
+.wcard.st-nope{ border-left-color:var(--border-strong); opacity:.82; }
+.wcard.st-nope .gt{ border-top-color:var(--border-strong); }
+.w-line{ font-size:11.5px; line-height:1.45; color:var(--text-muted); padding:0 12px 10px; }
+.w-line.cond{ color:var(--c-2); font-weight:600; }
+/* карточки присматривания шире библиотечных: в них condition + note прозой,
+   на 172px они превращались в четыре слова на строку */
+.sc-watch .game-grid{ grid-template-columns:repeat(auto-fill,minmax(296px,1fr)); }
+.w-src{
+  margin-top:auto; border:none; border-top:1px solid var(--border); background:transparent;
+  font-family:inherit; text-align:left; width:100%; cursor:pointer; color:var(--text-muted);
+  font-size:11.5px; padding:9px 12px; min-height:38px; display:flex; align-items:center; gap:7px;
+  transition:background .15s,color .15s;
+}
+@media (hover:hover){ .w-src:hover{ background:var(--bg-alt); color:var(--c-2); } }
+.w-src .arw{ margin-left:auto; color:var(--text-faint); }
+.vbadge.want{ color:var(--c-2); background:var(--warn-bg); }
+.vbadge.pencil{ color:var(--text-muted); background:var(--bg-alt); }
+.vbadge.demo{ color:var(--text-muted); background:var(--bg-alt); }
+.vbadge.nope{ color:var(--text-faint); background:var(--bg-sunk); }
+.w-empty{ font-size:12.5px; color:var(--text-faint); padding:2px 0 6px; }
+/* цены US eShop (eshop-prices.json, загрузка hub-notify в 08:30 МСК + кнопка) */
+.w-price{ font-size:12px; color:var(--text-muted); padding:0 12px 10px; display:flex; gap:6px 8px; align-items:baseline; flex-wrap:wrap; }
+.w-price b{ font-size:14px; color:var(--text); }
+.w-price s{ color:var(--text-faint); }
+.w-price .sale{ color:var(--success); font-weight:700; }
+.w-price .tgt{ font-size:10px; font-weight:700; border-radius:999px; padding:2px 7px; color:var(--text-muted); background:var(--bg-alt); }
+.w-price .tgt.met{ color:var(--success); background:var(--success-bg); }
+.w-price.na{ color:var(--text-faint); }
+.eshop-bar{ display:flex; gap:8px 10px; align-items:center; flex-wrap:wrap; font-size:12px; color:var(--text-muted); margin:-8px 0 18px; }
+.eshop-bar .msg{ color:var(--text-faint); }
+
+/* подборки */
+.reco{
+  background:var(--bg-elev); border:1px solid var(--border); border-left:3px solid var(--c-5);
+  border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:14px;
+}
+.reco summary{ list-style:none; cursor:pointer; display:flex; align-items:center; gap:20px; padding:20px 24px; flex-wrap:wrap; }
+.reco summary::-webkit-details-marker{ display:none; }
+.reco .r-eyebrow{ font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--c-5); font-weight:700; }
+.reco .r-title{ font-family:var(--font-serif); font-size:23px; font-weight:600; letter-spacing:-.01em; margin:6px 0 4px; }
+.reco .r-sub{ font-size:13px; color:var(--text-muted); }
+.reco .r-open{ display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:var(--c-5); white-space:nowrap; }
+.reco-chev{ transition:transform .2s; display:inline-block; color:var(--text-faint); font-size:12px; }
+.reco[open] .reco-chev{ transform:rotate(180deg); }
+.reco-body{ padding:0 24px 20px; }
+.cand{ display:grid; grid-template-columns:minmax(140px,1fr) 2fr auto; gap:6px 16px; align-items:baseline; padding:10px 2px; border-top:1px solid var(--border); }
+.cand .cn{ font-weight:600; font-size:13.5px; }
+.cand .why{ font-size:12.5px; color:var(--text-muted); line-height:1.45; }
+.cand .cv{ font-size:11px; }
+.reco-note{ font-size:12px; color:var(--text-faint); margin-top:10px; }
+.reco-actions{ margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; }
+
+
+/* окно просмотра md-документа подборки — ui-kit .ui-docwin (по центру, как
+   отчёты здоровья и стадии поездок); слои ui-kit: окно (70) выше нижней панели
+   (65) — оно обязано перекрывать навигацию телефона */
+/* шапка, ✕ и тело окна — общие ui-kit (.ui-docwin-head/-title/-x/-body) */
+.md-load{ padding:40px; text-align:center; color:var(--text-muted); font-size:13.5px; }
+
+/* ── правка с сайта: миниатюра обложки, отметка, карточка игры (оверлей Gaming/user-state.json) ── */
+.gcard .gc-head{ display:flex; align-items:flex-start; gap:10px; padding:10px; }
+.gcard .gc-hd-main{ flex:1; min-width:0; display:flex; flex-direction:column; }
+.gcard .gc-hd-main .gt{ padding:9px 11px 8px; min-height:0; }
+.gcard .gc-hd-main .gm{ padding:7px 2px 0; flex-wrap:wrap; justify-content:flex-start; gap:4px 8px; }
+.gcard .gm .sub{ min-width:0; }
+.gcard .gm .sub .nw{ white-space:nowrap; }
+.gcard .gm .g-ed{ display:inline-block; margin-left:6px; }
+.gcard .gm .vbadge{ flex:0 0 auto; }
+.gcard .gc-rest .gm, .gcard .gc-rest .w-line{ padding-left:12px; padding-right:12px; }
+.gthumb{ display:block; position:relative; flex:none; width:72px; height:72px; border-radius:10px; overflow:hidden; border:1px solid var(--border); background:var(--bg-sunk); }
+.gthumb .gph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--font-serif); font-size:28px; font-weight:600; color:var(--text-faint); text-transform:uppercase; }
+.gthumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:var(--bg-sunk); display:block; }
+@media (max-width:600px){ .gthumb{ width:56px; height:56px; } .gthumb .gph{ font-size:22px; } }
+.gcard.clk{ cursor:pointer; }
+@media (hover:hover){ .gcard.clk:hover{ border-color:var(--border-strong); } }
+.g-prog{ font-style:normal; font-size:10.5px; color:var(--text-faint); margin-left:6px; white-space:nowrap; }
+.g-ed{ font-style:normal; font-size:9.5px; letter-spacing:.02em; color:var(--text-faint); margin-left:6px; white-space:nowrap; }
+.g-addrow{ display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; }
+.gm-adv{ margin:0 0 12px; font-size:12.5px; color:var(--text-muted); }
+.gm-adv summary{ cursor:pointer; }
+.gm-adv p{ margin:6px 0 0; }
+.gm-cover.gthumb{ width:96px; height:96px; }
+.gm-cover.gthumb .gph{ font-size:36px; }
+.gm-grp{ margin:0 0 14px; }
+.gm-opts{ display:flex; flex-wrap:wrap; gap:6px; }
+.gm-opt{ border:1px solid var(--border); background:var(--bg); color:var(--text-muted); border-radius:999px; padding:6px 12px; min-height:34px; font:inherit; font-size:12.5px; font-weight:600; cursor:pointer; }
+.gm-opt[aria-pressed="true"]{ border-color:var(--c-5); color:var(--c-5); background:var(--bg-alt); }
+.gm-states{ display:flex; flex-wrap:wrap; gap:8px 18px; }   /* две группы: «демо · куплена» и «хочу · на карандаше · не хочу»; на телефоне переносятся */
+.gm-opts.off{ opacity:.45; }
+.gm-opt:disabled{ cursor:default; }
+.gm-row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:0 0 14px; }
+.gm-hint{ font-size:12px; color:var(--text-muted); line-height:1.45; margin:0 0 14px; }
+.gm-msg{ min-height:18px; font-size:12.5px; color:var(--text-muted); margin:2px 0 0; }
+.gm-msg.err{ color:var(--err); }
+.gm-lookup{ display:flex; gap:8px; align-items:flex-end; margin:0 0 14px; }
+.gm-lookup .ui-field{ flex:1; }
+.gm-link{ font-size:13px; margin:0 0 6px; }
+.gm-cap{ font-size:11.5px; color:var(--text-faint); margin:0 0 14px; }
+.gm-urlbox{ margin:0 0 14px; display:flex; gap:8px; align-items:flex-end; }
+.gm-urlbox .ui-field{ flex:1; }
+.gm-hint[hidden],.gm-urlbox[hidden],.gm-grp[hidden]{ display:none; }
+.gm-cover.gthumb{ width:72px; height:72px; }
+.gm-cover.gthumb .gph{ font-size:28px; }
+#gm-card .ui-modal-title{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+#gm-card .ui-modal-title.ph{ color:var(--text-faint); }
+#gm-card .ui-modal-sub{ font-size:12px; color:var(--text-faint); }
+#gm-card .gm-hint:empty{ display:none; }
+#gm-card .gm-hint{ margin-bottom:10px; }
+#gm-card .gm-grp, #gm-card .gm-row2{ margin-bottom:10px; }
+#gm-card .gm-link{ margin-bottom:2px; }
+#gm-card .gm-cap{ margin-bottom:8px; }
+#gm-card .gm-lookup{ margin-bottom:6px; }
+/* ссылка на магазин слева, «Найти обложку и магазин» — справа от неё в той же строке */
+#gm-card .gm-storerow{ align-items:center; justify-content:space-between; flex-wrap:wrap; }
+#gm-card .gm-storerow .gm-link{ margin:0; }
+.gm-row2 > *{ min-width:0; }
+/* v2.5.1: >600px — группы фильтров и сортировка в потоке над сеткой (кнопки «Фильтры»/«Сброс» скрыты); ≤600px — строка «поиск + Фильтры + Сброс» и шторка снизу */
+.g-qrow{ margin:0 0 16px; }
+.g-qrow .ui-qbox{ flex:1 1 auto; }
+.g-qrow .ui-freset[hidden]{ display:none; }
+.fgroup.in-modal .vchip.w-sale{ margin-left:0; }
+@media (min-width:601px){ .g-qrow .ui-fbtn, .g-qrow .ui-freset{ display:none; } }
+@media (max-width:600px){ .fgroup:not(.in-modal){ display:none; } }
+@media (max-width:760px){ .gm-opt{ min-height:40px; } }
+
+@media (max-width:760px){
+  .cand{ grid-template-columns:1fr; gap:2px; }
+  /* тач-мишени: на телефоне всё кликаемое ≥40px */
+  .vchip,.ap-chip{ min-height:40px; }
+}
+</style>
+</head>
+<body data-screen="overview">
+
+  <!-- верхняя липкая панель -->
+  <script>document.currentScript.insertAdjacentHTML("beforebegin", uiTopHTML({ page: "games", name: "Игры", tag: "Личный кабинет", push: "games" }));</script>
+
+  <div class="shell ui-shell">
+
+    <!-- навигация: боковая панель -->
+    <script>
+/* Разделы «Игр» — ОДИН список на рельс и нижнюю панель (ui-kit uiRailHTML /
+   uiNavMount): рассинхрон подписей и подсветки невозможен. Рельс вставляется
+   прямо при разборе страницы (ui-kit.js в <head>), панель — в init. */
+var GAMES_NAV = [
+  { k: "overview", label: "Обзор", sub: "дашборд", short: "Обзор",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>' },
+  { k: "taste", label: "Профиль вкуса", sub: "кластеры", short: "Вкус",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M12 2.5l2.4 6.6 6.6 2.4-6.6 2.4-2.4 6.6-2.4-6.6-6.6-2.4 6.6-2.4z"></path></svg>' },
+  { k: "library", label: "Библиотека", sub: "игры", short: "Игры",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M12 3l9 4.8-9 4.8-9-4.8z"></path><path d="M3 12.2l9 4.8 9-4.8"></path></svg>' },
+  { k: "watch", label: "Присматриваюсь", sub: "не куплено", short: "Хочу",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M1.8 12s3.6-6.5 10.2-6.5S22.2 12 22.2 12s-3.6 6.5-10.2 6.5S1.8 12 1.8 12z"></path><circle cx="12" cy="12" r="2.8"></circle></svg>' },
+  { k: "picks", label: "Подборки", sub: "лента", short: "Подборки",
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M6.5 3.5h11v17l-5.5-3.6-5.5 3.6z"></path></svg>' }
+];
+document.currentScript.insertAdjacentHTML("beforebegin", uiRailHTML(GAMES_NAV, null, { key: "data-s" }));
+</script>
+
+    <div class="sc-content">
+
+      <header class="sc-head">
+        <h1 class="hub-masthead" id="sc-title">Игры</h1>
+      </header>
+
+      <!-- ============ ОБЗОР ============ -->
+      <section class="screen sc-overview">
+        <div class="g-summary" id="summary">
+          <span class="v"><b id="sum-total">—</b><span id="sum-total-word"> игр в библиотеке</span></span>
+          <span class="div"></span>
+          <span class="v" id="sum-plat">—</span>
+          <span class="div"></span>
+          <span class="v" id="sum-upd">обновлено —</span>
+        </div>
+
+        <div class="gotile-grid">
+          <button class="gotile t-taste" data-goto="taste" type="button">
+            <span class="gt-eyebrow">Профиль вкуса</span>
+            <div class="gt-head"><span class="gt-name" id="ov-cl-name">—</span><span class="gt-num" id="ov-cl-num">—</span></div>
+            <div class="moodbar"><i id="ov-cl-bar" style="width:0"></i></div>
+            <div class="gt-note" id="ov-cl-note">Загружаю профиль…</div>
+            <span class="gt-open"><span id="ov-cl-open">Все кластеры</span> <span>→</span></span>
+          </button>
+
+          <button class="gotile t-library" data-goto="library" type="button">
+            <span class="gt-eyebrow">Библиотека</span>
+            <div class="gt-count"><span class="gt-big" id="ov-lib-total">—</span><span class="w" id="ov-lib-word">игр<br>всего</span></div>
+            <div class="plat-bar" id="ov-plat-bar" style="height:11px;"></div>
+            <div class="plat-legend" id="ov-plat-legend" style="font-size:11.5px;"></div>
+            <span class="gt-open">Открыть библиотеку <span>→</span></span>
+          </button>
+
+          <button class="gotile t-watch" data-goto="watch" type="button">
+            <span class="gt-eyebrow">Присматриваюсь</span>
+            <div class="gt-count"><span class="gt-big" id="ov-watch-total">—</span><span class="w" id="ov-watch-word">игр<br>не куплено</span></div>
+            <div class="gt-note" id="ov-watch-note" style="margin:0;">Загружаю список…</div>
+            <span class="gt-open">Открыть список <span>→</span></span>
+          </button>
+
+          <button class="gotile t-picks" data-goto="picks" type="button">
+            <span class="gt-eyebrow">Подборки</span>
+            <div class="gt-title" id="ov-pick-title">—</div>
+            <div class="gt-note" id="ov-pick-sub" style="margin:0;">Загружаю подборки…</div>
+            <span class="gt-open">Смотреть ленту <span>→</span></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ============ ПРОФИЛЬ ВКУСА ============ -->
+      <section class="screen sc-taste">
+        <div class="group-head">
+          <span class="line"></span>
+          <span class="note">нажми кластер — обоснование и игры раскроются под ним</span>
+        </div>
+        <div class="taste-card" id="clusters"><div class="md-load">Загружаю профиль…</div></div>
+
+        <div class="group-head">
+          <h2>Анти-паттерны</h2><span class="line"></span>
+          <span class="note">что не заходит · нажми — почему</span>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:9px;" id="ap-chips"></div>
+        <div class="ap-panel" id="ap-panel" hidden></div>
+      </section>
+
+      <!-- ============ БИБЛИОТЕКА ============ -->
+      <section class="screen sc-library">
+        <div class="g-addrow" style="margin-top:22px;"><button class="ui-btn" type="button" data-act="g-add" data-scope="lib">+ Добавить игру</button> <button class="ui-btn ghost" type="button" data-act="g-fill" data-scope="lib">Подобрать обложки</button></div>
+        <div class="lib-head">
+          <div style="display:flex; align-items:baseline; gap:10px;">
+            <span class="lib-total" id="lib-total">—</span>
+            <span style="font-size:13px; color:var(--text-muted);">игр<br>всего</span>
+          </div>
+          <div style="flex:1; min-width:220px;">
+            <div class="plat-bar" id="plat-bar"></div>
+            <div class="plat-legend" id="plat-legend"></div>
+          </div>
+        </div>
+        <div class="ui-qrow g-qrow" id="lib-qrow"><div class="ui-qbox"><input type="search" class="ui-q" id="lib-q" placeholder="Поиск по названию" autocomplete="off" aria-label="Поиск по названию"><button type="button" class="ui-search-x" data-ui-search-x="lib-q" aria-label="Очистить поиск" title="Очистить">✕</button></div><button class="ui-fbtn" id="lib-fbtn" type="button" data-act="g-filters" data-scope="lib" aria-haspopup="dialog">Фильтры</button><button class="ui-freset" id="lib-freset" type="button" data-act="g-freset" data-scope="lib" title="Сбросить фильтры" hidden>Сброс</button></div>
+        <div class="fgroup-slot"><div class="fgroup" id="lib-fgroup">
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;" id="gfilters">
+          <span style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); font-weight:700; margin-right:2px;">Статус</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;" id="vfilters">
+          <span style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); font-weight:700; margin-right:2px;">Оценка</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:0 0 16px;" id="pfilters">
+          <span style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); font-weight:700; margin-right:2px;">Платформа</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:0 0 16px;">
+          <span style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); font-weight:700; margin-right:2px;">Сортировка</span>
+          <span id="lib-sort"></span>
+        </div>
+        </div></div>
+        <div class="lib-grid" id="lib-grid"></div>
+        <p class="lib-note" id="lib-note"></p>
+      </section>
+
+      <!-- ============ ПРИСМАТРИВАЮСЬ ============ -->
+      <!-- watchlist.yaml наполняет скилл game-advisor, правки владельца — оверлей user-state.json;
+           цены — eshop-prices.json (hub-notify, 08:30 МСК), кнопка просит обновить их через hub-api -->
+      <section class="screen sc-watch">
+        <div class="g-addrow"><button class="ui-btn" type="button" data-act="g-add" data-scope="watch">+ Добавить игру</button> <button class="ui-btn ghost" type="button" data-act="g-fill" data-scope="watch">Подобрать обложки</button></div>
+        <div class="group-head">
+          <span class="line"></span>
+          <span class="note" id="w-updated">обсуждено с советником, но не куплено</span>
+        </div>
+        <div class="ui-qrow g-qrow" id="w-qrow"><div class="ui-qbox"><input type="search" class="ui-q" id="w-q" placeholder="Поиск по названию" autocomplete="off" aria-label="Поиск по названию"><button type="button" class="ui-search-x" data-ui-search-x="w-q" aria-label="Очистить поиск" title="Очистить">✕</button></div><button class="ui-fbtn" id="w-fbtn" type="button" data-act="g-filters" data-scope="watch" aria-haspopup="dialog">Фильтры</button><button class="ui-freset" id="w-freset" type="button" data-act="g-freset" data-scope="watch" title="Сбросить фильтры" hidden>Сброс</button></div>
+        <div class="fgroup-slot"><div class="fgroup" id="w-fgroup">
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:18px;" id="wfilters">
+          <span style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); font-weight:700; margin-right:2px;">Статус</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:-6px 0 18px;" id="wpfilters">
+          <span style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); font-weight:700; margin-right:2px;">Платформа</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:-6px 0 18px;">
+          <span style="font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); font-weight:700; margin-right:2px;">Сортировка</span>
+          <span id="w-sort"></span>
+        </div>
+        </div></div>
+        <div class="eshop-bar" id="eshop-bar" hidden>
+          <span id="eshop-when">Цены US eShop ещё не загружались</span>
+          <button class="ui-btn ghost sm" id="eshop-refresh" type="button">Обновить цены</button>
+          <span class="msg" id="eshop-msg"></span>
+        </div>
+        <div id="w-want-head" class="group-head" hidden><h2>Хочу</h2><span class="line"></span><span class="note">сказал, что интересно</span></div>
+        <div class="game-grid" id="w-want"></div>
+        <div id="w-pencil-head" class="group-head" hidden><h2>На карандаше</h2><span class="line"></span><span class="note">не отверг, но и не захотел</span></div>
+        <div class="game-grid" id="w-pencil"></div>
+        <div id="w-nope-head" class="group-head" hidden><h2>Не хочу</h2><span class="line"></span><span class="note">отрицательный сигнал для отбора</span></div>
+        <div class="game-grid" id="w-nope"></div>
+        <p class="lib-note" id="w-note"></p>
+      </section>
+
+      <!-- ============ ПОДБОРКИ ============ -->
+      <section class="screen sc-picks">
+        <div class="group-head">
+          <span class="line"></span>
+          <span class="note">лента рекомендаций советника</span>
+        </div>
+        <div id="recos"><div class="md-load">Загружаю подборки…</div></div>
+      </section>
+
+      <script>document.currentScript.insertAdjacentHTML("beforebegin", uiFootHTML({ page: "games", version: "games v2.8.5", src: "Synology · Claude-Memory / Gaming" }));</script>
+
+    </div>
+  </div>
+
+  <!-- нижняя навигация (мобильная) -->
+
+  <div id="gm-bar"></div>
+
+  <div class="ui-docwin" id="viewer" hidden>
+    <div class="ui-docwin-box vw-panel" role="dialog" aria-modal="true">
+      <div class="ui-docwin-head">
+        <div class="ui-docwin-titles">
+          <span class="ui-docwin-kicker">Подборка</span>
+          <span class="ui-docwin-title" id="vw-title">—</span>
+        </div>
+        <a class="ui-docwin-link" id="vw-raw" href="#" target="_blank" rel="noopener">файл ↗</a>
+        <button class="ui-docwin-x" id="vw-close" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="ui-docwin-body rd-host" id="vw-md"></div>
+    </div>
+  </div>
+
+<script src="assets/games-model.js?v=44d7ebbc"></script>
+<script src="assets/js-yaml.min.js"></script>
+<script>
+(function(){
+"use strict";
+
+var GAMING = "../Gaming/";
+var CACHE_TTL_MIN = 60;
+/* месяцы и форматы дат — общие, ui-kit (uiDateLong/uiMonthShort/uiDateNum, UI_MONTHS_*) */
+/* вердикты: значение в данных → класс/подпись (расширяемо) */
+var VERDICTS = [
+  { key: "восторг",        cls: "love" },
+  { key: "понравилось",    cls: "like" },
+  { key: "нормально",      cls: "ok" },
+  { key: "не понравилось", cls: "meh" },
+  { key: "брошено",        cls: "dropped" }
+];
+var PLAT_COLORS = { switch: "var(--c-3)", switch2: "var(--c-3)", steam_deck: "var(--c-6)", steam: "var(--c-5)", pc: "var(--c-2)", xbox: "var(--c-4)" };
+
+function $(id){ return document.getElementById(id); }
+// esc() переехала в assets/ui-kit.js (Фаза 2 плана унификации, 2026-07-21):
+// старая копия экранировала только `&<>` (textContent→innerHTML) и НЕ
+// экранировала кавычки — реальный дефект в data-file/data-title (значение
+// с `"` рвало атрибут). Эталон ui-kit.js — полный replace всех 5 спецсимволов.
+// Локальное определение удалено, чтобы не побеждать молча.
+
+function prettify(slug){
+  var s = String(slug);
+  if (s === "xbox") return "Xbox";
+  return s.split("_").map(function(w){ return w.charAt(0).toUpperCase() + w.slice(1); }).join(" ");
+}
+/* js-yaml превращает YYYY-MM-DD в Date (полночь UTC) — uiYmd берёт дату по UTC */
+function fmtYaml(v){ return uiDateLong(uiYmd(v)); }
+function normTitle(s){ return gamesNormTitle(s); }   /* модель слияния — assets/games-model.js (общая с хабом) */
+/* платформа из файлов советника («switch_2», «Nintendo Switch 2», «steam-deck») → код кодлиста game_platform; неизвестное → null */
+function normPlat(v){ return gamesNormPlat(v); }
+window.__normPlat = normPlat;   /* для теста */
+/* подпись платформы человеку: кодлист game_platform («Switch 2», «Steam Deck», «ПК»), неизвестное — prettify */
+function platRu(v){
+  if (v == null || v === "") return "";
+  var c = normPlat(v);
+  return (c && CL.ru("game_platform", c)) || prettify(v);
+}
+
+
+/* ── оверлей человеческих правок: Gaming/user-state.json (gaming-user@1) ──
+   Сервер: GET file / POST save (зона /api/gm/, как /api/hd/ у «Здоровья»). Слои при чтении: taste-profile +
+   library_full + watchlist (пишет скилл) под оверлеем (пишет страница); ключ игры — normTitle. */
+var GM_API = "../api/gm/";
+var USER_PATH = "Gaming/user-state.json";
+var S = { user: { hash: null, doc: null } };
+var SRC = { profile: null, libFull: [], watch: [], platNames: [] };
+var LIBM = null;                 /* слитая библиотека: {rows, verdicted, unrated, total, plats} */
+var G_STATES = CL.codes("game_state"), G_RATINGS = CL.codes("game_rating", false), G_PROGS = CL.codes("game_progress"), G_PLATS = CL.codes("game_platform");
+function ymd(v){ return String(uiYmd(v) || ""); }
+function today(){ var d = new Date(); function z(n){ return (n < 10 ? "0" : "") + n; } return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate()); }
+function safeUrl(u){ return /^https:\/\//.test(String(u || "")) ? String(u) : ""; }
+function userMap(){ return gamesUserMap((S.user.doc && S.user.doc.items) || []); }
+function normUserRec(u){ return gamesNormUserRec(u); }
+function normUserDoc(doc){ return gamesNormUserDoc(doc); }
+function loadUser(){
+  return authFetch(bust(GM_API + "file?path=" + encodeURIComponent(USER_PATH)), { cache: "no-store" }).then(function(r){
+    if (r.status === 404){ S.user = { hash: null, doc: null }; return; }   /* файла ещё нет — пустой оверлей */
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json().then(function(j){ S.user = { hash: j.hash, doc: normUserDoc(JSON.parse(j.content)) }; });
+  }).catch(function(){ S.user = { hash: null, doc: null }; });   /* без входа страница работает как раньше */
+}
+
+/* ── тема ── кнопку ведёт ui-kit (uiSetTheme); начальную ставит скрипт в <head> */
+
+/* ── экраны и навигация ──
+   Один контент, четыре экрана: показ/скрытие через data-screen на <body>.
+   Стиль навигации (панель/вкладки/оглавление) живёт в localStorage,
+   текущий экран — в sessionStorage, чтобы «Обновить» (location.reload)
+   возвращал туда же, где пользователь был. */
+var SCREENS = ["overview", "taste", "library", "watch", "picks"];
+var SC_TITLE = { overview: "Игры", taste: "Профиль вкуса", library: "Библиотека", watch: "Присматриваюсь", picks: "Подборки" };
+var screen = "overview";
+try { var s0 = sessionStorage.getItem("games-screen"); if (SCREENS.indexOf(s0) >= 0) screen = s0; } catch(e){}
+/* games.html#sale — ссылка из push «Скидки на игры»: «Присматриваюсь» с чипом «Со скидкой» */
+var SALE_LINK = location.hash === "#sale";
+if (SALE_LINK) screen = "watch";
+
+function applyScreen(){
+  document.body.setAttribute("data-screen", screen);
+  $("sc-title").textContent = SC_TITLE[screen] || "Игры";
+  uiNavSet(screen);   // рельс и нижняя панель — общие ui-kit
+}
+function setScreen(s, fromNav){
+  if (SCREENS.indexOf(s) < 0) return;
+  screen = s;
+  try { sessionStorage.setItem("games-screen", s); } catch(e){}
+  applyScreen();
+  if (!fromNav) uiScrollTop();   // из меню/рельса поднимает ui-kit
+}
+/* подписи-счётчики в навигации заполняются после загрузки данных */
+function setNavCount(s, sub){
+  if (sub == null) return;
+  Array.prototype.forEach.call(document.querySelectorAll('.ui-rail-item[data-s="' + s + '"] .ui-rail-sub'), function(e){ e.textContent = sub; });
+}
+document.addEventListener("click", function(ev){
+  var t = ev.target;
+  if (!t || !t.closest) return;
+  var nv = t.closest("[data-ui-nav],[data-goto]");
+  if (nv) setScreen(nv.getAttribute("data-s") || nv.getAttribute("data-goto"), nv.hasAttribute("data-ui-nav"));
+});
+uiNavMount(GAMES_NAV, screen, { key: "data-s" });   // нижняя панель — один раз, в body
+applyScreen();
+
+/* cache-buster: общий суффикс ?cb=<ts> для всех фетчей. Меняется ТОЛЬКО по
+   «Обновить»; между обновлениями стабилен → браузер кеширует. Без него
+   taste-profile/library/подборки грузились из HTTP-кеша даже после «Обновить». */
+/* Метка, кеш, тексты и листинги — общие, ui-kit (uiBust/uiFetchText/uiListDir;
+   ключи games-cb, games-cache:*). Данные игр публичные — без пароля. */
+var NET = { prefix: "games", ttlMin: CACHE_TTL_MIN };
+function bust(url){ return uiBust("games", url); }
+function fetchText(url){ return uiFetchText(url, NET); }
+function listDir(url){ return uiListDir(url, NET); }
+/* «Обновить» — общий uiRefresh(btn) из ui-kit.js (Фаза 3), кнопка несёт
+   data-act="refresh" data-cache-prefix="games"; чистит games-cache:*,
+   ставит games-cb → фетчи после reload идут из сети, не из HTTP-кеша.
+   Локального id-listener'а здесь больше нет. */
+
+/* ── документ подборки: общий читатель uiReader из ui-kit (1.7.0) —
+   оглавление по главам, полоса глав на телефоне, карточка frontmatter.
+   Свой мини-рендер markdown здесь больше не живёт. ── */
+var mdCache = {};
+function openDoc(url, title){
+  $("vw-title").textContent = title;
+  $("vw-raw").href = url;
+  $("vw-md").innerHTML = '<div class="md-load">Загружаю…</div>';
+  uiShow($("viewer"));   // плавный вход (ui-kit 1.38.0)
+  document.body.style.overflow = "hidden";
+  var p = mdCache[url] ? Promise.resolve(mdCache[url]) :
+    fetch(bust(url)).then(function(r){ if (!r.ok) throw new Error(r.status); return r.text(); })
+              .then(function(t){ mdCache[url] = t; return t; });
+  p.then(function(t){
+      var box = $("vw-md");
+      uiScrollTop(box);
+      box.innerHTML = uiReaderHTML(t, { acc: "--c-5", frontmatter: "card", key: "games:" + url });
+      uiReaderMount(box, { scroller: box });
+    })
+   .catch(function(){ $("vw-md").innerHTML = '<div class="md-load">Не удалось загрузить — <a href="' + url + '" target="_blank" rel="noopener">открыть напрямую</a>.</div>'; });
+}
+function closeDoc(){ uiHide($("viewer")); document.body.style.overflow = ""; }
+$("vw-close").addEventListener("click", closeDoc);
+$("viewer").addEventListener("click", function(ev){ if (ev.target === this) closeDoc(); });
+// слой страницы (ui-kit uiLayerBind): Escape (с preventDefault) и меню при открытом просмотрщике
+uiLayerBind({
+  depth: function(){ return ($("viewer").hidden ? 0 : 1) + (cardOpen() ? 1 : 0); },
+  closeTop: function(){ if (cardOpen()) closeCard(); else closeDoc(); },
+  closeAll: function(){ closeCard(); $("viewer").hidden = true; $("viewer").classList.remove("leave", "enter"); document.body.style.overflow = ""; }
+});
+
+/* ── данные ── */
+var verdictByTitle = {}; /* normTitle → {verdict, cls} */
+function verdictCls(v){
+  var hit = VERDICTS.filter(function(x){ return x.key === v; })[0];
+  return hit ? hit.cls : null;
+}
+function findVerdict(title){
+  var n = normTitle(title);
+  if (verdictByTitle[n]) return verdictByTitle[n];
+  var keys = Object.keys(verdictByTitle);
+  for (var i = 0; i < keys.length; i++){
+    if (keys[i].indexOf(n) >= 0 || n.indexOf(keys[i]) >= 0) return verdictByTitle[keys[i]];
+  }
+  return null;
+}
+/* o: { k — ключ игры (карточка открывается), cover, edited, extra } */
+function gameCard(title, sub, verdict, o){
+  o = o || {};
+  var prog = o.progress && o.progress !== "не-начата" ? ' <i class="g-prog">' + esc(CL.ru("game_progress", o.progress)) + "</i>" : "";
+  var badge = "";
+  if (verdict){
+    var cls = verdictCls(verdict) || "other"; /* нестандартный вердикт — нейтральный бейдж */
+    badge = '<span class="vbadge ' + cls + '">' + esc(verdict) + "</span>";
+  }
+  return cardShell(o, '<div class="gt"><span>' + esc(title) + "</span></div>" +
+         '<div class="gm"><span class="sub"><span class="nw">' + esc(sub || "") + "</span>" + prog + edMark(o) + "</span>" + badge + "</div>", o.extra || "", title);
+}
+function edMark(o){ return o.edited ? ' <i class="g-ed" title="оценка/часы внесены на сайте">с сайта</i>' : ""; }
+/* обложка записи: основной адрес и запасной; для Steam — из appid, если адресов нет */
+var STEAM_CDN = "https://cdn.cloudflare.steamstatic.com/steam/apps/";
+function coverOf(rec){
+  rec = rec || {};
+  var id = /^\d+$/.test(String(rec.steam_appid || "")) ? String(rec.steam_appid) : "";
+  var src = safeUrl(rec.cover_url) || (id ? STEAM_CDN + id + "/library_600x900.jpg" : "");
+  var fb = safeUrl(rec.cover_fallback_url) || (id ? STEAM_CDN + id + "/header.jpg" : "");
+  return { src: src, fb: fb && fb !== src ? fb : "" };
+}
+/* миниатюра фиксированного размера: плашка с первой буквой + картинка поверх; cls — доп. класс размера */
+function thumbHTML(cv, title, cls){
+  var ch = String(title || "").replace(/^[^A-Za-zА-Яа-яЁё0-9]+/, "").charAt(0) || "▣";
+  return '<span class="gthumb' + (cls ? " " + cls : "") + '" aria-hidden="true"><span class="gph">' + esc(ch) + "</span>" +
+    (cv.src ? '<img loading="lazy" alt="" src="' + esc(cv.src) + '" data-fallback="' + esc(cv.fb) + '">' : "") + "</span>";
+}
+function cardShell(o, head, rest, title){
+  var cv = coverOf({ cover_url: o.cover, steam_appid: o.steam_appid, cover_fallback_url: o.cover_fallback_url });
+  return '<div class="gcard' + (o.k ? " clk" : "") + (o.wcls ? " " + o.wcls : "") + '"' +
+         (o.k ? ' data-k="' + esc(o.k) + '" tabindex="0" role="button"' : "") + ">" +
+         '<div class="gc-head">' + thumbHTML(cv, title) + '<div class="gc-hd-main">' + head + "</div></div>" +
+         (rest ? '<div class="gc-rest">' + rest + "</div>" : "") + "</div>";
+}
+window.__gameCard = gameCard;   /* для теста карточек */
+document.addEventListener("error", function(ev){   /* обложка не загрузилась — запасной адрес, затем плашка с буквой */
+  var t = ev.target;
+  if (t && t.tagName === "IMG" && t.hasAttribute("data-fallback") && t.parentNode && t.parentNode.classList.contains("gthumb")){
+    var fb = t.getAttribute("data-fallback");
+    if (fb){ t.setAttribute("data-fallback", ""); t.src = fb; }
+    else t.parentNode.removeChild(t);
+  }
+}, true);
+
+/* профиль вкуса + анти-паттерны + библиотека */
+var userP = loadUser();
+Promise.all([fetchText(GAMING + "taste-profile.yaml"), fetchText(GAMING + "library_full.yaml"), userP]).then(function(r){
+  uiDataDone(true);
+  var profile = jsyaml.load(r[0]);
+  var libFull = (jsyaml.load(r[1]) || {}).library_full || [];
+
+  /* карта вердиктов из profile.library */
+  (profile.library || []).forEach(function(g){
+    if (g && g.title && g.verdict) verdictByTitle[normTitle(g.title)] = { verdict: g.verdict, reason: g["причина"] || null };
+  });
+
+  /* сводка (итог по библиотеке и подписи навигации — renderLibrary, с учётом оверлея) */
+  var plats = profile.platforms || {};
+  var platNames = [plats.primary, plats.secondary].filter(Boolean).map(platRu);
+  $("sum-plat").textContent = platNames.join(" · ") || "—";
+  $("sum-upd").textContent = "обновлено " + fmtYaml(profile.updated);
+  SRC.profile = profile; SRC.libFull = libFull; SRC.platNames = platNames;
+
+  /* кластеры */
+  var mc = profile.mood_clusters || {};
+  var slugs = Object.keys(mc);
+
+  /* плитка обзора «Профиль вкуса»: топ-кластер по весу */
+  var clWord = plural(slugs.length, "кластер", "кластера", "кластеров");
+  setNavCount("taste", slugs.length + " " + clWord);
+  $("ov-cl-open").textContent = "Все " + slugs.length + " " + clWord;
+  var byWeight = slugs.slice().sort(function(a, b){ return (+(mc[b] || {}).weight || 0) - (+(mc[a] || {}).weight || 0); });
+  if (byWeight.length){
+    var t0 = mc[byWeight[0]] || {}, w0 = +t0.weight || 0;
+    $("ov-cl-name").textContent = t0.title || prettify(byWeight[0]);
+    $("ov-cl-num").textContent = w0.toFixed(2);
+    $("ov-cl-bar").style.width = Math.round(w0 * 100) + "%";
+    var rest = byWeight.slice(1, 3).map(function(s){
+      var c = mc[s] || {};
+      return "«" + (c.title || prettify(s)) + "» " + (+c.weight || 0).toFixed(2);
+    });
+    $("ov-cl-note").textContent = "Топ-кластер" + (rest.length ? " · дальше " + rest.join(", ") : "");
+  } else {
+    $("ov-cl-name").textContent = "—";
+    $("ov-cl-note").textContent = "В профиле нет кластеров.";
+  }
+  applyScreen(); /* кикер экрана мог смениться на data-driven */
+
+  var html = "";
+  slugs.forEach(function(slug, idx){
+    var c = mc[slug] || {};
+    var w = +c.weight || 0;
+    /* evidence-строка: "Название [NN.Nч] [(аннотация)]" — часы и скобочный
+       вердикт вынимаются из названия (иначе «(восторг)» уезжает в заголовок) */
+    var evidence = (c.evidence || []).map(function(s){
+      s = String(s);
+      var hours = null, verdict = null;
+      var hm = s.match(/(\d+(?:\.\d+)?)\s*ч/);
+      if (hm) hours = Math.round(+hm[1]);
+      var t = s.replace(/\d+(?:\.\d+)?\s*ч\.?/g, "");
+      t = t.replace(/\(([^)]*)\)/g, function(_, inner){
+        var w2 = inner.trim().toLowerCase();
+        if (verdictCls(w2)) verdict = w2;
+        return ""; /* (stated)/(восторг)/прочие пометки — не часть названия */
+      });
+      t = t.replace(/\s{2,}/g, " ").replace(/[·,;:\s]+$/, "").trim();
+      return { t: t, h: hours, v: verdict };
+    });
+    var top = evidence.slice(0, 3).map(function(g){ return esc(g.t) + (g.h ? " · " + g.h + "ч" : ""); }).join(" · ");
+    html += '<div class="cl-row" data-cidx="' + idx + '">' +
+      '<div class="cl-head"><span class="cl-name">' + esc(c.title || prettify(slug)) + '</span>' +
+      '<span class="cl-num">' + w.toFixed(2) + "</span></div>" +
+      '<div class="moodbar"><i style="width:' + Math.round(w * 100) + '%"></i></div>' +
+      '<div class="cl-top">' + top + "</div></div>" +
+      '<div class="cl-detail" data-cdetail="' + idx + '" hidden>' +
+      (c.notes ? '<div class="cl-note"><span style="font-weight:700;">ℹ</span><span>' + esc(String(c.notes).trim()) + "</span></div>" : "") +
+      '<div class="game-grid">' + evidence.map(function(g){
+        var v = g.v || (findVerdict(g.t) || {}).verdict;
+        return gameCard(g.t, g.h ? g.h + "ч" : "", v);
+      }).join("") + "</div></div>";
+  });
+  $("clusters").innerHTML = html || '<div class="md-load">В профиле нет кластеров.</div>';
+  $("clusters").addEventListener("click", function(ev){
+    var row = ev.target.closest(".cl-row");
+    if (!row) return;
+    var det = document.querySelector('[data-cdetail="' + row.getAttribute("data-cidx") + '"]');
+    if (det) det.hidden = !det.hidden;
+    /* раскрытый кластер прячет строку-превью — её заменяют карточки игр */
+    row.classList.toggle("open", !!det && !det.hidden);
+  });
+
+  /* анти-паттерны */
+  var aps = profile.anti_patterns || [];
+  $("ap-chips").innerHTML = aps.map(function(a, i){
+    return '<button class="ap-chip" data-aidx="' + i + '"><span class="x">✕</span> ' + esc(a.pattern || "") + "</button>";
+  }).join("");
+  $("ap-chips").addEventListener("click", function(ev){
+    var b = ev.target.closest(".ap-chip");
+    if (!b) return;
+    var i = +b.getAttribute("data-aidx");
+    var panel = $("ap-panel");
+    var wasOn = b.classList.contains("on");
+    Array.prototype.forEach.call(document.querySelectorAll(".ap-chip"), function(c){ c.classList.remove("on"); });
+    if (wasOn){ panel.hidden = true; return; }
+    b.classList.add("on");
+    var a = aps[i] || {};
+    panel.innerHTML = "<h3>Анти-паттерн «" + esc(a.pattern || "") + "»</h3>" +
+      '<div class="ev">' + (a.evidence ? "Прецеденты: " + esc(String(a.evidence).trim()) : "Прецеденты в профиле не указаны.") + "</div>";
+    panel.hidden = false;
+  });
+
+  renderLibrary();
+
+  window.__clusterTitle = function(slug){
+    return (mc[slug] && mc[slug].title) || null;
+  };
+}).catch(function(e){
+  uiDataDone(false);
+  $("clusters").innerHTML = '<div class="md-load">Нет связи с данными профиля — <a href="' + GAMING + '">каталог Gaming</a>.</div>';
+  $("ov-cl-note").textContent = "Нет связи с данными профиля.";
+  $("ov-lib-total").textContent = "—";
+});
+
+/* ── присматриваюсь: watchlist.yaml ──
+   Файл наполняет скилл game-advisor (режим ПРИСМАТРИВАЮСЬ); страница — только
+   чтение. Отсутствие файла (404) — НЕ «нет связи»: это пустой список, пока
+   советник ничего не записал, и хоронить строку статуса из-за него нельзя. */
+var W_STATUS = [
+  { key: "хочу",         cls: "want",   slot: "want",   label: CL.ru("game_state", "хочу") },
+  { key: "на-карандаш",  cls: "pencil", slot: "pencil", label: CL.ru("game_state", "на-карандаш") },
+  { key: "не-интересно", cls: "nope",   slot: "nope",   label: CL.ru("game_state", "не-интересно") }
+];
+function wStatus(v){
+  return W_STATUS.filter(function(s){ return s.key === String(v || "").trim(); })[0] || null;
+}
+/* строка watchlist.yaml со старым status «демо» — на-карандаш + флаг demo (как normUserRec для оверлея) */
+function normWatchRow(it){
+  if (!it || String(it.status || "").trim() !== "демо") return it;
+  var o = {}, f;
+  for (f in it) o[f] = it[f];
+  o.status = "на-карандаш"; o.demo = true;
+  return o;
+}
+/* У игры с флагом демо хвост «Demo» / «Trial Version» в названии не показывается: его несёт бейдж.
+   Само название (ключ к файлам советника) не меняется — правится только подпись. */
+function demoTitle(t, demo){
+  if (!demo || !t) return t;
+  var s = String(t).replace(/\s*[:\-–—(]?\s*(demo|trial)(\s+version)?\s*\)?\s*$/i, "").trim();
+  return s || t;
+}
+function watchCard(it){
+  var st = wStatus(it.status);
+  var sub = it.platform ? platRu(it.platform) : (it.added ? fmtYaml(it.added) : "");
+  if (it._u && it._u.rating) sub += (sub ? " · " : "") + it._u.rating;
+  var o = { k: normTitle(it.title), cover: it.cover_url, steam_appid: it.steam_appid, edited: !!it._u, wcls: "wcard" + (st && st.slot === "nope" ? " st-nope" : "") };
+  var badge = '<span class="vbadge ' + (st ? st.cls : "other") + '">' + esc(st ? st.label : String(it.status || "—")) + "</span>";
+  var demoB = it.demo ? '<span class="vbadge demo">демо</span>' : "";
+  return cardShell(o, '<div class="gt"><span>' + esc(demoTitle(it.title, it.demo) || "—") + "</span></div>" +
+         '<div class="gm"><span class="sub"><span class="nw">' + esc(sub) + "</span>" + edMark(o) + demoB + "</span>" + badge + "</div>",
+         priceLine(it) +
+         (it.condition ? '<div class="w-line cond">' + esc(String(it.condition)) + "</div>" : "") +
+         (it.note ? '<div class="w-line">' + esc(String(it.note)) + "</div>" : "") +
+         srcBtn(it.source), it.title);
+}
+/* цена из eshop-prices.json по nsuid_us записи; нет файла, nsuid или цены — строки нет */
+var ESHOP = null;                 /* {byId: {nsuid: item}, rep} */
+function money(v){ return "$" + Number(v).toFixed(2); }
+function isoShort(s){ s = String(s || ""); return s.length >= 16 ? s.slice(8, 10) + "." + s.slice(5, 7) + " " + s.slice(11, 16) : ""; }
+function priceLine(it){
+  if (!ESHOP || !it.nsuid_us) return "";
+  var p = ESHOP.byId[String(it.nsuid_us)];
+  if (!p) return "";
+  if (p.sales_status === "not_found" || (p.regular_usd == null && p.sale_usd == null))
+    return '<div class="w-price na">нет в US eShop</div>';
+  var h = p.sale_usd != null
+    ? "<b>" + money(p.sale_usd) + "</b><s>" + money(p.regular_usd) + "</s>" +
+      '<span class="sale">−' + esc(p.discount_pct) + "%</span>" +
+      (p.sale_end ? "<span>до " + esc(String(p.sale_end).slice(8, 10) + "." + String(p.sale_end).slice(5, 7)) + "</span>" : "")
+    : (p.regular_usd != null ? "<b>" + money(p.regular_usd) + "</b>" : "");
+  if (p.sales_status === "preorder") h += '<span class="tgt">предзаказ</span>';
+  /* пороги: цена ≤ $X и/или скидка ≥ N% — выполнен любой */
+  /* порог записи (правка с сайта) главнее порога из файла цен; выполнение считаем по цене из файла */
+  var pt = it.price_target_usd != null ? it.price_target_usd : p.price_target_usd;
+  var dt = it.discount_target_pct != null ? it.discount_target_pct : p.discount_target_pct;
+  var met = p.target_met;
+  if (it.price_target_usd != null || it.discount_target_pct != null)
+    met = (pt != null && p.price_usd != null && p.price_usd <= pt) || (dt != null && p.discount_pct != null && p.discount_pct >= dt);
+  var th = [];
+  if (pt != null) th.push(money(pt));
+  if (dt != null) th.push("−" + dt + "%");
+  if (th.length)
+    h += '<span class="tgt' + (met ? " met" : "") + '">порог ' + th.join(" или ") + (met ? " выполнен" : "") + "</span>";
+  return '<div class="w-price">' + h + "</div>";
+}
+function eshopBar(){
+  var rep = ESHOP && ESHOP.rep, t;
+  if (!rep || !rep.fetched_at) t = "Цены US eShop ещё не загружались";
+  else {
+    var age = (Date.now() - Date.parse(rep.fetched_at)) / 3600000;
+    t = "Цены US eShop на " + isoShort(rep.fetched_at) + (age > 24 ? " · устарели (старше суток)" : "");
+  }
+  if (rep && rep.status === "unavailable")
+    t += " · обновить " + isoShort(rep.attempt_at) + " не удалось";
+  $("eshop-when").textContent = t;
+  $("eshop-bar").hidden = false;
+}
+/* fresh — сразу после «Обновить цены»: адрес с ?cb= постоянный до «Обновить» страницы,
+   и браузер отдавал файл из кеша — новое время появлялось только после перезагрузки */
+function loadEshop(fresh){
+  var url = bust(GAMING + "eshop-prices.json");
+  if (fresh) url += (url.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now();
+  return fetch(url, fresh ? { cache: "no-store" } : undefined).then(function(r){
+    if (r.status === 404) return null;
+    if (!r.ok) throw new Error("eshop-prices.json → " + r.status);
+    return r.json();
+  }).then(function(rep){
+    ESHOP = rep ? { rep: rep, byId: {} } : null;
+    if (rep) (rep.items || []).forEach(function(i){ ESHOP.byId[String(i.nsuid_us)] = i; });
+    eshopBar();
+    if (window.__wRender) window.__wRender();
+  }).catch(function(){ $("eshop-msg").textContent = "файл цен не прочитался"; });
+}
+$("eshop-refresh").addEventListener("click", function(){
+  var b = this, msg = $("eshop-msg");
+  b.disabled = true; msg.textContent = "загружаю…";
+  authFetch("../api/games/eshop-refresh", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" })
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return [r.status, j]; }); })
+    .then(function(x){
+      var code = x[0], j = x[1];
+      if (code === 200) { msg.textContent = ""; return loadEshop(true); }
+      if (code === 429) msg.textContent = "можно снова через " + Math.ceil((j.retry_after || 60) / 60) + " мин";
+      else if (code === 403) msg.textContent = "нет доступа (нужен вход с паролем)";
+      else msg.textContent = "не получилось: " + (j.error || ("HTTP " + code));
+    })
+    .catch(function(){ msg.textContent = "нет связи с сервером"; })
+    .then(function(){ b.disabled = false; });
+});
+loadEshop();
+
+/* ссылка на подборку, где игру рекомендовали: открывает тот же md-слайдовер,
+   что и экран «Подборки» (данные у обоих — recommendations/*.md) */
+function srcBtn(file){
+  if (!file) return "";
+  var f = String(file);
+  var d = (f.match(/\d{4}-\d{2}-\d{2}/) || [null])[0];
+  return '<button class="w-src" data-file="' + esc(f) + '" data-title="' + esc(f.replace(/\.md$/, "")) + '">' +
+         "Из подборки" + (d ? " · " + esc(fmtYaml(d)) : "") + '<span class="arw">↗</span></button>';
+}
+/* клик по «Из подборки» — тот же слайдовер, что на экране «Подборки».
+   Делегирование: карточки перерисовываются, слушатель на секции — нет.
+   Человеческий заголовок берём из карты подборок, если она уже загрузилась. */
+document.querySelector(".sc-watch").addEventListener("click", function(ev){
+  var b = ev.target.closest(".w-src");
+  if (!b) return;
+  var f = b.getAttribute("data-file");
+  openDoc(GAMING + "recommendations/" + encodeURIComponent(f),
+          (window.__recoTitle && window.__recoTitle(f)) || b.getAttribute("data-title"));
+});
+
+Promise.all([fetch(bust(GAMING + "watchlist.yaml")).then(function(r){
+  if (r.status === 404) return null;            /* файла ещё нет — пустой список */
+  if (!r.ok) throw new Error("watchlist.yaml → " + r.status);
+  return r.text();
+}), userP]).then(function(a){
+  var txt = a[0];
+  uiDataDone(true);
+  var wl = txt ? (jsyaml.load(txt) || {}) : {};
+  SRC.watch = (wl.items || []).filter(function(it){ return it && it.title; });
+  var items = [], slots = { want: [], pencil: [], nope: [] };
+  /* слияние со слоем оверлея; неизвестный статус не теряем */
+  function rebuild(){
+    items = mergeWatch();
+    slots = { want: [], pencil: [], nope: [] };
+    items.forEach(function(it){
+      var st = wStatus(it.status);
+      slots[st ? st.slot : "pencil"].push(it);
+    });
+  }
+  rebuild();
+
+  /* Фильтр-чипы вместо простыни на 39 карточек — тот же приём, что на экране
+     «Библиотека». Дефолт «в работе» (хочу + на карандаше): отказы никуда не
+     деваются, но и не листаются каждый раз, когда нужен живой список. */
+  /* «Со скидкой» — второй фильтр поверх статуса: скидка по eshop-prices.json (sale_usd).
+     Чип скрыт, пока файла цен нет. */
+  var wSale = SALE_LINK, wDemo = false;
+  function onSale(it){
+    var p = ESHOP && it.nsuid_us && ESHOP.byId[String(it.nsuid_us)];
+    return !!(p && p.sale_usd != null);
+  }
+  /* число на чипе — сколько игр покажет этот чип при остальных фильтрах как сейчас */
+  function wCounts(){
+    var inSlot = function(k){ return k === "open" ? slots.want.concat(slots.pencil) : (slots[k] || []); };
+    var n = function(st, sale, plat, demo){
+      return inSlot(st).filter(function(it){ return (!sale || onSale(it)) && (!demo || it.demo) && platMatch(plat, it.platform) && qMatch(wQ, it); }).length;
+    };
+    chipCounts(wf, function(k){ return n(k, wSale, wPlat, wDemo); });
+    chipCounts($("wpfilters"), function(k){ return n(wFilter, wSale, k, wDemo); });
+    var sc = $("w-sale-chip");
+    if (sc) { var t = "Со скидкой (" + n(wFilter, true, wPlat, wDemo) + ")"; if (sc.textContent !== t) sc.textContent = t; }
+    var dc = $("w-demo-chip");
+    if (dc) { var t2 = "Демо (" + n(wFilter, wSale, wPlat, true) + ")"; if (dc.textContent !== t2) dc.textContent = t2; }
+  }
+  function renderWatch(filter){
+    var shown = 0;
+    var sc = $("w-sale-chip");
+    if (sc) sc.hidden = !ESHOP;
+    var dc0 = $("w-demo-chip");
+    if (dc0) dc0.hidden = !items.some(function(it){ return it.demo; });
+    if (wDemo && dc0 && dc0.hidden){ wDemo = false; dc0.classList.remove("on"); }
+    [["want", slots.want], ["pencil", slots.pencil], ["nope", slots.nope]].forEach(function(p){
+      var on = filter === p[0] || (filter === "open" && p[0] !== "nope");
+      var arr = on ? p[1].filter(function(it){ return (!wSale || onSale(it)) && (!wDemo || it.demo) && platMatch(wPlat, it.platform) && qMatch(wQ, it); }) : [];
+      if (wSort === "name") arr = arr.slice().sort(byName);
+      shown += arr.length;
+      $("w-" + p[0]).innerHTML = arr.map(watchCard).join("");
+      $("w-" + p[0] + "-head").hidden = !arr.length;
+    });
+    wCounts();
+    updFbtn("w-fbtn", (filter !== "open" ? 1 : 0) + (wSale ? 1 : 0) + (wDemo ? 1 : 0) + (wPlat !== "all" ? 1 : 0));
+    $("w-note").innerHTML = items.length
+      ? "Показаны " + shown + " из " + items.length + (wSale ? " (только со скидкой)" : "") + (wDemo ? " (только с демо)" : "") +
+        "<span class=\"noai-hide\"> · переносит записи скилл game-advisor: купил — уходит в библиотеку, передумал — меняет статус.</span>"
+      : "Пусто: советник ещё не записал ни одной обсуждённой игры.";
+  }
+  var wf = $("wfilters");
+  $("w-q").addEventListener("input", function(ev){ wQ = ev.target.value; renderWatchAll(wFilter); });
+  function wPlatRender(){
+    var pc = {};
+    items.forEach(function(it){ if (it.platform) pc[it.platform] = (pc[it.platform] || 0) + 1; });
+    wPlat = platAvail(pc, wPlat);
+    platChips($("wpfilters"), pc, wPlat);
+  }
+  onChip($("wpfilters"), function(k){ wPlat = k; prefSet("watch-plat", k); }, function(){ renderWatchAll(wFilter); });
+  sortSelect($("w-sort"), "gm-w-sort", W_SORTS, wSort, function(v){ wSort = v; prefSet("watch-sort", v); renderWatchAll(wFilter); });
+  var WCHIPS = [{ key: "open" }, { key: "want" }, { key: "pencil" }, { key: "nope" }];
+  var W_LABELS = { open: "В работе", want: "Хочу", pencil: "На карандаше", nope: "Не хочу" };
+  function wStatusRender(){
+    if (wFilter !== "open" && !slots[wFilter].length) wFilter = "open";
+    setChips(wf, WCHIPS.filter(function(c){ return c.key === "open" || slots[c.key].length; }).map(function(c){ return { key: c.key, label: W_LABELS[c.key] }; }), wFilter);
+  }
+  var sb = document.createElement("button");
+  sb.className = "vchip w-sale" + (wSale ? " on" : "");
+  /* #sale уже на открытой странице (строка журнала уведомлений) — то же, что при открытии по ссылке */
+  window.addEventListener("hashchange", function(){
+    if (location.hash !== "#sale") return;
+    wSale = true; sb.classList.add("on");
+    setScreen("watch");
+    renderWatchAll(wFilter);
+  });
+  sb.id = "w-sale-chip";
+  sb.hidden = true;
+  wf.appendChild(sb);
+  /* «Демо» — переключатель того же устройства, что «Со скидкой»: сужает до игр с флагом demo, складывается с остальными фильтрами */
+  var db = document.createElement("button");
+  db.className = "vchip w-sale w-demo" + (wDemo ? " on" : "");
+  db.id = "w-demo-chip";
+  db.hidden = true;
+  wf.appendChild(db);
+  var wFilter = "open";
+  wf.addEventListener("click", function(ev){
+    var b = ev.target.closest(".vchip");
+    if (!b) return;
+    if (b === sb) {
+      wSale = !wSale;
+      sb.classList.toggle("on", wSale);
+      renderWatchAll(wFilter);
+      return;
+    }
+    if (b === db) {
+      wDemo = !wDemo;
+      db.classList.toggle("on", wDemo);
+      renderWatchAll(wFilter);
+      return;
+    }
+    Array.prototype.forEach.call(wf.querySelectorAll(".vchip:not(.w-sale)"), function(c){ c.classList.toggle("on", c === b); });
+    wFilter = b.getAttribute("data-key");
+    renderWatchAll(wFilter);
+    uiScrollTop();
+  });
+  /* «Пока пусто.» — при КАЖДОЙ перерисовке: раньше ставилась один раз, и цены eShop, пришедшие позже
+     списка, перерисовывали «Хочу» без неё (итог зависел от того, какой ответ быстрее; v1.34) */
+  var renderWatchAll = function(f){
+    renderWatch(f);
+    if (!items.length) $("w-want").innerHTML = '<div class="w-empty">Пока пусто.</div>';
+  };
+  /* подписи, подзаголовки и плитка обзора — от слитого списка */
+  function meta(){
+    wStatusRender();
+    wPlatRender();
+    wCounts();
+    var open = slots.want.length + slots.pencil.length;
+    var word = plural(items.length, "игра", "игры", "игр");
+    if (wl.updated) $("w-updated").textContent = "обновлено " + fmtYaml(wl.updated) + " · список ведёт советник";
+    setNavCount("watch", items.length + " " + word);
+    applyScreen();
+    $("ov-watch-total").textContent = open;
+    $("ov-watch-word").innerHTML = esc(plural(open, "игра", "игры", "игр")) + "<br>на примете";
+    $("ov-watch-note").textContent = slots.want.length
+      ? "Хочу: " + slots.want.slice(0, 2).map(function(it){ return "«" + it.title + "»"; }).join(", ") +
+        (slots.pencil.length ? " · на карандаше ещё " + slots.pencil.length : "")
+      : (items.length ? "Всё на карандаше — явного «хочу» нет." : "Список пуст.");
+  }
+  /* «Сбросить» окна фильтров на телефоне: дефолты экрана */
+  window.__wReset = function(){
+    wSale = false; sb.classList.remove("on");
+    wDemo = false; db.classList.remove("on");
+    wPlat = "all"; prefSet("watch-plat", "all");
+    wSort = "date"; prefSet("watch-sort", "date");
+    $("w-sort").innerHTML = sortHTML("gm-w-sort", W_SORTS, wSort);
+    wFilter = "open";
+    Array.prototype.forEach.call(wf.querySelectorAll(".vchip:not(.w-sale)"), function(c){ c.classList.toggle("on", c.getAttribute("data-key") === "open"); });
+    window.__wRender();
+  };
+  /* цены eShop пришли позже списка или оверлей изменился */
+  window.__wRender = function(){ rebuild(); meta(); renderWatchAll(wFilter); };
+  meta();
+  renderWatchAll(wFilter);
+}).catch(function(){
+  uiDataDone(false);
+  $("w-note").textContent = "Нет связи со списком.";
+  $("ov-watch-total").textContent = "—";
+  $("ov-watch-note").textContent = "Нет связи со списком.";
+});
+
+/* ── слияние слоёв: оверлей главнее ── */
+function prefGet(k, def){ try { var v = localStorage.getItem("games-" + k); return v == null ? def : v; } catch(e){ return def; } }
+function prefSet(k, v){ try { localStorage.setItem("games-" + k, String(v)); } catch(e){} }
+var LIB_SORTS = [{ value: "hours", t: "по часам ↓", s: "по часам" }, { value: "name", t: "по имени A→Я", s: "по имени" }, { value: "date", t: "по дате правки ↓", s: "по дате" }];
+var W_SORTS = [{ value: "date", t: "по дате добавления ↓", s: "по дате" }, { value: "name", t: "по имени A→Я", s: "по имени" }];
+function okSort(list, v, def){ return list.some(function(x){ return x.value === v; }) ? v : def; }
+var libFilter = "all", libProg = "all", libQ = "", wQ = "";
+var libPlat = prefGet("lib-plat", "all"), libSort = okSort(LIB_SORTS, prefGet("lib-sort", "hours"), "hours");
+var wPlat = prefGet("watch-plat", "all"), wSort = okSort(W_SORTS, prefGet("watch-sort", "date"), "date");
+function byName(a, b){ return String(a.title).localeCompare(String(b.title), "ru"); }
+/* Switch и Switch 2 — один чип «Switch» (ключ switch, фильтр пропускает обе); в данных и карточке платформы раздельные */
+function platAvail(counts, cur){
+  if (cur === "switch2") cur = "switch";
+  if (cur === "all") return cur;
+  return cur === "switch" ? ((counts.switch || counts.switch2) ? cur : "all") : (counts[cur] ? cur : "all");
+}
+function platMatch(sel, p){ return sel === "all" || (sel === "switch" ? (p === "switch" || p === "switch2") : p === sel); }
+/* Ряд чипов: кнопки с тем же набором ключей не пересоздаются (без мигания), меняется только текст.
+   Число в скобках ставит chipCounts — оно считается с учётом ОСТАЛЬНЫХ фильтров экрана, без своего ряда */
+function setChips(box, list, cur){
+  var old = Array.prototype.slice.call(box.querySelectorAll(".vchip:not(.w-sale)"));
+  var same = old.length === list.length && old.every(function(b, i){ return b.getAttribute("data-key") === list[i].key; });
+  if (!same) {
+    old.forEach(function(c){ box.removeChild(c); });
+    old = list.map(function(c){
+      var b = document.createElement("button");
+      b.setAttribute("data-key", c.key); b.textContent = c.label; box.insertBefore(b, box.querySelector(".w-sale"));
+      return b;
+    });
+  }
+  old.forEach(function(b, i){
+    b.setAttribute("data-label", list[i].label);
+    var cls = "vchip" + (list[i].key === cur ? " on" : "") + (b.classList.contains("zero") ? " zero" : "");
+    if (b.className !== cls) b.className = cls;
+  });
+}
+function chipCounts(box, countOf){
+  Array.prototype.forEach.call(box.querySelectorAll(".vchip[data-label]"), function(b){
+    var n = countOf(b.getAttribute("data-key")), t = b.getAttribute("data-label") + " (" + n + ")";
+    if (b.textContent !== t) b.textContent = t;
+    b.classList.toggle("zero", !n);
+  });
+}
+function platChips(box, counts, cur){
+  var list = [], seen = {};
+  G_PLATS.forEach(function(p){
+    if (!counts[p]) return;
+    var key = p === "switch2" ? "switch" : p;
+    if (seen[key]) return;
+    seen[key] = 1;
+    list.push({ key: key, label: key === "switch" ? "Switch" : CL.ru("game_platform", p) });
+  });
+  setChips(box, [{ key: "all", label: "Все" }].concat(list), cur);
+}
+function sortHTML(name, list, cur){
+  return uiSelectHTML({ id: name, name: name, size: "md", compact: true, options: list.map(function(o){ return { value: o.value, t: o.t, selected: o.value === cur }; }) });
+}
+/* кнопка «Фильтры» с бейджем числа включённых (без бейджа при нуле) и «Сброс» — только при включённых */
+function updFbtn(id, n){
+  var b = $(id); if (!b) return;
+  b.innerHTML = "Фильтры" + (n ? '<span class="ui-fbtn-n">' + n + "</span>" : "");
+  b.classList.toggle("on", n > 0);
+  var r = $(id.replace("-fbtn", "-freset"));
+  if (r) r.hidden = !n;
+}
+/* живой поиск по названию и store_title без регистра (normTitle); пустой запрос — без фильтра */
+function qMatch(q, it){
+  q = normTitle(q || "");
+  if (!q) return true;
+  var u = it.u || it._u || {};
+  return normTitle(it.title).indexOf(q) >= 0 || (!!(it.store_title || u.store_title) && normTitle(it.store_title || u.store_title).indexOf(q) >= 0);
+}
+function sortSelect(host, name, list, cur, onPick){
+  host.innerHTML = sortHTML(name, list, cur);
+  host.addEventListener("ui-select", function(ev){ if (ev.detail && ev.detail.name === name) onPick(ev.detail.value); });
+}
+function isWatchState(v){ return gamesIsWatchState(v); }
+function mergeLibrary(){ return gamesMergeLibrary((SRC.profile && SRC.profile.library) || [], SRC.libFull, (S.user.doc && S.user.doc.items) || []); }
+function overlayWatch(it, u){
+  var o = {}, f;
+  for (f in it) o[f] = it[f];
+  o._u = u; o._baseNote = it.note;
+  o.status = u.state;
+  o.demo = !!u.demo;
+  if (u.platform) o.platform = u.platform;
+  ["note", "price_target_usd", "discount_target_pct", "nsuid_us", "eshop_url", "cover_url", "store_title", "steam_appid"].forEach(function(f){
+    if (u[f] != null) o[f] = u[f];
+  });
+  if (!o.added && u.added) o.added = u.added;
+  return o;
+}
+function withPlat(it){
+  var o = {}, f;
+  for (f in it) o[f] = it[f];
+  o.platform = normPlat(it.platform);
+  return o;
+}
+function mergeWatch(){
+  var um = userMap(), out = [], seen = {};
+  SRC.watch.forEach(function(it){
+    var k = normTitle(it.title), u = um[k];
+    seen[k] = 1;
+    it = withPlat(normWatchRow(it));
+    if (u){
+      if (u.deleted || !isWatchState(u.state)) return;   /* убрана или куплена — её место в библиотеке */
+      it = overlayWatch(it, u);
+    }
+    out.push(it);
+  });
+  Object.keys(um).forEach(function(k){
+    var u = um[k];
+    if (seen[k] || u.deleted || !isWatchState(u.state)) return;
+    out.push(overlayWatch({ title: u.title }, u));
+  });
+  out.sort(function(a, b){ return ymd(b.added).localeCompare(ymd(a.added)); });
+  SRC.watchMerged = out;
+  return out;
+}
+
+/* ── библиотека: счётчики, чипы и сетка от слитых записей ── */
+function renderLibrary(){
+  if (!SRC.profile) return;
+  var m = mergeLibrary(), total = m.total;
+  var verdicted = m.rows.filter(function(g){ return g.verdict; });
+  var unrated = m.rows.filter(function(g){ return !g.verdict; });
+  LIBM = { rows: m.rows, verdicted: verdicted, unrated: unrated, total: total };
+  window.__libm = LIBM;   /* для теста паритета хаба */
+  var libWord = plural(total, "игра", "игры", "игр"), platNames = SRC.platNames;
+  $("sum-total").textContent = total;
+  $("sum-total-word").textContent = " " + libWord + " в библиотеке";
+  $("ov-lib-total").textContent = total;
+  $("ov-lib-word").innerHTML = esc(libWord) + "<br>всего";
+  setNavCount("library", total + " " + libWord);
+  applyScreen();
+
+  $("lib-total").textContent = total;
+  /* полоса и подпись — от тех же слитых записей, что и чипы (правка платформы с сайта главнее файла);
+     Switch и Switch 2 — один сегмент «Switch», как и чип фильтра; порядок сегментов = порядок подписи */
+  var byPlat = {};
+  m.rows.forEach(function(g){ var p = g.platform === "switch2" ? "switch" : (g.platform || "другое"); byPlat[p] = (byPlat[p] || 0) + 1; });
+  var platKeys = Object.keys(byPlat).sort(function(a, b){ return byPlat[b] - byPlat[a]; });
+  function platTitle(p){ return p === "другое" ? "без платформы" : (CL.ru("game_platform", p) || prettify(p)); }
+  var barHtml = platKeys.map(function(p){
+    return '<div style="width:' + (byPlat[p] / (m.rows.length || 1) * 100) + "%; background:" + (PLAT_COLORS[p] || "var(--c-6)") + ';"></div>';
+  }).join("");
+  var legendHtml = platKeys.map(function(p){
+    return '<span><span class="sw" style="background:' + (PLAT_COLORS[p] || "var(--c-6)") + ';"></span>' + esc(platTitle(p)) + " · " + byPlat[p] + "</span>";
+  }).join("");
+  /* одна разметка на два места: экран «Библиотека» и плитка обзора */
+  $("plat-bar").innerHTML = barHtml;
+  $("plat-legend").innerHTML = legendHtml;
+  $("ov-plat-bar").innerHTML = barHtml;
+  $("ov-plat-legend").innerHTML = legendHtml;
+
+  /* по умолчанию — ВСЕ купленные игры; «Прохождение» и «Оценка» сужают */
+  /* чип выводится, только если такие игры в библиотеке вообще есть (под фильтрами он может показывать 0) */
+  var has = {}, hasR = { all: 1 };
+  m.rows.forEach(function(g){ has[g.progress || "не-начата"] = 1; hasR[g.verdict || "unrated"] = 1; });
+  if (libProg !== "all" && !has[libProg]) libProg = "all";
+  if (!hasR[libFilter]) libFilter = "all";
+  setChips($("gfilters"), [{ key: "all", label: "Все" }].concat(G_PROGS.filter(function(c){ return has[c]; }).map(function(c){ return { key: c, label: CL.ru("game_progress", c) }; })), libProg);
+  setChips($("vfilters"), [{ key: "all", label: "Все" }].concat(G_RATINGS.filter(function(c){ return hasR[c]; }).map(function(c){ return { key: c, label: CL.ru("game_rating", c) }; }),
+    hasR.unrated ? [{ key: "unrated", label: "без оценки" }] : []), libFilter);
+  var pc = {};
+  m.rows.forEach(function(g){ if (g.platform) pc[g.platform] = (pc[g.platform] || 0) + 1; });
+  libPlat = platAvail(pc, libPlat);
+  platChips($("pfilters"), pc, libPlat);
+  renderLibGrid();
+}
+function libSortFn(){
+  if (libSort === "name") return byName;
+  if (libSort === "date") return function(a, b){
+    var da = a.u ? ymd(a.u.updated || a.u.added) : "", db = b.u ? ymd(b.u.updated || b.u.added) : "";
+    return db.localeCompare(da) || byName(a, b);
+  };
+  return function(a, b){
+    var ha = a.hours == null ? -1 : a.hours, hb = b.hours == null ? -1 : b.hours;
+    return hb - ha || byName(a, b);
+  };
+}
+function renderLibGrid(){
+  if (!LIBM) return;
+  var progOk = function(g, k){ return k === "all" || (g.progress || "не-начата") === k; };
+  var rateOk = function(g, k){ return k === "all" || (k === "unrated" ? !g.verdict : g.verdict === k); };
+  var qOk = function(g){ return !libQ || qMatch(libQ, g); };
+  var cnt = function(f){ return LIBM.rows.filter(f).length; };
+  var rows = LIBM.rows.filter(function(g){ return progOk(g, libProg) && rateOk(g, libFilter) && platMatch(libPlat, g.platform) && qOk(g); });
+  /* число на чипе — сколько игр покажет этот чип при остальных фильтрах как сейчас */
+  chipCounts($("gfilters"), function(k){ return cnt(function(g){ return progOk(g, k) && rateOk(g, libFilter) && platMatch(libPlat, g.platform) && qOk(g); }); });
+  chipCounts($("vfilters"), function(k){ return cnt(function(g){ return progOk(g, libProg) && rateOk(g, k) && platMatch(libPlat, g.platform) && qOk(g); }); });
+  chipCounts($("pfilters"), function(k){ return cnt(function(g){ return progOk(g, libProg) && rateOk(g, libFilter) && platMatch(k, g.platform) && qOk(g); }); });
+  updFbtn("lib-fbtn", (libProg !== "all" ? 1 : 0) + (libFilter !== "all" ? 1 : 0) + (libPlat !== "all" ? 1 : 0));
+  rows.sort(libSortFn());
+  $("lib-grid").innerHTML = rows.map(function(g){
+    var sub = [platRu(g.platform), g.hours ? Math.round(g.hours) + "ч" : null].filter(Boolean).join(" · ");
+    return gameCard(g.title, sub, g.verdict, { k: normTitle(g.title), cover: g.cover, steam_appid: g.steam_appid, edited: !!g.u, progress: g.progress,
+      extra: g.note ? '<div class="w-line">' + esc(String(g.note)) + "</div>" : "" });
+  }).join("");
+  $("lib-note").textContent = "Показаны " + rows.length + " из " + LIBM.total +
+    " · оценки — калибровка советника и оценки с сайта; прохождение и оценку можно поставить в карточке игры";
+}
+/* переключение «on» — только внутри своего ряда: document-wide снимало бы выделение с чипов «Присматриваюсь» */
+function onChip(box, apply, after){
+  box.addEventListener("click", function(ev){
+    var b = ev.target.closest(".vchip");
+    if (!b) return;
+    Array.prototype.forEach.call(box.querySelectorAll(".vchip"), function(c){ c.classList.toggle("on", c === b); });
+    apply(b.getAttribute("data-key"));
+    (after || renderLibGrid)();
+  });
+}
+$("lib-q").addEventListener("input", function(ev){ libQ = ev.target.value; renderLibGrid(); });
+onChip($("vfilters"), function(k){ libFilter = k; });
+onChip($("gfilters"), function(k){ libProg = k; });
+onChip($("pfilters"), function(k){ libPlat = k; prefSet("lib-plat", k); });
+sortSelect($("lib-sort"), "gm-lib-sort", LIB_SORTS, libSort, function(v){ libSort = v; prefSet("lib-sort", v); renderLibGrid(); });
+
+function refreshAll(){
+  renderLibrary();
+  if (window.__wRender) window.__wRender();
+}
+
+/* ── запись оверлея: POST ../api/gm/save с base_hash ── */
+function postUser(doc, baseHash){
+  return authFetch(GM_API + "save", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path: USER_PATH, content: JSON.stringify(doc, null, 2) + "\n", base_hash: baseHash }) })
+    .then(function(r){ return r.json().then(function(j){ return { st: r.status, j: j || {} }; }, function(){ return { st: r.status, j: {} }; }); },
+          function(){ throw new Error("Нет связи с сервером."); });
+}
+/* mut(doc) применяется к свежей копии файла: после 409 перечитываем и повторяем один раз */
+function saveUser(mut, retried){
+  var doc = JSON.parse(JSON.stringify(S.user.doc || { schema: "gaming-user@1", updated: today(), items: [] }));
+  mut(doc);
+  return postUser(doc, S.user.hash).then(function(res){
+    if (res.st === 200){ S.user = { hash: res.j.hash, doc: doc }; return; }
+    if (res.st === 409){
+      if (retried) throw new Error("Кто-то правил параллельно — данные перечитаны, нажмите «Сохранить» ещё раз.");
+      return loadUser().then(function(){ return saveUser(mut, true); });
+    }
+    if (res.st === 400) throw new Error("Файл не прошёл проверку: " + (res.j.error || res.j.detail || "без пояснения") + ".");
+    if (res.st === 401 || res.st === 403) throw new Error("Нужен вход с паролем.");
+    throw new Error("Не удалось сохранить (код " + res.st + ").");
+  });
+}
+function upsertMut(rec, from){
+  return function(doc){
+    var k = normTitle(rec.title), idx = -1, f, fromAdded = null;
+    doc.schema = "gaming-user@1";
+    doc.items = doc.items || [];
+    if (from) doc.items.forEach(function(u){            /* переименование: старая запись — deleted, новая с теми же полями */
+      if (u && u.title && normTitle(u.title) === from){ fromAdded = u.added || null; u.deleted = true; u.updated = today(); }
+    });
+    doc.items.forEach(function(u, i){ if (u && u.title && normTitle(u.title) === k) idx = i; });
+    var old = idx >= 0 ? doc.items[idx] : null, out = {};
+    if (old) for (f in old) out[f] = old[f];
+    for (f in rec) out[f] = rec[f];
+    if (!out.demo) delete out.demo;                     /* флаг «играл в демо»: нет или false — поле не пишется */
+    out.updated = today();
+    out.added = (old && old.added) || fromAdded || today();
+    if (idx >= 0) doc.items[idx] = out; else doc.items.push(out);
+    doc.updated = today();
+  };
+}
+var barTimer = null;
+function showBar(text, kind){
+  clearTimeout(barTimer);
+  $("gm-bar").innerHTML = uiSaveBarHTML({ text: text, kind: kind, dismiss: "gm-bar-x" });
+  if (kind === "ok") barTimer = setTimeout(function(){ $("gm-bar").innerHTML = ""; }, 4000);
+}
+document.addEventListener("click", function(ev){
+  var t = ev.target;
+  if (!t || !t.closest) return;
+  if (t.closest('[data-act="gm-bar-x"]')){ $("gm-bar").innerHTML = ""; return; }
+  var fb = t.closest('[data-act="g-filters"]');
+  if (fb){ openFilters(fb.getAttribute("data-scope"), fb); return; }
+  var fr = t.closest('[data-act="g-freset"]');
+  if (fr){ resetFilters(fr.getAttribute("data-scope")); return; }
+  var add = t.closest('[data-act="g-add"]');
+  if (add) openCard(null, add.getAttribute("data-scope"), add);
+  var fill = t.closest('[data-act="g-fill"]');
+  if (fill) bulkFill(fill);
+});
+
+/* cover_tried («ГГГГ-ММ-ДД») моложе 30 дней — игру в массовый подбор не берём */
+function triedRecently(v){
+  if (!/^\d{4}-\d\d-\d\d$/.test(String(v || ""))) return false;
+  var t = Date.parse(v + "T00:00:00");
+  return isFinite(t) && Date.now() - t < 30 * 86400000;
+}
+/* ── массовый подбор обложек и nsuid: одним запросом до 40 игр без обложки, одним сохранением ── */
+function bulkFill(btn){
+  var scope = btn.getAttribute("data-scope");
+  var seeds = scope === "watch"
+    ? (SRC.watchMerged || []).map(seedFromWatch)
+    : (LIBM ? LIBM.rows.map(seedFromLib) : []);
+  var miss0 = seeds.filter(function(g){ return !g.cover_url && !g.steam_appid; });
+  var miss = miss0.filter(function(g){ return !triedRecently(g.cover_tried); }), skipped = miss0.length - miss.length;
+  var skipTxt = skipped ? " · пропущено " + skipped + " (искали недавно)" : "";
+  if (!miss0.length) return showBar("У всех видимых игр уже есть обложка.", "ok");
+  if (!miss.length) return showBar("Подбирать нечего" + skipTxt + ".", "ok");
+  var batch = miss.slice(0, 40), by = {};
+  batch.forEach(function(g){ by[normTitle(g.title)] = g; });
+  btn.disabled = true; showBar("Подбираю обложки: " + batch.length + " из " + miss.length + "…", "ok");
+  authFetch("../api/games/nsuid-fill", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ items: batch.map(function(g){ return { title: g.title, platform: g.platform, eshop_url: g.eshop_url }; }) }) })
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return { st: r.status, j: j || {} }; }); })
+    .then(function(x){
+      if (x.st === 404) throw new Error("Подбор обложек на сервере пока недоступен (404).");
+      if (x.st === 401 || x.st === 403) throw new Error("Нужен вход с паролем.");
+      if (x.st !== 200) throw new Error("Подбор не удался (код " + x.st + ")" + (x.j.error ? ": " + x.j.error : "") + ".");
+      var res = x.j.results || [], found = res.filter(function(r){ return r && !r.error && (r.cover_url || r.nsuid_us || r.steam_appid); });
+      var lost = batch.filter(function(g){ return !found.some(function(r){ return normTitle(r.title) === normTitle(g.title); }); });
+      /* «искали и не нашли» — только игры, по которым сервер ответил (при done=false остальные ещё не обработаны) */
+      var tried = lost.filter(function(g){ return x.j.done !== false || res.some(function(r){ return r && normTitle(r.title) === normTitle(g.title); }); });
+      var msg = "Обложек найдено " + found.filter(function(r){ return r.cover_url; }).length + " из " + batch.length +
+        (lost.length ? " · не нашлось " + lost.length + ": " + lost.map(function(g){ return g.title; }).join(", ") : "") + skipTxt +
+        (x.j.done === false ? ". Есть ещё — нажмите кнопку ещё раз" : "");
+      if (!found.length && !tried.length) return showBar(msg, "err");
+      return saveUser(function(doc){
+        doc.schema = "gaming-user@1"; doc.items = doc.items || [];
+        found.map(function(r){ return { r: r, ok: true }; }).concat(tried.map(function(g){ return { r: { title: g.title }, ok: false }; })).forEach(function(e){
+          var r = e.r, k = normTitle(r.title), g = by[k], idx = -1;
+          if (!g) return;
+          doc.items.forEach(function(u, i){ if (u && u.title && normTitle(u.title) === k) idx = i; });
+          var o = idx >= 0 ? doc.items[idx] : { title: g.title, platform: g.platform, state: g.state, demo: g.demo ? true : undefined, rating: g.rating, progress: g.progress || null, note: g.note,
+            price_target_usd: g.price_target_usd, discount_target_pct: g.discount_target_pct, nsuid_us: null, eshop_url: null,
+            cover_url: null, store_title: null, steam_appid: null, deleted: false, added: today() };
+          if (e.ok){
+            [["nsuid_us", r.nsuid_us ? String(r.nsuid_us) : null], ["steam_appid", /^\d+$/.test(String(r.steam_appid || "")) ? String(r.steam_appid) : null], ["store_title", r.store_title], ["eshop_url", r.store === "steam" ? null : r.eshop_url], ["cover_url", r.cover_url]].forEach(function(p){
+              if (p[1] && !g[p[0]] && !o[p[0]]) o[p[0]] = p[1];
+            });
+            if (!o.platform && !g.platform && validPlat(r.platform)) o.platform = r.platform;
+          } else o.cover_tried = today();
+          o.updated = today();
+          if (idx >= 0) doc.items[idx] = o; else doc.items.push(o);
+        });
+        doc.updated = today();
+      }).then(function(){ refreshAll(); showBar(msg, found.length ? "ok" : "err"); });
+    })
+    .catch(function(e){ showBar(e.message || "Нет связи с сервером.", "err"); })
+    .then(function(){ btn.disabled = false; });
+}
+
+/* чем открыли окно: мышь/касание → byPointer, фокус на opener не возвращаем (иначе после Esc остаётся рамка) */
+var PTR = false;
+document.addEventListener("pointerdown", function(){ PTR = true; }, true);
+document.addEventListener("keydown", function(){ PTR = false; }, true);
+function focusBack(c){
+  if (!c) return;
+  try {
+    var el = c.opener && document.body.contains(c.opener) ? c.opener : (c.k ? document.querySelector('.gcard[data-k="' + c.k.replace(/"/g, "") + '"]') : null);
+    if (!el) return;
+    if (c.byPointer){ if (el.blur) el.blur(); return; }
+    if (el.focus) el.focus({ preventScroll: true });
+  } catch(e){}
+}
+
+/* ── шторка «Фильтры» (ui-kit .sheet: снизу на телефоне, окно по центру на компьютере); узлы групп переносятся целиком, обработчики остаются ── */
+var FW = null;
+function filtersKey(ev){
+  if (ev.key !== "Escape") return;
+  if (document.querySelector(".ui-confirm, .ui-select.open, .ui-select-list")) return;
+  ev.preventDefault(); ev.stopImmediatePropagation(); closeFilters();
+}
+/* ≤600px — фильтры в шторке; шире — в потоке. При смене ширины открытая шторка закрывается: узлы возвращаются в поток с состоянием */
+var FMQ = window.matchMedia ? window.matchMedia("(max-width:600px)") : null;
+function filtersNarrow(){ return FMQ ? FMQ.matches : false; }
+if (FMQ){
+  var fmqOn = function(){ if (!filtersNarrow()) closeFilters(true); };
+  if (FMQ.addEventListener) FMQ.addEventListener("change", fmqOn); else if (FMQ.addListener) FMQ.addListener(fmqOn);
+}
+function openFilters(scope, opener){
+  closeFilters();
+  if (!filtersNarrow()) return;
+  var grp = $(scope === "watch" ? "w-fgroup" : "lib-fgroup");
+  if (!grp) return;
+  FW = { scope: scope, grp: grp, slot: grp.parentNode, opener: opener, byPointer: PTR };
+  var w = document.createElement("div");
+  w.id = "gm-fwin";
+  w.innerHTML = uiModalHTML({ title: "Фильтры", close: "gm-fclose", cls: "sheet enter", width: 560, body: "",
+    foot: '<button type="button" class="ui-modal-cancel" data-act="gm-freset">Сбросить</button><span class="ui-modal-sp"></span><button type="button" class="ui-modal-save" data-act="gm-fclose">Готово</button>' });
+  document.body.appendChild(w);
+  grp.classList.add("in-modal");
+  w.querySelector(".ui-modal-body").appendChild(grp);
+  document.addEventListener("keydown", filtersKey, true);
+  w.addEventListener("click", function(ev){
+    var a = ev.target.closest && ev.target.closest("[data-act]");
+    if (!a) return;
+    var act = a.getAttribute("data-act");
+    if (act === "gm-fclose") closeFilters();
+    else if (act === "gm-freset") resetFilters(FW && FW.scope);
+  });
+  try { w.querySelector(".ui-modal-x").focus({ preventScroll: true }); } catch(e){}
+}
+function closeFilters(noFocus){
+  var w = $("gm-fwin"), c = FW;
+  if (!w || !c) return;
+  document.removeEventListener("keydown", filtersKey, true);
+  c.grp.classList.remove("in-modal");
+  c.slot.appendChild(c.grp);
+  w.parentNode.removeChild(w);
+  FW = null;
+  if (!noFocus) focusBack(c);
+}
+function resetFilters(scope){
+  if (scope === "watch"){ if (window.__wReset) window.__wReset(); return; }
+  libFilter = "all"; libProg = "all";
+  libPlat = "all"; prefSet("lib-plat", "all");
+  libSort = "hours"; prefSet("lib-sort", "hours");
+  $("lib-sort").innerHTML = sortHTML("gm-lib-sort", LIB_SORTS, libSort);
+  renderLibrary();
+}
+
+/* ── карточка игры ── */
+var CARD = null;
+function numOrNull(v){ if (v == null || v === "") return null; var n = Number(v); return isFinite(n) ? n : null; }
+function roundUsd(v){ var n = numOrNull(v); return n == null ? null : Math.round(n); }
+function validPlat(p){ var c = normPlat(p); return c && G_PLATS.indexOf(c) >= 0 ? c : null; }
+/* часы слоя советника (library_full, затем taste-profile): подсказка в карточке, в оверлей не копируются */
+function baseHoursOf(k){
+  var h = null;
+  SRC.libFull.forEach(function(g){ if (g && g.title && normTitle(g.title) === k && g.hours != null) h = g.hours; });
+  if (h == null && SRC.profile) (SRC.profile.library || []).forEach(function(g){ if (g && g.title && normTitle(g.title) === k && g.hours != null) h = g.hours; });
+  return h;
+}
+var G_BOUGHT = ["куплена"];
+/* правая группа ряда «Статус»: живые коды game_state, кроме «куплена» (она — в левой группе вместе с флагом «демо») */
+var WISH_CODES = CL.codes("game_state", false).filter(function(c){ return G_BOUGHT.indexOf(c) < 0; });
+/* «Наиграно» и «Прохождение» есть у купленных и у игр с флагом demo (играл в демо); пороги цены — у всех некупленных, с флагом тоже */
+function hasHours(st, demo){ return G_BOUGHT.indexOf(st) >= 0 || !!demo; }
+function hasProg(st, demo){ return hasHours(st, demo); }
+function progHTML(val){
+  return '<span class="fld-lbl">Прохождение</span>' + uiSelectHTML({ id: "gm-progress", name: "gm-progress", size: "md", block: true, value: val || "не-начата",
+    options: G_PROGS.map(function(c){ return { value: c, t: CL.ru("game_progress", c), selected: c === (val || "не-начата") }; }) });
+}
+function seedFromLib(r){
+  var u = r.u || {};
+  return { title: r.title, platform: validPlat(r.platform), state: u.state || "куплена", demo: false,
+    rating: G_RATINGS.indexOf(r.verdict) >= 0 ? r.verdict : null, progress: u.progress || r.progress || null, note: u.note != null ? u.note : null,
+    price_target_usd: roundUsd(u.price_target_usd), discount_target_pct: numOrNull(u.discount_target_pct),
+    nsuid_us: u.nsuid_us || null, eshop_url: u.eshop_url || null, cover_url: u.cover_url || null, steam_appid: u.steam_appid || null, store_title: u.store_title || null, advisor: "",
+    hours: numOrNull(u.hours), baseHours: r.baseHours != null ? r.baseHours : null, cover_tried: u.cover_tried || null };
+}
+function seedFromWatch(it){
+  var u = it._u || {};
+  return { title: it.title, platform: validPlat(it.platform), state: wStatus(it.status) ? wStatus(it.status).key : "на-карандаш", demo: !!it.demo,
+    rating: u.rating || null, progress: u.progress || null, note: u.note != null ? u.note : null,
+    price_target_usd: roundUsd(it.price_target_usd), discount_target_pct: numOrNull(it.discount_target_pct),
+    nsuid_us: it.nsuid_us ? String(it.nsuid_us) : null, eshop_url: it.eshop_url || null, cover_url: it.cover_url || null, steam_appid: it.steam_appid ? String(it.steam_appid) : null,
+    store_title: it.store_title || null, cover_tried: u.cover_tried || null, advisor: String(it._u ? (it._baseNote || "") : (it.note || "")), condition: String(it.condition || ""),
+    hours: numOrNull(u.hours), baseHours: baseHoursOf(normTitle(it.title)) };
+}
+function findGame(k, scope){
+  var lib = null, w = null;
+  if (LIBM) LIBM.rows.forEach(function(r){ if (normTitle(r.title) === k) lib = r; });
+  (SRC.watchMerged || []).forEach(function(it){ if (normTitle(it.title) === k) w = it; });
+  if (scope === "watch" && w) return seedFromWatch(w);
+  if (lib) return seedFromLib(lib);
+  return w ? seedFromWatch(w) : null;
+}
+function optsHTML(id, codes, cur, ru, none){
+  var list = (none ? [{ v: "", l: none }] : []).concat(codes.map(function(c){ return { v: c, l: ru(c) }; }));
+  return '<div class="gm-opts" id="' + id + '" role="group">' + list.map(function(o){
+    return '<button type="button" class="gm-opt" data-v="' + esc(o.v) + '" aria-pressed="' + (o.v === (cur || "") ? "true" : "false") + '">' + esc(o.l) + "</button>";
+  }).join("") + "</div>";
+}
+function coverLead(rec, title){
+  return thumbHTML(coverOf(rec), title, "gm-cover");
+}
+function platSelHTML(val){
+  return uiSelectHTML({ id: "gm-plat", name: "gm-plat", size: "md", block: true, value: val || "",
+    options: [{ value: "", t: "не указана", selected: !val }].concat(G_PLATS.map(function(c){ return { value: c, t: CL.ru("game_platform", c), selected: c === val }; })) });
+}
+function storeLinkHTML(rec){
+  var id = /^\d+$/.test(String(rec.steam_appid || "")) ? String(rec.steam_appid) : "";
+  if (id) return '<a href="https://store.steampowered.com/app/' + id + '/" target="_blank" rel="noopener">Страница в Steam ↗</a>';
+  return safeUrl(rec.eshop_url) ? '<a href="' + esc(safeUrl(rec.eshop_url)) + '" target="_blank" rel="noopener">Страница в US eShop ↗</a>' : "";
+}
+function triedText(v){
+  var m = /^(\d{4})-(\d\d)-(\d\d)$/.exec(String(v || ""));
+  return "обложка не нашлась " + (m ? m[3] + "." + m[2] : String(v)) + " — вставь адрес страницы";
+}
+function storeCapText(rec){
+  /* номера магазина владельцу не нужны: строка скрыта (hidden), остаётся служебной отметкой «магазин найден» */
+  if (rec.steam_appid) return "appid " + rec.steam_appid;
+  return rec.nsuid_us ? "nsuid " + rec.nsuid_us : "";
+}
+function storeHintText(rec, title){
+  var st = String(rec.store_title || "").trim();
+  return st && st.toLowerCase() !== String(title || "").trim().toLowerCase() ? "в магазине: " + st : "";
+}
+/* игра из файлов советника (library / watchlist) — её имя ключ слияния и не переименовывается с сайта */
+function isAdvisorKey(k){
+  var hit = false;
+  function chk(a){ (a || []).forEach(function(g){ if (g && g.title && normTitle(g.title) === k) hit = true; }); }
+  if (SRC.profile) chk(SRC.profile.library);
+  chk(SRC.libFull); chk(SRC.watch);
+  return hit;
+}
+function hoursHTML(g, val){
+  return '<div class="gm-grp">' + uiFieldHTML({ label: "Наиграно, ч", hint: g.baseHours != null ? "из библиотеки: " + g.baseHours + " ч" : "", id: "gm-hours",
+    value: val, type: "number", inputmode: "decimal", extra: 'min="0" step="0.5"' }) + "</div>";
+}
+function thrHTML(price, disc){
+  return '<div class="gm-row2">' +
+    uiFieldHTML({ label: "Порог цены", id: "gm-price", value: price, type: "number", inputmode: "numeric", suffix: "$", extra: 'min="1" step="1"' }) +
+    uiFieldHTML({ label: "Порог скидки", id: "gm-disc", value: disc, type: "number", inputmode: "numeric", suffix: "%", extra: 'min="0" max="100" step="1"' }) + "</div>";
+}
+/* у игр из файлов советника поля «Название» нет: имя в шапке (ключ к файлам советника) */
+function cardBodyHTML(g, isNew){
+  var h = "", bought = G_BOUGHT.indexOf(g.state) >= 0, hrs = hasHours(g.state, g.demo);
+  if (isNew || CARD.canRename) h += '<div class="gm-grp">' + uiFieldHTML({ label: "Название", id: "gm-title", value: g.title, ph: "как в магазине", extra: 'maxlength="120" autocomplete="off"' }) + "</div>";
+  h += '<p class="gm-hint" id="gm-store">' + esc(storeHintText(g, g.title)) + "</p>";
+  h += '<div class="gm-grp"><span class="fld-lbl">Статус</span><div class="gm-states">' +
+    optsHTML("gm-own", ["демо", "куплена"], bought ? "куплена" : (g.demo ? "демо" : ""), function(c){ return c === "демо" ? "демо" : CL.ru("game_state", c); }) +
+    optsHTML("gm-state", WISH_CODES, bought ? "" : g.state, function(c){ return CL.ru("game_state", c); }) + "</div></div>";
+  h += '<div class="gm-grp" id="gm-prog-host">' + (hasProg(g.state, g.demo) ? progHTML(CARD.stash.progress) : "") + "</div>";
+  h += '<div class="gm-row2"><div><span class="fld-lbl">Оценка</span>' + uiSelectHTML({ id: "gm-rating", name: "gm-rating", size: "md", block: true, value: g.rating || "",
+    options: [{ value: "", t: "без оценки", selected: !g.rating }].concat(G_RATINGS.map(function(c){ return { value: c, t: CL.ru("game_rating", c), selected: c === g.rating }; })) }) + "</div>";
+  h += '<div><span class="fld-lbl">Платформа</span><div id="gm-plat-wrap">' + platSelHTML(g.platform) + "</div></div></div>";
+  h += '<div id="gm-hours-host">' + (hrs ? hoursHTML(g, CARD.stash.hours) : "") + "</div>";
+  if (g.advisor || g.condition) h += '<details class="gm-adv"><summary>От советника</summary>' +
+    (g.condition ? "<p><b>Условие покупки:</b> " + esc(g.condition) + "</p>" : "") +
+    (g.advisor ? "<p>" + esc(g.advisor) + "</p>" : "") + "</details>";
+  h += '<div class="gm-grp">' + uiFieldHTML({ label: "Заметка", hint: "до 500 знаков", id: "gm-note", value: g.note, area: true, rows: 2, extra: 'maxlength="500"' }) + "</div>";
+  h += '<div id="gm-thr-host">' + (bought ? "" : thrHTML(CARD.stash.price, CARD.stash.disc)) + "</div>";
+  h += '<p class="gm-hint" id="gm-tried"' + (CARD.triedAt ? "" : " hidden") + ">" + (CARD.triedAt ? esc(triedText(CARD.triedAt)) : "") + "</p>";
+  h += '<div class="gm-lookup gm-storerow"><p class="gm-link" id="gm-link">' + storeLinkHTML(g) + '</p>' +
+    '<button type="button" class="ui-btn ghost sm" data-act="gm-lookup">Найти обложку и магазин</button></div>';
+  h += '<p class="gm-cap" id="gm-cap" hidden>' + esc(storeCapText(g)) + "</p>";
+  h += '<div class="gm-urlbox" id="gm-urlbox" hidden>' + uiFieldHTML({ label: "Вставьте адрес страницы в US eShop или Steam", id: "gm-url", value: "", ph: "https://www.nintendo.com/us/store/products/… или https://store.steampowered.com/app/…", extra: 'autocomplete="off"' }) +
+    '<button type="button" class="ui-btn ghost sm" data-act="gm-lookup-url">Найти по адресу</button></div>';
+  h += '<div class="gm-msg" id="gm-msg" role="status"></div>';
+  return h;
+}
+/* купленные: порогов в DOM нет; некупленные: нет поля «Наиграно» (кроме игр с флагом demo: у них есть и пороги, и часы).
+   Набранное при переключении не теряется — лежит в CARD.stash */
+function cardMode(){
+  var own = pressedOf("gm-own"), bought = own === "куплена", demo = own === "демо", st = bought ? "куплена" : (pressedOf("gm-state") || "на-карандаш");
+  return { bought: bought, demo: demo, state: st };
+}
+/* «куплена» гасит правую группу (хочу / на карандаше / не хочу не сохраняются); без неё правая группа обязательна — по умолчанию «на карандаше» */
+function syncWishGroup(){
+  var m = pressedOf("gm-own") === "куплена", box = $("gm-state");
+  if (!box) return;
+  var btns = Array.prototype.slice.call(box.querySelectorAll(".gm-opt"));
+  if (m){
+    var cur = pressedOf("gm-state");
+    if (cur) CARD.stash.wish = cur;
+    btns.forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
+  } else if (!pressedOf("gm-state")){
+    var want = CARD.stash.wish || "на-карандаш";
+    btns.forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-v") === want ? "true" : "false"); });
+  }
+  btns.forEach(function(b){ b.disabled = m; });
+  box.classList.toggle("off", m);
+}
+function syncState(){
+  syncWishGroup();
+  var md = cardMode(), st = md.state, bought = md.bought, hrs = hasHours(st, md.demo), hh = $("gm-hours"), ph = $("gm-price"), pg = $("gm-progress");
+  if (pg) CARD.stash.progress = pg.value;
+  if (hasProg(st, md.demo) !== !!pg) $("gm-prog-host").innerHTML = hasProg(st, md.demo) ? progHTML(CARD.stash.progress) : "";
+  if (ph){ CARD.stash.price = $("gm-price").value; CARD.stash.disc = $("gm-disc").value; }
+  if (hh) CARD.stash.hours = hh.value;
+  if (!bought !== !!ph) $("gm-thr-host").innerHTML = bought ? "" : thrHTML(CARD.stash.price, CARD.stash.disc);
+  if (hrs !== !!hh) $("gm-hours-host").innerHTML = hrs ? hoursHTML(CARD.g, CARD.stash.hours) : "";
+}
+function pressedOf(id){
+  var b = document.querySelector("#" + id + ' .gm-opt[aria-pressed="true"]');
+  return b ? b.getAttribute("data-v") : "";
+}
+function cardMsg(t, err){ var m = $("gm-msg"); if (m){ m.textContent = t || ""; m.className = "gm-msg" + (err ? " err" : ""); } }
+function cardKey(ev){
+  if (ev.key !== "Escape") return;
+  if (document.querySelector(".ui-confirm")) return;     /* подтверждение закроет себя само */
+  ev.preventDefault(); ev.stopImmediatePropagation(); closeCard();
+}
+function cardOpen(){ return !!$("gm-card"); }
+function closeCard(){
+  var w = $("gm-card");
+  if (!w) return;
+  document.removeEventListener("keydown", cardKey, true);
+  w.parentNode.removeChild(w);
+  var c = CARD; CARD = null;
+  focusBack(c);
+}
+function openCard(k, scope, opener){
+  closeFilters(true);   /* открытая шторка фильтров не мешает карточке */
+  closeCard();
+  var isNew = !k, g = isNew ? { title: "", platform: null, state: scope === "watch" ? "хочу" : "куплена", demo: false, rating: null, note: null,
+    price_target_usd: null, discount_target_pct: null, nsuid_us: null, eshop_url: null, cover_url: null, steam_appid: null, store_title: null, advisor: "", hours: null, baseHours: null } : findGame(k, scope);
+  if (!g) return;
+  CARD = { g: g, k: k, scope: scope, isNew: isNew, busy: false, opener: opener || document.activeElement, byPointer: PTR, stash: { price: roundUsd(g.price_target_usd), disc: g.discount_target_pct, hours: g.hours, progress: g.progress || null, wish: g.state !== "куплена" ? g.state : null }, cover_url: g.cover_url, store_title: g.store_title, nsuid_us: g.nsuid_us, eshop_url: g.eshop_url, steam_appid: g.steam_appid || null, canRename: !isNew && !isAdvisorKey(k), triedAt: g.cover_tried || null, triedCleared: false };
+  var w = document.createElement("div");
+  w.id = "gm-card";
+  w.innerHTML = uiModalHTML({ title: isNew ? "Новая игра" : (CARD.canRename ? g.title : demoTitle(g.title, g.demo)), close: "gm-close", cls: "compact enter", width: 560,
+    subHTML: (isNew || CARD.canRename) ? "" : '<span title="имя — ключ к файлам советника; переименование — через скилл">имя — ключ к файлам советника; переименование — через скилл</span>', lead: '<span id="gm-cov">' + coverLead(g, g.title) + "</span>",
+    body: cardBodyHTML(g, isNew), save: "gm-save",
+    footLeft: isNew ? "" : '<button type="button" class="ui-btn danger gm-del" data-act="gm-del">Удалить</button>' });
+  document.body.appendChild(w);
+  syncWishGroup();                                       /* «куплена» с порога гасит правую группу статуса */
+  document.addEventListener("keydown", cardKey, true);
+  w.addEventListener("click", cardClick);
+  if (isNew){                                            /* шапка — живое имя из поля «Название» */
+    var ti = $("gm-title"), tt = w.querySelector(".ui-modal-title"), bx = w.querySelector(".ui-modal-box");
+    tt.classList.add("ph");
+    ti.addEventListener("input", function(){
+      var v = ti.value.trim();
+      tt.textContent = v || "Новая игра"; tt.classList.toggle("ph", !v);
+      bx.setAttribute("aria-label", v || "Новая игра");
+    });
+  }
+  try { w.querySelector(".ui-modal-x").focus({ preventScroll: true }); } catch(e){}
+}
+function cardClick(ev){
+  var t = ev.target;
+  if (!t || !t.closest || !CARD) return;
+  var opt = t.closest(".gm-opt");
+  if (opt){
+    var grp = opt.parentNode;
+    if (opt.disabled) return;
+    var was = opt.getAttribute("aria-pressed") === "true";
+    /* «демо» / «куплена» — взаимоисключающие, повторный клик снимает; остальные группы — всегда ровно одна выбрана */
+    Array.prototype.forEach.call(grp.querySelectorAll(".gm-opt"), function(b){ b.setAttribute("aria-pressed", b === opt ? (grp.id === "gm-own" && was ? "false" : "true") : "false"); });
+    if (grp.id === "gm-state" || grp.id === "gm-own") syncState();
+    return;
+  }
+  var a = t.closest("[data-act]");
+  if (!a) return;
+  var act = a.getAttribute("data-act");
+  if (act === "gm-close") closeCard();
+  else if (act === "gm-save") saveCard(false);
+  else if (act === "gm-del") deleteCard();
+  else if (act === "gm-lookup") lookupCard(a, false);
+  else if (act === "gm-lookup-url") lookupCard(a, true);
+}
+function readCard(){
+  var g = CARD.g, f = function(id){ return ($(id).value || "").trim(); };
+  var title = (CARD.isNew || CARD.canRename) ? f("gm-title") : g.title;
+  if (!title) return { err: "Укажите название игры." };
+  var md = cardMode(), state = md.state, bought = md.bought, demo = md.demo;
+  var price = null, disc = null, hours = g.hours;
+  if (!bought){
+    price = f("gm-price") === "" ? null : Number(f("gm-price").replace(",", "."));
+    disc = f("gm-disc") === "" ? null : Number(f("gm-disc").replace(",", "."));
+    if (price != null && !(isFinite(price) && price >= 0.5)) return { err: "Порог цены — целое число долларов, не меньше 1." };
+    if (price != null) price = Math.round(price);
+    if (disc != null && !(isFinite(disc) && disc >= 0 && disc <= 100)) return { err: "Порог скидки — число от 0 до 100." };
+  }
+  if (hasHours(state, demo)){
+    hours = f("gm-hours") === "" ? null : Number(f("gm-hours").replace(",", "."));
+    if (hours != null && !(isFinite(hours) && hours >= 0)) return { err: "Наиграно — число часов не меньше нуля." };
+    if (hours == null && g.hours != null && f("gm-hours") === "") hours = null;
+  }
+  if ($("gm-note").value.length > 500) return { err: "Заметка длиннее 500 знаков." };
+  var note = $("gm-note").value.trim();
+  var prog = hasProg(state, demo) && $("gm-progress") ? $("gm-progress").value : "";
+  var rec = { title: title, platform: $("gm-plat").value || null, state: state, demo: demo, rating: $("gm-rating").value || null,
+    progress: prog && prog !== "не-начата" ? prog : null,
+    note: note || null, price_target_usd: price, discount_target_pct: disc, hours: hours, nsuid_us: CARD.nsuid_us || null, eshop_url: CARD.eshop_url || null, steam_appid: CARD.steam_appid || null,
+    cover_url: CARD.cover_url || null, store_title: CARD.store_title || null, deleted: false };
+  if (CARD.triedCleared) rec.cover_tried = null;     /* «Найти обложку и магазин» сработала — пометка «искали» снимается */
+  return { rec: rec };
+}
+function visibleKey(k){
+  return !!((LIBM && LIBM.rows.some(function(r){ return normTitle(r.title) === k; })) ||
+            (SRC.watchMerged || []).some(function(it){ return normTitle(it.title) === k; }));
+}
+function cardBusy(on){
+  CARD.busy = on;
+  Array.prototype.forEach.call($("gm-card").querySelectorAll(".ui-modal-save,.gm-del,[data-act=\"gm-lookup\"],[data-act=\"gm-lookup-url\"]"), function(b){ b.disabled = on; });
+}
+function commit(rec, doneMsg, from){
+  var k = normTitle(rec.title), scope = CARD.scope, byPtr = CARD.byPointer;
+  cardBusy(true); cardMsg("Сохраняю…");
+  saveUser(upsertMut(rec, from)).then(function(){
+    closeCard();
+    refreshAll();
+    showBar(doneMsg, "ok");
+    focusBack({ k: k, opener: null, byPointer: byPtr });
+  }, function(e){
+    if (CARD){ cardBusy(false); cardMsg(e.message, true); }
+    else showBar(e.message, "err");
+  });
+}
+function saveCard(){
+  if (!CARD || CARD.busy) return;
+  var r = readCard();
+  if (r.err) return cardMsg(r.err, true);
+  var k = normTitle(r.rec.title);
+  if (CARD.isNew && visibleKey(k)){        /* дубль по трём слоям — открываем уже существующую */
+    var sc = CARD.scope;
+    closeCard(); refreshAll();
+    openCard(k, sc);
+    cardMsg("Такая игра уже есть — открыта её карточка.");
+    return;
+  }
+  if (CARD.canRename && k !== CARD.k){
+    if (visibleKey(k)) return cardMsg("Игра с таким названием уже есть — выберите другое.", true);
+    return commit(r.rec, "Сохранено: " + r.rec.title, CARD.k);
+  }
+  commit(r.rec, "Сохранено: " + r.rec.title);
+}
+function deleteCard(){
+  if (!CARD || CARD.busy) return;
+  var g = CARD.g;
+  uiConfirm({ title: "Убрать игру?", name: g.title, text: "Игра исчезнет из списков сайта. Файлы советника не меняются.", ok: "Убрать" }).then(function(ok){
+    if (!ok || !CARD) return;
+    commit({ title: g.title, platform: g.platform, state: g.state, rating: g.rating, progress: g.progress || null, note: g.note, price_target_usd: g.price_target_usd,
+      discount_target_pct: g.discount_target_pct, hours: g.hours, nsuid_us: g.nsuid_us, eshop_url: g.eshop_url, steam_appid: g.steam_appid || null, cover_url: g.cover_url,
+      store_title: g.store_title, deleted: true }, "Убрана: " + g.title);
+  });
+}
+function lookupCard(btn, byUrl){
+  if (!CARD || CARD.busy) return;
+  var title = (CARD.isNew || CARD.canRename) ? ($("gm-title").value || "").trim() : CARD.g.title;
+  if (!title) return cardMsg("Сначала укажите название игры.", true);
+  var body = { title: title }, pl = $("gm-plat") && $("gm-plat").value;
+  if (pl) body.platform = pl;
+  if (byUrl){
+    var u = ($("gm-url").value || "").trim();
+    if (!/^https:\/\//.test(u)) return cardMsg("Адрес страницы должен начинаться с https://.", true);
+    body.eshop_url = u;
+  }
+  btn.disabled = true; cardMsg("Ищу обложку и магазин…");
+  function fail(msg){ cardMsg(msg, true); $("gm-urlbox").hidden = false; }
+  authFetch("../api/games/nsuid-lookup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return [r.status, j || {}]; }); })
+    .then(function(x){
+      var code = x[0], j = x[1];
+      if (!CARD) return;
+      var sid = /^\d+$/.test(String(j.steam_appid || "")) ? String(j.steam_appid) : "";
+      if (code === 200 && (j.nsuid_us || sid)){
+        var steam = j.store === "steam" || (!j.nsuid_us && !!sid);
+        if (steam){ CARD.steam_appid = sid; }
+        else {
+          CARD.nsuid_us = String(j.nsuid_us);
+          if (j.eshop_url || j.store_url) CARD.eshop_url = j.eshop_url || j.store_url;
+        }
+        if (j.platform && validPlat(j.platform) && !$("gm-plat").value) $("gm-plat-wrap").innerHTML = platSelHTML(j.platform);
+        CARD.triedCleared = true; CARD.triedAt = null; var ct = $("gm-tried"); if (ct) ct.hidden = true;
+        CARD.cover_url = j.cover_url || CARD.cover_url; CARD.store_title = j.store_title || CARD.store_title;
+        $("gm-cov").innerHTML = coverLead({ cover_url: CARD.cover_url, steam_appid: CARD.steam_appid, cover_fallback_url: j.cover_fallback_url }, CARD.isNew ? ($("gm-title").value || "") : CARD.g.title);
+        $("gm-store").textContent = storeHintText(CARD, CARD.isNew || CARD.canRename ? $("gm-title").value : CARD.g.title);
+        $("gm-link").innerHTML = storeLinkHTML(CARD);
+        $("gm-cap").textContent = storeCapText(CARD);
+        $("gm-urlbox").hidden = true;
+        cardMsg("Найдено " + (steam ? "в Steam" : "в US eShop") + (j.store_title ? ": " + j.store_title : "") + ". Нажмите «Сохранить».");
+      }
+      else if (code === 401 || code === 403) cardMsg("Нужен вход с паролем.", true);
+      else if (code === 404) fail("Игра в магазине не найдена — вставьте адрес её страницы в US eShop или Steam.");
+      else fail("Поиск не удался: " + (j.error || ("HTTP " + code)));
+    }, function(){ cardMsg("Нет связи с сервером.", true); })
+    .then(function(){ btn.disabled = false; });
+}
+/* клик и Enter/Пробел по карточке списка; «Из подборки» и ссылки открывают своё */
+function bindCards(sel, scope){
+  var root = document.querySelector(sel);
+  function open(ev){
+    var c = ev.target.closest ? ev.target.closest(".gcard.clk") : null;
+    if (!c || ev.target.closest(".w-src, a")) return;
+    openCard(c.getAttribute("data-k"), scope);
+  }
+  root.addEventListener("click", open);
+  root.addEventListener("keydown", function(ev){
+    if ((ev.key === "Enter" || ev.key === " ") && ev.target.classList && ev.target.classList.contains("gcard")){ ev.preventDefault(); open(ev); }
+  });
+}
+bindCards(".sc-library", "lib");
+bindCards(".sc-watch", "watch");
+
+/* ── подборки: recommendations/*.md ── */
+function parseReco(name, text){
+  var out = { file: name, title: name.replace(/\.md$/, ""), date: null, clusterSlug: null, lean: null, candidates: [], verdicts: {} };
+  var h1 = text.match(/^#\s+(.+)$/m);
+  if (h1) out.title = h1[1].replace(/^Рекомендация:\s*/i, "").trim();
+  out.title = out.title.charAt(0).toUpperCase() + out.title.slice(1);
+  var dm = text.match(/\*\*Дата:\*\*\s*([0-9-]+)/);
+  out.date = dm ? dm[1] : (name.match(/\d{4}-\d{2}-\d{2}/) || [null])[0];
+  var cm = text.match(/\*\*Кластер:\*\*\s*([\wа-яё_-]+)/i);
+  if (cm) out.clusterSlug = cm[1];
+  var lm = text.match(/\*\*Склоняется к:\*\*\s*(.+)$/m);
+  if (lm) out.lean = lm[1].replace(/\*\*/g, "").replace(/\(.*\)/, "").trim();
+  /* таблица «Кандидаты»: колонка «Игра» + «Роль» (почему эта рекомендация) */
+  var sec = text.split(/^##\s+Кандидаты\s*$/m)[1];
+  if (sec){
+    sec = sec.split(/^##\s+/m)[0];
+    var rows = sec.split("\n").filter(function(l){ return /^\s*\|/.test(l); });
+    if (rows.length > 1){
+      var header = rows[0].replace(/^\||\|$/g, "").split("|").map(function(c){ return c.trim().toLowerCase(); });
+      var iName = header.findIndex(function(c){ return c.indexOf("игра") >= 0; });
+      var iWhy = header.findIndex(function(c){ return c.indexOf("роль") >= 0; });
+      rows.slice(1).forEach(function(row){
+        if (/^\|[\s:|-]+\|$/.test(row.trim())) return;
+        var cells = row.replace(/^\s*\||\|\s*$/g, "").split("|").map(function(c){ return c.trim(); });
+        var nm = (cells[iName] || "").replace(/\*\*/g, "").replace(/\s*←.*$/, "").trim();
+        if (!nm) return;
+        out.candidates.push({ name: nm, why: (cells[iWhy] || "").replace(/\*\*/g, "") });
+      });
+    }
+  }
+  /* Итоги: «- Name — `итог:` значение» (заполняется калибровкой) */
+  var it = text.split(/^##\s+Итоги/m)[1];
+  if (it){
+    it.split(/^##\s+/m)[0].split("\n").forEach(function(l){
+      var m = l.match(/^-\s+\**(.+?)\**\s+—\s+`итог:`\s*(.*)$/);
+      if (m){
+        var val = m[2].replace(/[_*()]/g, "").trim();
+        if (val && !/попадание\/промах/.test(val)) out.verdicts[normTitle(m[1])] = val;
+      }
+    });
+  }
+  return out;
+}
+listDir(GAMING + "recommendations/").then(function(entries){
+  var files = entries.filter(function(e){ return !e.isDir && /\.md$/.test(e.name); })
+                     .map(function(e){ return e.name; }).sort().reverse().slice(0, 10);
+  if (!files.length){
+    $("recos").innerHTML = '<div class="md-load">Подборок пока нет.</div>';
+    $("ov-pick-title").textContent = "Подборок пока нет";
+    $("ov-pick-sub").textContent = "Советник ещё не сохранил ни одной ленты.";
+    setNavCount("picks", "лента пуста");
+    uiDataDone(true);
+    return null;
+  }
+  return Promise.all(files.map(function(f){
+    return fetchText(GAMING + "recommendations/" + encodeURIComponent(f))
+      .then(function(t){ return parseReco(f, t); }).catch(function(){ return null; });
+  }));
+}).then(function(recos){
+  if (!recos) return;
+  recos = recos.filter(Boolean);
+  uiDataDone(true);
+
+  /* карта «файл → человеческий заголовок»: ею подписывается слайдовер, когда
+     подборку открывают с карточки экрана «Присматриваюсь» */
+  var recoTitles = {};
+  recos.forEach(function(r){ recoTitles[r.file] = r.title; });
+  window.__recoTitle = function(file){ return recoTitles[file] || null; };
+
+  /* плитка обзора «Подборки»: самая свежая лента (files отсортированы по убыванию) */
+  setNavCount("picks", recos.length + " " + plural(recos.length, "подборка", "подборки", "подборок"));
+  if (recos.length){
+    var r0 = recos[0];
+    var cl0 = (window.__clusterTitle && r0.clusterSlug) ? window.__clusterTitle(r0.clusterSlug) : null;
+    $("ov-pick-title").textContent = r0.title;
+    $("ov-pick-sub").textContent = "Свежая лента · " + fmtYaml(r0.date) +
+      ((cl0 || r0.clusterSlug) ? " · под кластер «" + (cl0 || prettify(r0.clusterSlug)) + "»" : "");
+  }
+
+  $("recos").innerHTML = recos.map(function(r, i){
+    var clTitle = (window.__clusterTitle && r.clusterSlug) ? window.__clusterTitle(r.clusterSlug) : null;
+    var subBits = [];
+    if (clTitle || r.clusterSlug) subBits.push("Под кластер «" + esc(clTitle || prettify(r.clusterSlug)) + "»");
+    if (r.lean) subBits.push("склоняется к: " + esc(r.lean));
+    var cands = r.candidates.map(function(c){
+      var v = r.verdicts[normTitle(c.name)];
+      return '<div class="cand"><span class="cn">' + esc(c.name) + "</span>" +
+             '<span class="why">' + esc(c.why || "—") + "</span>" +
+             '<span class="cv">' + (v ? '<span class="vbadge like">' + esc(v) + "</span>"
+                                      : '<span style="color:var(--text-faint);">итог не зафиксирован</span>') + "</span></div>";
+    }).join("");
+    return '<details class="reco"><summary>' +
+      '<div style="flex:1; min-width:220px;">' +
+        '<span class="r-eyebrow">Подборка · ' + esc(fmtYaml(r.date)) + "</span>" +
+        '<div class="r-title">' + esc(r.title) + "</div>" +
+        '<div class="r-sub">' + subBits.join(" · ") + "</div>" +
+      "</div>" +
+      '<span class="r-open">почему эти игры <span class="reco-chev">▾</span></span>' +
+      "</summary>" +
+      '<div class="reco-body">' + (cands || '<div class="reco-note">Кандидаты не распарсились — открой документ.</div>') +
+      '<div class="reco-note">«Почему» — роль кандидата из подборки советника; итоги заполняются калибровкой.</div>' +
+      '<div class="reco-actions"><button class="ui-btn ghost reco-doc" data-file="' + esc(r.file) + '" data-title="' + esc(r.title) + '">Открыть документ</button></div>' +
+      "</div></details>";
+  }).join("");
+  $("recos").addEventListener("click", function(ev){
+    var b = ev.target.closest(".reco-doc");
+    if (!b) return;
+    ev.preventDefault();
+    openDoc(GAMING + "recommendations/" + encodeURIComponent(b.getAttribute("data-file")), b.getAttribute("data-title"));
+  });
+}).catch(function(){
+  uiDataDone(false);
+  $("recos").innerHTML = '<div class="md-load">Нет связи с подборками.</div>';
+  $("ov-pick-title").textContent = "—";
+  $("ov-pick-sub").textContent = "Нет связи с подборками.";
+});
+
+})();
+</script>
+</body>
+</html>

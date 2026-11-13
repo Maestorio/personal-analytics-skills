@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Путешествия — Личный кабинет</title>
+<!-- иконка кабинета (вкладка и экран «Домой»): шесть ромбов — цвета разделов --c-1…--c-6 -->
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/hub-32.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/hub-180.png?v=2">
+<meta name="apple-mobile-web-app-title" content="Кабинет">
+<!-- Светлая тема по умолчанию: системную prefers-color-scheme НЕ подхватываем
+     (правило кабинета) — тёмная только при явном hub-theme==="dark". Скрипт стоит
+     до <style>, иначе у тёмной темы страница мигает светлым до отработки JS.
+     В share-режиме (?trip=) тема всегда светлая — чей бы ни был браузер. -->
+<script>(function(){try{if(new URLSearchParams(location.search).get("trip"))return;if(localStorage.getItem("hub-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/ui-kit.css?v=1.72.0">
+<!-- ui-kit.js — в <head>: шапку (uiTopHTML) страница вставляет прямо при
+     разборе, без мигания; при загрузке ui-kit только вешает обработчики. -->
+<script src="assets/ui-kit.js?v=1.72.0"></script>
+<style>
+
+
+/* База (сброс, шрифт, цвет и фон body) — в assets/ui-kit.css; здесь только своё. */
+/* акцент раздела для общих компонентов ui-kit (окно документа и др.) */
+body{ --sec-acc:var(--c-4); }
+body{
+  min-height:100vh;
+  background-image:var(--trav-bg,none); background-size:260px 260px;
+  transition:background-color .25s,color .25s;
+}
+a{ color:var(--accent); text-decoration:none; }
+@media (hover:hover){ a:hover{ color:var(--accent-2); } }
+/* фон «маршруты» */
+body{ --trav-bg:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='260'%20height='260'%3E%3Cg%20fill='none'%20stroke='%23b57b66'%20stroke-opacity='.19'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M28%20232c38-10%2016-42%2048-58s54%202%2052-30%2026-28%2046-52'%20stroke-dasharray='3%207'/%3E%3Cpath%20d='M174%2092l25-11-11%2023-5-9z'/%3E%3Cpath%20d='M28%20210a8%208%200%200%201%208%208c0%206-8%2014-8%2014s-8-8-8-14a8%208%200%200%201%208-8z'/%3E%3Ccircle%20cx='28'%20cy='218'%20r='2.6'/%3E%3Cpath%20d='M164%20252c24-4%2018-22%2040-28s26-16%2024-32'%20stroke-dasharray='3%207'/%3E%3Ccircle%20cx='162'%20cy='252'%20r='2.2'/%3E%3Ccircle%20cx='228'%20cy='192'%20r='2.2'/%3E%3Cg%20transform='translate(40%2036)%20rotate(-6)'%3E%3Crect%20x='0'%20y='8'%20width='34'%20height='24'%20rx='5'/%3E%3Cpath%20d='M12%208V5a5%205%200%200%201%2010%200v3M8%208v24M26%208v24'/%3E%3C/g%3E%3Cg%20transform='translate(196%2020)%20rotate(5)'%3E%3Crect%20x='0'%20y='6'%20width='28'%20height='20'%20rx='4'/%3E%3Ccircle%20cx='14'%20cy='16'%20r='5.5'/%3E%3Cpath%20d='M8%206l3-4h6l3%204'/%3E%3C/g%3E%3Ccircle%20cx='226'%20cy='120'%20r='11'/%3E%3Cpath%20d='M222%20126l3-9%205-3-3%209z'/%3E%3Cpath%20d='M110%20236l11-18%207%2011%205-7%2010%2014'/%3E%3Ccircle%20cx='150'%20cy='214'%20r='3.5'/%3E%3Cpath%20d='M96%20108v10M91%20113h10'/%3E%3Ccircle%20cx='140'%20cy='60'%20r='2'/%3E%3C/g%3E%3C/svg%3E"); }
+[data-theme="dark"] body{ --trav-bg:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='260'%20height='260'%3E%3Cg%20fill='none'%20stroke='%23cf9583'%20stroke-opacity='.12'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M28%20232c38-10%2016-42%2048-58s54%202%2052-30%2026-28%2046-52'%20stroke-dasharray='3%207'/%3E%3Cpath%20d='M174%2092l25-11-11%2023-5-9z'/%3E%3Cpath%20d='M28%20210a8%208%200%200%201%208%208c0%206-8%2014-8%2014s-8-8-8-14a8%208%200%200%201%208-8z'/%3E%3Ccircle%20cx='28'%20cy='218'%20r='2.6'/%3E%3Cpath%20d='M164%20252c24-4%2018-22%2040-28s26-16%2024-32'%20stroke-dasharray='3%207'/%3E%3Ccircle%20cx='162'%20cy='252'%20r='2.2'/%3E%3Ccircle%20cx='228'%20cy='192'%20r='2.2'/%3E%3Cg%20transform='translate(40%2036)%20rotate(-6)'%3E%3Crect%20x='0'%20y='8'%20width='34'%20height='24'%20rx='5'/%3E%3Cpath%20d='M12%208V5a5%205%200%200%201%2010%200v3M8%208v24M26%208v24'/%3E%3C/g%3E%3Cg%20transform='translate(196%2020)%20rotate(5)'%3E%3Crect%20x='0'%20y='6'%20width='28'%20height='20'%20rx='4'/%3E%3Ccircle%20cx='14'%20cy='16'%20r='5.5'/%3E%3Cpath%20d='M8%206l3-4h6l3%204'/%3E%3C/g%3E%3Ccircle%20cx='226'%20cy='120'%20r='11'/%3E%3Cpath%20d='M222%20126l3-9%205-3-3%209z'/%3E%3Cpath%20d='M110%20236l11-18%207%2011%205-7%2010%2014'/%3E%3Ccircle%20cx='150'%20cy='214'%20r='3.5'/%3E%3Cpath%20d='M96%20108v10M91%20113h10'/%3E%3Ccircle%20cx='140'%20cy='60'%20r='2'/%3E%3C/g%3E%3C/svg%3E"); }
+
+.hub-wrap{ max-width:960px; margin:0 auto; padding:28px 32px 72px; }
+
+
+:focus-visible{ outline:2px solid var(--c-4); outline-offset:3px; }
+
+/* шапка раздела (.ui-top) — общая, ui-kit uiTopHTML; своих стилей шапки нет */
+
+.hub-masthead{ font-family:var(--font-serif); font-weight:600; font-size:58px; line-height:1; letter-spacing:-.02em; margin:14px 0 0; }
+.sec-eyebrow{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--c-4); font-weight:700; }
+.masthead-sub{ font-family:var(--font-serif); font-style:italic; font-size:15px; color:var(--text-muted); margin:14px 0 0; }
+
+.trav-summary{ display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:6px 4px; margin:20px auto 0; font-size:12px; color:var(--text-faint); }
+.trav-summary .v{ padding:0 12px; }
+.trav-summary .v b{ color:var(--text-muted); font-weight:600; font-variant-numeric:tabular-nums; }
+.trav-summary .v b.hot{ color:var(--c-4); }
+.trav-summary .div{ width:1px; height:12px; background:var(--border); }
+
+.who-label{ font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-faint); font-weight:700; }
+.fchip{
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:999px; padding:6px 14px;
+  font-size:12.5px; font-weight:600; color:var(--text-muted); cursor:pointer; min-height:34px; font-family:inherit;
+  transition:background .15s,border-color .15s,color .15s;
+}
+@media (hover:hover){ .fchip:hover{ border-color:var(--border-strong); color:var(--text); } }
+.fchip.on{ background:var(--bg-alt); border-color:var(--c-4); color:var(--c-4); }
+
+.group-head{ display:flex; align-items:center; gap:14px; margin:40px 0 16px; }
+.group-head h2{ font-family:var(--font-sans); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:var(--text-muted); margin:0; }
+.group-head .cnt{ font-size:11px; font-weight:600; color:var(--text-muted); background:var(--bg-alt); border:1px solid var(--border); border-radius:999px; padding:1px 8px; font-variant-numeric:tabular-nums; }
+.group-head .cnt.hot{ color:var(--c-4); }
+.group-head .line{ flex:1; height:1px; background:var(--border); }
+.group-head .note{ font-size:12px; color:var(--text-faint); }
+
+summary{ list-style:none; cursor:pointer; }
+summary::-webkit-details-marker{ display:none; }
+.trip-card{
+  background:var(--bg-elev); border:1px solid var(--border); border-left:3px solid var(--c-4);
+  border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:16px;
+  transition:border-color .18s,box-shadow .18s;
+}
+@media (hover:hover){ .trip-card:hover{ border-color:var(--border-strong); box-shadow:0 2px 4px rgba(60,52,38,.10),0 14px 34px rgba(60,52,38,.08); } }
+.trip-card.arch{ border-left-color:var(--border-strong); box-shadow:none; margin-bottom:12px; }
+.trip-title{ font-family:var(--font-serif); font-weight:600; font-size:30px; line-height:1.04; letter-spacing:-.01em; margin:7px 0 0; transition:color .15s; }
+@media (hover:hover){ .trip-card summary:hover .trip-title{ color:var(--c-4); } }
+.trip-card.arch .trip-title{ font-size:21px; margin:0; }
+.trip-chev{ transition:transform .2s; display:inline-block; color:var(--text-faint); font-size:12px; }
+.trip-card[open] .trip-chev{ transform:rotate(180deg); }
+.trip-eyebrow{ font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--c-4); font-weight:700; }
+.dots{ display:flex; gap:5px; }
+.dots i{ width:9px; height:9px; border-radius:50%; border:1.5px solid var(--border-strong); }
+.dots i.done{ background:var(--c-4); border-color:var(--c-4); }
+.trip-card.arch .dots i{ width:7px; height:7px; }
+.trip-card.arch .dots i.done{ background:var(--border-strong); border-color:var(--border-strong); }
+.badge{ display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:600; border-radius:999px; padding:4px 11px; white-space:nowrap; }
+.badge .dot{ width:6px; height:6px; border-radius:50%; background:currentColor; }
+.badge.ready{ color:var(--success); background:var(--success-bg); }
+.badge.progress{ color:var(--c-4); background:var(--bg-alt); border:1px solid var(--border); }
+.badge.draft{ color:var(--warn); background:var(--warn-bg); }
+.badge.done{ color:var(--text-muted); background:var(--bg-alt); }
+.badge.superseded{ color:var(--text-faint); background:var(--bg-alt); }
+.badge.expired{ color:var(--text-faint); background:var(--bg-alt); border:1px dashed var(--border-strong); }
+/* когда поездка (uiTripWhen): поездка — акцентом; возможная/идея — приглушённо,
+   пунктиром: отсчёта времени у них нет */
+.trip-when{ display:inline-flex; align-items:center; margin-top:10px; font-size:12.5px; font-weight:600; font-variant-numeric:tabular-nums;
+  padding:3px 10px; border-radius:999px; color:var(--c-4); background:var(--bg-alt); border:1px solid var(--border); }
+.trip-when--possible, .trip-when--idea{ color:var(--text-muted); font-weight:500; border-style:dashed; }
+.vw-when{ display:block; font-size:12px; color:var(--c-4); font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.vw-when.is-soft{ color:var(--text-muted); font-weight:500; }
+.who{ display:inline-flex; align-items:center; gap:7px; font-size:12px; color:var(--text-muted); margin-top:10px; }
+.who b{ font-weight:600; color:var(--text); }
+
+.stage-row{ display:grid; grid-template-columns:26px 1fr auto; gap:14px; align-items:center; padding:10px 2px; border-top:1px solid var(--border); }
+.snum{ width:22px; height:22px; border-radius:50%; display:grid; place-items:center; font-size:11px; font-weight:700; }
+.snum.done{ background:var(--c-4); color:#fff; }
+[data-theme="dark"] .snum.done{ color:#241f1b; }
+.snum.todo{ background:transparent; color:var(--text-faint); border:1.5px solid var(--border-strong); }
+.stage-name{ font-size:13.5px; font-weight:500; }
+.stage-name.todo{ color:var(--text-muted); }
+.stage-links{ display:inline-flex; align-items:center; gap:12px; font-size:12.5px; }
+.exp-link{ color:var(--c-4); font-weight:600; }
+@media (hover:hover){ .exp-link:hover{ text-decoration:underline; } }
+.stage-links .sep{ color:var(--border-strong); }
+.stage-none{ font-size:12px; color:var(--text-faint); }
+.stage-warn{ font-size:11px; font-weight:600; color:var(--warn); background:var(--warn-bg); border-radius:999px; padding:2px 9px; white-space:nowrap; margin-left:8px; }
+.plan-block{ margin:6px 0 8px; }
+/* компактный дубль плана в шапке карточки — только на узком экране */
+.ui-btn.plan-inline{ display:none; white-space:nowrap; }
+.card-note{ display:inline-flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-muted); margin:6px 0 8px; padding:8px 13px; background:var(--bg-alt); border-radius:8px; }
+/* кнопка «Поделиться» — копирует ссылку ?trip=; живёт в card-body, не в summary */
+.trip-share{ margin:6px 0 8px 8px; }
+.ui-btn.plain.trip-share.done{ color:var(--success); box-shadow:inset 0 0 0 1px var(--success); }
+.share-missing{
+  margin:40px auto; max-width:480px; text-align:center; padding:22px;
+  background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius);
+  font-size:13.5px; color:var(--text-muted);
+}
+.card-body{ padding:6px 24px 24px; }
+.trip-card.arch .card-body{ padding:4px 22px 20px; border-top:1px solid var(--border); }
+.all-files{ font-size:12.5px; color:var(--text-muted); font-weight:600; }
+
+/* ── окно просмотра стадии (ui-kit .ui-docwin, по центру) ──
+   1280px — чтобы экспортный HTML стадии (лист A4 794px) развернул оглавление
+   столбцом слева: nav-layer включает рельс при ширине окна ≥ ~1200px. На
+   экранах уже — оглавление остаётся нижней панелью, как на телефоне. */
+#viewer{ --docwin-w:1280px; z-index:60; }
+/* шапка, ✕ и тело окна — общие ui-kit (.ui-docwin-head/-title/-x/-body);
+   здесь — своё у стадий: стрелки, счётчик, переключатель вида, действия */
+.vw-arr{
+  background:var(--bg-alt); border:1px solid var(--border); border-radius:8px; cursor:pointer;
+  color:var(--text); font-size:12px; line-height:1; padding:9px 12px; font-family:inherit;
+}
+@media (hover:hover){ .vw-arr:hover{ border-color:var(--border-strong); } }
+.vw-arr[disabled]{ opacity:.4; cursor:default; }
+.vw-count{ font-size:12.5px; color:var(--text-muted); white-space:nowrap; font-variant-numeric:tabular-nums; }
+.vw-tools{
+  display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  padding:10px 20px; background:var(--bg-elev); border-bottom:1px solid var(--border); flex:none;
+}
+.vw-seg{ display:inline-flex; background:var(--bg-sunk); border:1px solid var(--border); border-radius:9px; padding:3px; }
+.vw-seg button{
+  background:none; border:none; border-radius:7px; cursor:pointer; font-family:inherit;
+  font-size:12.5px; font-weight:600; color:var(--text-muted); padding:6px 16px;
+}
+.vw-seg button.on{ background:var(--bg-elev); color:var(--text); box-shadow:var(--shadow); }
+.vw-seg button[disabled]{ opacity:.35; cursor:default; }
+.vw-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+.vw-actions .ui-btn{ display:inline-flex; align-items:center; gap:8px; text-decoration:none; }
+/* Значок-дублёр подписи: нужен только там, где подпись спрятана (телефон). */
+.vw-ic{ display:none; }
+.ui-docwin-body iframe{ width:100%; height:100%; border:none; display:block; background:#fff; }
+
+/* — карточка профиля путешественника (модалка по центру, поверх экрана) — */
+.who-name{ color:var(--c-4); text-decoration:none; cursor:pointer; border-bottom:1px dashed color-mix(in srgb, var(--c-4) 45%, transparent); }
+@media (hover:hover){ .who-name:hover{ border-bottom-style:solid; } }
+.prof-overlay{ position:fixed; inset:0; z-index:70; background:rgba(30,26,20,.5); display:flex; align-items:center; justify-content:center; padding:18px; }
+[data-theme="dark"] .prof-overlay{ background:rgba(0,0,0,.6); }
+.prof-card{ background:var(--bg); border:1px solid var(--border-strong); border-radius:14px; width:min(680px,96vw); max-height:90vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,.3); overflow:hidden; }
+.prof-head{ display:flex; align-items:flex-start; gap:14px; padding:20px 24px 16px; border-bottom:1px solid var(--border); flex:none; }
+.prof-eyebrow{ font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--c-4); font-weight:700; }
+.prof-name{ font-family:var(--font-serif); font-size:24px; font-weight:600; margin:3px 0 0; line-height:1.15; }
+.prof-arch{ display:inline-block; margin-top:9px; font-size:11px; padding:3px 10px; border-radius:20px; background:color-mix(in srgb,var(--c-4) 12%,transparent); color:var(--c-4); border:1px solid color-mix(in srgb,var(--c-4) 30%,transparent); }
+.prof-updated{ font-size:11px; color:var(--text-faint); margin-top:8px; }
+.prof-close{ margin-left:auto; flex:none; background:var(--bg-alt); border:1px solid var(--border); border-radius:8px; cursor:pointer; color:var(--text); font-size:15px; line-height:1; padding:8px 11px; }
+@media (hover:hover){ .prof-close:hover{ border-color:var(--border-strong); } }
+.prof-body{ overflow-y:auto; }
+.prof-body .md-load{ padding:34px 24px; text-align:center; color:var(--text-muted); line-height:1.6; }
+.md-load{ padding:40px; text-align:center; color:var(--text-muted); font-size:13.5px; }
+
+@media (max-width:760px){
+  .hub-masthead{ font-size:42px; }
+  .hub-wrap{ padding:24px 16px 60px; }
+  .trav-summary{ border-radius:14px; }
+  /* план — компактным чипом в шапке, чтобы не раскрывать карточку */
+  .ui-btn.plan-inline{ display:inline-flex; }
+  .plan-block{ display:none; }
+  /* тач-мишени: находка аудита №5 */
+  .fchip{ min-height:40px; }
+  .vw-arr, .prof-close{ min-width:40px; min-height:40px; justify-content:center; }
+  /* Шапка вьюера: замер до правки — 215px из 780 (28% экрана), из них 151px
+     панель инструментов. Три кнопки действий с полными подписями в 390px не
+     помещались, flex-wrap разворачивал их в ДВА ряда по 40px.
+     Прячем подписи, оставляем значок — тот же приём, что у .h-btn-lbl выше;
+     мишень 40×40 сохраняется, поэтому теряется текст, а не удобство.
+     Стало 124px (16%): тексту документа досталось +91px на каждом экране. */
+  .vw-actions .ui-btn{ min-height:40px; min-width:40px; padding:6px 10px; justify-content:center; }
+  .vw-actions .vw-lbl{ display:none; }
+  .vw-ic{ display:inline; }
+  .vw-tools{ padding:8px 16px; flex-wrap:nowrap; }
+  /* Название поездки в шапке дублирует контекст — документ открыт из карточки
+     этой же поездки. Высоты это не экономит (её держат стрелки 40px), но
+     освобождает строку названию стадии: оно перестаёт обрезаться на «Финал: …». */
+  #viewer .ui-docwin-kicker{ display:none; }
+  /* Две строки вместо многоточия достаются даром: высоту шапки задают стрелки
+     (40px), а два ряда по 16×1.2 = 38px в них укладываются. Одной строкой
+     «Финал: карта + досье» не помещался ни при каком кегле — в 390px на титул
+     остаётся ~145px после стрелок, счётчика и крестика. */
+  #viewer .ui-docwin-head{ gap:10px; }
+  #viewer .ui-docwin-title{ font-size:16px; white-space:normal; display:-webkit-box;
+             -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+}
+</style>
+</head>
+<body>
+  <!-- шапка — общая (ui-kit uiTopHTML); по ссылке «поделиться» (?trip=) — без
+       крошки «← Хаб», входа и справки: гостю они не нужны -->
+  <script>document.currentScript.insertAdjacentHTML("beforebegin", uiTopHTML({ page: "travel", name: "Путешествия", share: !!new URLSearchParams(location.search).get("trip") }));</script>
+
+  <div class="hub-wrap">
+
+    <header style="text-align:center; margin:40px 0 6px;">
+      <span class="sec-eyebrow">Личный кабинет · раздел</span>
+      <h1 class="hub-masthead">Путешествия</h1>
+      <p class="masthead-sub">Индекс поездок — каждая проходит пайплайн из семи стадий.</p>
+    </header>
+
+    <div class="trav-summary" id="summary">
+      <span class="v"><b id="sum-total">—</b> поездок</span>
+      <span class="div"></span>
+      <span class="v">мои: <b id="sum-mine">—</b> · для близких: <b id="sum-others">—</b></span>
+      <span class="div"></span>
+      <span class="v"><b class="hot" id="sum-active">—</b> активные</span>
+      <span class="div"></span>
+      <span class="v" style="color:var(--text-muted);" id="sum-next">Ближайшая — …</span>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; margin:24px auto 0;" id="filters">
+      <span class="who-label" style="margin-right:2px;">Кто едет</span>
+      <button class="fchip on" data-key="all">Все</button>
+      <button class="fchip" data-key="alexey">Алексей</button>
+      <button class="fchip" data-key="alena">Мария</button>
+      <button class="fchip" data-key="parents">Родители</button>
+    </div>
+
+    <div id="groups"></div>
+
+    <script>document.currentScript.insertAdjacentHTML("beforebegin", uiFootHTML({ page: "travel", version: "travel v1.31", src: "Synology · Claude-Memory / travel-planner" }));</script>
+
+  </div>
+
+  <div class="ui-docwin" id="viewer" hidden>
+    <div class="ui-docwin-box vw-panel" role="dialog" aria-modal="true">
+      <div class="ui-docwin-head">
+        <button class="vw-arr" id="vw-prev" aria-label="Предыдущая стадия">◀</button>
+        <button class="vw-arr" id="vw-next" aria-label="Следующая стадия">▶</button>
+        <div class="ui-docwin-titles">
+          <span class="ui-docwin-kicker" id="vw-trip">—</span>
+          <span class="ui-docwin-title" id="vw-stage">—</span>
+          <span class="vw-when" id="vw-when"></span>
+        </div>
+        <span class="vw-count" id="vw-count">1 / 7</span>
+        <button class="ui-docwin-x" id="vw-close" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="vw-tools">
+        <div class="vw-seg">
+          <button id="seg-html">HTML</button>
+          <button id="seg-md">md</button>
+        </div>
+        <div class="vw-actions">
+          <!-- Подписи в отдельных span: на телефоне они прячутся, а значок
+               остаётся — кнопка сохраняет смысл и мишень 40×40. У «↗» и «PDF»
+               значок уже есть в самой подписи, копированию он добавлен явно. -->
+          <a class="ui-btn plain sm" id="vw-open" href="#" target="_blank" rel="noopener" title="Открыть в новой вкладке"><span class="vw-lbl">В новой вкладке </span>↗</a>
+          <a class="ui-btn plain sm" id="vw-pdf" href="#" download title="Скачать PDF"><span class="vw-lbl">Скачать </span>PDF</a>
+          <button class="ui-btn plain sm" id="vw-copy" title="Копировать ссылку"><span class="vw-lbl">Копировать ссылку</span><span class="vw-ic" aria-hidden="true">⧉</span></button>
+        </div>
+      </div>
+      <div class="ui-docwin-body" id="vw-html" hidden><iframe id="vw-frame" title="Стадия поездки"></iframe></div>
+      <div class="ui-docwin-body rd-host" id="vw-md" hidden></div>
+      <div class="ui-docwin-body md-load" id="vw-empty" hidden>Стадия не начата — файлов пока нет.</div>
+    </div>
+  </div>
+
+  <div class="prof-overlay ui-fx" id="prof" hidden>
+    <div class="prof-card" role="dialog" aria-modal="true">
+      <div class="prof-head">
+        <div style="min-width:0;">
+          <span class="prof-eyebrow">Профиль путешественника</span>
+          <h2 class="prof-name" id="prof-name">—</h2>
+          <div id="prof-arch"></div>
+          <div class="prof-updated" id="prof-updated"></div>
+        </div>
+        <button class="prof-close" id="prof-close" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="prof-body rd-host" id="prof-body"></div>
+    </div>
+  </div>
+
+<script>
+/* ───────────────────────────────────────────────────────────────────────────
+   Путешествия · Personal Hub                                     travel v1.23
+
+   v1.8 · кнопка «? Справка» в топбаре (helpBtnHTML, ui-kit 1.4) — справка по
+     travel-planning из assets/help/travel.md; в share-режиме скрыта.
+
+   v1.6 · переработанный макет Claude Design + мобильный аудит:
+     • липкая панель раздела .h-top (крошка · ромб --c-4 «Путешествия» · ⟳ ◐)
+       вынесена из .hub-wrap — идёт во всю ширину; подписи кнопок .h-btn-lbl
+       схлопываются на ≤760px, остаются иконки;
+     • .plan-inline — компактный чип «План vN ↗» в шапке карточки на мобильном
+       (основной .plan-block прячется): финальный план доступен без раскрытия.
+       Чип живёт в <summary>, но карточку не раскрывает — обработчик .vw-link
+       делает preventDefault();
+     • тач-мишени ≥40px на ≤760px (кнопки панели 40×40, .fchip, стрелки
+       просмотрщика, ✕ модалок, кнопки действий);
+     • ранний скрипт темы в <head> — тёмная больше не мигает светлым при
+       загрузке; в share-режиме (?trip=) пропускается, там тема всегда светлая;
+     • viewport-fit=cover + env(safe-area-inset-*) в шапке просмотрщика.
+   ─────────────────────────────────────────────────────────────────────────── */
+(function(){
+"use strict";
+
+/* ── универсальная мета: НИКАКИХ конкретных поездок в коде.
+   Источники по приоритету: trip.yaml (контракт trip-meta@1, пишет скилл
+   travel-planning) → frontmatter 0_scope.md → имя директории. */
+var TRIPS_ROOT = "../travel-planner/trips/";
+var PROFILES_ROOT = "../travel-planner/profiles/";
+/* месяцы и форматы дат — общие, ui-kit (uiDateLong/uiMonthShort/uiDateNum, UI_MONTHS_*) */
+var STATUS_BADGE = {
+  ready:      { cls: "ready",      text: "к поездке готов" },
+  progress:   { cls: "progress",   text: "в проработке" },
+  draft:      { cls: "draft",      text: "черновик" },
+  done:       { cls: "done",       text: "состоялась" },
+  superseded: { cls: "superseded", text: "вытеснена" },
+  /* возможная поездка/идея, срок которой прошёл, а точных дат так и нет:
+     «состоялась» было бы неправдой (решение 2026-10-03) */
+  expired:    { cls: "expired",    text: "срок прошёл" }
+};
+var STAGE_NAMES = ["Регионы","Отчёты","Похожие авторы","Места","Варианты","Финальный план","Финал: карта + досье"];
+var GROUPS = [
+  { key: "active",  title: "Активные",          hot: true,  note: "" },
+  { key: "early",   title: "Ранняя проработка",  hot: false, note: "" },
+  { key: "archive", title: "Архив",              hot: false, note: "прошедшие поездки и истёкшие идеи" }
+];
+var CACHE_TTL_MIN = 60;
+
+/* share-режим: ?trip=<dir> открывает ОДНУ поездку публичной ссылкой.
+   NFC-нормализация — macOS отдаёт имена директорий в NFD («й» = «и»+диакритика),
+   а URLSearchParams/ссылка приходят как NFC → сравнивать нормализованно с обеих
+   сторон (см. память project_personal_hub_plan «Ловушки JSON-листинга»). */
+var SHARE_TRIP = null;
+try {
+  var _st = new URLSearchParams(location.search).get("trip");
+  if (_st) SHARE_TRIP = _st.normalize("NFC");
+} catch(e){}
+
+function $(id){ return document.getElementById(id); }
+// esc() переехала в assets/ui-kit.js (Фаза 2 плана унификации, 2026-07-21):
+// старая копия экранировала только `&<>` (textContent→innerHTML) и НЕ
+// экранировала кавычки — реальный дефект в data-profile/data-name/data-dir
+// (значение с `"` рвало атрибут). Эталон ui-kit.js — полный replace всех
+// 5 спецсимволов. Локальное определение удалено, чтобы не побеждать молча.
+
+/* ── плоский YAML/frontmatter-парс: key: value + [a, b]-списки (без вложенности) ── */
+function parseFlatYaml(text){
+  var res = {};
+  text.split("\n").forEach(function(ln){
+    var m = ln.match(/^([A-Za-zА-Яа-яё_][\wА-Яа-яё-]*):\s*(.*)$/);
+    if (!m) return;
+    var v = m[2].replace(/\s+#.*$/, "").trim().replace(/^["']|["']$/g, "");
+    if (/^\[.*\]$/.test(v)){
+      res[m[1]] = v.slice(1, -1).split(",").map(function(x){ return x.trim().replace(/^["']|["']$/g, ""); }).filter(Boolean);
+    } else {
+      res[m[1]] = v;
+    }
+  });
+  return res;
+}
+function frontmatterOf(text){
+  var m = text.match(/---\s*\n([\s\S]*?)\n\s*---/);
+  return m ? parseFlatYaml(m[1]) : {};
+}
+/* сезон "YYYY-MM"|"YYYY"|текст → отображение и ключ сортировки */
+function seasonDisplay(s){
+  if (!s) return "";
+  var m = String(s).match(/^(\d{4})-(\d{2})/);
+  if (m) return UI_MONTHS_NOM[+m[2] - 1] + " " + m[1];
+  return String(s);
+}
+/* участники: имена из trip.yaml/профиля → ключи фильтра + подпись */
+function whoKeys(names){
+  var keys = [];
+  names.forEach(function(n){
+    n = n.toLowerCase();
+    if (n.indexOf("алексей") >= 0) keys.push("alexey");
+    else if (n.indexOf("ал") === 0 || n.indexOf("алё") >= 0) keys.push("alena");
+    else if (n.indexOf("родител") >= 0) keys.push("parents");
+  });
+  return keys.length ? keys : ["alexey"];
+}
+function profileFile(name){ return String(name).toLowerCase().replace(/\u0451/g, "\u0435").trim(); }
+function joinPhrase(parts){
+  if (parts.length <= 1) return parts.join("");
+  return parts.slice(0, -1).join(", ") + " и " + parts[parts.length - 1];
+}
+function whoLink(profile, name, bold){
+  var inner = bold ? "<b>" + esc(name) + "</b>" : esc(name);
+  return '<a class="who-name" href="#" data-profile="' + esc(profile) +
+         '" data-name="' + esc(name) + '">' + inner + "</a>";
+}
+/* combined — общий профиль пары/группы (из travelers_profile). Есть → ОДНА
+   ссылка на весь состав; нет → индивидуальные ссылки на каждого. */
+function whoLabel(names, combined, bold){
+  var caps = names.map(function(n){ n = n.trim(); return n.charAt(0).toUpperCase() + n.slice(1); });
+  if (combined) return whoLink(combined, joinPhrase(caps), bold);
+  return joinPhrase(caps.map(function(w){ return whoLink(profileFile(w), w, bold); }));
+}
+function travelersFromProfile(profilePath){
+  /* "profiles/алексей_мария.md" → ["алексей","мария"] */
+  if (!profilePath) return null;
+  var base = String(profilePath).split("/").pop().replace(/\.md$/, "");
+  var parts = base.split("_").filter(function(p){ return !/^\d/.test(p); });
+  return parts.length ? parts : null;
+}
+function prettify(id){
+  return String(id).replace(/_/g, " ").replace(/\s+\d{4}(-\d{2})?$/, "").trim()
+    .replace(/^./, function(c){ return c.toUpperCase(); });
+}
+/* сборка меты поездки из yaml/scope/имени; hasExports решает active vs early */
+function buildMeta(dir, yamlText, scopeText, hasExports){
+  var y = yamlText ? parseFlatYaml(yamlText) : {};
+  var fm = scopeText ? frontmatterOf(scopeText) : {};
+  var season = y.season || fm.season || (dir.match(/\d{4}(-\d{2})?/) || [""])[0];
+  var travelers = (Array.isArray(y.travelers) && y.travelers.length ? y.travelers : null) ||
+                  travelersFromProfile(fm.travelers_profile || fm.profile_id) || ["алексей"];
+  /* общий профиль пары/группы: travelers_profile → файл без .md; берём его как
+     единую ссылку, если он объединённый (в имени "_") или состав под одним
+     именем (напр. «родители»). Иначе — индивидуальные профили. */
+  var tp = y.travelers_profile || fm.travelers_profile;
+  var combined = null;
+  if (tp){
+    var pbase = String(tp).split("/").pop().replace(/\.md$/, "");
+    if (pbase.indexOf("_") >= 0 || travelers.length === 1) combined = pbase;
+  }
+  var status = y.status || "planning";
+  /* Когда поездка — общий расчёт ui-kit (uiTripWhen): точные даты start/end →
+     поездка; ready + месяц → поездка с точностью до месяца; иначе возможная
+     поездка или идея. Прошла → «состоялась»; возможная/идея с прошедшим сроком
+     и без дат → «срок прошёл» (не «состоялась» — это было бы неправдой). */
+  var when = uiTripWhen({ start: y.start, end: y.end, season: season, status: status });
+  if (status !== "superseded" && status !== "done" && when.archive)
+    status = when.archive === "expired" ? "expired" : "done";
+  var group = (status === "done" || status === "superseded" || status === "expired") ? "archive"
+            : (status === "ready" || hasExports) ? "active" : "early";
+  var badgeKey = status === "planning" ? (group === "active" ? "progress" : "draft") : status;
+  var badge = STATUS_BADGE[badgeKey] || STATUS_BADGE.draft;
+  var sd = when.kind === "trip" ? when.seasonLabel : seasonDisplay(season);
+  return {
+    title: y.title || prettify(fm.trip_id || dir),
+    eyebrow: group === "archive" ? "" : (group === "active" ? "Выпуск" : "Замысел") + (sd ? " · " + sd : ""),
+    date: sd,
+    who: whoKeys(travelers),
+    whoLabel: whoLabel(travelers, combined, group !== "archive"),
+    group: group, status: badge.cls, statusText: badge.text,
+    sort: when.sortKey, superseded: status === "superseded", when: when,
+    /* мои (владелец в travelers, один или с кем-то) / для близких — ui-kit */
+    mine: uiTripIsMine(travelers)
+  };
+}
+
+
+/* ── тема ── кнопку ведёт ui-kit (uiSetTheme). Начальную ставит скрипт в <head>;
+   по ссылке «поделиться» он тему не трогает — гостю всегда светлая. */
+
+/* share-режим: скрыть фильтры и сводку сразу (до загрузки данных —
+   без мелькания), подпись — под одну поездку (крошку, вход и справку шапка не рисует сама). */
+if (SHARE_TRIP){
+  $("filters").hidden = true;
+  $("summary").hidden = true;
+  var _sub = document.querySelector(".masthead-sub");
+  if (_sub) _sub.textContent = "Поездка — семь стадий проработки.";
+}
+
+/* cache-buster: общий суффикс ?cb=<ts> для URL стадий, листингов и trip.yaml.
+   Меняется ТОЛЬКО по кнопке «Обновить»; между обновлениями стабилен → браузер
+   кеширует нормально. Без него iframe со стадией грузился из HTTP-кеша по
+   неизменному имени файла даже после пересборки экспорта на сервере. */
+/* Метка, кеш и листинги — общие, ui-kit (uiBust/uiListDir; ключи travel-cb,
+   travel-cache:*). Листинг несёт mtime — по нему кнопка «План». */
+var NET = { prefix: "travel", ttlMin: CACHE_TTL_MIN };
+function bust(url){ return uiBust("travel", url); }
+function listDir(url){ return uiListDir(url, NET); }
+/* «Обновить» — общий uiRefresh(btn) из ui-kit.js (Фаза 3), кнопка несёт
+   data-act="refresh" data-cache-prefix="travel"; чистит travel-cache:*,
+   ставит travel-cb → iframe/md/листинги перезагрузятся из сети, не из
+   HTTP-кеша. Локального id-listener'а здесь больше нет. */
+
+/* ── файлы поездки → стадии ──
+   Единый канон: ВСЕ файлы стадии лежат в корне trips/{trip_id}/, имя
+   начинается с "N_" (0–6); история — в _archive/ (не сканируется).
+   Приоритет ссылок: html > pdf > md; версия — максимальный _vN. */
+function stageOf(name){
+  var m = name.match(/^([0-6])[_ ]/);
+  return m ? +m[1] : null;
+}
+function ver(name){
+  var m = name.match(/_v(\d+)/);
+  return m ? +m[1] : 0;
+}
+function best(files){
+  if (!files.length) return null;
+  files.sort(function(a, b){ return ver(b) - ver(a) || b.localeCompare(a); });
+  return files[0];
+}
+function buildStages(rootFiles){
+  var stages = [];
+  var mtimeOf = {};
+  rootFiles.forEach(function(f){ if (!f.isDir) mtimeOf[f.name] = f.mtime || 0; });
+  for (var s = 0; s <= 6; s++) stages.push({ html: [], pdf: [], md: [], docx: [] });
+  rootFiles.forEach(function(f){
+    if (f.isDir) return;
+    /* N_stage_log.md — лог прогона стадии, не артефакт стадии; matchится
+       тем же stageOf() и без фильтра вытесняет 0_scope.md/etc. как "лучшую"
+       версию (localeCompare desc ставит "_stage_log" впереди "_scope"). */
+    if (/_stage_log\.md$/i.test(f.name)) return;
+    /* {stem}_print.html — промежуточный сайдкар HTML→PDF (alt-ориентация,
+       без edit-слоя); остаётся на диске только при handoff-конвертации.
+       Не артефакт стадии — иначе вытесняет настоящий HTML-экспорт. */
+    if (/_print\.html$/i.test(f.name)) return;
+    var s = stageOf(f.name);
+    if (s === null) return;
+    var ext = (f.name.match(/\.(\w+)$/) || [])[1] || "";
+    if (stages[s][ext]) stages[s][ext].push(f.name);
+  });
+  return stages.map(function(st){
+    /* консистентность версий: актуальная версия стадии = максимальный _vN
+       среди всех форматов; формат старее актуального НЕ предлагается —
+       смесь «md v4 + html v1» только запутает */
+    var maxVer = Math.max(ver(best(st.html) || ""), ver(best(st.pdf) || ""),
+                          ver(best(st.md) || ""), ver(best(st.docx) || ""));
+    function cur(arr){
+      var b = best(arr);
+      return (b && ver(b) === maxVer) ? b : null;
+    }
+    var h = cur(st.html), p = cur(st.pdf), m = cur(st.md), d = cur(st.docx);
+    /* Время стадии — mtime того файла, на который поведёт ссылка (порядок
+       предпочтения тот же, что у ссылок: html → md → pdf). Именно его
+       сравнивает planTarget(), выбирая между стадиями 5 и 6. */
+    var lead = h || m || p;
+    return {
+      done: !!(st.html.length || st.pdf.length || st.md.length || st.docx.length),
+      html: h, pdf: p, md: m, docx: d,
+      mtime: lead ? (mtimeOf[lead] || 0) : 0
+    };
+  });
+}
+
+/* ── рендер ── */
+function stageRow(dir, tripUrl, idx, st, warn){
+  var vwAttr = ' class="exp-link vw-link" data-dir="' + esc(dir) + '" data-idx="' + idx + '"';
+  var warnChip = warn ? '<span class="stage-warn" title="Финал собран из более старой версии плана — пересобери Stage 6">из плана v' + warn.src + " · актуален v" + warn.cur + "</span>" : "";
+  var row = '<div class="stage-row">';
+  row += '<span class="snum ' + (st.done ? "done" : "todo") + '">' + idx + "</span>";
+  if (st.html || st.md){
+    /* имя стадии тоже открывает панель просмотра */
+    row += '<span style="min-width:0;"><a' + vwAttr.replace('exp-link vw-link', 'vw-link') + ' href="' + tripUrl + (st.html || st.md) +
+           '" style="color:inherit;"><span class="stage-name">' + STAGE_NAMES[idx] + "</span></a>" + warnChip + "</span>";
+  } else {
+    row += '<span class="stage-name' + (st.done ? "" : " todo") + '">' + STAGE_NAMES[idx] + warnChip + "</span>";
+  }
+  if (!st.done){
+    row += '<span class="stage-none">не начата</span>';
+  } else {
+    /* универсальный порядок: смотреть (панель, html либо md) → PDF → DOCX */
+    var links = [];
+    if (st.html || st.md){
+      links.push('<a' + vwAttr + ' data-fmt="' + (st.html ? "html" : "md") + '" href="' + tripUrl + (st.html || st.md) + '" title="Открыть в панели">смотреть</a>');
+    }
+    if (st.pdf)  links.push('<a class="exp-link" href="' + tripUrl + st.pdf + '" title="Скачать PDF" download>PDF</a>');
+    if (st.docx) links.push('<a class="exp-link" href="' + tripUrl + st.docx + '" title="Скачать DOCX" download>DOCX</a>');
+    row += '<span class="stage-links">' + links.join('<span class="sep">·</span>') + "</span>";
+  }
+  return row + "</div>";
+}
+/* Куда ведёт кнопка «План». Раньше — всегда на стадию 5, и это врало: стадия 6
+   («Финал: карта + досье») собирается ПОЗЖЕ и содержит тот же план вместе с
+   картой. Но и обратное бывает — план пересобрали после финала, тогда свежее
+   стадия 5, а кнопка вела бы на устаревший финал.
+   Поэтому решает ВРЕМЯ файла, а не номер стадии. Ничья (и старый кэш листинга
+   без mod_time) — за стадией 6: она позже по смыслу пайплайна. */
+function planTarget(stages){
+  var cands = [];
+  [6, 5].forEach(function(i){
+    var st = stages[i];
+    if (!st) return;
+    /* Стадия 6 участвует, ТОЛЬКО если её есть чем открыть в панели. Финал,
+       выложенный одним PDF, кнопку не забирает, даже будучи свежее: увести
+       читателя на заглушку «есть только PDF» хуже, чем показать план постарше,
+       который открывается. У стадии 5 PDF остаётся запасным — так было и раньше. */
+    var f = i === 6 ? (st.html || st.md) : (st.html || st.md || st.pdf);
+    if (f) cands.push({ idx: i, file: f, ver: ver(f), t: st.mtime || 0 });
+  });
+  if (!cands.length) return null;
+  cands.sort(function(a, b){ return b.t - a.t || b.idx - a.idx; });
+  return cands[0];
+}
+function tripCard(dirName, meta, stages, planWarn, shareMode){
+  var tripUrl = TRIPS_ROOT + encodeURIComponent(dirName) + "/";
+  var doneCnt = stages.filter(function(s){ return s.done; }).length;
+  var dots = stages.map(function(s){ return "<i" + (s.done ? ' class="done"' : "") + "></i>"; }).join("");
+  var plan = planTarget(stages);
+  var planFile = plan ? plan.file : null;
+  var planIdx = plan ? plan.idx : 5;
+  var planVer = plan ? plan.ver : 0;
+  /* share-режим: полная (не архивная) раскрытая карточка даже для состоявшихся
+     поездок — гостю читабельнее вся шапка. */
+  var isArch = meta.group === "archive" && !shareMode;
+  var eyebrowText = meta.eyebrow || (shareMode ? (meta.date || "Поездка") : "");
+  var badge = '<span class="badge ' + meta.status + '">' +
+    (meta.status === "ready" || meta.status === "progress" ? '<span class="dot"></span>' : "") +
+    meta.statusText + "</span>";
+
+  var html = '<details class="trip-card' + (isArch ? " arch" : "") + '" data-who="' + meta.who.join(" ") + '"' +
+             (meta.group === "active" || shareMode ? " open" : "") + ">";
+  if (!isArch){
+    html += '<summary style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; padding:22px 24px;">' +
+      '<div style="min-width:0;">' +
+        (eyebrowText ? '<span class="trip-eyebrow">' + esc(eyebrowText) + "</span>" : "") +
+        '<h3 class="trip-title">' + esc(meta.title) + "</h3>" +
+        whenChip(meta.when) +
+        '<div style="display:flex; align-items:center; gap:12px; margin-top:14px; flex-wrap:wrap;">' +
+          '<div class="dots">' + dots + "</div>" +
+          '<span style="font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums;">готово ' +
+            doneCnt + " из 7" + (planVer > 1 ? " · план v" + planVer : "") + "</span>" +
+        "</div>" +
+        '<div class="who"><span class="who-label">Едут</span> <span>' + meta.whoLabel + "</span></div>" +
+      "</div>" +
+      '<div style="display:flex; flex-direction:column; align-items:flex-end; gap:12px; flex:none;">' +
+        badge + '<span class="trip-chev">▾</span>' +
+        (planFile ? '<a class="ui-btn sm plan-inline vw-link" data-dir="' + esc(dirName) + '" data-idx="' + planIdx + '" href="' +
+                    tripUrl + planFile + '">План' + (planVer > 1 ? " v" + planVer : "") + ' ↗</a>' : "") +
+      "</div></summary>";
+    html += '<div class="card-body">';
+    if (planFile){
+      html += '<a class="ui-btn plan-block vw-link" data-dir="' + esc(dirName) + '" data-idx="' + planIdx + '" href="' +
+              /* Подпись берём у стадии, на которую реально ведём: «Финальный
+                 план» на карточке, открывающей финал с картой, — вранье. */
+              tripUrl + planFile + '">' + STAGE_NAMES[planIdx] + ' <span style="font-size:14px;">→</span></a>';
+    } else if (doneCnt < 7){
+      var hasExports = stages.some(function(s){ return s.html || s.pdf; });
+      html += '<div class="card-note">' + (hasExports
+        ? "Финальный план — впереди, стадия 5 из 0–6"
+        : "Экспортов пока нет — стадии живут в рабочих md.") + "</div>";
+    }
+    if (!shareMode){
+      html += '<button class="ui-btn plain trip-share" data-dir="' + esc(dirName) + '" title="Скопировать публичную ссылку на эту поездку">' +
+              '<span style="font-size:14px;">↗</span> Поделиться</button>';
+    }
+    html += "<div>";
+    for (var i = 0; i <= 6; i++) html += stageRow(dirName, tripUrl, i, stages[i], i === 6 ? planWarn : null);
+    html += "</div></div>";
+  } else {
+    var strike = meta.status === "superseded" ? ' style="color:var(--text-muted); text-decoration:line-through; text-decoration-color:var(--border-strong);"' : "";
+    html += '<summary style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 22px;">' +
+      '<div style="display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; min-width:0;">' +
+        '<h3 class="trip-title"' + strike + ">" + esc(meta.title) + "</h3>" +
+        (meta.date ? '<span style="font-size:12.5px; color:var(--text-muted); font-variant-numeric:tabular-nums;">' + esc(meta.date) + "</span>" : "") +
+        '<span style="font-size:12px; color:var(--text-faint);">· ' + meta.whoLabel + "</span>" +
+      "</div>" +
+      '<div style="display:flex; align-items:center; gap:14px; flex:none;">' +
+        '<div class="dots">' + dots + "</div>" + badge + '<span class="trip-chev">▾</span>' +
+      "</div></summary>";
+    html += '<div class="card-body"><div style="margin-top:14px;">';
+    for (var j = 0; j <= 6; j++) html += stageRow(dirName, tripUrl, j, stages[j], j === 6 ? planWarn : null);
+    html += '</div><div style="margin-top:12px; display:flex; align-items:center; flex-wrap:wrap;"><a class="all-files" href="' + tripUrl + '">Все файлы поездки →</a>' +
+      (!shareMode ? '<button class="ui-btn plain trip-share" data-dir="' + esc(dirName) + '" title="Скопировать публичную ссылку на эту поездку"><span style="font-size:14px;">↗</span> Поделиться</button>' : "") +
+      '</div></div>';
+  }
+  return html + "</details>";
+}
+
+/* «когда» на карточке: только у неархивных; подсказка — точные даты или
+   «точных дат нет — по сезону» */
+function whenChip(w){
+  if (!w || !w.label || w.archive) return "";
+  return '<div><span class="trip-when trip-when--' + w.kind + '" title="' + esc(w.title) + '">' + esc(w.label) + "</span></div>";
+}
+
+/* финал (стадия 6) собран из 5_vX (frontmatter source_plan 6_final md);
+   если план ушёл вперёд — вешаем предупреждение на стадию 6 */
+function withPlanWarn(base, obj){
+  if (!obj) return Promise.resolve(obj);
+  var st6md = obj.stages[6].md;
+  var v5 = Math.max(ver(obj.stages[5].html || ""), ver(obj.stages[5].pdf || ""), ver(obj.stages[5].md || ""));
+  if (!st6md || !v5) return Promise.resolve(obj);
+  return fetchTextOpt(base + encodeURIComponent(st6md)).then(function(t){
+    var src = t ? frontmatterOf(t).source_plan : null;
+    var vs = src ? ver(String(src)) : 0;
+    if (vs && vs < v5) obj.planWarn = { src: vs, cur: v5 };
+    return obj;
+  });
+}
+
+/* текстовый файл с кешем; missing → null (trip.yaml опционален) */
+function fetchTextOpt(url){
+  var hit = uiCacheGet("travel", "t:" + url, CACHE_TTL_MIN);
+  if (hit !== null) return Promise.resolve(hit === " none" ? null : hit);
+  return fetch(bust(url)).then(function(r){
+    if (r.status === 404){ uiCacheSet("travel", "t:" + url, " none"); return null; }
+    if (!r.ok) throw new Error(r.status);
+    return r.text();
+  }).then(function(t){
+    if (t !== null) uiCacheSet("travel", "t:" + url, t);
+    return t;
+  }).catch(function(){ return null; });
+}
+
+/* ── просмотр markdown в модалке: общий читатель uiReader (ui-kit 1.8.0) ──
+   Свой мини-рендер markdown здесь больше не живёт. frontmatter стадии —
+   служебные ключи (trip_id, stage, счётчики), карточкой не показывается. «Сегодня» — у идущей
+   поездки с точными датами, если в заголовках дней есть дата «(ДД.ММ». */
+var mdCache = {};
+function todayAction(when){
+  if (!when || when.kind !== "trip" || when.phase !== "during") return [];
+  var n = new Date(), dm = ("0" + n.getDate()).slice(-2) + "." + ("0" + (n.getMonth() + 1)).slice(-2);
+  return [{ label: "Сегодня · " + dm, find: function(txt){
+    var m = /День\s+\d+\s*\((\d{2}\.\d{2})/.exec(txt);
+    return !!m && m[1] === dm;
+  } }];
+}
+/* ── просмотрщик стадий: боковая панель, ◀ ▶ по стадиям 0–6, HTML/md ── */
+var TRIP_INDEX = {}; /* dir → { meta, stages } */
+var vw = { dir: null, idx: 0, fmt: "html" };
+function vwStage(){ return TRIP_INDEX[vw.dir].stages[vw.idx]; }
+function vwUrl(fmt){
+  var f = vwStage()[fmt];
+  return f ? bust(TRIPS_ROOT + encodeURIComponent(vw.dir) + "/" + f) : null;
+}
+function vwRender(){
+  var t = TRIP_INDEX[vw.dir], st = vwStage();
+  $("vw-trip").textContent = t.meta.title;
+  $("vw-stage").textContent = STAGE_NAMES[vw.idx];
+  /* когда поездка — на любой стадии, включая ранние и md-режим */
+  var vwW = t.meta.when, vwWhen = $("vw-when");
+  vwWhen.textContent = vwW && vwW.label && !vwW.archive ? vwW.label : "";
+  vwWhen.title = vwW ? vwW.title : "";
+  vwWhen.className = "vw-when" + (vwW && (vwW.kind === "possible" || vwW.kind === "idea") ? " is-soft" : "");
+  $("vw-count").textContent = (vw.idx + 1) + " / 7";
+  $("vw-prev").disabled = vw.idx === 0;
+  $("vw-next").disabled = vw.idx === 6;
+  /* формат: просили fmt, но если файла нет — падаем на доступный */
+  if (!st[vw.fmt]) vw.fmt = st.html ? "html" : (st.md ? "md" : vw.fmt);
+  $("seg-html").disabled = !st.html;
+  $("seg-md").disabled = !st.md;
+  $("seg-html").classList.toggle("on", vw.fmt === "html" && !!st.html);
+  $("seg-md").classList.toggle("on", vw.fmt === "md" && !!st.md);
+  var cur = vwUrl(vw.fmt);
+  $("vw-open").hidden = !cur;
+  if (cur) $("vw-open").href = cur;
+  $("vw-pdf").hidden = !st.pdf;
+  if (st.pdf) $("vw-pdf").href = vwUrl("pdf");
+  $("vw-copy").hidden = !cur;
+  $("vw-html").hidden = true; $("vw-md").hidden = true; $("vw-empty").hidden = true;
+  if (!st.html && !st.md){
+    $("vw-empty").hidden = false;
+    $("vw-empty").textContent = st.pdf ? "Для этой стадии есть только PDF — кнопка «Скачать PDF» выше." : "Стадия не начата — файлов пока нет.";
+  } else if (vw.fmt === "html" && st.html){
+    $("vw-html").hidden = false;
+    var frame = $("vw-frame");
+    if (frame.getAttribute("src") !== cur) frame.setAttribute("src", cur);
+  } else {
+    $("vw-md").hidden = false;
+    var el = $("vw-md");
+    el.innerHTML = '<div class="md-load">Загружаю…</div>';
+    var url = vwUrl("md");
+    var p = mdCache[url] ? Promise.resolve(mdCache[url]) :
+      fetch(url).then(function(r){ if (!r.ok) throw new Error(r.status); return r.text(); })
+                .then(function(txt){ mdCache[url] = txt; return txt; });
+    p.then(function(txt){
+      if (vwUrl("md") !== url) return; /* уже перелистнули */
+      uiScrollTop(el);
+      el.innerHTML = uiReaderHTML(txt, { acc: "--c-4", frontmatter: false, key: "travel:" + url.split("?")[0],
+                                         actions: todayAction(TRIP_INDEX[vw.dir] && TRIP_INDEX[vw.dir].meta.when) });
+      uiReaderMount(el, { scroller: el });
+    }).catch(function(){
+      el.innerHTML = '<div class="md-load">Не удалось загрузить — <a href="' + url + '" target="_blank" rel="noopener">открыть напрямую</a>.</div>';
+    });
+  }
+}
+function openViewer(dir, idx, fmt){
+  if (!TRIP_INDEX[dir]) return;
+  vw.dir = dir; vw.idx = idx; vw.fmt = fmt || "html";
+  uiShow($("viewer"));   // плавный вход (ui-kit 1.38.0)
+  document.body.style.overflow = "hidden";
+  vwRender();
+}
+function closeViewer(){
+  /* стадия открыта с несохранёнными правками (edit-слой Stage 3, тот же origin) —
+     спросить подтверждение перед закрытием, чтобы правки не потерялись молча.
+     Флаг window.__travelUnsavedEdits выставляет edit-слой внутри iframe.
+     Окно — общее ui-kit (uiConfirm), не confirm(): тот на iOS блокирует страницу.
+     Пока вопрос открыт, повторный Esc (в т.ч. из iframe) второго не задаёт. */
+  if (document.querySelector(".ui-confirm")) return;
+  var unsaved = false;
+  try { var w = $("vw-frame").contentWindow; unsaved = !!(w && w.__travelUnsavedEdits); } catch(e){}
+  if (!unsaved) return closeViewerNow();
+  uiConfirm({ title: "Закрыть без сохранения?", text: "В этой стадии есть несохранённые правки — они пропадут.",
+              ok: "Закрыть", cancel: "Остаться" }).then(function(ok){ if (ok) closeViewerNow(); });
+}
+function closeViewerNow(){
+  // плавный уход (ui-kit 1.38.0); стадию из iframe выгружаем, когда окно уже скрыто
+  uiHide($("viewer"), function(){ $("vw-frame").removeAttribute("src"); });
+  document.body.style.overflow = "";
+}
+
+/* ── карточка профиля путешественника (оверлей поверх экрана) ── */
+var profCache = {}, profFor = null;
+function openProfile(file, name){
+  profFor = file;
+  $("prof-name").textContent = name || prettify(file);
+  $("prof-arch").innerHTML = ""; $("prof-updated").textContent = "";
+  $("prof-body").innerHTML = '<div class="md-load">Загружаю профиль…</div>';
+  uiShow($("prof"));
+  document.body.style.overflow = "hidden";
+  var url = PROFILES_ROOT + encodeURIComponent(file) + ".md";
+  var p = profCache[url] ? Promise.resolve(profCache[url]) :
+    fetch(bust(url)).then(function(r){ if (!r.ok) throw new Error(r.status); return r.text(); })
+                    .then(function(t){ profCache[url] = t; return t; });
+  p.then(function(txt){
+    if (profFor !== file) return;
+    var y = frontmatterOf(txt);
+    /* имя карточки: имя профиля (name/title/имя) → фраза из трипа → имя файла */
+    $("prof-name").textContent = y.name || y.title || y["имя"] || name || prettify(file);
+    var arch = y["группа_архетип"] || y["архетип"] || y.type;
+    if (arch) $("prof-arch").innerHTML = '<span class="prof-arch">' + esc(prettify(arch)) + "</span>";
+    if (y.updated) $("prof-updated").textContent = "обновлён " + esc(String(y.updated));
+    /* убрать frontmatter и дублирующий H1 «Профиль: …» — имя уже в шапке */
+    var pb = $("prof-body");
+    uiScrollTop(pb);
+    pb.innerHTML = uiReaderHTML(txt, { acc: "--c-4", frontmatter: false, key: "profile:" + file });
+    uiReaderMount(pb, { scroller: pb });
+  }).catch(function(){
+    if (profFor !== file) return;
+    $("prof-body").innerHTML = '<div class="md-load">Профиль «' + esc(name || file) +
+      '» пока не заполнен отдельно.<br><a href="' + PROFILES_ROOT + '" target="_blank" rel="noopener">каталог профилей</a></div>';
+  });
+}
+function closeProfile(){ uiHide($("prof")); profFor = null; if ($("viewer").hidden) document.body.style.overflow = ""; }
+$("prof-close").addEventListener("click", closeProfile);
+$("prof").addEventListener("click", function(ev){ if (ev.target === this) closeProfile(); });
+function vwStep(d){
+  var n = Math.min(6, Math.max(0, vw.idx + d));
+  if (n === vw.idx) return;
+  vw.idx = n; vwRender();
+}
+$("vw-close").addEventListener("click", closeViewer);
+$("vw-prev").addEventListener("click", function(){ vwStep(-1); });
+$("vw-next").addEventListener("click", function(){ vwStep(1); });
+$("seg-html").addEventListener("click", function(){ vw.fmt = "html"; vwRender(); });
+$("seg-md").addEventListener("click", function(){ vw.fmt = "md"; vwRender(); });
+$("vw-copy").addEventListener("click", function(){
+  var cur = vwUrl(vw.fmt);
+  if (!cur) return;
+  var abs = new URL(cur, location.href).href;
+  // Пишем В ПОДПИСЬ, а не в кнопку целиком: textContent на кнопке снёс бы
+  // span'ы, и на телефоне (где видна только иконка) подтверждение осталось бы
+  // немым, а после возврата текста кнопка стала бы пустым кружком.
+  var lbl = $("vw-copy").querySelector(".vw-lbl"), ic = $("vw-copy").querySelector(".vw-ic");
+  var done = function(){
+    lbl.textContent = "Скопировано ✓"; ic.textContent = "✓";
+    setTimeout(function(){ lbl.textContent = "Копировать ссылку"; ic.textContent = "⧉"; }, 1600);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(abs).then(done);
+});
+$("viewer").addEventListener("click", function(ev){ if (ev.target === this) closeViewer(); });
+/* Escape изнутри стадии. После клика по плану фокус живёт в iframe, и его
+   нажатия до этой страницы не доходят. Документ стадии — с того же адреса,
+   поэтому слушаем его напрямую (каждый load: перелистывание меняет документ).
+   Порядок слоёв: открытое меню глав nav-layer перехватывает Escape в capture-
+   фазе и гасит его — первое нажатие закрывает меню, следующее — окно. В поле
+   ввода (комментарии edit-слоя Stage 3) Escape окно не закрывает. */
+$("vw-frame").addEventListener("load", function(){
+  var doc;
+  try { doc = this.contentDocument; } catch(e){ return; }
+  if (!doc || doc.__vwEsc) return;
+  doc.__vwEsc = true;
+  doc.addEventListener("keydown", function(ev){
+    if (ev.key !== "Escape" || ev.defaultPrevented || $("viewer").hidden) return;
+    var t = ev.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    ev.preventDefault();
+    closeViewer();
+  });
+});
+/* Слой страницы (ui-kit uiLayerBind): Escape (с preventDefault) — сначала профиль,
+   потом стадия (с вопросом о несохранённых правках внутри closeViewer). */
+uiLayerBind({
+  depth: function(){ return ($("prof").hidden ? 0 : 1) + ($("viewer").hidden ? 0 : 1); },
+  closeTop: function(){ if (!$("prof").hidden) closeProfile(); else closeViewer(); },
+  dirty: function(){ try { var w = $("vw-frame").contentWindow; return !$("viewer").hidden && !!(w && w.__travelUnsavedEdits); } catch(e){ return false; } },
+  closeAll: function(){ if (!$("prof").hidden) closeProfile(); if (!$("viewer").hidden) closeViewerNow(); }
+});
+document.addEventListener("keydown", function(ev){
+  if (!$("prof").hidden || $("viewer").hidden) return;
+  if (ev.key === "ArrowLeft") vwStep(-1);
+  else if (ev.key === "ArrowRight") vwStep(1);
+});
+$("groups").addEventListener("click", function(ev){
+  var sb = ev.target.closest(".trip-share");
+  if (sb){ ev.preventDefault(); ev.stopPropagation();
+    var dir = sb.getAttribute("data-dir");
+    var link = location.origin + location.pathname + "?trip=" + encodeURIComponent(dir);
+    var restore = sb.innerHTML;
+    var done = function(){
+      sb.innerHTML = '<span style="font-size:14px;">✓</span> Скопировано';
+      sb.classList.add("done");
+      setTimeout(function(){ sb.innerHTML = restore; sb.classList.remove("done"); }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(done, function(){});
+    return;
+  }
+  var wn = ev.target.closest(".who-name");
+  if (wn){ ev.preventDefault(); ev.stopPropagation();
+    openProfile(wn.getAttribute("data-profile"), wn.getAttribute("data-name")); return; }
+  var a = ev.target.closest(".vw-link");
+  if (!a) return;
+  ev.preventDefault();
+  openViewer(a.getAttribute("data-dir"), +a.getAttribute("data-idx"), a.getAttribute("data-fmt") || null);
+});
+
+/* фильтр «Кто едет» */
+var filter = "all";
+$("filters").addEventListener("click", function(ev){
+  var b = ev.target.closest(".fchip");
+  if (!b) return;
+  filter = b.getAttribute("data-key");
+  Array.prototype.forEach.call(document.querySelectorAll(".fchip"), function(c){
+    c.classList.toggle("on", c.getAttribute("data-key") === filter);
+  });
+  applyFilter();
+});
+function applyFilter(){
+  Array.prototype.forEach.call(document.querySelectorAll(".trip-card"), function(card){
+    var who = (card.getAttribute("data-who") || "").split(" ");
+    card.style.display = (filter === "all" || who.indexOf(filter) >= 0) ? "" : "none";
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".trip-group"), function(g){
+    var visible = Array.prototype.filter.call(g.querySelectorAll(".trip-card"), function(c){ return c.style.display !== "none"; });
+    g.style.display = visible.length ? "" : "none";
+    var cnt = g.querySelector(".cnt");
+    if (cnt) cnt.textContent = visible.length;
+  });
+}
+
+/* ── share-режим: одна поездка по ?trip=<dir> ── */
+function renderShare(trips){
+  var groupsEl = $("groups");
+  var t = trips.filter(function(x){ return x.dir.normalize("NFC") === SHARE_TRIP; })[0];
+  if (!t){
+    groupsEl.innerHTML = '<div class="share-missing">Поездка не найдена — возможно, ссылка устарела.</div>';
+    uiDataDone(true);
+    return;
+  }
+  groupsEl.innerHTML = tripCard(t.dir, t.meta, t.stages, t.planWarn, /*shareMode*/ true);
+  uiDataDone(true);
+}
+
+/* ── загрузка ── */
+listDir(TRIPS_ROOT).then(function(entries){
+  var dirs = entries.filter(function(e){ return e.isDir; }).map(function(e){ return e.name; });
+  return Promise.all(dirs.map(function(dir){
+    var base = TRIPS_ROOT + encodeURIComponent(dir) + "/";
+    return listDir(base).then(function(rootFiles){
+      /* trip.yaml — приоритетная мета; 0_scope нужен ради travelers_profile
+         (ссылка на общий профиль пары/группы) — грузим ПАРАЛЛЕЛЬНО, без задержки. */
+      var scopeFile = null;
+      rootFiles.forEach(function(f){
+        if (!f.isDir && /^0_.*\.md$/.test(f.name) && (!scopeFile || f.name === "0_scope.md")) scopeFile = f.name;
+      });
+      return Promise.all([
+        fetchTextOpt(base + "trip.yaml"),
+        scopeFile ? fetchTextOpt(base + encodeURIComponent(scopeFile)) : Promise.resolve(null)
+      ]).then(function(r){
+        var stages = buildStages(rootFiles);
+        var hasExports = stages.some(function(s){ return s.html || s.pdf; });
+        return { dir: dir, meta: buildMeta(dir, r[0], r[1], hasExports), stages: stages };
+      });
+    }).then(function(obj){ return withPlanWarn(base, obj); })
+      .catch(function(){ return null; });
+  }));
+}).then(function(trips){
+  trips = trips.filter(Boolean);
+  if (!trips.length) throw new Error("empty");
+  trips.forEach(function(t){ TRIP_INDEX[t.dir] = { meta: t.meta, stages: t.stages }; });
+  /* офлайн: во время прогрева из хаба (?warm=1) — стадии 3–6 всех поездок, кроме архива. Панель грузит их
+     только при открытии, а без связи нужны именно планы. HTML там, где он есть, иначе MD; PDF — нет
+     (решение 2026-10-26). Плюс исходный MD стадии напрямую и через /api/file: по ним слой правок и
+     чекбоксы подготовки внутри HTML включаются без связи (правки уходят в очередь фонового скрипта).
+     Адреса — те же, что у панели и у страницы стадии: фоновый скрипт сохраняет ответы под ними. */
+  if (/[?&]warm=1\b/.test(location.search)){
+    trips.forEach(function(t){
+      if (t.meta.group === "archive") return;
+      var dirUrl = TRIPS_ROOT + encodeURIComponent(t.dir) + "/";
+      [3, 4, 5, 6].forEach(function(i){
+        var st = t.stages[i];
+        if (!st) return;
+        var view = st.html || st.md;
+        if (view) fetch(bust(dirUrl + encodeURIComponent(view))).catch(function(){});
+        if (st.html && st.md){
+          fetch(dirUrl + encodeURIComponent(st.md)).catch(function(){});
+          /* путь — как его считает сама страница стадии (mdPath: папка страницы от корня, без «/») */
+          var mdPath = decodeURIComponent(new URL(dirUrl, location.href).pathname).replace(/^\/+/, "") + st.md;
+          authFetch("../api/file?path=" + encodeURIComponent(mdPath)).catch(function(){});
+        }
+      });
+    });
+  }
+  if (SHARE_TRIP){ renderShare(trips); return; }
+  var groupsEl = $("groups");
+  groupsEl.innerHTML = "";
+  GROUPS.forEach(function(g){
+    /* активные/ранние — ближайшая дата первой; архив — свежая первой;
+       вытесненные и без даты — в конец */
+    var dirSign = g.key === "archive" ? -1 : 1;
+    var inGroup = trips.filter(function(t){ return t.meta.group === g.key; })
+                       .sort(function(a, b){
+                         if (a.meta.superseded !== b.meta.superseded) return a.meta.superseded ? 1 : -1;
+                         var av = a.meta.sort, bv = b.meta.sort;
+                         if (av === null && bv === null) return 0;
+                         if (av === null) return 1;
+                         if (bv === null) return -1;
+                         return (av - bv) * dirSign;
+                       });
+    if (!inGroup.length) return;
+    var sec = document.createElement("section");
+    sec.className = "trip-group";
+    sec.innerHTML = '<div class="group-head"><h2>' + g.title + '</h2>' +
+      '<span class="cnt' + (g.hot ? " hot" : "") + '">' + inGroup.length + "</span>" +
+      '<span class="line"></span>' + (g.note ? '<span class="note">' + g.note + "</span>" : "") + "</div>" +
+      (g.key === "archive" ? '<div style="opacity:.84;">' : "<div>") +
+      inGroup.map(function(t){ return tripCard(t.dir, t.meta, t.stages, t.planWarn); }).join("") + "</div>";
+    groupsEl.appendChild(sec);
+  });
+  var active = trips.filter(function(t){ return t.meta.group === "active"; }).length;
+  $("sum-total").textContent = trips.length;
+  var mineCnt = trips.filter(function(t){ return t.meta.mine; }).length;
+  $("sum-mine").textContent = mineCnt;
+  $("sum-others").textContent = trips.length - mineCnt;
+  $("sum-active").textContent = active;
+  /* «Ближайшая» — только поездки (точные даты или ready + месяц); возможные и
+     идеи туда не попадают, иначе сводка выдала бы мечту за план */
+  var bySort = function(a, b){ return a.meta.sort - b.meta.sort; };
+  /* и только мои: поездка родителей — не «моя ближайшая» (так же на хабе) */
+  var upcoming = trips.filter(function(t){ return t.meta.mine && t.meta.when && t.meta.when.nearest; }).sort(bySort)[0];
+  var idea = upcoming ? null : trips.filter(function(t){
+    return t.meta.mine && t.meta.group !== "archive" && t.meta.when && (t.meta.when.kind === "possible" || t.meta.when.kind === "idea");
+  }).sort(bySort)[0];
+  $("sum-next").textContent = upcoming
+    ? "Ближайшая — " + upcoming.meta.title + ", " + upcoming.meta.when.label
+    : idea ? "Точных дат пока нет · ближайшая идея — " + idea.meta.title + ", " + idea.meta.when.seasonLabel.toLowerCase() : "";
+  uiDataDone(true);
+  applyFilter();
+}).catch(function(){
+  $("groups").innerHTML = '<div style="margin:40px auto; max-width:480px; text-align:center; padding:22px; ' +
+    'background:var(--bg-alt); border-radius:var(--radius); font-size:13.5px; color:var(--text-muted);">' +
+    "Нет связи с данными поездок. Открой страницу через сервер Synology (Caddy) — " +
+    'или загляни в <a href="' + TRIPS_ROOT + '">каталог поездок</a> напрямую.</div>';
+  $("sum-total").textContent = "—";
+  $("sum-active").textContent = "—";
+  $("sum-next").textContent = "";
+  uiDataDone(false);
+});
+
+})();
+</script>
+</body>
+</html>

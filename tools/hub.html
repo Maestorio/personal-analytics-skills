@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Личный кабинет</title>
+<!-- иконка кабинета (вкладка и экран «Домой»): шесть ромбов — цвета разделов --c-1…--c-6 -->
+<link rel="manifest" href="assets/hub-manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/hub-32.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/hub-180.png?v=2">
+<meta name="apple-mobile-web-app-title" content="Кабинет">
+<!-- Светлая тема по умолчанию: системную prefers-color-scheme НЕ подхватываем
+     (правило кабинета) — тёмная только при явном hub-theme==="dark". Скрипт стоит
+     до <style>, иначе у тёмной темы страница мигает светлым до отработки JS. -->
+<script>(function(){try{if(localStorage.getItem("hub-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<link rel="stylesheet" href="assets/ui-kit.css?v=1.72.0">
+<!-- ui-kit.js — в <head>: шапку (uiTopHTML) страница вставляет прямо при
+     разборе, без мигания; при загрузке ui-kit только вешает обработчики. -->
+<script src="assets/ui-kit.js?v=1.72.0"></script>
+<script src="assets/codelists.js?v=29ef9fc4"></script>
+<script src="assets/games-model.js?v=44d7ebbc"></script>
+<script src="assets/js-yaml.min.js"></script>
+<style>
+
+
+/* База (сброс, шрифт, цвет и фон body) — в assets/ui-kit.css; здесь только своё. */
+body{
+  min-height:100vh;
+  background-image:var(--hub-bg,none); background-size:260px 260px;
+  transition:background-color .25s,color .25s;
+}
+a{ color:var(--accent); text-decoration:none; }
+@media (hover:hover){ a:hover{ color:var(--accent-2); } }
+/* фон «домены»: рассыпанные пиктограммы разделов */
+body{ --hub-bg:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='260'%20height='260'%3E%3Cg%20fill='none'%20stroke='%233f7c77'%20stroke-opacity='.19'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M20%2062l11-13%208%206%2012-16%2010%208'/%3E%3Ccircle%20cx='63'%20cy='47'%20r='2'/%3E%3Cpath%20d='M156%2056c7-4%2012-9%2018-13'%20stroke-dasharray='3%206'/%3E%3Cpath%20d='M176%2042l26-10-13%2023-4-8z'/%3E%3Cg%20transform='translate(42%20168)'%3E%3Crect%20x='0'%20y='0'%20width='36'%20height='22'%20rx='11'/%3E%3Cpath%20d='M10%206v10M5%2011h10'/%3E%3Ccircle%20cx='26'%20cy='8'%20r='1.8'/%3E%3Ccircle%20cx='30'%20cy='14'%20r='1.8'/%3E%3C/g%3E%3Cpath%20d='M150%20206h12l6-12%208%2022%206-10h12'/%3E%3Ccircle%20cx='222'%20cy='120'%20r='9'/%3E%3Ccircle%20cx='222'%20cy='120'%20r='4'/%3E%3Cpath%20d='M118%20106v10M113%20111h10'/%3E%3Ccircle%20cx='36'%20cy='112'%20r='2'/%3E%3Ccircle%20cx='232'%20cy='232'%20r='2'/%3E%3Cg%20transform='translate(96%2016)%20rotate(4)'%3E%3Crect%20x='0'%20y='0'%20width='34'%20height='19'%20rx='3'/%3E%3Ccircle%20cx='17'%20cy='9.5'%20r='5'/%3E%3C/g%3E%3Cpath%20d='M24%20238l16-20'/%3E%3Ccircle%20cx='26'%20cy='220'%20r='3.5'/%3E%3Ccircle%20cx='38'%20cy='236'%20r='3.5'/%3E%3C/g%3E%3C/svg%3E"); }
+[data-theme="dark"] body{ --hub-bg:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='260'%20height='260'%3E%3Cg%20fill='none'%20stroke='%2379b3ad'%20stroke-opacity='.12'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M20%2062l11-13%208%206%2012-16%2010%208'/%3E%3Ccircle%20cx='63'%20cy='47'%20r='2'/%3E%3Cpath%20d='M156%2056c7-4%2012-9%2018-13'%20stroke-dasharray='3%206'/%3E%3Cpath%20d='M176%2042l26-10-13%2023-4-8z'/%3E%3Cg%20transform='translate(42%20168)'%3E%3Crect%20x='0'%20y='0'%20width='36'%20height='22'%20rx='11'/%3E%3Cpath%20d='M10%206v10M5%2011h10'/%3E%3Ccircle%20cx='26'%20cy='8'%20r='1.8'/%3E%3Ccircle%20cx='30'%20cy='14'%20r='1.8'/%3E%3C/g%3E%3Cpath%20d='M150%20206h12l6-12%208%2022%206-10h12'/%3E%3Ccircle%20cx='222'%20cy='120'%20r='9'/%3E%3Ccircle%20cx='222'%20cy='120'%20r='4'/%3E%3Cpath%20d='M118%20106v10M113%20111h10'/%3E%3Ccircle%20cx='36'%20cy='112'%20r='2'/%3E%3Ccircle%20cx='232'%20cy='232'%20r='2'/%3E%3Cg%20transform='translate(96%2016)%20rotate(4)'%3E%3Crect%20x='0'%20y='0'%20width='34'%20height='19'%20rx='3'/%3E%3Ccircle%20cx='17'%20cy='9.5'%20r='5'/%3E%3C/g%3E%3Cpath%20d='M24%20238l16-20'/%3E%3Ccircle%20cx='26'%20cy='220'%20r='3.5'/%3E%3Ccircle%20cx='38'%20cy='236'%20r='3.5'/%3E%3C/g%3E%3C/svg%3E"); }
+
+.hub-wrap{ max-width:1000px; margin:0 auto; padding:44px 32px 72px; }
+
+/* верхняя панель хаба: липкая, во всю ширину (хаб корневой — крошки нет).
+   Горизонтальные отступы уважают вырез/скругления экрана (safe-area). */
+
+
+
+/* крупная типографика — плавно, без ступеньки на брейкпоинте */
+.hub-masthead{ font-family:var(--font-serif); font-weight:600; font-size:clamp(34px,6vw,58px); line-height:1; letter-spacing:-.02em; margin:0; }
+.hub-rule{ display:flex; align-items:center; gap:16px; max-width:560px; margin:20px auto 0; }
+.hub-rule span.line{ flex:1; height:1px; background:var(--border-strong); }
+.hub-dateline{ font-family:var(--font-serif); font-style:italic; font-size:14px; color:var(--text-muted); white-space:nowrap; }
+
+.hub-summary{
+  display:flex; align-items:stretch; justify-content:center; flex-wrap:wrap; margin:30px auto 0; padding:4px;
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:999px; width:fit-content; max-width:100%;
+  box-shadow:var(--shadow);
+}
+.hub-summary .cell{ display:inline-flex; align-items:baseline; gap:7px; padding:10px 22px; font-size:13px; color:var(--text-muted); font-variant-numeric:tabular-nums; }
+.hub-summary .cell b{ font-family:var(--font-serif); font-size:17px; font-weight:600; color:var(--text); }
+.hub-summary .cell.travel b{ color:var(--c-4); }
+.hub-summary .cell.food b{ color:var(--c-2); }
+.hub-div{ width:1px; align-self:center; height:20px; background:var(--border); }
+.hub-summary a.cell{ align-items:center; gap:8px; font-weight:600; }
+.hub-summary a.cell.err{ color:var(--err); }
+.hub-summary a.cell.ok{ color:var(--success); }
+.hub-summary a.cell.warn{ color:var(--warn); }
+.hub-summary a.cell.plain{ font-weight:inherit; color:var(--text-muted); text-decoration:none; }
+.hub-summary a.cell .dot{ width:7px; height:7px; border-radius:50%; background:currentColor; }
+
+.hub-sechead{ font-family:var(--font-sans); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.14em; color:var(--text-muted); margin:44px 0 16px; }
+
+.hub-card{
+  background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow); color:inherit; display:flex; flex-direction:column;
+  transition:border-color .18s,box-shadow .18s,transform .18s;
+}
+@media (hover:hover){ .hub-card:hover{ border-color:var(--border-strong); box-shadow:0 2px 4px rgba(60,52,38,.10),0 16px 40px rgba(60,52,38,.10); transform:translateY(-2px); color:inherit; } }
+.hub-open{ display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; transition:gap .15s; }
+@media (hover:hover){ .hub-card:hover .hub-open{ gap:11px; } }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; }
+.hub-card:focus-visible{ outline-offset:4px; border-radius:var(--radius); }
+
+.hub-feat{ display:grid; grid-template-columns:1fr 1fr; gap:0; border-left:3px solid var(--c-1); }
+.hub-featured{ display:flex; flex-direction:column; padding:26px 28px; }
+.hub-featured-right{ display:flex; flex-direction:column; justify-content:center; gap:14px; padding:26px 28px; border-left:1px solid var(--border); }
+.dom-eyebrow{ font-size:11px; letter-spacing:.13em; text-transform:uppercase; font-weight:700; }
+.dom-badge{ display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; border-radius:999px; padding:3px 10px; color:var(--text-muted); background:var(--bg-alt); border:1px solid var(--border); }
+.dom-badge .dot{ width:6px; height:6px; border-radius:50%; }
+.hub-h3{ font-family:var(--font-serif); font-weight:600; line-height:1.05; letter-spacing:-.01em; margin:0; font-variant-numeric:tabular-nums; }
+.hub-h3.xl{ font-size:clamp(28px,4.4vw,38px); }
+.hub-h3.lg{ font-size:clamp(22px,3.2vw,28px); }
+.hub-sub{ font-size:13.5px; color:var(--text-muted); margin-top:6px; }
+.hub-kv{ display:grid; grid-template-columns:max-content 1fr; gap:6px 16px; font-size:12.5px; margin:20px 0 0; }
+.hub-kv dt{ color:var(--text-faint); }
+.hub-kv dd{ margin:0; font-variant-numeric:tabular-nums; }
+
+.rep-item{ display:flex; align-items:center; gap:10px; padding:9px 12px; background:var(--err-bg); border-radius:8px; }
+.rep-item .dot{ width:6px; height:6px; border-radius:50%; background:var(--err); flex:none; }
+.rep-item .lbl{ font-size:12.5px; font-weight:600; color:var(--text); flex:1; }
+.rep-item .age{ font-size:11.5px; color:var(--err); font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; }
+/* «не смог проверить» ≠ «просрочен»: жёлтый, а не красный — это неизвестность,
+   а не установленный факт опоздания */
+.rep-item.warn{ background:var(--warn-bg); }
+.rep-item.warn .dot{ background:var(--warn); }
+.rep-item.warn .age{ color:var(--warn); }
+.rep-item.noai{ background:var(--surface-2, transparent); }
+.rep-item.noai .dot{ background:var(--text-faint); }
+.rep-item.noai .age, .rep-item.noai .lbl{ color:var(--text-faint); }
+.rep-ok{ display:flex; align-items:center; gap:10px; padding:9px 12px; background:var(--success-bg); border-radius:8px; font-size:12.5px; font-weight:600; color:var(--success); }
+.rep-more{ display:inline-flex; align-items:center; gap:6px; align-self:flex-start; margin-top:2px; font-size:12px; font-weight:600; color:var(--err); }
+@media (hover:hover){ .rep-more:hover{ text-decoration:underline; } }
+
+/* Ряд финансов: портфель ⅔ + деньги ⅓. Уже 900px портфелю в ⅔ тесно (две его
+   половины сжимаются до ~250px) — ряд складывается в столбик. */
+.hub-row1{ display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:20px; align-items:stretch; }
+.hub-money{ padding:24px 26px; }
+.hub-row2{ display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px; }
+.hub-row2 .hub-card{ padding:24px 26px; }
+.card-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:20px; }
+
+/* Разделы — четыре равные плитки. Здоровье было широкой полосой во всю ширину
+   с отдельной панелью «Ближайшее событие»; макет свёл его в обычную плитку, а
+   событие переехало в строку описания — иначе четвёртый раздел (еда) ломал
+   ритм страницы. Порядок задаётся order: у самих плиток. */
+.hub-out .up{ color:var(--err); font-weight:600; }
+.hub-out .down{ color:var(--info); font-weight:600; }
+.hub-kv dd.warn{ color:var(--warn); font-weight:600; }
+.hub-kv dd.err{ color:var(--err); font-weight:600; }
+
+@media (max-width:900px){
+  .hub-row1{ grid-template-columns:1fr; }
+}
+@media (max-width:760px){
+  /* .hub-masthead ступенькой не правим — размер уже на clamp() */
+  .hub-wrap{ padding:26px 18px 60px;
+             padding-left:max(18px, env(safe-area-inset-left));
+             padding-right:max(18px, env(safe-area-inset-right)); }
+  .hub-feat{ grid-template-columns:1fr; }
+  .hub-dateline{ white-space:normal; text-align:center; }
+  .hub-featured-right{ border-left:none; border-top:1px solid var(--border); }
+  .hub-row2{ grid-template-columns:1fr; }
+  .hub-summary{ border-radius:14px; }
+  /* тап-цель ячейки сводки ≥40px по высоте, вид пилюли сохраняем */
+  .hub-summary .cell{ padding:8px 12px; font-size:12px; min-height:40px; align-items:center; }
+  .hub-long{ display:none; }
+}
+</style>
+</head>
+<body>
+  <script>document.currentScript.insertAdjacentHTML("beforebegin", uiTopHTML({ page: "hub", brand: "Synology · self-hosted", push: "all", mode: true }));</script>
+
+  <div class="hub-wrap">
+
+    <header style="text-align:center; margin:38px 0 6px;">
+      <h1 class="hub-masthead">Личный кабинет</h1>
+    </header>
+    <div class="hub-rule">
+      <span class="line"></span>
+      <span class="hub-dateline" id="dateline">—</span>
+      <span class="line"></span>
+    </div>
+
+    <!-- передовица / сводка дня -->
+    <div class="hub-summary">
+      <span class="cell travel"><b id="sum-trips">—</b><span id="sum-trips-word"> поездки<span class="hub-long"> в проработке</span></span></span>
+      <span class="hub-div"></span>
+      <!-- игры — ссылка на страницу игр (hub 1.36), вид как у соседних счётчиков -->
+      <a class="cell plain" id="sum-games-link" href="games.html"><b id="sum-games">193</b><span id="sum-games-word"> игры<span class="hub-long"> в библиотеке</span></span></a>
+      <span class="hub-div"></span>
+      <!-- еда — ссылка, а не текст: это то, ради чего сюда заходят из магазина -->
+      <a class="cell food" id="sum-food" href="food.html" hidden><b id="sum-food-n">—</b><span id="sum-food-word"><span class="hub-long"> позиций</span> купить</span></a>
+      <span class="hub-div" id="sum-food-div" hidden></span>
+      <a class="cell err" id="sum-reports" href="portfolio-integrated-viewer.html"><span class="dot"></span><span id="sum-reports-txt">отчёты…</span></a>
+    </div>
+
+    <h2 class="hub-sechead">Разделы</h2>
+
+    <!-- Финансы одним рядом: инвестиции (широко) + деньги (ZenMoney). Деньги —
+         рядом с портфелем, а не в сетке быта: это та же тема «мои финансы». -->
+    <div class="hub-row1">
+    <!-- FEATURED: инвестиции -->
+    <a class="hub-card hub-feat" href="portfolio-integrated-viewer.html">
+      <div class="hub-featured">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+          <span class="dom-eyebrow" style="color:var(--c-1);">Инвестиции</span>
+          <span class="dom-badge">приватный</span>
+        </div>
+        <h3 class="hub-h3 xl">Портфель</h3>
+        <div class="hub-sub" style="font-size:14px; margin-top:8px; max-width:34ch;">Интегрированный обзор активов, доходности и плана. Все счета и позиции сведены в одну картину.</div>
+        <div style="flex:1; min-height:22px;"></div>
+        <div class="hub-open" style="color:var(--c-1);">Открыть дашборд <span style="font-size:14px;">→</span></div>
+      </div>
+      <div class="hub-featured-right">
+        <div style="display:flex; align-items:baseline; gap:9px;">
+          <span class="dom-eyebrow" id="rep-head" style="color:var(--err); letter-spacing:.1em;">Просроченные отчёты</span>
+          <span id="rep-count" style="font-size:11px; font-weight:700; color:var(--err); background:var(--err-bg); border-radius:999px; padding:1px 8px; font-variant-numeric:tabular-nums;">…</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px;" id="rep-list">
+          <div class="rep-ok" style="background:var(--bg-alt); color:var(--text-muted);">Проверяю свежесть отчётов…</div>
+        </div>
+        <dl class="hub-kv" style="margin:2px 0 0;">
+          <dt>Последний обзор акций</dt><dd id="last-weekly">—</dd>
+        </dl>
+      </div>
+    </a>
+
+    <!-- деньги: итоги месяцев и поездок из ZenMoney (пишет zenmoney-analyst).
+         Цифры — только с токеном: ZenMoney/* под паролем, как Portfolio/. -->
+    <a class="hub-card hub-money" href="money.html" style="border-left:3px solid var(--c-6);">
+      <div class="card-top">
+        <span class="dom-eyebrow" style="color:var(--c-6);">Деньги</span>
+        <span class="dom-badge">приватный</span>
+      </div>
+      <h3 class="hub-h3 lg" id="money-head">Траты и учёт</h3>
+      <div class="hub-sub" id="money-sub">итоги месяцев и поездок из ZenMoney</div>
+      <dl class="hub-kv" id="money-kv" hidden>
+        <dt>Обычные траты</dt><dd id="money-reg">—</dd>
+        <dt>Учёт</dt><dd id="money-q">—</dd>
+        <dt id="money-todo-dt" hidden>Надо</dt><dd id="money-todo" class="warn" hidden>—</dd>
+      </dl>
+      <div style="flex:1; min-height:18px;"></div>
+      <div class="hub-open" style="color:var(--c-6);">Открыть раздел <span style="font-size:14px;">→</span></div>
+    </a>
+    </div>
+
+    <!-- сетка 2×2: еда · здоровье · путешествия · игры (порядок — через order:,
+         разметка идёт в исходном порядке разделов, чтобы диффы были читаемы) -->
+    <div class="hub-row2">
+      <!-- еда: единственная плитка без входа — список покупок нужен у полки,
+           а не после авторизации -->
+      <a class="hub-card" href="food.html" style="border-left:3px solid var(--c-2); order:1;">
+        <div class="card-top">
+          <span class="dom-eyebrow" style="color:var(--c-2);">Еда</span>
+          <span class="dom-badge">рецепты · продукты</span>
+        </div>
+        <h3 class="hub-h3 lg" id="food-count">Рецепты и покупки</h3>
+        <div class="hub-sub" id="food-sub">список · каталог продуктов</div>
+        <dl class="hub-kv" id="food-kv" hidden>
+          <dt>Надо купить</dt><dd id="food-next">—</dd>
+        </dl>
+        <div style="flex:1; min-height:18px;"></div>
+        <div class="hub-open" style="color:var(--c-2);">Список покупок <span style="font-size:14px;">→</span></div>
+      </a>
+      <a class="hub-card" href="health.html" style="border-left:3px solid var(--c-3); order:2;">
+        <div class="card-top">
+          <span class="dom-eyebrow" style="color:var(--c-3);">Здоровье</span>
+          <span class="dom-badge">приватный</span>
+        </div>
+        <h3 class="hub-h3 lg" id="health-count">Анализы, прививки и аптечка</h3>
+        <div class="hub-sub hub-out" id="health-meta">биомаркеры · измерения · сроки</div>
+        <dl class="hub-kv" id="health-kv" hidden>
+          <!-- «Ближайшее»: ревакцинация ≤60 дн или истекающее лекарство — то же
+               окно, что у health.html (reminders); нечего показать → строки нет -->
+          <dt>Ближайшее</dt><dd id="health-next">—</dd>
+        </dl>
+        <div style="flex:1; min-height:18px;"></div>
+        <div class="hub-open" style="color:var(--c-3);">Открыть раздел <span style="font-size:14px;">→</span></div>
+      </a>
+      <a class="hub-card" href="travel.html" style="border-left:3px solid var(--c-4); order:3;">
+        <div class="card-top">
+          <span class="dom-eyebrow" style="color:var(--c-4);">Путешествия</span>
+          <span class="dom-badge" style="color:var(--c-4);"><span class="dot" style="background:var(--c-4);"></span><span id="trips-active">2 в проработке</span></span>
+        </div>
+        <h3 class="hub-h3 lg" id="trips-count">6 поездок</h3>
+        <div class="hub-sub" id="trips-split" style="margin-top:2px;"></div>
+        <div class="hub-sub" id="trips-last">Последняя — Камбоджа и Лаос, февраль 2026</div>
+        <dl class="hub-kv">
+          <!-- «моя» — только поездки, где в travelers есть владелец (у родителей свои) -->
+          <dt>Моя ближайшая</dt><dd id="trips-next">Северный Вьетнам, сентябрь 2026</dd>
+        </dl>
+        <div style="flex:1; min-height:18px;"></div>
+        <div class="hub-open" style="color:var(--c-4);">Все поездки <span style="font-size:14px;">→</span></div>
+      </a>
+      <a class="hub-card" href="games.html" style="border-left:3px solid var(--c-5); order:4;">
+        <div class="card-top">
+          <span class="dom-eyebrow" style="color:var(--c-5);">Игры</span>
+          <span class="dom-badge" id="games-plats">Switch · Steam Deck</span>
+        </div>
+        <h3 class="hub-h3 lg" id="games-count">193 игры</h3>
+        <!-- платформы — в бейдже (из данных библиотеки); здесь прохождение: играю · бэклог (не начата + отложена) · пройдено.
+             Значения по умолчанию заменяются данными -->
+        <div class="hub-sub" id="games-split">играю — · бэклог — · пройдено —</div>
+        <dl class="hub-kv">
+          <dt>Наиграно</dt><dd id="games-hours">—</dd>
+          <dt>Последняя подборка</dt><dd id="games-reco">7 июля 2026</dd>
+        </dl>
+        <div style="flex:1; min-height:18px;"></div>
+        <div class="hub-open" style="color:var(--c-5);">Библиотека <span style="font-size:14px;">→</span></div>
+      </a>
+    </div>
+
+    <script>document.currentScript.insertAdjacentHTML("beforebegin", uiFootHTML({ page: "hub", version: "hub v2.2.0", src: "Synology · Claude-Memory", crumb: false }));</script>
+
+  </div>
+
+<script>
+(function(){
+"use strict";
+
+/* ── конфиг: контракты данных (не контент — конкретные поездки/игры/отчёты
+   выводятся из файлов Claude-Memory, в коде их не прописывать) ───────── */
+var CONFIG = {
+  /* Отчёты: dir (относительно корня Caddy) + match (маска имени) + staleAfter
+     (старше скольки дней отчёт получает плашку) + failAfter (необязательно:
+     старше скольки дней плашка «жёсткая» — скиллы на таком файле не работают).
+     match обязателен, потому что в ОДНОМ каталоге лежат разные виды обзоров:
+     weekly-reviews/ содержит и stock, и bond, а раньше запись была одна на
+     каталог — максимум даты брался по обеим маскам, и свежий обзор акций
+     маскировал протухший обзор облигаций.
+     ⚠ SYNC: key + staleAfter + failAfter обязаны совпадать с STALE_THRESHOLDS_DAYS
+     и STALE_FAIL_DAYS в assets/viewer.js и с таблицей tools/assets/help/viewer/03-fresh.md. Обе страницы судят о свежести одних и тех же файлов;
+     расхождение выглядит как баг данных, а не как разная настройка. Сторож —
+     ось «свежесть» в tools/tests/test_pages_contracts.py.
+     macro — недельная инфляция: два файла (model.jsonl — скилл macro-ru-watcher, owner.jsonl — форма сайта), дата записи
+     внутри (jsonl: true — дата берётся из строк, не из имени), свежее из двух. Автосрез сайта плашкой не меряется (его сторожит
+     журнал заданий), результат macro-forecast-chain — тоже (внутренний промежуточный файл). */
+  reports: [
+    { key: "integratedView", label: "Интегрированный обзор",     dir: "../Portfolio/integrated-views/", match: /^integrated-view-/,     staleAfter: 30 },
+    { key: "stocks",         label: "Weekly review · акции",     dir: "../Portfolio/weekly-reviews/",   match: /^weekly-review-stock-/, staleAfter: 14, failAfter: 30 },
+    { key: "bonds",          label: "Weekly review · облигации", dir: "../Portfolio/weekly-reviews/",   match: /^weekly-review-bond-/,  staleAfter: 14, failAfter: 30 },
+    { key: "stress",         label: "Стресс-тест",               dir: "../Portfolio/stress/",           match: /^stress-/,              staleAfter: 30, failAfter: 60 },
+    { key: "portfolio",      label: "Снапшот портфеля",          dir: "../Portfolio/snapshots/",        match: /^portfolio-/,           staleAfter: 7, failAfter: 30 },
+    { key: "monitor",        label: "Forecast monitor",          dir: "../monitor-reports/",            match: /^monitor-report-/,      staleAfter: 10 },
+    { key: "macro",          label: "Недельная инфляция",        dir: "../macro-snapshots/inflation/",  match: /^(model|owner)\.jsonl$/, jsonl: true, staleAfter: 9, failAfter: 16 }
+  ],
+  cacheTtlMin: 60
+};
+
+/* месяцы и форматы дат — общие, ui-kit (uiDateLong/uiMonthShort/uiDateNum, UI_MONTHS_*) */
+var DAYS = ["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"];
+
+function $(id){ return document.getElementById(id); }
+
+
+/* ── тема ── кнопку ведёт ui-kit (uiSetTheme); начальную ставит скрипт в <head> */
+
+/* ── дата в шапке ──────────────────────────────────────────────────────────
+   Дейтлайн = сегодняшняя дата + «когда данные обновляли последний раз».
+   Метку ставит кнопка «Обновить» (localStorage hub-last-refresh); на первом
+   визите её нет — проставляем текущее время, данные и правда только что
+   пришли из сети. Битую/будущую метку лечим тем же способом. */
+function lastRefreshTs(){
+  var raw = null;
+  try { raw = localStorage.getItem("hub-last-refresh"); } catch(e){}
+  var t = raw ? parseInt(raw, 10) : NaN;
+  if (!isFinite(t) || t <= 0 || t > Date.now()){
+    t = Date.now();
+    try { localStorage.setItem("hub-last-refresh", String(t)); } catch(e){}
+  }
+  return t;
+}
+function refreshedAgo(ts){
+  var min = Math.floor((Date.now() - ts) / 60000);
+  if (min < 1) return "обновлено только что";
+  if (min < 60) return "обновлено " + min + " мин назад";
+  var h = Math.floor(min / 60);
+  if (h < 24) return "обновлено " + h + " ч назад";
+  return "обновлено " + Math.floor(h / 24) + " дн назад";
+}
+var now = new Date();
+$("dateline").textContent = uiCap(DAYS[now.getDay()]) + ", " + uiDateLong(now) +
+  " · " + refreshedAgo(lastRefreshTs());
+
+/* cache-buster: общий суффикс ?cb=<ts> для всех фетчей. Меняется ТОЛЬКО по
+   «Обновить»; между обновлениями стабилен → браузер кеширует нормально. Без
+   него листинги/trip.yaml/данные грузились из HTTP-кеша даже после «Обновить». */
+/* Кеш, метка «Обновить» и листинги — общие, ui-kit (uiBust/uiFetchText/
+   uiListDir; ключи hub-cb, hub-cache:*). Здесь — только настройки хаба:
+   приватные каталоги (Portfolio/, health-data/ …) читаются с паролем. */
+var NET = { prefix: "hub", ttlMin: CONFIG.cacheTtlMin, auth: true, accept: "application/json" };
+function bust(url){ return uiBust("hub", url); }
+/* ── единый вход кабинета ──────────────────────────────────────────────────
+   Токен localStorage["hub-auth"] (btoa hubuser:пароль) общий для origin'а: его
+   пишет login.html, читают вьюер портфеля, health и edit-слой travel.
+   Приватные пути (Portfolio/, monitor-reports/, macro-snapshots/, health-data/)
+   Caddy отдаёт ТОЛЬКО с явным Authorization; без него — тихий 403 (нативного
+   окна пароля не бывает, см. шапку Caddyfile). Раньше хаб токен не слал —
+   поэтому вне дома сводка отчётов не грузилась вообще.
+   authToken()/loginUrl(why)/authBtnHTML()/authFetch() — общие, из ui-kit.js
+   (вход — одна реализация на кабинет, ui-kit 1.16.0); локальных копий нет.
+   Отвергнутый пароль authFetch запоминает сам, и «Выйти» в шапке становится
+   «Войти заново» — иначе виджеты молча пустели при живой кнопке «Выйти». */
+
+function fetchText(url){ return uiFetchText(url, NET); }
+function listDir(url){ return uiListDir(url, NET); }
+/* jsonl: true — файлы без даты в имени: берём самую свежую `date` из строк всех подходящих файлов */
+function jsonlDate(rep, names){
+  return Promise.all(names.map(function(n){ return fetchText(rep.dir + n).catch(function(){ return ""; }); })).then(function(texts){
+    var best = null;
+    texts.forEach(function(t){
+      String(t || "").split("\n").forEach(function(ln){
+        var o; try { o = JSON.parse(ln); } catch(e){ return; }
+        var m = o && typeof o.date === "string" && o.date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (!m) return;
+        var d = new Date(+m[1], +m[2] - 1, +m[3]);
+        if (!best || d > best) best = d;
+      });
+    });
+    return best;
+  });
+}
+function latestDate(names){
+  var best = null;
+  names.forEach(function(n){
+    var m = n.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (!m) return;
+    var d = new Date(+m[1], +m[2] - 1, +m[3]);
+    if (!best || d > best) best = d;
+  });
+  return best;
+}
+
+/* «Обновить» — общий uiRefresh(btn) из ui-kit.js (Фаза 3), кнопка несёт
+   data-act="refresh" data-cache-prefix="hub"; чистит hub-cache:*, ставит
+   hub-cb и hub-last-refresh (последний — дейтлайн после reload скажет
+   «обновлено только что»). Локального id-listener'а здесь больше нет. */
+
+/* ── данные ── */
+function done(ok){ uiDataDone(ok); }
+
+/* ── кнопка входа/выхода: один элемент из ui-kit.js (Фаза 3) ──
+   Логаут ловит общий делегированный листенер ui-kit (кнопка несёт
+   data-act="logout" data-cache-prefix="hub" → uiLogout чистит hub-cache:*
+   и piv-seen — поведение старого IIFE сохранено один-в-один). */
+
+/* Приватные отчёты грузятся ТОЛЬКО когда есть токен входа: без него любой
+   приватный путь отдаёт тихий 403, и виджеты просто не из чего наполнять.
+   Раньше признаком служил piv-seen (его ставил вьюер), но он означал лишь
+   «портфель когда-то открывали» и не работал вне LAN — токен честнее. */
+function hideReportsWidgets(){
+  var sr = $("sum-reports");
+  if (sr){ sr.style.display = "none"; var pd = sr.previousElementSibling;
+    if (pd && pd.classList && pd.classList.contains("hub-div")) pd.style.display = "none"; }
+  var right = document.querySelector(".hub-featured-right");
+  if (right) right.style.display = "none";
+  var feat = document.querySelector(".hub-feat");
+  if (feat) feat.style.gridTemplateColumns = "1fr";
+}
+function reportsFallback(){ hideReportsWidgets(); }
+
+/* Мета раздела «Здоровье» — по той же логике, что и отчёты портфеля: цифры
+   тянем ТОЛЬКО при наличии токена (иначе приватный запрос дал бы 403 и «?»
+   на публичном хабе). Без токена карточка остаётся ссылкой без чисел. */
+function hdJson(name){
+  return authFetch(bust("../health-data/" + name), { cache: "no-store" })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .catch(function(){ return null; });
+}
+function daysTo(iso){
+  var d = new Date(iso + "T00:00:00");
+  var t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((d - t0) / 86400000);
+}
+(function healthMeta(){
+  var el = $("health-meta");
+  if (!el) return;
+  if (!authToken()) return;
+
+  hdJson("labs.json").then(function(j){
+    if (!j || !j.biomarkers) return;
+    var bs = j.biomarkers, dates = [], meas = 0, hi = 0, lo = 0;
+    bs.forEach(function(b){
+      var ser = b.series || [];
+      meas += ser.length;
+      ser.forEach(function(s){ dates.push(s.date); });
+      /* «вне нормы» считаем ровно как блок «Требует внимания» health.html:
+         только числовые маркеры и только последнее значение серии. У
+         качественных «выше нормы» — механическая отметка лаборатории. */
+      if (b.kind !== "num" || !ser.length) return;
+      /* тот же порог свежести, что у health.html: последний замер не старше 365 дней */
+      if (daysTo(ser[ser.length - 1].date) < -365) return;
+      var st = ser[ser.length - 1].status;
+      if (st === "high") hi++; else if (st === "low") lo++;
+    });
+    if (!dates.length) return;
+    dates.sort();
+    $("health-count").textContent = bs.length + " " + plural(bs.length, "биомаркер", "биомаркера", "биомаркеров");
+    /* Дата последнего анализа ушла: в плитке её вытеснило «вне нормы». Свежесть
+       анализов ничего не требует делать, а маркеры вне нормы — требуют. */
+    el.innerHTML = meas + " " + plural(meas, "измерение", "измерения", "измерений") +
+      (hi || lo
+        ? ' · <span class="up">' + hi + ' ↑</span> · <span class="down">' + lo + ' ↓</span> вне нормы'
+        : " · всё в норме");
+  });
+
+  /* «Ближайшее» — то же окно, что у reminders() health.html:
+     ревакцинация в пределах 60 дней либо лекарство с истекающим (≤3 мес)
+     или истёкшим сроком. Нет такого события — строку не показываем (выдумывать
+     «через 700 дней» ради заполнения макета нечестно). */
+  Promise.all([hdJson("vaccinations.json"), hdJson("meds.json")]).then(function(res){
+    var ev = null;
+    function offer(c){ if (!ev || c.ord < ev.ord) ev = c; }
+    (((res[0] || {}).vaccinations) || []).forEach(function(v){
+      if (!v.next_due || !/^\d{4}-\d{2}-\d{2}$/.test(v.next_due)) return;
+      var d = daysTo(v.next_due);
+      if (d > 60) return;
+      offer({ ord: d, err: d < 0,
+        name: (v.vaccine || "Ревакцинация") + (v.against ? " (" + v.against + ")" : ""),
+        sub: "Плановый срок — " + uiDateLong(new Date(v.next_due + "T00:00:00")),
+        chip: d < 0 ? "просрочено" : "через " + d + " " + plural(d, "день", "дня", "дней") });
+    });
+    (((res[1] || {}).meds) || []).forEach(function(m){
+      if (m.archived || !m.expiry || !/^\d{4}-\d{2}/.test(m.expiry)) return;
+      var p = m.expiry.split("-");
+      var months = (+p[0] - now.getFullYear()) * 12 + (+p[1] - 1 - now.getMonth());
+      if (months > 3) return;
+      /* у срока годности точность — месяц; в дни его не переводим, ord нужен
+         только для выбора самого раннего события */
+      offer({ ord: months * 30, err: months < 0, name: m.name || "Лекарство",
+        sub: "Срок годности — " + UI_MONTHS_NOM[+p[1] - 1] + " " + p[0],
+        chip: months < 0 ? "истёк" : "истекает" });
+    });
+    if (!ev) return;
+    var dd = $("health-next");
+    dd.textContent = ev.name + " · " + ev.chip;
+    dd.className = ev.err ? "err" : "warn";
+    dd.title = ev.sub;                 // подробность («Плановый срок — …») в тултипе
+    $("health-kv").hidden = false;
+  });
+})();
+
+/* ── деньги: последняя запись аудита + последний месяц трат ─────────────────
+   ZenMoney/* под паролем, как Portfolio/: без токена плитка остаётся ссылкой
+   без чисел. Логика цифр — та же, что у money.html: обычные траты (без поездок
+   и разовых) к среднему за до трёх прошлых месяцев; «открыто замечаний» — только
+   из последней записи истории (это снимок всей истории, не месяца). */
+(function moneyMeta(){
+  if (!$("money-head") || !authToken()) return;
+  function zm(name){
+    return authFetch(bust("../ZenMoney/audit/" + name), { cache: "no-store" })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .catch(function(){ return null; });
+  }
+  function k(v){ return (v / 1000).toFixed(1).replace(".", ",") + " тыс. ₽"; }
+  Promise.all([zm("history.json"), zm("spending.json"), zm("site-audit.json")]).then(function(res){
+    var recs = (res[0] && res[0].records) || [], ms = (res[1] && res[1].months) || [];
+    if (!recs.length && !ms.length) return;
+    /* Прошлый календарный месяц закрыт? «Закрыт» = есть и итоги трат, и аудит
+       (их пишет одно «закрой месяц»). Та же проверка — unclosed() в money.html. */
+    var pm = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    var pk = pm.getFullYear() + "-" + String(pm.getMonth() + 1).padStart(2, "0");
+    var hasSp = ms.some(function(x){ return x.month === pk; }), hasAu = recs.some(function(x){ return x.month === pk; });
+    /* закрыт «по сайту»: итоги трат и проверки сайта (site-audit.json, необязателен) — как unclosed() в money.html */
+    if (hasSp && !hasAu && res[2] && res[2].months && res[2].months[pk]) hasAu = true;
+    if (!hasSp || !hasAu){
+      $("money-todo").textContent = !hasSp && !hasAu ? "закрыть " + UI_MONTHS_NOM[pm.getMonth()]
+        : (hasSp ? "проверить учёт за " : "подвести итоги трат за ") + UI_MONTHS_NOM[pm.getMonth()];
+      $("money-todo").hidden = $("money-todo-dt").hidden = false;
+    }
+    if (ms.length){
+      var m = ms[ms.length - 1], prior = ms.slice(Math.max(0, ms.length - 4), ms.length - 1);
+      var reg = m.totals.expense_regular_rub || 0;
+      var avg = prior.length ? prior.reduce(function(s, x){ return s + (x.totals.expense_regular_rub || 0); }, 0) / prior.length : 0;
+      var d = avg ? reg / avg - 1 : 0;
+      var mi = +m.month.slice(5) - 1;
+      $("money-head").textContent = UI_MONTHS_NOM[mi].charAt(0).toUpperCase() + UI_MONTHS_NOM[mi].slice(1) + " " + m.month.slice(0, 4);
+      $("money-reg").textContent = k(reg) + (avg ? " · " + (d > 0 ? "+" : d < 0 ? "−" : "") + Math.round(Math.abs(d) * 100) + "% к среднему" : "");
+    }
+    if (recs.length){
+      // открытые — по статусам issues (как money.html openStats): open_total последней записи
+      // не обновляется, когда перезакрывают более ранний месяц
+      var iss = (res[0] && res[0].issues) || null, r = recs[recs.length - 1];
+      var open = iss && Object.keys(iss).length
+        ? Object.keys(iss).filter(function(k){ return iss[k].status === "open"; }).length : (r.open_total || 0);
+      var dq = $("money-q");
+      dq.textContent = open ? open + " " + plural(open, "замечание", "замечания", "замечаний") + " открыто"
+                            : Math.round((r.clean_share_rub || 0) * 100) + "% без замечаний";
+      if (open) dq.className = "warn";
+      $("money-sub").textContent = "аудит учёта " + uiDateLong(new Date(r.as_of + "T00:00:00"));
+    }
+    /* Самый свежий месяц с итогами проверен только сайтом (site-audit.json), записи скилла за него нет →
+       плитка показывает проверки сайта, а не аудит более раннего месяца. Аудит скилла главнее: появится — вернётся он.
+       Открытые замечания прошлых аудитов остаются в строке: сами они не закрываются. */
+    var lm = ms.length ? ms[ms.length - 1].month : null;
+    var sa = lm && res[2] && res[2].months && res[2].months[lm];
+    if (sa && Array.isArray(sa.checks) && !recs.some(function(x){ return x.month === lm; })){
+      var marks = sa.checks.reduce(function(n, c){ return n + (c.count || 0); }, 0), dq2 = $("money-q");
+      var openTxt = recs.length && dq2.className === "warn" ? dq2.textContent + " · " : "";
+      dq2.textContent = openTxt + (marks ? "проверки сайта: " + marks + " " + plural(marks, "отметка", "отметки", "отметок") : "проверки сайта: без отметок");
+      $("money-sub").textContent = "аудит сайта" + (sa.as_of ? " " + uiDateLong(new Date(sa.as_of + "T00:00:00")) : "");
+    }
+    $("money-kv").hidden = false;
+  });
+})();
+
+/* ── еда: список покупок ───────────────────────────────────────────────────
+   Единственный раздел, читаемый БЕЗ входа: Caddy отдаёт /Food/* и без токена,
+   потому что список нужен у полки в магазине. Поэтому обычный fetch, не
+   authFetch, и плитка наполняется у всех. */
+(function foodMeta(){
+  var el = $("food-count");
+  if (!el) return;
+  fetch(bust("../Food/shopping.json"), { cache: "no-store" })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(j){
+      if (!j || !Array.isArray(j.items)) return;
+      var items = j.items;
+      var left = items.filter(function(i){ return !i.bought; });
+      var n = left.length, total = items.length;
+      if (!total){
+        el.textContent = "Список пуст";
+        $("food-sub").textContent = "рецепты и каталог продуктов";
+        return;
+      }
+      el.textContent = n + " в списке";
+      $("food-sub").textContent = n
+        ? "куплено " + (total - n) + " из " + total
+        : "всё куплено · " + total + " " + plural(total, "позиция", "позиции", "позиций");
+      if (n){
+        /* Три имени и «+N»: плитка отвечает на «надо ли заезжать», а не
+           заменяет список. Полный — по клику. */
+        var names = left.slice(0, 3).map(function(i){ return i.name || "—"; });
+        $("food-next").innerHTML = names.join(", ") +
+          (n > 3 ? ' <span style="color:var(--text-faint);">+' + (n - 3) + "</span>" : "");
+        $("food-kv").hidden = false;
+
+        $("sum-food-n").textContent = n;
+        $("sum-food-word").innerHTML = '<span class="hub-long"> ' +
+          plural(n, "позицию", "позиции", "позиций") + "</span> купить";
+        $("sum-food").hidden = false;
+        $("sum-food-div").hidden = false;
+      }
+    })
+    .catch(function(){});
+})();
+
+var loggedIn = !!authToken();
+/* плашки свежести отчётов; тело вынесено, чтобы перерисовать при смене режима «с ИИ / без ИИ» */
+var lastReps = null, repsCounted = false;
+function renderReports(reps){
+  var ok = reps.filter(function(r){ return !r.error; });
+  var bad = reps.filter(function(r){ return !!r.error; });
+  if (!ok.length){ if (!repsCounted){ repsCounted = true; done(false); } reportsFallback(); return; }
+  /* частично живые данные — это «частично», а не «живые»: подвал скажет
+     «Данные частично живые (N/M)» вместо бодрого «Данные живые» */
+  if (!repsCounted){ repsCounted = true; done(bad.length === 0); }
+  /* «без ИИ»: LLM-отчёты (всё, кроме снапшота) не просрочены — серые строки «данные от DD.MM» */
+  var grey = [];
+  if (uiAiMode() === "off"){
+    /* недельную инфляцию (macro) без ИИ вносит форма сайта — она остаётся в проверке, как снапшот */
+    var mine = function(r){ return r.key === "portfolio" || r.key === "macro"; };
+    grey = ok.filter(function(r){ return !mine(r); });
+    ok = ok.filter(mine);
+    bad = bad.filter(mine);
+  }
+  var overdue = ok.filter(function(r){ return r.overdue > 0; })
+                  .sort(function(a, b){ return b.overdue - a.overdue; });
+  var listEl = $("rep-list");
+  var sum = $("sum-reports");
+  var head = $("rep-head"), cnt = $("rep-count");
+  listEl.innerHTML = "";
+  if (!overdue.length && !bad.length){
+    head.textContent = "Отчёты";
+    head.style.color = "var(--success)";
+    cnt.style.display = "none";
+    var okEl = document.createElement("div");
+    okEl.className = "rep-ok";
+    okEl.textContent = grey.length ? "Без ИИ: отчёты не обновляются" : "Все отчёты в графике";
+    listEl.appendChild(okEl);
+    sum.className = "cell ok";
+    $("sum-reports-txt").textContent = grey.length ? "без ИИ: отчёты не обновляются" : "отчёты в графике";
+  } else {
+    /* Просрочку и «не смог проверить» показываем раздельно и оба. Прежняя
+       версия молча выбрасывала недоступные каталоги из выборки и печатала
+       «Все отчёты в графике» по выжившим — сломанный NAS выглядел точно так
+       же, как порядок. Страницы после выкладки не чинятся, поэтому
+       деградировать они обязаны громко. */
+    var quiet = !overdue.length;   // только непроверенные, просрочки нет
+    /* два уровня плашки: жёлтая — старше staleAfter, красная — старше failAfter */
+    var hard = overdue.some(function(r){ return r.hard; });
+    var tone = (quiet || !hard) ? "warn" : "err";
+    head.textContent = quiet ? "Свежесть не проверена" : "Просроченные отчёты";
+    head.style.color = "var(--" + tone + ")";
+    cnt.style.display = "";
+    cnt.textContent = overdue.length + bad.length;
+    cnt.style.color = "var(--" + tone + ")";
+    cnt.style.background = "var(--" + tone + "-bg)";
+    var rows = overdue.map(function(r){
+      return { label: r.label, note: r.overdue + " дн.", warn: !r.hard };
+    }).concat(bad.map(function(r){
+      return { label: r.label, note: r.error, warn: true };
+    }));
+    rows.slice(0, 3).forEach(function(r){
+      var row = document.createElement("div");
+      row.className = r.warn ? "rep-item warn" : "rep-item";
+      var dot = document.createElement("span"); dot.className = "dot";
+      var lbl = document.createElement("span"); lbl.className = "lbl"; lbl.textContent = r.label;
+      var age = document.createElement("span"); age.className = "age"; age.textContent = r.note;
+      row.appendChild(dot); row.appendChild(lbl); row.appendChild(age);
+      listEl.appendChild(row);
+    });
+    if (rows.length > 3){
+      var more = document.createElement("span");
+      more.className = "rep-more";
+      if (quiet) more.style.color = "var(--warn)";
+      more.textContent = "Ещё " + (rows.length - 3) + " " + plural(rows.length - 3, "отчёт", "отчёта", "отчётов") + " →";
+      listEl.appendChild(more);
+    }
+    if (quiet){
+      sum.className = "cell warn";
+      $("sum-reports-txt").innerHTML = bad.length + '<span class="hub-long"> ' +
+        plural(bad.length, "отчёт не проверен", "отчёта не проверены", "отчётов не проверены") + "</span>";
+    } else {
+      sum.className = "cell " + tone;
+      $("sum-reports-txt").innerHTML = overdue.length + '<span class="hub-long"> ' +
+        plural(overdue.length, "отчёт просрочен", "отчёта просрочены", "отчётов просрочены") + "</span>";
+    }
+  }
+  /* без ИИ: одна серая строка с самой старой датой — возраст данных по каждому отчёту смотрят во вьюере («Сегодня») */
+  if (grey.length){
+    var oldest = grey.map(function(r){ return r.last; }).sort(function(a, b){ return a - b; })[0];
+    var row = document.createElement("div");
+    row.className = "rep-item noai";
+    var dot = document.createElement("span"); dot.className = "dot";
+    var lbl = document.createElement("span"); lbl.className = "lbl";
+    lbl.textContent = grey.length + " " + plural(grey.length, "отчёт", "отчёта", "отчётов") + " без обновления";
+    var age = document.createElement("span"); age.className = "age";
+    age.textContent = "самые старые от " + ("0" + oldest.getDate()).slice(-2) + "." + ("0" + (oldest.getMonth() + 1)).slice(-2);
+    row.appendChild(dot); row.appendChild(lbl); row.appendChild(age);
+    listEl.appendChild(row);
+  }
+  /* последний weekly review акций — по ключу, а не по префиксу лейбла: с
+     появлением «Weekly review · облигации» префикс перестал быть уникальным */
+  var weekly = reps.filter(function(r){ return r.key === "stocks"; })[0];
+  if (weekly && weekly.last) $("last-weekly").textContent = uiDateLong(weekly.last);
+}
+document.addEventListener("ui-noai", function(){ if (lastReps) renderReports(lastReps); });
+if (loggedIn) Promise.all(CONFIG.reports.map(function(rep){
+  return listDir(rep.dir).then(function(entries){
+    var names = entries.map(function(e){ return e.name; })
+                       .filter(function(n){ return rep.match.test(n); });
+    return (rep.jsonl ? jsonlDate(rep, names) : Promise.resolve(latestDate(names))).then(function(d){
+    /* каталог ответил, но подходящих файлов в нём нет. Это НЕ «в графике»:
+       либо маска разошлась с реальными именами, либо отчётов такого вида не
+       было вообще — и то и другое пользователь должен видеть. */
+    if (!d) return rep.jsonl ? null : { key: rep.key, label: rep.label, error: "нет файлов" };   /* jsonl: инфляции ещё не вносили — не ошибка */
+    var age = Math.floor((now - d) / 86400000);
+    return { key: rep.key, label: rep.label, last: d,
+             overdue: age - rep.staleAfter,
+             hard: rep.failAfter != null && age > rep.failAfter };
+    });
+  }).catch(function(){ return rep.jsonl ? null : { key: rep.key, label: rep.label, error: "нет связи" }; });
+})).then(function(reps){ reps = reps.filter(Boolean); lastReps = reps; renderReports(reps); })
+.catch(function(){ done(false); reportsFallback(); });
+else hideReportsWidgets();
+
+/* путешествия: всё из данных — листинг trips/ + trip.yaml каждой поездки
+   (контракт trip-meta@1, пишет скилл travel-planning; фолбэк — дата из имени) */
+/* «Моя ближайшая» — только поездки, в которых едет владелец кабинета: у
+   родителей свои маршруты (trip.yaml travelers: [родители]), и подсовывать
+   их как «мою ближайшую» неверно. Нет поля travelers — считаем поездку своей
+   (тот же дефолт, что в travel.html: travelers || ["алексей"]). */
+/* чья поездка — общий uiTripIsMine из ui-kit (одно имя владельца на кабинет) */
+function tripIsMine(y){ return uiTripIsMine(y && y.travelers); }
+function tripYamlParse(t){
+  var res = {};
+  t.split("\n").forEach(function(ln){
+    var m = ln.match(/^(\w+):\s*(.*)$/);
+    if (m) res[m[1]] = m[2].replace(/\s+#.*$/, "").trim().replace(/^["']|["']$/g, "");
+  });
+  return res;
+}
+listDir("../travel-planner/trips/").then(function(entries){
+  var dirs = entries.filter(function(e){ return e.isDir; }).map(function(e){ return e.name; });
+  return Promise.all(dirs.map(function(dir){
+    return fetchText("../travel-planner/trips/" + encodeURIComponent(dir) + "/trip.yaml")
+      .then(tripYamlParse)
+      .catch(function(){
+        var dm = dir.match(/\d{4}(-\d{2})?/);
+        return { title: dir.replace(/_/g, " "), status: "planning", season: dm ? dm[0] : "" };
+      })
+      /* когда поездка — общий расчёт ui-kit (тот же, что на travel.html) */
+      .then(function(y){ return { dir: dir, y: y, w: uiTripWhen(y) }; });
+  }));
+}).then(function(trips){
+  if (!trips.length) throw new Error("empty");
+  /* архив — по uiTripWhen: прошла / состоялась / срок прошёл без дат */
+  var live = trips.filter(function(t){ return t.y.status !== "superseded" && !t.w.archive; });
+  var past = trips.filter(function(t){ return t.y.status !== "superseded" && (t.w.archive === "past" || t.w.archive === "done"); });
+  /* «в проработке» = семантика travel-страницы: status planning И есть экспорты
+     (html/pdf стадий); ready — «готова», planning без экспортов — черновик */
+  var planning = live.filter(function(t){ return (t.y.status || "planning") === "planning"; });
+  return Promise.all(planning.map(function(t){
+    return listDir("../travel-planner/trips/" + encodeURIComponent(t.dir) + "/").then(function(entries){
+      return entries.some(function(f){ return !f.isDir && /^[0-6][_ ].*\.(html|pdf)$/.test(f.name); });
+    }).catch(function(){ return false; });
+  })).then(function(flags){
+    done(true);
+    var progress = planning.filter(function(t, i){ return flags[i]; }).length;
+    var mineAll = trips.filter(function(t){ return tripIsMine(t.y); }).length;
+    $("trips-count").textContent = trips.length + " " + plural(trips.length, "поездка", "поездки", "поездок");
+    $("trips-split").textContent = "мои: " + mineAll + " · для близких: " + (trips.length - mineAll);
+    $("trips-active").textContent = progress + " в проработке";
+    $("sum-trips").textContent = progress;
+    $("sum-trips-word").innerHTML = " " + plural(progress, "поездка", "поездки", "поездок") +
+      '<span class="hub-long"> в проработке</span>';
+    /* «Моя ближайшая» — только поездки (точные даты или ready + месяц);
+       возможные поездки и идеи — отдельной оговоркой, не как план */
+    var bySort = function(a, b){ return a.w.sortKey - b.w.sortKey; };
+    var mine = live.filter(function(t){ return tripIsMine(t.y); });
+    var next = mine.filter(function(t){ return t.w.nearest; }).sort(bySort)[0];
+    var idea = next ? null : mine.filter(function(t){ return t.w.kind === "possible" || t.w.kind === "idea"; }).sort(bySort)[0];
+    $("trips-next").textContent = next ? (next.y.title || next.dir) + ", " + next.w.label
+      : idea ? "точных дат нет · идея — " + (idea.y.title || idea.dir) + ", " + idea.w.seasonLabel.toLowerCase() : "—";
+    var last = past.filter(function(t){ return t.w.sortKey; }).sort(function(a, b){ return b.w.sortKey - a.w.sortKey; })[0];
+    $("trips-last").textContent = last ? "Последняя — " + (last.y.title || last.dir) + ", " + last.w.seasonLabel.toLowerCase() : "";
+  });
+}).catch(function(){ done(false); });
+
+/* игры: счётчики — те же слитые данные, что экран «Библиотека» games.html (assets/games-model.js):
+   taste-profile.yaml: library + library_full.yaml + оверлей Gaming/user-state.json. Оверлей недоступен — по файлам скилла. */
+function gamesOverlayItems(){
+  return authFetch(bust("../api/gm/file?path=" + encodeURIComponent("Gaming/user-state.json")), { cache: "no-store" }).then(function(r){
+    if (!r.ok) return [];
+    return r.json().then(function(j){ return (gamesNormUserDoc(JSON.parse(j.content)) || {}).items || []; });
+  }).catch(function(){ return []; });
+}
+Promise.all([fetchText("../Gaming/library_full.yaml"), fetchText("../Gaming/taste-profile.yaml").catch(function(){ return ""; }), gamesOverlayItems()]).then(function(r){
+  done(true);
+  var libFull = (jsyaml.load(r[0]) || {}).library_full || [];
+  var prof = r[1] ? (jsyaml.load(r[1]) || {}) : {};
+  var sm = gamesLibSummary(gamesMergeLibrary(prof.library || [], libFull, r[2]));
+  if (sm.total){
+    $("games-count").textContent = sm.total + " " + plural(sm.total, "игра", "игры", "игр");
+    $("sum-games").textContent = sm.total;
+    $("sum-games-word").innerHTML = " " + plural(sm.total, "игра", "игры", "игр") + '<span class="hub-long"> в библиотеке</span>';
+    $("games-split").textContent = "играю " + sm.playing + " · бэклог " + sm.backlog + " · пройдено " + sm.done;
+    $("games-hours").textContent = sm.hours + " ч";
+    if (sm.plats.length) $("games-plats").textContent = sm.plats.map(function(p){ return p === "switch" ? "Switch" : (CL.ru("game_platform", p) || p); }).join(" · ");
+  }
+}).catch(function(){ done(false); });
+
+/* игры: дата последней подборки */
+listDir("../Gaming/recommendations/").then(function(entries){
+  done(true);
+  var d = latestDate(entries.map(function(e){ return e.name; }));
+  if (d) $("games-reco").textContent = uiDateLong(d);
+}).catch(function(){ done(false); });
+
+/* офлайн (ui-kit 1.55.0): при связи раз в 6 ч хаб в фоне обновляет копии остальных страниц — через 3 с
+   после открытия, чтобы не мешать своей загрузке */
+setTimeout(function(){ uiOfflineWarm(); }, 3000);
+
+})();
+</script>
+</body>
+</html>

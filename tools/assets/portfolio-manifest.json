@@ -1,0 +1,17 @@
+{
+  "id": "/tools/portfolio-integrated-viewer.html",
+  "name": "Портфель",
+  "short_name": "Портфель",
+  "description": "Вьюер портфеля: вердикты, условия, стресс — и уведомления о событиях",
+  "start_url": "/tools/portfolio-integrated-viewer.html",
+  "scope": "/tools/",
+  "display": "standalone",
+  "background_color": "#f4f1ea",
+  "theme_color": "#f4f1ea",
+  "lang": "ru",
+  "icons": [
+    { "src": "/tools/assets/icons/portfolio-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/tools/assets/icons/portfolio-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/tools/assets/icons/portfolio-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
