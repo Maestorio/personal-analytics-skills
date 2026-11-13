@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>%%TITLE%%</title>
+%%HEAD_ASSETS%%
+</head>
+<body>
+
+<header>
+  <div class="header-label">%%HEADER_LABEL%%</div>
+  <h1>Похожие авторы — <em>%%COUNT%%</em></h1>
+  <div class="header-sub">%%HEADER_SUB%%</div>
+</header>
+
+<div class="summary">%%SUMMARY_ITEMS%%</div>
+
+%%WARNING_BANNER%%
+
+<div class="controls">
+  <span class="filter-label">Фильтр:</span>
+  <button class="btn active" onclick="filter('all',this)">Все</button>
+  <button class="btn btn-high" onclick="filter('high',this)">ВЫСОКАЯ</button>
+  <button class="btn btn-medium" onclick="filter('medium',this)">СРЕДНЯЯ</button>
+  <button class="btn btn-low" onclick="filter('low',this)">НИЗКАЯ</button>
+  <button class="btn btn-outlier" onclick="filter('outlier',this)">ОСОБЫЙ СИГНАЛ</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+%%READING_SECTION%%
+
+<div class="legend">%%LEGEND%%</div>
+<footer>%%FOOTER%%</footer>
+
+<script>
+const reports = [
+%%DATA%%
+];
+
+const HAS_PRACTICAL = %%HAS_PRACTICAL%%;
+const compNames = %%COMP_NAMES%%;
+const compWeights = %%COMP_WEIGHTS%%;
+// Русские ярлыки категорий (из taxonomy.json — SSOT). Ключи данных
+// (high/medium/low/outlier/unscored) не меняются.
+const CAT_LABELS = %%CAT_LABELS%%;
+
+function catLabel(c){ return CAT_LABELS[c] || c.toUpperCase(); }
+function toneIcon(t){ return {pos:"✓",neg:"✗",neu:"·"}[t] || "·"; }
+function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function renderCards(data){
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  data.forEach(r => {
+    const pct = (Math.max(0, Math.min(10, r.score||0))/10*100).toFixed(0);
+    const urlShort = r.url ? r.url.replace(/https?:\/\//,'').split('/')[0] : '';
+
+    const compItems = (r.comps||[]).map((c,i)=>`
+      <div class="comp-item">
+        <div class="comp-name">${esc(compNames[i]||('C'+(i+1)))}</div>
+        <div class="comp-score">${c==null?'—':c}<span style="font-size:11px;color:var(--muted)">/10</span></div>
+        <div class="comp-contrib">${(r.contribs&&r.contribs[i]!=null)?'+'+r.contribs[i].toFixed(2):'—'} (${compWeights[i]}%)</div>
+      </div>`).join('');
+
+    const reasonUp = r.up ? `<div class="reason up"><span class="reason-label">Тянет вверх</span>${esc(r.up)}</div>` : '';
+    const reasonDown = r.down ? `<div class="reason down"><span class="reason-label">Тянет вниз</span>${esc(r.down)}</div>` : '';
+
+    const outlierBox = r.outlierSignal ? `<div class="signal-box outlier">${esc(r.outlierSignal)}</div>` : '';
+    const readingBox = r.readingList ? `<div class="signal-box reading">${esc(r.readingNote||'Включён в список чтения Stage 3')}</div>` : '';
+
+    let practicalTab = '', practicalPane = '';
+    if (HAS_PRACTICAL) {
+      const p = r.practical || {};
+      const poiHtml = p.poi ? `<div class="prac-section"><div class="prac-label">POI из отчёта</div><div class="prac-text">${esc(p.poi)}</div></div>` : '';
+      const gemsHtml = p.gems ? `<div class="prac-section"><div class="prac-label">Скрытые жемчужины</div><div class="prac-text gem">${esc(p.gems)}</div></div>` : '';
+      const warnHtml = p.warnings ? `<div class="prac-section"><div class="prac-label">Предупреждения / жалобы</div><div class="prac-text warn">${esc(p.warnings)}</div></div>` : '';
+      const photoHtml = p.photo ? `<div class="prac-section"><div class="prac-label">Фото-наблюдения</div><div class="prac-text photo">${esc(p.photo)}</div></div>` : '';
+      const inner = poiHtml + gemsHtml + warnHtml + photoHtml;
+      practicalTab = `<button class="tab-btn" onclick="switchTab(event,'practical')">Практика</button>`;
+      practicalPane = `<div class="tab-pane" data-tab="practical">${inner || '<div class="prac-empty">Нет практических данных из Stage 1 по этому автору.</div>'}${outlierBox}${readingBox}</div>`;
+    }
+
+    const tagsHtml = (r.tags && r.tags.length)
+      ? `<div class="tags">${r.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>` : '';
+
+    const card = document.createElement('div');
+    card.className = `card ${r.cat}`;
+    card.innerHTML = `
+      <div class="card-header">
+        <div>
+          <div class="card-num">ОТЧЁТ #${r.num}${r.season?(' · '+esc(r.season)):''}</div>
+          <div class="card-author">${esc(r.author)}</div>
+          ${r.url?`<a class="card-url" href="${esc(r.url)}" target="_blank" title="${esc(r.url)}" onclick="event.stopPropagation()">${esc(urlShort)}</a>`:''}
+        </div>
+        <div class="score-block">
+          <div class="score-num">${r.score!=null?r.score.toFixed(2):'—'}</div>
+          <div><span class="cat-badge">${catLabel(r.cat)}</span></div>
+        </div>
+      </div>
+      <div class="score-bar-row">
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%"></div></div>
+        <div class="bar-label">${pct}%</div>
+      </div>
+      ${tagsHtml}
+      ${r.rationale?`<div class="card-rationale">${esc(r.rationale)}</div>`:''}
+      <div class="expanded-details">
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="switchTab(event,'scoring')">Оценка</button>
+          ${practicalTab}
+        </div>
+        <div class="tab-pane active" data-tab="scoring">
+          <div class="comp-grid">${compItems}</div>
+          ${reasonUp}${reasonDown}
+          ${outlierBox}${readingBox}
+        </div>
+        ${practicalPane}
+      </div>`;
+
+    card.addEventListener('click', e => {
+      if(e.target.closest('.tab-btn') || e.target.closest('.card-url')) return;
+      card.classList.toggle('expanded');
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+function switchTab(e, tab){
+  e.stopPropagation();
+  const card = e.target.closest('.card');
+  card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  card.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  e.target.classList.add('active');
+  card.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+}
+
+let currentFilter = 'all', currentSort = 'score';
+
+function filter(cat, btn){
+  currentFilter = cat;
+  document.querySelectorAll('.controls > .btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilterSort();
+}
+function sort(by, btn){
+  currentSort = by;
+  document.querySelectorAll('.sort-controls .btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilterSort();
+}
+function applyFilterSort(){
+  let data = [...reports];
+  if(currentFilter !== 'all') data = data.filter(r => r.cat === currentFilter);
+  if(currentSort === 'score') data.sort((a,b) => (b.score||0) - (a.score||0));
+  else data.sort((a,b) => a.num - b.num);
+  renderCards(data);
+}
+
+applyFilterSort();
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+{
+  "default_display_lang": "ru",
+  "languages": ["en", "ru"],
+  "no_translate": ["POI", "Deep Research"],
+  "terms": {
+    "author_category": {
+      "HIGH":     {"en": "HIGH",     "ru": "ВЫСОКАЯ",       "aliases_ru": ["ВЫСОКОЕ СХОДСТВО"]},
+      "MEDIUM":   {"en": "MEDIUM",   "ru": "СРЕДНЯЯ"},
+      "LOW":      {"en": "LOW",      "ru": "НИЗКАЯ"},
+      "OUTLIER":  {"en": "OUTLIER",  "ru": "ОСОБЫЙ СИГНАЛ"},
+      "UNSCORED": {"en": "UNSCORED", "ru": "БЕЗ ОЦЕНКИ"}
+    },
+    "poi_category": {
+      "STRONG_CONFIRMED": {"en": "STRONG CONFIRMED", "ru": "СИЛЬНОЕ ПОДТВЕРЖДЕНИЕ"},
+      "WEAK_CONFIRMED":   {"en": "WEAK CONFIRMED",   "ru": "СЛАБОЕ ПОДТВЕРЖДЕНИЕ"},
+      "HIDDEN_GEM":       {"en": "HIDDEN GEM",       "ru": "СКРЫТАЯ ЖЕМЧУЖИНА"},
+      "CONTESTED":        {"en": "CONTESTED",        "ru": "СПОРНЫЙ",
+                           "aliases_ru": ["СПОРНОЕ", "СПОРНЫЕ"]},
+      "RED_FLAG":         {"en": "RED FLAG",         "ru": "КРАСНЫЙ ФЛАГ"},
+      "LOW_SIGNAL":       {"en": "LOW SIGNAL",       "ru": "СЛАБЫЙ СИГНАЛ"}
+    },
+    "poi_category_badge": {
+      "STRONG_CONFIRMED": {"en": "STRONG",    "ru": "СИЛЬНОЕ"},
+      "WEAK_CONFIRMED":   {"en": "WEAK",      "ru": "СЛАБОЕ"},
+      "HIDDEN_GEM":       {"en": "HIDDEN",    "ru": "ЖЕМЧУЖИНА"},
+      "CONTESTED":        {"en": "CONTESTED", "ru": "СПОРНЫЙ"},
+      "RED_FLAG":         {"en": "RED FLAG",  "ru": "КРАСНЫЙ ФЛАГ"},
+      "LOW_SIGNAL":       {"en": "LOW",       "ru": "СЛАБЫЙ"}
+    },
+    "region_role": {
+      "Core":       {"en": "Core",       "ru": "Ядро"},
+      "Supporting": {"en": "Supporting", "ru": "Поддержка"},
+      "Niche":      {"en": "Niche",      "ru": "Нишевый"},
+      "Borderline": {"en": "Borderline", "ru": "Пограничный"}
+    },
+    "warning_severity": {
+      "critical":   {"en": "critical",   "ru": "критично"},
+      "borderline": {"en": "borderline", "ru": "погранично"},
+      "info":       {"en": "info",       "ru": "инфо"}
+    },
+    "tonality": {
+      "recommend":      {"en": "recommend",      "ru": "рекомендует"},
+      "neutral":        {"en": "neutral",        "ru": "нейтрально"},
+      "criticize":      {"en": "criticize",      "ru": "критикует"},
+      "regret_visited": {"en": "regret_visited", "ru": "жалеет о посещении"},
+      "regret_missed":  {"en": "regret_missed",  "ru": "жалеет, что пропустил"}
+    },
+    "similarity_component": {
+      "style":        {"en": "style",        "ru": "стиль",            "ru_short": "стиль"},
+      "focus":        {"en": "focus",        "ru": "фокус",            "ru_short": "фокус"},
+      "pace":         {"en": "pace",         "ru": "темп",             "ru_short": "темп"},
+      "independence": {"en": "independence", "ru": "самостоятельность", "ru_short": "самост."},
+      "depth":        {"en": "depth",        "ru": "глубина",          "ru_short": "глубина"},
+      "demo":         {"en": "demo",         "ru": "демография",       "ru_short": "демо"}
+    },
+    "content_density": {
+      "HIGH":   {"en": "HIGH",   "ru": "высокая"},
+      "MEDIUM": {"en": "MEDIUM", "ru": "средняя", "aliases_en": ["MED"]},
+      "LOW":    {"en": "LOW",    "ru": "низкая"}
+    },
+    "tempo": {
+      "slow":     {"en": "slow",     "ru": "размеренный"},
+      "balanced": {"en": "balanced", "ru": "сбалансированный", "aliases_en": ["moderate"]},
+      "active":   {"en": "active",   "ru": "активный",         "aliases_en": ["fast", "rapid"]}
+    },
+    "flag_badge": {
+      "photo":            {"en": "photo",            "ru": "фото-фокус"},
+      "residence":        {"en": "residence",        "ru": "резидент"},
+      "iconic":           {"en": "iconic",           "ru": "знаковый"},
+      "iconic_status":    {"en": "iconic status",    "ru": "знаковость"},
+      "iconic_exception": {"en": "iconic exception", "ru": "знаковое исключение"},
+      "trap":             {"en": "tourist-trap",     "ru": "ловушка"},
+      "combined_with":    {"en": "combined with",    "ru": "совмещать с"},
+      "cluster":          {"en": "cluster",          "ru": "кластер"}
+    },
+    "report_focus": {
+      "photo":        {"en": "photo",        "ru": "фото",       "aliases_en": ["photography"]},
+      "culture":      {"en": "culture",      "ru": "культура"},
+      "nature":       {"en": "nature",       "ru": "природа"},
+      "architecture": {"en": "architecture", "ru": "архитектура"},
+      "food":         {"en": "food",         "ru": "гастрономия"},
+      "adventure":    {"en": "adventure",    "ru": "адвенчура", "aliases_ru": ["приключения"]},
+      "mix":          {"en": "mix",          "ru": "микс"},
+      "relax":        {"en": "relax",        "ru": "отдых"}
+    },
+    "report_tonality": {
+      "critical": {"en": "critical", "ru": "критика"}
+    },
+    "report_style": {
+      "mid_range_independent":   {"en": "mid-range independent",   "ru": "миддл-сегмент самостоятельно"},
+      "budget_independent":      {"en": "budget independent",      "ru": "бюджетно самостоятельно"},
+      "motorbike_independent":   {"en": "motorbike independent",   "ru": "мотобайк самостоятельно"},
+      "standard_tourist_circuit": {"en": "standard tourist circuit", "ru": "стандартный туристический маршрут"},
+      "hardcore_adventure":      {"en": "hardcore adventure",      "ru": "хардкор-адвенчура"},
+      "cultural_deep_dive":      {"en": "cultural deep-dive",      "ru": "культурное погружение"},
+      "photography_focused":     {"en": "photography-focused",     "ru": "фото-фокус",
+                                  "aliases_ru": ["фото-ориентированный"]},
+      "food_focused":            {"en": "food-focused",            "ru": "гастро-фокус"},
+      "organized_tour":          {"en": "organized tour",          "ru": "организованный тур"},
+      "digital_nomad":           {"en": "digital nomad",           "ru": "диджитал-номад"},
+      "backpacker":              {"en": "backpacker",              "ru": "бэкпэкер"},
+      "backpacking":             {"en": "backpacking",             "ru": "бэкпэкинг"},
+      "mid_range":               {"en": "mid-range",               "ru": "миддл-сегмент"},
+      "luxury":                  {"en": "luxury",                  "ru": "люкс"},
+      "family":                  {"en": "family",                  "ru": "семья"},
+      "mix":                     {"en": "mix",                     "ru": "микс"}
+    },
+    "scope_labels": {
+      "tempo":   {"en": "Tempo",   "ru": "Темп"},
+      "country": {"en": "Country", "ru": "Страны"},
+      "math":    {"en": "Math",    "ru": "Расчёт"}
+    },
+    "scope_format": {
+      "multi_region_tour": {"en": "multi-region tour", "ru": "мульти-регион-тур"},
+      "single_base":       {"en": "single-base",       "ru": "одна база"},
+      "explicit_list":     {"en": "explicit list",     "ru": "явный список"}
+    },
+    "region_role_group": {
+      "core":       {"en": "Core",       "ru": "Ядро поездки"},
+      "supporting": {"en": "Supporting", "ru": "Поддержка"},
+      "niche":      {"en": "Niche",      "ru": "Нишевые"},
+      "borderline": {"en": "Borderline", "ru": "Пограничные"}
+    },
+    "author_tag": {
+      "user_added":  {"en": "user_added",   "ru": "добавлен вручную"},
+      "ext_reading": {"en": "ext. reading", "ru": "расш. чтение"}
+    }
+  }
+}

@@ -1,0 +1,28 @@
+# Закрытый список секторных групп стресса: ключ -> подпись (одна на все прогоны) и
+# фонды -> группа. Читает compute_derived_fields.py. Бумага вне списка в разбивку не попадает:
+# блоки по секторам не считаются, пока ключ или фонд не добавлены сюда.
+groups:
+  algo_strategies: Алгоритмические стратегии
+  banks_finance: Банки и финансы
+  bond_funds: Облигационные фонды
+  bonds_fx: Облигации валютные
+  bonds_rub: Облигации в рублях
+  consumer: Потребительский сектор
+  funds_equity: Фонды акций
+  funds_gold: Золото (фонд)
+  funds_real_estate: Фонды недвижимости
+  gold_miners: Золотодобыча
+  it_telecom: IT и телеком
+  metals_mining: Металлы и добыча
+  money_market: Денежный рынок
+  oil_gas: Нефтегаз
+  real_estate: Недвижимость
+  utilities: Электроэнергетика
+funds:
+  TGLD: funds_gold
+  TLCB: bond_funds
+  SBGB: bond_funds
+  XXXXXX: funds_real_estate
+  FINAMAR: algo_strategies
+  TMON: money_market
+  TPAY: money_market

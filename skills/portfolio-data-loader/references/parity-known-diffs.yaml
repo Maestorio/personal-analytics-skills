@@ -1,0 +1,39 @@
+# Известные расхождения сверки «скилл против скрипта» (parity_check.py, API-1b PR-4).
+#
+# Каждая запись — шаблон пути поля (как в отчёте сверки; `*` — фрагмент без точки,
+# `**` — что угодно, скобки буквально) и причина. Это правило, а не исключение «по факту»:
+# добавлять только с объяснением, почему расхождение законно.
+#
+# Формат:
+#   - path: "$.input_files.trades"
+#     reason: "почему расхождение законно"
+#     since: "YYYY-MM-DD"
+
+known:
+  # Флаги фолбэков: SKILL.md (Шаги 3, 4б, 5) велит модели «пометить в data_quality_flags»
+  # своими словами; build_snapshot.py ставит их с фиксированным кодом. Факт фолбэка
+  # сверяется отдельно — shadow_bundle.py пишет «Фолбэки разошлись» в отчёт.
+  - path: "$.data_quality_flags[moex_unavailable|build_snapshot|**"
+    reason: "флаг фолбэка MOEX: у скрипта код moex_unavailable, у скилла — свободный текст"
+    since: "2026-10-20"
+  - path: "$.data_quality_flags[cbr_offline|build_snapshot|**"
+    reason: "флаг фолбэка ЦБ: у скрипта код cbr_offline, у скилла — свободный текст"
+    since: "2026-10-20"
+  - path: "$.data_quality_flags[iis_returns_failed|build_snapshot|**"
+    reason: "сбой расчёта ИИС-3: у скрипта код iis_returns_failed, скилл шаг пропускает молча"
+    since: "2026-10-20"
+  - path: "$.data_quality_flags[moex_quotes_failed|build_snapshot|**"
+    reason: "котировки MOEX не получены: у скрипта код moex_quotes_failed, у скилла — свободный текст"
+    since: "2026-10-21"
+  - path: "$.parity"
+    reason: "сверка «без баланса ↔ с балансом» (этап 6) пишется только сборкой скриптом"
+    since: "2026-10-28"
+  - path: "$.parity.**"
+    reason: "то же"
+    since: "2026-10-28"
+  - path: "$.per_instrument_xirr_closed"
+    reason: "результат по проданным бумагам считает только сборка скриптом (build_snapshot.py: второй прогон per_security_xirr.py по закрытым тикерам); шаги скилла его не строят"
+    since: "2026-10-30"
+  - path: "$.per_instrument_xirr_closed.**"
+    reason: "то же"
+    since: "2026-10-30"

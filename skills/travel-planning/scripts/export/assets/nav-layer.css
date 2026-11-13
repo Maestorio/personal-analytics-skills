@@ -1,0 +1,270 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TNAV — навигационный слой путеводителя (стадии 0–6).
+
+   Источник: Claude Design, проект 553ebbf1-cf71-453d-9d71-39b0427aee77,
+   файл `nav-layer.snippet.txt`. Имена классов — контракт с дизайном, не
+   переименовывать: при следующей синхронизации дизайн приедет с ними же.
+
+   Отличия от макета (правки мобильного аудита, 2026-08):
+   · панель — полоса с подписями в строку, а не таб-бар в три доли; прячется
+     при прокрутке вниз; с 2026-10-06 прилеплена к нижнему краю во всю ширину
+     (была плавающей капсулой в 12px от края — «висит в воздухе»);
+   · тач-мишень чекбокса подготовки поднята до 40px невидимой накладкой —
+     визуальный размер 19px сохранён (его жмут пальцем в поездке);
+   · шторка на dvh (на iOS vh считается без адресной строки — низ уезжал);
+   · --tnav-bottom отдаётся наружу: на Stage 3 под панель уходит плавающая
+     кнопка «Сохранить» edit-слоя.
+
+   Печать: слой исчезает целиком, «[ ]» пунктов возвращается на бумагу.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media print { #tnav-root { display: none !important; } }
+@media screen { html { scroll-padding-top: 18px; } }
+
+#tnav-root { font-family: var(--font-label); }
+#tnav-root button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
+#tnav-spacer { height: 0; }
+#tnav-root.tnav-mobile #tnav-spacer { height: calc(78px + env(safe-area-inset-bottom, 0px)); }
+.tnav-off { display: none !important; }
+/* прокрутка страницы замирает, пока открыта шторка (иначе фон уезжает под ней) */
+html.tnav-lock, html.tnav-lock body { overflow: hidden !important; }
+
+/* ── чекбокс прямо в документе (пункты «[ ]» в .note-item) ──────────────── */
+.tnav-box {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  vertical-align: -4px; width: 19px; height: 19px; margin: 0 8px 0 0; padding: 0;
+  cursor: pointer; flex: none; background: var(--card); border: 1px solid var(--line);
+  border-radius: 3px; transition: background .12s ease, border-color .12s ease;
+}
+/* мишень 40×40 поверх 19px-квадрата: пункты отмечают пальцем */
+.tnav-box::after { content: ""; position: absolute; inset: -11px; }
+.tnav-box:hover { border-color: var(--accent); }
+.tnav-box svg {
+  width: 12px; height: 12px; stroke: var(--plate-fg); fill: none; stroke-width: 2.4;
+  stroke-linecap: round; stroke-linejoin: round; opacity: 0;
+}
+.tnav-box[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
+.tnav-box[aria-pressed="true"] svg { opacity: 1; }
+.tnav-pb { display: none; }
+@media screen {
+  .note-item.tnav-done { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+}
+@media print {
+  .tnav-box { display: none !important; }
+  .tnav-pb { display: inline !important; }
+  .note-item.tnav-done { color: inherit !important; text-decoration: none !important; }
+}
+
+/* ── нижняя панель (телефон) ───────────────────────────────────────────── */
+/* Прилеплена к нижнему краю во всю ширину, как панель разделов кабинета
+   (.ui-mnav): плавающая капсула в 12px от края на телефоне читалась как
+   «меню висит в воздухе», под ней просвечивал текст (2026-10-06).
+   translateZ(0) — свой слой композитора: iOS иначе дорисовывает fixed-панель,
+   пересозданную после `load`, посреди экрана (тот же лечёный баг у «Еды»). */
+.tnav-bar {
+  position: fixed; z-index: 2147483000; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -2px 12px rgba(20, 24, 20, .10);
+  transform: translateZ(0);
+  transition: transform .22s cubic-bezier(.2, .75, .3, 1), opacity .18s ease;
+}
+/* уезжает вниз при прокрутке к концу документа, возвращается при прокрутке вверх */
+.tnav-bar.is-hidden { transform: translateY(calc(100% + 4px)); opacity: 0; }
+
+.tnav-b {
+  /* НЕ сжимаются: единственный способ уместиться — снять подпись (is-compact).
+     С flex-shrink кнопки молча ужимались, и подпись резалась многоточием —
+     ровно то «Сохра…», ради которого затевалась подгонка. */
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: 0 0 auto;
+  min-height: 44px; padding: 0 14px; background: none; border: 0; border-radius: 10px;
+  color: var(--muted); font-size: 12.5px; font-weight: 600; line-height: 1; cursor: pointer;
+  transition: background .14s ease, color .14s ease, transform .1s ease;
+}
+.tnav-b svg { width: 19px; height: 19px; flex: none; stroke: currentColor; fill: none;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.tnav-b:hover { color: var(--ink); }
+.tnav-b:active { transform: scale(.96); }
+.tnav-b--main { flex: 1 0 auto; min-width: 0; justify-content: flex-start;
+  background: var(--date-bg); color: var(--accent); }
+.tnav-b--ctx { min-width: 0; }
+.tnav-b--ico { flex: none; width: 44px; padding: 0; }
+.tnav-b.is-on { background: var(--date-bg); color: var(--accent); }
+.tnav-lb { display: inline-flex; align-items: baseline; gap: 6px; min-width: 0; white-space: nowrap; }
+.tnav-w { overflow: hidden; text-overflow: ellipsis; }
+/* не влезло по ширине — подпись снимается целиком, кнопка становится
+   квадратной иконкой; счётчик (сколько несохранено / дней до старта) остаётся */
+.tnav-bar.is-measuring .tnav-b { flex: 0 0 auto !important; }
+.tnav-bar.is-measuring .tnav-w { overflow: visible; text-overflow: clip; }
+.tnav-b.is-compact { padding: 0 10px; }
+.tnav-b.is-compact .tnav-w { display: none; }
+.tnav-b.is-compact .tnav-lb:empty, .tnav-b.is-compact .tnav-lb:not(:has(.tnav-n)) { display: none; }
+.tnav-b.is-compact.tnav-b--main { flex: 1 0 auto; }
+.tnav-n { font-family: var(--font-mono); font-style: normal; font-size: 11px; opacity: .72; }
+
+/* ── шторка ─────────────────────────────────────────────────────────────── */
+.tnav-scrim {
+  position: fixed; inset: 0; z-index: 2147483001; background: rgba(22, 20, 15, .44);
+  opacity: 0; pointer-events: none; transition: opacity .18s ease;
+}
+.tnav-scrim.is-open { opacity: 1; pointer-events: auto; }
+.tnav-sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 2147483002;
+  max-height: 84vh; max-height: 84dvh; display: flex; flex-direction: column;
+  background: var(--paper); border-top: 2px solid var(--accent);
+  border-radius: 16px 16px 0 0; box-shadow: 0 -14px 40px rgba(20, 30, 25, .28);
+  transform: translateY(102%); padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* закрытая шторка прячется целиком: её тень (вверх на 40px) иначе лежала
+     белёсой полосой по низу окна, а кнопки ловили Tab */
+  visibility: hidden;
+  transition: transform .24s cubic-bezier(.2, .75, .3, 1), visibility 0s linear .24s;
+}
+.tnav-sheet.is-open { transform: none; visibility: visible; transition-delay: 0s; }
+/* на компьютере шторка — боковая панель на месте рельса, а не телефонная
+   шторка снизу во всю ширину поверх рельса и текста (2026-10-06) */
+#tnav-root.tnav-desk .tnav-sheet {
+  left: 0; right: auto; top: 0; bottom: 0; width: min(420px, 92vw);
+  max-height: none; border-top: 0; border-right: 2px solid var(--accent);
+  border-radius: 0 14px 14px 0; box-shadow: 14px 0 40px rgba(20, 30, 25, .24);
+  transform: translateX(-102%); padding-bottom: 0;
+}
+#tnav-root.tnav-desk .tnav-sheet.is-open { transform: none; }
+#tnav-root.tnav-desk .tnav-grab { display: none; }
+.tnav-grab { flex: none; width: 38px; height: 4px; margin: 7px auto 0; border-radius: 2px;
+  background: var(--line); }
+.tnav-head { display: flex; align-items: center; gap: 10px; padding: 10px 14px 11px;
+  border-bottom: 1px solid var(--line); flex: none; }
+.tnav-head-t { flex: 1; min-width: 0; }
+.tnav-kick { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tnav-ttl { font-size: var(--fs-title); color: var(--ink); font-weight: 600; letter-spacing: -.01em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tnav-ico { flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  background: none; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); cursor: pointer; }
+.tnav-ico:hover { color: var(--ink); border-color: var(--accent); }
+.tnav-ico:active { transform: scale(.96); }
+.tnav-ico svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round; }
+.tnav-body { overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch; flex: 1 1 auto; }
+.tnav-body::-webkit-scrollbar { width: 8px; }
+.tnav-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+
+.tnav-gh { position: sticky; top: 0; z-index: 1; background: var(--paper); padding: 11px 16px 5px;
+  font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: .13em;
+  text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); }
+.tnav-sub { padding: 9px 16px 4px; font-family: var(--font-mono); font-size: var(--fs-micro);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--canvas); }
+.tnav-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 46px;
+  padding: 9px 16px; background: none; border: 0; border-bottom: 1px solid var(--line);
+  color: var(--ink); font-size: var(--fs-body); line-height: 1.35; text-align: left; cursor: pointer; }
+.tnav-row:hover { background: var(--card); }
+.tnav-row:active { background: var(--canvas); }
+.tnav-row.is-active { color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+.tnav-k { flex: none; min-width: 26px; font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--muted); }
+.tnav-row.is-active .tnav-k { color: var(--accent); }
+.tnav-txt { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tnav-sig { flex: none; font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--muted); letter-spacing: .06em; }
+.tnav-sig.is-done { color: var(--accent); }
+.tnav-row.is-closed .tnav-txt { color: var(--muted); }
+.tnav-l1 .tnav-txt { font-weight: 600; }
+.tnav-l2 { padding-left: 26px; }
+.tnav-l3 { padding-left: 26px; }
+.tnav-l3 .tnav-txt { color: var(--muted); font-size: var(--fs-small); }
+
+/* ── «Заранее»: чеклист ─────────────────────────────────────────────────── */
+.tnav-prog { display: flex; align-items: center; gap: 10px; padding: 9px 16px;
+  border-bottom: 1px solid var(--line); background: var(--canvas); }
+.tnav-prog-t { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.tnav-prog-b { flex: 1; height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.tnav-prog-f { height: 100%; background: var(--accent); width: 0; transition: width .2s; }
+.tnav-ck { flex: none; width: 17px; height: 17px; border: 1px solid var(--line); border-radius: 2px;
+  display: flex; align-items: center; justify-content: center; background: var(--card); }
+.tnav-ck svg { width: 11px; height: 11px; stroke: var(--plate-fg); fill: none; stroke-width: 2.2;
+  stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+.tnav-row.is-done .tnav-ck { background: var(--accent); border-color: var(--accent); }
+.tnav-row.is-done .tnav-ck svg { opacity: 1; }
+.tnav-row.is-done .tnav-txt { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.tnav-row--check .tnav-txt { white-space: normal; }
+.tnav-jump { flex: none; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+.tnav-jump svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round; }
+.tnav-empty { padding: 22px 16px; color: var(--muted); font-size: var(--fs-small); line-height: 1.5; }
+
+/* ── сохранность отметок: план (.md) против буфера браузера ─────────────── */
+.tnav-save { padding: 11px 16px 13px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.tnav-save-t { font-size: var(--fs-small); color: var(--ink); font-weight: 600; }
+.tnav-save-m { margin-top: 5px; font-size: var(--fs-micro); color: var(--muted); line-height: 1.45; }
+.tnav-save .tnav-cta:disabled { opacity: .45; cursor: default; }
+/* пункт, отличающийся от плана: отметка есть, но в файл ещё не записана */
+@media screen {
+  .note-item.tnav-unsaved > * { border-left: 2px solid var(--warn); padding-left: 7px; margin-left: -9px; }
+}
+@media print { .note-item.tnav-unsaved > * { border-left: 0 !important; padding-left: 0 !important; margin-left: 0 !important; } }
+/* точка на кнопке «Разделы», пока есть несохранённое */
+.tnav-b.has-unsaved { position: relative; }
+.tnav-b.has-unsaved::after {
+  content: ""; position: absolute; top: 7px; right: 9px; width: 7px; height: 7px;
+  border-radius: 50%; background: var(--warn);
+}
+
+/* ── левый рельс (десктоп) ──────────────────────────────────────────────── */
+.tnav-rail { position: fixed; top: 0; z-index: 2147482000; height: 100vh; height: 100dvh;
+  box-sizing: border-box; display: none; flex-direction: column; padding: 22px 0 14px; }
+#tnav-root.tnav-desk .tnav-rail { display: flex; }
+.tnav-rail-h { padding: 0 12px 9px; border-bottom: 1px solid var(--line); margin-bottom: 6px; }
+.tnav-rail-st { margin-top: 5px; font-size: var(--fs-small); font-weight: 600; color: var(--accent);
+  font-variant-numeric: tabular-nums; }
+.tnav-rail-body { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; padding-bottom: 8px; }
+.tnav-rail-body::-webkit-scrollbar { width: 6px; }
+.tnav-rail-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+.tnav-rl { display: flex; gap: 7px; align-items: baseline; width: 100%; text-align: left; cursor: pointer;
+  background: none; border: 0; border-left: 2px solid var(--line); padding: 4px 10px;
+  color: var(--muted); font-size: var(--fs-small); line-height: 1.32; }
+.tnav-rl:hover { color: var(--ink); }
+.tnav-rl.is-active { border-left-color: var(--accent); color: var(--ink); }
+.tnav-rl .tnav-rt { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tnav-rl.lv1 { color: var(--ink); font-weight: 600; margin-top: 6px; }
+.tnav-rl.lv3 { padding-left: 20px; font-size: var(--fs-micro); }
+.tnav-rl.it { padding-left: 20px; }
+.tnav-rl .tnav-rk { flex: none; font-family: var(--font-mono); font-size: var(--fs-micro); color: var(--line); }
+.tnav-rl.is-active .tnav-rk { color: var(--accent); }
+.tnav-exp { display: flex; align-items: center; gap: 6px; width: 100%; background: none; border: 0;
+  cursor: pointer; padding: 4px 10px; margin-top: 2px; color: var(--muted); font-family: var(--font-mono);
+  font-size: var(--fs-micro); letter-spacing: .1em; text-transform: uppercase; border-left: 2px solid transparent; }
+.tnav-exp:hover { color: var(--accent); }
+.tnav-exp svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round; transition: transform .15s; }
+.tnav-exp.is-open svg { transform: rotate(90deg); }
+.tnav-top { display: block; width: calc(100% - 20px); margin: 12px 10px 0; padding: 6px 10px;
+  background: none; border: 1px solid var(--line); border-radius: var(--radius-sm); cursor: pointer;
+  color: var(--muted); font-size: var(--fs-small); text-align: center; }
+.tnav-top:hover { color: var(--accent); border-color: var(--accent); }
+.tnav-cta { display: flex; align-items: center; gap: 7px; width: 100%; margin: 0 0 8px; padding: 9px 10px;
+  background: var(--date-bg); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 10px; color: var(--accent); font-size: var(--fs-small); font-weight: 600;
+  cursor: pointer; text-align: left; }
+.tnav-cta:active { transform: scale(.99); }
+.tnav-cta > span { flex: 1; min-width: 0; }
+.tnav-cta .tnav-n { flex: none; }
+.tnav-cta.has-unsaved { border-color: var(--warn); }
+.tnav-cta.has-unsaved .tnav-n { color: var(--warn); opacity: 1; font-weight: 700; }
+.tnav-cta svg { width: 14px; height: 14px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── сверка HTML ↔ план (отладочная, но человеческая) ───────────────────── */
+.tnav-diag { padding: 10px 16px 12px; border-bottom: 1px solid var(--line); background: var(--canvas); }
+.tnav-diag-t { font-family: var(--font-mono); font-size: var(--fs-micro); letter-spacing: .06em;
+  color: var(--muted); text-transform: uppercase; }
+.tnav-diag-ok { margin-top: 4px; font-size: var(--fs-micro); color: var(--muted); }
+.tnav-diag-d { margin-top: 6px; font-size: var(--fs-small); color: var(--ink); }
+.tnav-diag-d summary { cursor: pointer; color: var(--warn); font-weight: 600; }
+.tnav-diag-i { margin: 3px 0 0 12px; font-size: var(--fs-micro); color: var(--muted); line-height: 1.4; }
+
+/* кнопка «Сохранить» прямо в панели — появляется, когда есть несохранённое */
+.tnav-b--save { min-width: 0; background: var(--todo-bg); color: var(--todo-fg); }
+.tnav-b--save:hover { color: var(--todo-fg); }
+.tnav-b--save[disabled] { opacity: .6; cursor: default; }

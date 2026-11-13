@@ -1,0 +1,398 @@
+# game-advisor taste profile
+# source of truth: Claude-Memory/Gaming/taste-profile.yaml (этот файл — bundled seed/fallback)
+schema_version: 1.0
+updated: 2026-09-23
+data_sources:
+  - exophase_nintendo_snapshot: 2026-07-06 (последние 20 игр, Switch)
+  - exophase_steam_snapshot: 2026-07-06 (172 игры, ~1166 ч суммарно)
+  - user_stated: Zelda BOTW/TOTK/SS пройдены; вся линейка Xenoblade (X не понравился)
+  - user_calibration: 2026-07-07 (verdict-батч + round2 — ELDEN/BG3 восторг, RimWorld/CODE VEIN брошено, PRAGMATA понравилось, анти-паттерн декбилдеры)
+  - user_calibration: 2026-07-25 (game-advisor рекомендация — Ravenswatch демо брошено; Tchia отклонена по внешним признакам без пробы)
+  - user_calibration: 2026-08-28 (батч по итогам скидочной подборки — Death's Door/Immortals Fenyx Rising/Ori дилогия/Inscryption пройдены; 13 Sentinels апгрейд вердикта)
+  - user_calibration: 2026-08-28-b (Unicorn Overlord — вероятный дроп на 25ч; Split Fiction понравилось; Denshattack! понравилось; Moonlighter 1 брошена)
+  - user_calibration: 2026-09-21 (разбор скидочной подборки eShop — Echoes of Wisdom пройдена, слишком простая; NieR:Automata пройдена 3 раза, восторг; FF VII Remake — отложено)
+  - user_calibration: 2026-09-21-b (MH Rise — демо не зашло; Skyrim — понравился давно на ПК; Astral Chain — брошено на середине; Bayonetta Origins — демо скучно; Witcher 3 — брошено, боёвка; Hogwarts Legacy — отказ по принципиальным соображениям)
+  - user_calibration: 2026-09-21-c (исключение по издателю Warner Bros. Games; DOS2 отложена до скидки в eShop)
+  - user_calibration: 2026-09-21-d (вишлист — новая Fire Emblem, физика/картридж, возможно в поездке)
+  - user_calibration: 2026-09-21-e (Children of Morta понравилась, застрял на сложном уровне; Nobody Saves the World брошено в начале — не понял куда идти; Against the Storm брошено — управление на Steam Deck; сверка с library_full — DOS2 уже есть в Steam)
+  - user_calibration: 2026-09-21-f (правило — не запускавшиеся игры из library можно рекомендовать; часы 0 не гарантируют, что игра не запускалась)
+  - user_calibration: 2026-09-21-g (Bastion брошено — умный английский; Children of Morta играна на Switch 1; Wall World не предлагать; Momodora и INSIDE не запускались)
+  - user_calibration: 2026-09-21-h (уточнение — Bastion трудно на слух, чтение по-английски проще; ослаблено трение «нет русского» для текстовых игр)
+  - user_calibration: 2026-09-22 (покупки по подборкам — TOEM, Enter the Gungeon, Valkyria Chronicles+VC4, Hob, NFS Hot Pursuit перенесены из watchlist в library; A Short Hike — не интересна)
+  - user_calibration: 2026-09-23 (батч 41 вердикта по играм библиотеки без оценки — фильтр «без оценки» страницы games; веса метроидвания 0.8→0.85, билдер-лайт 0.5→0.45, короткий нарратив 0.45→0.5; новые ось «непрозрачные системы» и анти-паттерн «техническое трение на Steam Deck»)
+data_quality: >
+  Часы Exophase занижены/неполны (прецедент: ANIMAL WELL — 6 минут в статистике,
+  фактически пройдена). Часы — индикатор, не истина. Малые часы сами по себе
+  не доказательство дропа; при противоречии приоритет у утверждений пользователя.
+
+platforms:
+  primary: nintendo_switch_2
+  secondary: steam_deck
+  notes: US eShop доступ готов; физика — интерес (распродажи, покупки в поездках)
+
+# ── Mood-кластеры (подтверждены данными) ─────────────────────────────
+# evidence: суммарные часы в кластере по Steam+Switch
+mood_clusters:
+  bolshaya_igra:            # «сесть надолго»: JRPG/ARPG/CRPG с нарративом и прогрессией
+    title: Большая игра
+    weight: 0.95
+    evidence: ["ELDEN RING 85.6ч", "Like a Dragon: Infinite Wealth 74ч", "Baldur's Gate 3 73.5ч",
+               "Persona 5 Royal 66.9ч", "Clair Obscur 41.2ч", "Path of Exile 2 37.3ч",
+               "Xenoblade 1-3 (stated)", "CODE VEIN 17.1ч", "NieR:Automata (восторг)"]
+    notes: нужен нарративный каркас; чистый sandbox без стержня (Xenoblade X) — промах
+  poputit:                  # «потупить»: roguelike / survivor-like / autobattler / deckbuilder
+    title: Потупить
+    weight: 0.95
+    evidence: ["DRG: Survivor 108.7ч", "Hades II 40.2ч", "Loop Hero 35.2ч", "Dome Keeper 32.9ч",
+               "Monster Train 2 29.9ч", "Hades 24.8ч", "Death Must Die 18.9ч", "Monster Train 18.6ч",
+               "Into the Breach 15.7ч", "Brotato 13.9ч", "BALL x PIT 14ч (нормально)", "20 Min Till Dawn 9.8ч", "Children of Morta (понравилось)",
+               "Crimsonland (понравилось)", "Bloons TD 6 2.7ч (не понравилось)", "Melvor Idle 4.6ч (нормально)"]
+    notes: сильнейший кластер по совокупным часам; DRG Survivor — рекорд библиотеки
+  zelda_adventure:          # экшн-адвенчура с исследованием
+    title: Zelda-адвенчура
+    weight: 0.85
+    evidence: ["BOTW/TOTK (stated)", "Skyward Sword HD 39.1ч", "Death Stranding DC 36.5ч",
+               "Death's Door (понравилось)", "Immortals Fenyx Rising (понравилось)", "Echoes of Wisdom (нормально)", "Bayonetta Origins (не понравилось)"]
+    notes: Immortals Fenyx Rising пройдена и понравилась, но заметно слабее BOTW/TOTK по ощущениям
+      пользователя ("странный дизайн") — не апгрейдить вес по этому наблюдению, ядро кластера
+      остаётся Zelda-подобная читаемая структура + сильный визуальный стиль
+    caveat: >
+      Echoes of Wisdom (2026-09-21) — пройдена до конца, «неплохая, но слишком простая» (нормально).
+      Второе наблюдение «слабее BOTW/TOTK» после Immortals Fenyx Rising, но причина иная —
+      нехватка сложности, а не дизайн. 2026-09-21-b: вес 0.9→0.85 (малый шаг) после третьего
+      слабого Zelda-подобного наблюдения — Bayonetta Origins, демо: «очень скучно». Ядро
+      кластера — сами BOTW/TOTK; для Zelda-подобных кандидатов проверять сложность и темп
+      по отзывам, не полагаться на жанровое сходство.
+  metroidvania_platformer:  # метроидвании + точные платформеры (Mario/Metroid) — сильный
+    title: Метроидвания / платформер
+    weight: 0.85
+    evidence: ["Mario Odyssey (восторг)", "Super Mario 3D World + Bowser's Fury 15.9ч (восторг)", "PoP: The Lost Crown 21.7ч (понравилось)",
+               "Metroid Dread (понравилось)", "Mario Wonder (понравилось)", "ENDER MAGNOLIA 16ч",
+               "Celeste 13.5ч", "Metroid Prime 4 (нормально)", "Crash 4 7.3ч", "F.I.S.T. 7ч (понравилось)",
+               "ENDER LILIES 3.2ч (понравилось)", "SteamWorld Dig 2 2.4ч (понравилось)",
+               "Ori and the Will of the Wisps (восторг)", "Ori and the Blind Forest (восторг)",
+               "Hollow Knight 7.2ч (нормально)", "Dead Cells 3.6ч (не понравилось)"]
+    caveat: >
+      2026-09-23: вес 0.8→0.85 — Mario 3D World восторг (второй 3D-Mario-восторг после Odyssey)
+      + три новых «понравилось» (F.I.S.T., ENDER LILIES, SteamWorld Dig 2) против двух слабых.
+      Hollow Knight (нормально) и Dead Cells (не понравилось) — ниже ожидаемого для жанра; работает
+      при чёткой структуре/направлении, буксует в чистом «potеряйся сам» (Nine Sols — не зашло).
+      Ori-дилогия (2026-08-28) — сильное подтверждение паттерна: «идеальная по длине и сложности
+      метроидвания» — вес кластера поднят с 0.75 до 0.8
+  builder_light:            # лёгкий менеджмент/автоматизация
+    title: Билдер-лайт
+    weight: 0.45
+    evidence: ["Mini Motorways 35ч", "Mini Metro (понравилось)", "RimWorld 22.2ч (брошено)", "Drill Core 22.3ч (нормально)",
+               "Ratopia 8ч (брошено)", "Oxygen Not Included 6.5ч (брошено)", "Stacklands 6.1ч (нормально)",
+               "Potion Craft 1ч (нормально)", "Frostpunk 0.1ч (брошено)"]
+    caveat: >
+      2026-09-23: вес 0.5→0.45. Кластер расслоился: минималистичные «тупилки» (Mini Motorways,
+      Mini Metro) заходят, глубокие колони-симы (RimWorld, Oxygen Not Included, Ratopia,
+      Frostpunk, Against the Storm) стабильно бросаются. Предлагать только лёгкий край кластера.
+  coop_party:               # кооп с партнёром / гонки
+    title: Кооп / пати
+    weight: 0.5
+    evidence: ["Mario Kart World 26.3ч", "Split Fiction 4.6ч", "Among Us 10.3ч", "Forza Horizon 4 9.1ч (понравилось)", "Small World 6.5ч (понравилось)"]
+  narrative_short:          # короткий нарратив/адвенчура на вечер-два
+    title: Короткий нарратив
+    weight: 0.5
+    evidence: ["Detroit 9.7ч (понравилось)", "Disco Elysium 9.8ч (брошено)", "Cloudpunk 11.3ч", "Journey 5ч", "Stray 5.3ч (понравилось)",
+               "Viewfinder 1.3ч (понравилось)", "The Stanley Parable 4.8ч (нормально)", "Planet of Lana 0.6ч (брошено)"]
+    caveat: >
+      Disco Elysium 9.8ч — понравилась, но бросил, когда перестал понимать, что дальше (2026-09-23);
+      плотный текст ок, но не бесконечный и нужен ясный вектор. 2026-09-23: вес 0.45→0.5 — Detroit
+      (почти восторг), Stray, Viewfinder понравились; Planet of Lana — понравилась, но заскучал.
+
+# ── Латентные оси вкуса (для серендипности — кросс-жанровый матчинг) ──
+# Питают explore-квоту: discovery-пик обязан лежать на «любит»-оси, даже если жанр новый.
+latent_axes:
+  любит:
+    - системная песочница со стержнем/прогрессией (DRG Survivor, Death Stranding, ELDEN RING)
+    - читаемая структура и направление (Metroid Dread, PoP: Lost Crown, Into the Breach)
+    - тактика и просчёт хода (FE: Three Houses, Into the Breach, контроль в Ace Combat 7)
+    - >-
+      реальный челлендж / риск проигрыша как источник вовлечения (2026-08-28, уточнено
+      пользователем) — Three Houses напрягал больше половины прохождения (восторг),
+      Into the Breach — частые проигрыши, вовлекало (понравилось); в противовес — Unicorn
+      Overlord «не напрягает» (дроп на 25ч) и Fire Emblem Engage на normal не напрягал
+      с самого начала (быстрый дроп). Вывод: не глубина тактики сама по себе, а ощутимая
+      сложность/давление и риск поражения — без него тактика быстро наскучивает, даже
+      если механика хороша. Подтверждено вне тактики: Zelda Echoes of Wisdom (2026-09-21) —
+      «неплохая, но слишком простая», оценка нормально
+    - «ещё один заход» — короткая петля с ощутимым прогрессом (roguelike/survivor-like)
+    - сильный арт и атмосфера (Cloudpunk, Death Stranding, ANIMAL WELL)
+    - >-
+      нелогичный сюжет с резкими поворотами, который затягивает сам по себе — даже в
+      непривычной механике (Inscryption, восторг 2026-08-28 — «затягивает нелогичностью
+      и поворотами», деккбилдинг не стал препятствием)
+  не_любит:
+    - «потеряйся сам» без направления (Hollow Knight, Nine Sols, Nobody Saves the World, открытый MMO-сэндбокс)
+    - принудительный гринд, ломающий темп (Octopath, Xenoblade X)
+    - построение деки с нуля / глубокие синергии-движки (Balatro, The King is Watching)
+    - текстонасыщенность без русского — трение (не жёсткий блок)
+    - диффузный прогресс без явного вектора — бросает, даже если игра нравится (Dave the Diver, No Man's Sky, Disco Elysium)
+    - >-
+      непрозрачные системы без онбординга — «не понял, что делать» уже в начале (2026-09-23:
+      Noita, Frostpunk, ASTRONEER; ранее Monster Hunter Rise — «не разобрался в системах»).
+      Отличие от «потеряйся сам»: не про навигацию, а про правила игры
+    - надоедливые побочные квесты / филлер (Astral Chain, 2026-09-21 — одно наблюдение, не паттерн; у FF VII Remake рецензенты тоже ругают побочки)
+
+# ── Анти-паттерны (негативные сигналы, фильтровать) ──────────────────
+anti_patterns:
+  - pattern: open-world без нарративного стержня / MMO-подобная структура
+    evidence: Xenoblade X (stated dislike), EVE 16.6ч заброшен, Black Desert 3м, The First Descendant 1.4ч (не понравилось, 2026-09-23)
+    caveat: Skyrim понравился (давно, ПК) — паттерн не абсолютный; Witcher 3 брошен из-за боёвки, а не структуры (2026-09-21); Path of Exile — много играл, понравилось, но «сейчас уже не моё» (2026-09-23)
+  - pattern: survival/building с упором на выживание, а не прогрессию
+    evidence: 'ASTRONEER 0.4ч (не понравилось — скучно, неясно что делать), Terraria 0.4ч (брошено — «идея классная, но не моё»), Frostpunk 0.1ч (брошено — не разобрался + Deck), Oxygen Not Included 6.5ч и Ratopia 8ч (брошено) — подтверждено вердиктами 2026-09-23 (NMS убран — игра понравилась, см. library)'
+  - pattern: сверхсложные «hardcore-престиж» игры без структуры
+    evidence: 'Noita 0.9ч (не понравилось — «идея интересная, но не понял»), Cuphead 0.4ч, Dead Cells 3.6ч (не понравилось, 2026-09-23)'
+  - pattern: линейные шутеры/слэшеры старой школы — не держат
+    evidence: '"Control" 1.5ч (не понравилось), "DMC5" 0.6ч (брошено — понравилась, но стало скучно), "Mass Effect LE" 1.3ч (брошено — нормально), Darksiders Genesis 9.9ч (брошено) — вердикты 2026-09-23'
+    caveat: BioShock Remastered сейчас в процессе (46м, июль 2026) — паттерн под наблюдением; NieR:Automata (Platinum-экшен с сильным сюжетом, восторг, 3 прохождения) — исключение, паттерн не про слэшеры с нарративным крючком. Уточнено 2026-09-23 — DMC5 понравилась, так что паттерн не «не нравится», а «надоедает без нарративного крючка»
+  - pattern: управление/производительность на Steam Deck — техническое трение, не вкус
+    evidence: 'Against the Storm (управление), while True: learn() (неудобно), Warhammer 40,000: Space Marine 2 (не играбельна), Frostpunk (не играбельна), Palworld (вылеты) — 2026-09-23'
+    action: для Steam Deck-кандидатов проверять статус Deck Verified и свежие отзывы про управление с геймпада и производительность; стратегии/симуляторы под мышь и тяжёлые AAA — флаг «на Deck может не пойти»
+  - pattern: классические пиксельные топ-дауны без hook
+    evidence: '"Hyper Light Drifter" 0.2ч, "Crypt of NecroDancer" 0.1ч'
+
+  - pattern: тактика/SRPG без реального давления сложности — быстро наскучивает даже
+      при хорошей механике
+    evidence: 'Unicorn Overlord — не напрягает, дроп на 25ч; Fire Emblem Engage — normal
+      не напрягал с начала, дроп сразу; контраст: Three Houses (сложно больше половины
+      игры, восторг), Into the Breach (частые проигрыши, вовлекало, понравилось)'
+    action: для тактики/SRPG-кандидатов проверять отзывы на репутацию жёсткая/пунишащая
+      боевая система, избегать игр с щадящим/казуальным балансом на стандартной сложности;
+      RNG-тяжёлые/punishing системы (как в Front Mission) — скорее плюс, чем минус, для этого
+      профиля
+  - pattern: слишком низкая сложность в любом жанре (не только тактика) — игра оценивается
+      «нормально» или наскучивает даже при хорошей механике
+    evidence: 'Unicorn Overlord (не напрягает, дроп), Fire Emblem Engage (дроп), Zelda Echoes of Wisdom (2026-09-21, пройдена, «слишком простая», нормально)'
+    action: для любых кандидатов проверять в отзывах «слишком лёгкая / нет вызова»; при таком сигнале — флаг «низкая сложность» и понижение в списке
+  - pattern: стена гринда в JRPG (принудительный фарм опыта ломает темп)
+    evidence: 'Octopath Traveler — брошена на стене гринда (заявлено); Xenoblade X — гринд-вол (заявлено); Chained Echoes 0.8ч (2026-09-23 — брошено по темпу, «не завлекла», не гринд; оставлено как слабый сигнал)'
+    action: для JRPG-кандидатов проверять отзывы на обязательный фарм
+  - pattern: текстонасыщенные игры без русской локализации — фактор трения
+    evidence: 'Chained Echoes — отложена частично из-за английского; Caves of Qud (2026-09-23, не понравилось — «слишком много английского»); Bastion (Steam Deck, 2026-09-21) — трудно на слух (рассказчик), чтение по-английски даётся проще: трение касается озвучки без русских субтитров, а не письменного текста'
+    action: указывать наличие русского языка в каждой рекомендации; для
+      текстонасыщенных жанров (JRPG, CRPG, визуальные новеллы) отсутствие
+      русского — минус к приоритету, не жёсткий фильтр
+  - pattern: декбилдеры с построением деки с нуля / глубокие синергии-движки — трение
+    evidence: 'Balatro и The King is Watching — концепция нравится, но «не умею строить деки»; Cobalt Core не тянет по той же причине'
+    action: отделять «готовые архетипы» (Monster Train-тип, где часы есть — ок) от «собери синергию с нуля» (Balatro/Slay-тип — трение); декбилдеры-с-нуля не предлагать наравне, помечать сложность построения деки
+    caveat: 'Inscryption (2026-08-28) — исключение: паттерн трения снят нарративным крючком
+      (нелогичность сюжета, повороты, смена жанра по ходу игры) — деккбилдинг не был
+      препятствием, игра пройдена с вердиктом восторг. Не отменяет паттерн для чистых
+      деккбилдеров без сильного сюжетного стержня (Balatro/Slay the Spire остаются трением),
+      но при сильном нарративном крючке вокруг механики — можно предлагать с пометкой «как Inscryption»'
+
+# ── Открытые вопросы (уточнять при калибровке) ───────────────────────
+open_questions:
+  # PRAGMATA — 2026-07-07: пройдена, понравилось (ранее казалась дропом по темпу)
+  # Chained Echoes: разъяснено 2026-07 — лень + английский; 2026-09-23 — брошено, «не завлекла» (тег темп, возврат маловероятен)
+  - "Hades II 40ч на Steam: брать ли контент этого типа на Switch 2 повторно?"
+  # Tchia — 2026-07-25: отклонена по внешним признакам (выглядит слишком казуальной/скучной),
+  # без пробы — не library-вердикт, сигнал не для anti_patterns, а для калибровки формулировки
+  # запроса «отдохнуть» (не путать с «активнее» — см. запрос от 2026-07-25).
+
+# ── Библиотека (НЕ рекомендовать; merge по title) ─────────────────────
+# ПРАВИЛО (2026-09-21, заявлено пользователем): игру, которую он ни разу не запускал (куплена, но не запускалась — как DOS2 в Steam, часы 0),
+# МОЖНО рекомендовать. Часы Exophase занижены и для Steam Deck (Bastion = 0.0, а играна на Deck) — перед рекомендацией не запущенной игры
+# просить подтвердить «не запускал»; играные игры не предлагать.
+# verdict: заполняется в КАЛИБРОВКЕ (восторг / понравилось / нормально / брошено / не понравилось)
+library:
+  # --- Nintendo Switch (Exophase, 2026-07-06) ---
+  - {title: "Persona 5 Royal", platform: switch, hours: 66.9, verdict: нормально, note: "много сюжета про детей"}
+  - {title: "The Legend of Zelda: Skyward Sword HD", platform: switch, hours: 39.1, verdict: понравилось}
+  - {title: "Mario Kart World", platform: switch, hours: 26.3, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Prince of Persia: The Lost Crown", platform: switch, hours: 21.7, verdict: понравилось}
+  - {title: "Super Mario 3D World + Bowser's Fury", platform: switch, hours: 15.9, verdict: восторг, note: "калибровка 2026-09-23"}
+  - {title: "BALL x PIT", platform: switch, hours: 14.0, verdict: нормально, note: "ближе к понравилось (калибровка 2026-09-23)"}
+  - {title: "PRAGMATA", platform: switch, hours: 13.5, verdict: понравилось,
+     note: "пройдена; изначально казалась дропом по темпу — прошёл, понравилось (2026-07-07)"}
+  - {title: "Crash Bandicoot 4: It's About Time", platform: switch, hours: 7.3}
+  - {title: "Sonic Superstars", platform: switch, hours: 5.0}
+  - {title: "Split Fiction", platform: switch, hours: 4.6, verdict: понравилось, note: "калибровка 2026-08-28"}
+  - {title: "Have a Nice Death", platform: switch, hours: 2.7}
+  - {title: "Crash Bandicoot N. Sane Trilogy", platform: switch, hours: 1.8}
+  - {title: "Diablo III: Eternal Collection", platform: switch, hours: 1.7, verdict: не понравилось, note: "бросил (калибровка 2026-09-23)"}
+  - {title: "BioShock Remastered", platform: switch, hours: 0.8, note: in-progress 2026-07}
+  - {title: "Superliminal", platform: switch, hours: 0.9}
+  - {title: "Star Fox Demo", platform: switch, hours: 0.6, note: demo}
+  - {title: "ASTRONEER", platform: switch, hours: 0.4, verdict: не понравилось, note: "бросил — скучно и неясно, что делать (калибровка 2026-09-23)"}
+  - {title: "PRAGMATA SKETCHBOOK", platform: switch, hours: 0.4, verdict: восторг, note: "demo (калибровка 2026-09-23)"}
+  - {title: "Hyper Light Drifter - Special Edition", platform: switch, hours: 0.2}
+  - {title: "Crypt of the NecroDancer: Nintendo Switch Edition", platform: switch, hours: 0.1}
+  # --- Заявлено пользователем (пройдено ранее, вне снапшота) ---
+  - {title: "The Legend of Zelda: Breath of the Wild", platform: switch, verdict: восторг}
+  - {title: "The Legend of Zelda: Tears of the Kingdom", platform: switch, verdict: восторг}
+  - {title: "Xenoblade Chronicles: Definitive Edition", platform: switch, verdict: восторг}
+  - {title: "Xenoblade Chronicles 2", platform: switch, verdict: восторг}
+  - {title: "Xenoblade Chronicles 3", platform: switch, verdict: восторг}
+  - {title: "Xenoblade Chronicles X: Definitive Edition", platform: switch, verdict: брошено, причина: стена-гринда, note: "гринд-вол, но красивая"}
+  - {title: "Octopath Traveler", platform: switch, verdict: брошено, причина: стена-гринда,
+     note: "было прикольно до стены гринда — стало лень фармить опыт"}
+  - {title: "13 Sentinels: Aegis Rim", platform: switch, verdict: восторг, note: "очень понравилась (апгрейд с понравилось, 2026-08-28)"}
+  - {title: "Fire Emblem: Three Houses", platform: switch, verdict: восторг}
+  - {title: "Fire Emblem Engage", platform: switch, verdict: брошено, причина: сложность, note: "рисовка, лёгкая, неинтересный сюжет; на normal не напрягал с самого начала (уточнено 2026-08-28)"}
+  - {title: "Animal Crossing: New Horizons", platform: switch, verdict: понравилось}
+  - {title: "Cyberpunk 2077", platform: steam, verdict: понравилось, note: "платформа: уточнить (Steam Deck / Switch 2)"}
+  - {title: "Nine Sols", platform: steam, verdict: не понравилось, note: "пробовал, не зашло"}
+  - {title: "Balatro", platform: steam, hours: 0.0, verdict: нормально, note: "концепция нравится, но построение деки — трудно"}
+  - {title: "The King is Watching", platform: steam, hours: 4.3, verdict: нормально, note: "концепция нравится, но построение деки — трудно"}
+  - {title: "Super Mario Odyssey", platform: switch, verdict: восторг}
+  - {title: "Super Mario Bros. Wonder", platform: switch, verdict: понравилось}
+  - {title: "Metroid Dread", platform: switch, verdict: понравилось}
+  - {title: "Metroid Prime 4: Beyond", platform: switch, verdict: нормально, note: "назван как Prime 5"}
+  - {title: "Vampire Survivors", platform: steam, verdict: нормально, note: "концепция ок, но DRG Survivor развил лучше"}
+  - {title: "Dave the Diver", platform: switch, verdict: брошено, причина: не-виден-прогресс, note: "понравилась, но бросил — прогресс не читался"}
+  # --- Steam (Exophase, 2026-07-06; топ по часам, полный список: см. library_full) ---
+  - {title: "Deep Rock Galactic: Survivor", platform: steam, hours: 108.7, verdict: восторг}
+  - {title: "ELDEN RING", platform: steam, hours: 85.6, verdict: восторг}
+  - {title: "Like a Dragon: Infinite Wealth", platform: steam, hours: 74.0, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Baldur's Gate 3", platform: steam, hours: 73.5, verdict: восторг}
+  - {title: "Clair Obscur: Expedition 33", platform: steam, hours: 41.2, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Hades II", platform: steam, hours: 40.2, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Path of Exile 2", platform: steam, hours: 37.3, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "DEATH STRANDING DIRECTOR'S CUT", platform: steam, hours: 36.5, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Loop Hero", platform: steam, hours: 35.2, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Mini Motorways", platform: steam, hours: 35.0, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Dome Keeper", platform: steam, hours: 32.9, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Talisman: Digital Classic Edition", platform: steam, hours: 31.4, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Monster Train 2", platform: steam, hours: 29.9, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Hades", platform: steam, hours: 24.8, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Drill Core", platform: steam, hours: 22.3, verdict: нормально}
+  - {title: "RimWorld", platform: steam, hours: 22.2, verdict: брошено, причина: сложность}
+  - {title: "Gremlins, Inc.", platform: steam, hours: 19.4, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Death Must Die", platform: steam, hours: 18.9, verdict: не понравилось}
+  - {title: "Monster Train", platform: steam, hours: 18.6, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "CODE VEIN", platform: steam, hours: 17.1, verdict: брошено, note: "скучно"}
+  - {title: "EVE Online", platform: steam, hours: 16.6, verdict: не понравилось, причина: жанр-мимо, note: "сложно + жанр мимо"}
+  - {title: "ENDER MAGNOLIA: Bloom in the Mist", platform: steam, hours: 16.0, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Into the Breach", platform: steam, hours: 15.7, verdict: понравилось}
+  - {title: "Palworld", platform: steam, hours: 14.4, verdict: брошено, причина: техническое, note: "вылеты на Steam Deck (не по вкусу)"}
+  - {title: "Brotato", platform: steam, hours: 13.9, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Celeste", platform: steam, hours: 13.5, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "Ace Combat 7: Skies Unknown", platform: steam, hours: 12.7, verdict: восторг}
+  - {title: "Cloudpunk", platform: steam, hours: 11.3, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "No Man's Sky", platform: steam, hours: 10.3, verdict: понравилось, note: "прошёл много; не понял, что дальше"}
+  - {title: "Among Us", platform: steam, hours: 10.3, verdict: понравилось, note: "дефолт по часам"}
+  - {title: "ANIMAL WELL", platform: steam, hours: 0.1, verdict: понравилось,
+     note: "пройдена; часы Exophase ошибочны — играна вне трекинга"}
+  # ... полный Steam-список (172 позиции) — data/library_full.yaml; при PROFILE-UPDATE
+  # merge выполнять по полному списку, здесь — только топ для контекста.
+  # --- game-advisor рекомендации (пробы/демо) ---
+  - {title: "Ravenswatch", platform: switch, hours: 0.0, verdict: брошено,
+     note: "демо, не понравилась (game-advisor рекомендация, 2026-07-25)"}
+  - {title: "Death's Door", platform: steam_deck, verdict: понравилось,
+     note: "калибровка 2026-08-28"}
+  - {title: "Immortals Fenyx Rising", platform: switch, verdict: понравилось,
+     note: "завершена; странный дизайн, понравилась меньше, чем BOTW/TOTK (калибровка 2026-08-28)"}
+  - {title: "Ori and the Will of the Wisps", platform: steam_deck, verdict: восторг,
+     note: "идеальная по длине и сложности метроидвания (калибровка 2026-08-28)"}
+  - {title: "Ori and the Blind Forest", platform: steam_deck, verdict: восторг,
+     note: "такое же мнение, что и о Will of the Wisps (калибровка 2026-08-28)"}
+  - {title: "Inscryption", platform: steam, verdict: восторг,
+     note: "офигительная игра, затягивает нелогичностью сюжета и поворотами (калибровка 2026-08-28)"}
+  - {title: "Unicorn Overlord", platform: switch2, hours: 25.0, verdict: брошено, причина: сложность,
+     note: "механика неплохая, но не напрягает даже на среднем уровне — нет ощутимого риска проигрыша, поэтому наскучивает; вероятный дроп (уточнено 2026-08-28)"}
+  - {title: "Denshattack!", platform: switch2, verdict: понравилось,
+     note: "классная игра — аркадный трюковый раннер на поезде в стиле Dreamcast (калибровка 2026-08-28)"}
+  - {title: "Moonlighter", platform: steam_deck, hours: 6.8, verdict: брошено, причина: темп,
+     note: "хорошее начало, не затянула (калибровка 2026-08-28)"}
+  - {title: "NieR:Automata", platform: switch, verdict: восторг,
+     note: "пройдена 3 раза, «очень классная игра»; discovery-пик game-advisor 2026-09-21 (мостик: ось «нелогичный сюжет с поворотами») — попадание; пройдена на Switch 1, платформа уточнена (калибровка 2026-09-21)"}
+  - {title: "The Legend of Zelda: Echoes of Wisdom", platform: switch, verdict: нормально,
+     note: "пройдена до конца; «неплохая, но слишком простая» — рекомендация game-advisor 2026-09-21 не учла сложность (калибровка 2026-09-21)"}
+  - {title: "Monster Hunter Rise", platform: switch, verdict: не понравилось,
+     note: "демо: не разобрался в системах; рекомендация game-advisor 2026-09-21 — промах (калибровка 2026-09-21)"}
+  - {title: "The Elder Scrolls V: Skyrim", platform: pc, verdict: понравилось,
+     note: "играл давно на ПК, тогда понравился; возвращаться не хочет (калибровка 2026-09-21)"}
+  - {title: "Astral Chain", platform: switch, verdict: брошено, причина: темп,
+     note: "дошёл до середины: интересная, но побочные квесты надоедали, геймплей не до конца зашёл; мостик «тот же Platinum, что NieR» не сработал (калибровка 2026-09-21)"}
+  - {title: "Bayonetta Origins: Cereza and the Lost Demon", platform: switch, verdict: не понравилось,
+     note: "демо: очень скучно (калибровка 2026-09-21)"}
+  - {title: "The Witcher 3: Wild Hunt", platform: xbox, verdict: брошено, причина: жанр-мимо,
+     note: "начинал на Xbox, боёвка не зашла (калибровка 2026-09-21)"}
+  - {title: "Children of Morta", platform: switch, verdict: понравилось,
+     note: "играна на Switch 1 (Steam-копия не запускалась); понравилась, как и Hades; застрял на уровне, который не смог пройти — не завершена (калибровка 2026-09-21)"}
+  - {title: "Nobody Saves the World", platform: steam_deck, verdict: брошено, причина: не-виден-прогресс,
+     note: "в самом начале не понял, куда идти (калибровка 2026-09-21)"}
+  - {title: "Against the Storm", platform: steam_deck, hours: 4.0, verdict: брошено, причина: техническое,
+     note: "не понравилось управление на Steam Deck (калибровка 2026-09-21)"}
+  - {title: "Bastion", platform: steam_deck, verdict: брошено, причина: язык,
+     note: "проблема — понимать рассказчика на слух (английская озвучка), реплики пропускал; читать по-английски проще; возможно вернётся; Steam-часы 0 при том, что играна на Deck (уточнено 2026-09-21)"}
+
+  # --- Калибровка библиотеки без оценки (2026-09-23, фильтр «без оценки» на странице games) ---
+  # Правило свёртки в enum: «не понравилась + бросил» → не понравилось; «понравилась/нормально,
+  # но бросил» → брошено (+причина, если названа), исходное впечатление — в note.
+  - {title: "Darksiders Genesis", platform: steam, hours: 9.9, verdict: брошено, note: "причина не названа (калибровка 2026-09-23)"}
+  - {title: "Disco Elysium", platform: steam, hours: 9.8, verdict: брошено, причина: не-виден-прогресс,
+     note: "понравилась, но в какой-то момент не понял, что дальше (калибровка 2026-09-23)"}
+  - {title: "Forza Horizon 4", platform: steam, hours: 9.1, verdict: понравилось, note: "калибровка 2026-09-23"}
+  - {title: "Detroit: Become Human", platform: steam, hours: 9.7, verdict: понравилось, note: "ближе к восторгу (калибровка 2026-09-23)"}
+  - {title: "Ratopia", platform: steam, hours: 8.0, verdict: брошено, note: "нормально, но бросил (калибровка 2026-09-23)"}
+  - {title: "Hollow Knight", platform: steam, hours: 7.2, verdict: нормально, note: "калибровка 2026-09-23"}
+  - {title: "F.I.S.T.: Forged In Shadow Torch", platform: steam, hours: 7.0, verdict: понравилось, note: "калибровка 2026-09-23"}
+  - {title: "Oxygen Not Included", platform: steam, hours: 6.5, verdict: брошено, note: "нормально, но бросил — как Ratopia (калибровка 2026-09-23)"}
+  - {title: "Small World", platform: steam, hours: 6.5, verdict: понравилось, note: "калибровка 2026-09-23"}
+  - {title: "Stacklands", platform: steam, hours: 6.1, verdict: нормально, note: "калибровка 2026-09-23"}
+  - {title: "while True: learn()", platform: steam, hours: 5.5, verdict: брошено, причина: техническое,
+     note: "нормально, но неудобно на Steam Deck (калибровка 2026-09-23)"}
+  - {title: "Stray", platform: steam, hours: 5.3, verdict: понравилось, note: "калибровка 2026-09-23"}
+  - {title: "Caves of Qud", platform: steam, hours: 4.8, verdict: не понравилось, причина: язык,
+     note: "слишком много английского (калибровка 2026-09-23)"}
+  - {title: "The Stanley Parable: Ultra Deluxe", platform: steam, hours: 4.8, verdict: нормально, note: "ближе к понравилось (калибровка 2026-09-23)"}
+  - {title: "Melvor Idle", platform: steam, hours: 4.6, verdict: нормально, note: "калибровка 2026-09-23"}
+  - {title: "Laika: Aged Through Blood", platform: steam, hours: 3.7, verdict: брошено,
+     note: "понравилась, музыка шикарная; причина дропа не названа (калибровка 2026-09-23)"}
+  - {title: "Dead Cells", platform: steam, hours: 3.6, verdict: не понравилось, note: "калибровка 2026-09-23"}
+  - {title: "Warhammer 40,000: Space Marine 2", platform: steam, hours: 3.3, verdict: нормально,
+     note: "на Steam Deck не играбельна — техническое, не вкус (калибровка 2026-09-23)"}
+  - {title: "ENDER LILIES: Quietus of the Knights", platform: steam, hours: 3.2, verdict: понравилось, note: "калибровка 2026-09-23"}
+  - {title: "Bloons TD 6", platform: steam, hours: 2.7, verdict: не понравилось, note: "бросил (калибровка 2026-09-23)"}
+  - {title: "SteamWorld Dig 2", platform: steam, hours: 2.4, verdict: понравилось, note: "калибровка 2026-09-23"}
+  - {title: "Papers, Please", platform: steam, hours: 2.1, verdict: не понравилось, note: "калибровка 2026-09-23"}
+  - {title: "Control Ultimate Edition", platform: steam, hours: 1.5, verdict: не понравилось, note: "бросил (калибровка 2026-09-23)"}
+  - {title: "The First Descendant", platform: steam, hours: 1.4, verdict: не понравилось, note: "бросил (калибровка 2026-09-23)"}
+  - {title: "Mass Effect Legendary Edition", platform: steam, hours: 1.3, verdict: брошено, note: "нормально, но бросил (калибровка 2026-09-23)"}
+  - {title: "Viewfinder", platform: steam, hours: 1.3, verdict: понравилось, note: "калибровка 2026-09-23"}
+  - {title: "Potion Craft: Alchemist Simulator", platform: steam, hours: 1.0, verdict: нормально, note: "калибровка 2026-09-23"}
+  - {title: "Noita", platform: steam, hours: 0.9, verdict: не понравилось,
+     note: "идея интересная, но не понял (калибровка 2026-09-23)"}
+  - {title: "Chained Echoes", platform: steam, hours: 0.8, verdict: брошено, причина: темп,
+     note: "понравилась, но не завлекла, были другие дела; ранее — трение английского (калибровка 2026-09-23)"}
+  - {title: "Devil May Cry 5", platform: steam, hours: 0.6, verdict: брошено, причина: темп,
+     note: "понравилась, но стало скучно (калибровка 2026-09-23)"}
+  - {title: "Planet of Lana", platform: steam, hours: 0.6, verdict: брошено, причина: темп,
+     note: "понравилась, но заскучал (калибровка 2026-09-23)"}
+  - {title: "Mini Metro", platform: steam, hours: 0.5, verdict: понравилось,
+     note: "«отличная тупилка»; часы Exophase занижены (калибровка 2026-09-23)"}
+  - {title: "Terraria", platform: steam, hours: 0.4, verdict: брошено, причина: жанр-мимо,
+     note: "идея классная, но не моё (калибровка 2026-09-23)"}
+  - {title: "Path of Exile", platform: steam, hours: 0.3, verdict: понравилось,
+     note: "играл много (часы Exophase неполны); сейчас уже не моё — не предлагать возврат (калибровка 2026-09-23)"}
+  - {title: "Crimsonland", platform: steam, hours: 0.1, verdict: понравилось,
+     note: "«отличная тупилка в своё время»; часы Exophase неполны (калибровка 2026-09-23)"}
+  - {title: "Frostpunk", platform: steam, hours: 0.1, verdict: брошено, причина: техническое,
+     note: "не разобрался; на Steam Deck не играбельна (калибровка 2026-09-23)"}
+
+  # --- Куплено по подборкам советника, ещё не начато (2026-09-22) ---
+  # verdict появится в КАЛИБРОВКЕ; до тех пор эти игры уже НЕ кандидаты —
+  # рекомендовать их повторно нельзя.
+  - {title: "TOEM", platform: switch,
+     note: "куплена 2026-09-22 по подборке 2026-09-21-eshop-skidki ($1.99, −90%); не начата"}
+  - {title: "Enter the Gungeon", platform: switch,
+     note: "куплена 2026-09-22 по подборке 2026-08-28-avgust-skidki-eshop ($2.99, −80%); не начата"}
+  - {title: "Valkyria Chronicles + VC4 Bundle", platform: switch,
+     note: "куплена 2026-09-22 по подборке 2026-08-28-avgust-skidki-eshop ($9.99, −75%); не начата"}
+  - {title: "Hob: Definitive Edition", platform: switch,
+     note: "куплена 2026-09-22 по подборке 2026-08-28-avgust-skidki-eshop ($1.99, −90%); не начата"}
+  - {title: "Need for Speed Hot Pursuit Remastered", platform: switch,
+     note: "куплена 2026-09-22 по подборке 2026-08-28-avgust-skidki-eshop ($7.99, −80%); брали на пару, погонять вдвоём; не начата"}
+
+wishlist_hints:  # ПРАВИЛА и оговорки отбора (конкретные игры переехали в watchlist.yaml, 2026-09-22)
+  - "традиция: покупка физической копии в поездках — тег travel-purchase"
+  - "Deep Rock Galactic: Survivor на Switch — следить за портом (сейчас нет); сама игра уже в library (Steam Deck), поэтому не в watchlist"
+  - "ИСКЛЮЧЕНИЕ ПО ИЗДАТЕЛЮ: Warner Bros. Games (в т.ч. Hogwarts Legacy) — не предлагать; принципиальные соображения: компания не работает с российским IP, не хочет поддерживать (заявлено 2026-09-21; ранняя формулировка про Disney — ошибка, исправлено)"
+  - "Подтверждено пользователем 2026-09-21, что не запускал (можно предлагать): Divinity: Original Sin 2, Momodora: Reverie Under the Moonlight, INSIDE"
+  - "Игры, обсуждённые но не купленные (хочу / на-карандаш / не-интересно), живут в watchlist.yaml — сюда их не возвращать"

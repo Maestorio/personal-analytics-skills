@@ -1,0 +1,196 @@
+# Полная библиотека (auto-generated 2026-07-06, Exophase snapshots)
+# merge key: title (normalized). hours=0 — куплено/в библиотеке, не запускалось или <1м
+schema_version: 1.0
+library_full:
+  - {title: "Persona 5 Royal", platform: switch, hours: 66.9}
+  - {title: "The Legend of Zelda: Skyward Sword HD", platform: switch, hours: 39.0}
+  - {title: "Mario Kart World", platform: switch, hours: 26.3}
+  - {title: "Prince of Persia: The Lost Crown", platform: switch, hours: 21.7}
+  - {title: "Super Mario 3D World + Bowser’s Fury", platform: switch, hours: 15.9}
+  - {title: "BALL x PIT", platform: switch, hours: 13.9}
+  - {title: "PRAGMATA", platform: switch, hours: 13.5}
+  - {title: "Crash Bandicoot 4: It's About Time", platform: switch, hours: 7.3}
+  - {title: "Sonic Superstars", platform: switch, hours: 5.0}
+  - {title: "Split Fiction", platform: switch, hours: 4.5}
+  - {title: "Have a Nice Death", platform: switch, hours: 2.6}
+  - {title: "Crash Bandicoot N. Sane Trilogy", platform: switch, hours: 1.8}
+  - {title: "Diablo III: Eternal Collection", platform: switch, hours: 1.7}
+  - {title: "Superliminal", platform: switch, hours: 0.9}
+  - {title: "BioShock Remastered", platform: switch, hours: 0.8}
+  - {title: "Star Fox Demo", platform: switch, hours: 0.6}
+  - {title: "ASTRONEER", platform: switch, hours: 0.4}
+  - {title: "PRAGMATA SKETCHBOOK", platform: switch, hours: 0.4}
+  - {title: "Hyper Light Drifter - Special Edition", platform: switch, hours: 0.2}
+  - {title: "Crypt of the NecroDancer: Nintendo Switch Edition", platform: switch, hours: 0.1}
+  - {title: "Deep Rock Galactic: Survivor", platform: steam, hours: 108.7}
+  - {title: "ELDEN RING", platform: steam, hours: 85.6}
+  - {title: "Like a Dragon: Infinite Wealth", platform: steam, hours: 74.0}
+  - {title: "Baldur's Gate 3", platform: steam, hours: 73.5}
+  - {title: "Clair Obscur: Expedition 33", platform: steam, hours: 41.2}
+  - {title: "Hades II", platform: steam, hours: 40.2}
+  - {title: "Path of Exile 2", platform: steam, hours: 37.3}
+  - {title: "DEATH STRANDING DIRECTOR'S CUT", platform: steam, hours: 36.5}
+  - {title: "Loop Hero", platform: steam, hours: 35.2}
+  - {title: "Mini Motorways", platform: steam, hours: 35.0}
+  - {title: "Dome Keeper", platform: steam, hours: 32.9}
+  - {title: "Talisman: Digital Classic Edition", platform: steam, hours: 31.4}
+  - {title: "Monster Train 2", platform: steam, hours: 29.9}
+  - {title: "Hades", platform: steam, hours: 24.8}
+  - {title: "Drill Core", platform: steam, hours: 22.3}
+  - {title: "RimWorld", platform: steam, hours: 22.2}
+  - {title: "Gremlins, Inc.", platform: steam, hours: 19.4}
+  - {title: "Death Must Die", platform: steam, hours: 18.9}
+  - {title: "Monster Train", platform: steam, hours: 18.6}
+  - {title: "CODE VEIN", platform: steam, hours: 17.1}
+  - {title: "EVE Online", platform: steam, hours: 16.6}
+  - {title: "ENDER MAGNOLIA: Bloom in the Mist", platform: steam, hours: 16.0}
+  - {title: "Into the Breach", platform: steam, hours: 15.7}
+  - {title: "Palworld", platform: steam, hours: 14.4}
+  - {title: "Brotato", platform: steam, hours: 13.9}
+  - {title: "Celeste", platform: steam, hours: 13.5}
+  - {title: "Ace Combat 7: Skies Unknown", platform: steam, hours: 12.7}
+  - {title: "Cloudpunk", platform: steam, hours: 11.3}
+  - {title: "No Man's Sky", platform: steam, hours: 10.3}
+  - {title: "Among Us", platform: steam, hours: 10.3}
+  - {title: "Darksiders Genesis", platform: steam, hours: 9.9}
+  - {title: "20 Minutes Till Dawn", platform: steam, hours: 9.8}
+  - {title: "Disco Elysium", platform: steam, hours: 9.8}
+  - {title: "Detroit: Become Human", platform: steam, hours: 9.7}
+  - {title: "Forza Horizon 4", platform: steam, hours: 9.1}
+  - {title: "Ratopia", platform: steam, hours: 8.0}
+  - {title: "Hollow Knight", platform: steam, hours: 7.2}
+  - {title: "F.I.S.T.: Forged In Shadow Torch", platform: steam, hours: 7.0}
+  - {title: "Moonlighter", platform: steam, hours: 6.8}
+  - {title: "Oxygen Not Included", platform: steam, hours: 6.5}
+  - {title: "Small World", platform: steam, hours: 6.5}
+  - {title: "Stacklands", platform: steam, hours: 6.1}
+  - {title: "while True: learn()", platform: steam, hours: 5.5}
+  - {title: "Stray", platform: steam, hours: 5.3}
+  - {title: "Journey", platform: steam, hours: 5.0}
+  - {title: "Mages of Mystralia", platform: steam, hours: 4.8}
+  - {title: "Caves of Qud", platform: steam, hours: 4.8}
+  - {title: "The Stanley Parable: Ultra Deluxe", platform: steam, hours: 4.8}
+  - {title: "Portal 2", platform: steam, hours: 4.7}
+  - {title: "Melvor Idle", platform: steam, hours: 4.6}
+  - {title: "The King is Watching", platform: steam, hours: 4.3}
+  - {title: "The Wandering Village", platform: steam, hours: 4.2}
+  - {title: "Against the Storm", platform: steam, hours: 4.0}
+  - {title: "ISLANDERS", platform: steam, hours: 3.9}
+  - {title: "Tabletop Simulator", platform: steam, hours: 3.9}
+  - {title: "Laika: Aged Through Blood", platform: steam, hours: 3.7}
+  - {title: "CARRION", platform: steam, hours: 3.6}
+  - {title: "Dead Cells", platform: steam, hours: 3.6}
+  - {title: "Black Book", platform: steam, hours: 3.5}
+  - {title: "Warhammer 40,000: Space Marine 2", platform: steam, hours: 3.3}
+  - {title: "Drop - System Breach", platform: steam, hours: 3.3}
+  - {title: "ENDER LILIES: Quietus of the Knights", platform: steam, hours: 3.2}
+  - {title: "shapez", platform: steam, hours: 3.1}
+  - {title: "Don Duality: Initiation", platform: steam, hours: 2.8}
+  - {title: "Bloons TD 6", platform: steam, hours: 2.7}
+  - {title: "Splitgate", platform: steam, hours: 2.6}
+  - {title: "Shotgun King: The Final Checkmate", platform: steam, hours: 2.5}
+  - {title: "SteamWorld Dig 2", platform: steam, hours: 2.4}
+  - {title: "Papers, Please", platform: steam, hours: 2.1}
+  - {title: "AER Memories of Old", platform: steam, hours: 1.7}
+  - {title: "Potion Tycoon", platform: steam, hours: 1.6}
+  - {title: "Control Ultimate Edition", platform: steam, hours: 1.5}
+  - {title: "Risk of Rain 2", platform: steam, hours: 1.5}
+  - {title: "The First Descendant", platform: steam, hours: 1.4}
+  - {title: "The Plucky Squire", platform: steam, hours: 1.3}
+  - {title: "Mass Effect Legendary Edition", platform: steam, hours: 1.3}
+  - {title: "Viewfinder", platform: steam, hours: 1.3}
+  - {title: "Blacksad: Under the Skin", platform: steam, hours: 1.3}
+  - {title: "Songs of Conquest", platform: steam, hours: 1.2}
+  - {title: "The Witch's Cauldron", platform: steam, hours: 1.1}
+  - {title: "Potion Craft: Alchemist Simulator", platform: steam, hours: 1.0}
+  - {title: "Noita", platform: steam, hours: 0.9}
+  - {title: "Chained Echoes", platform: steam, hours: 0.8}
+  - {title: "HELLCARD", platform: steam, hours: 0.8}
+  - {title: "Deponia", platform: steam, hours: 0.7}
+  - {title: "Halls of Torment", platform: steam, hours: 0.7}
+  - {title: "Devil May Cry 5", platform: steam, hours: 0.6}
+  - {title: "Cookie Cutter", platform: steam, hours: 0.6}
+  - {title: "Planet of Lana", platform: steam, hours: 0.6}
+  - {title: "Chants of Sennaar", platform: steam, hours: 0.6}
+  - {title: "Sable", platform: steam, hours: 0.6}
+  - {title: "Thronefall", platform: steam, hours: 0.5}
+  - {title: "Mini Metro", platform: steam, hours: 0.5}
+  - {title: "Aperture Desk Job", platform: steam, hours: 0.5}
+  - {title: "Terraria", platform: steam, hours: 0.4}
+  - {title: "Twilight Struggle", platform: steam, hours: 0.4}
+  - {title: "Undertale", platform: steam, hours: 0.4}
+  - {title: "Cuphead", platform: steam, hours: 0.3}
+  - {title: "Growth", platform: steam, hours: 0.3}
+  - {title: "The Talos Principle 2", platform: steam, hours: 0.3}
+  - {title: "Path of Exile", platform: steam, hours: 0.3}
+  - {title: "Monument Valley", platform: steam, hours: 0.2}
+  - {title: "Cat Quest III: Demo", platform: steam, hours: 0.2}
+  - {title: "Backpack Battles", platform: steam, hours: 0.1}
+  - {title: "ANIMAL WELL", platform: steam, hours: 0.1}
+  - {title: "Poly Bridge 2", platform: steam, hours: 0.1}
+  - {title: "Idle Clans", platform: steam, hours: 0.1}
+  - {title: "Momodora: Moonlit Farewell", platform: steam, hours: 0.1}
+  - {title: "Black Desert (Retired)", platform: steam, hours: 0.1}
+  - {title: "Frostpunk", platform: steam, hours: 0.1}
+  - {title: "Crimsonland", platform: steam, hours: 0.1}
+  - {title: "Is This Game Trying To Kill Me?", platform: steam, hours: 0.0}
+  - {title: "Mistward", platform: steam, hours: 0.0}
+  - {title: "Balatro", platform: steam, hours: 0.0}
+  - {title: "Europa", platform: steam, hours: 0.0}
+  - {title: "Wall World", platform: steam, hours: 0.0}
+  - {title: "Little Nightmares Enhanced Edition", platform: steam, hours: 0.0}
+  - {title: "Islands of Insight", platform: steam, hours: 0.0}
+  - {title: "Monument Valley 2", platform: steam, hours: 0.0}
+  - {title: "Luckitown", platform: steam, hours: 0.0}
+  - {title: "South of the Circle", platform: steam, hours: 0.0}
+  - {title: "Tiny Tina's Assault on Dragon Keep: A Wonderlands One-shot Adventure", platform: steam, hours: 0.0}
+  - {title: "Heliopedia", platform: steam, hours: 0.0}
+  - {title: "Fading Afternoon", platform: steam, hours: 0.0}
+  - {title: "Intravenous", platform: steam, hours: 0.0}
+  - {title: "Sokpop S09: pyramida", platform: steam, hours: 0.0}
+  - {title: "Heavy Rain", platform: steam, hours: 0.0}
+  - {title: "Beyond: Two Souls", platform: steam, hours: 0.0}
+  - {title: "Sokpop S06: Sunset Kingdom", platform: steam, hours: 0.0}
+  - {title: "Ultimate Zombie Defense", platform: steam, hours: 0.0}
+  - {title: "Omno", platform: steam, hours: 0.0}
+  - {title: "Soko Loco Deluxe", platform: steam, hours: 0.0}
+  - {title: "Simmiland", platform: steam, hours: 0.0}
+  - {title: "Gris", platform: steam, hours: 0.0}
+  - {title: "Darksiders III", platform: steam, hours: 0.0}
+  - {title: "Warhammer 40,000: Gladius - Relics of War", platform: steam, hours: 0.0}
+  - {title: "TGV Voyages Train Simulator", platform: steam, hours: 0.0}
+  - {title: "Children of Morta", platform: steam, hours: 0.0}
+  - {title: "Mafia", platform: steam, hours: 0.0}
+  - {title: "Half-Life Deathmatch: Source", platform: steam, hours: 0.0}
+  - {title: "Half-Life 2: Deathmatch", platform: steam, hours: 0.0}
+  - {title: "Tower 57", platform: steam, hours: 0.0}
+  - {title: "Figment", platform: steam, hours: 0.0}
+  - {title: "Divinity: Original Sin 2 - Definitive Edition", platform: steam, hours: 0.0}
+  - {title: "Battlestar Galactica Deadlock", platform: steam, hours: 0.0}
+  - {title: "Black Desert", platform: steam, hours: 0.0}
+  - {title: "Little Nightmares", platform: steam, hours: 0.0}
+  - {title: "Beat Cop", platform: steam, hours: 0.0}
+  - {title: "Darksiders Warmastered Edition", platform: steam, hours: 0.0}
+  - {title: "BUTCHER", platform: steam, hours: 0.0}
+  - {title: "Titan Quest Anniversary Edition", platform: steam, hours: 0.0}
+  - {title: "INSIDE", platform: steam, hours: 0.0}
+  - {title: "Momodora: Reverie Under the Moonlight", platform: steam, hours: 0.0}
+  - {title: "Darksiders II Deathinitive Edition", platform: steam, hours: 0.0}
+  - {title: "Divinity: Original Sin Enhanced Edition", platform: steam, hours: 0.0}
+  - {title: "Poly Bridge", platform: steam, hours: 0.0}
+  - {title: "This War of Mine", platform: steam, hours: 0.0}
+  - {title: "SPACECOM", platform: steam, hours: 0.0}
+  - {title: "Divinity: Original Sin (Classic)", platform: steam, hours: 0.0}
+  - {title: "Anomaly Defenders", platform: steam, hours: 0.0}
+  - {title: "Plague Inc: Evolved", platform: steam, hours: 0.0}
+  - {title: "Desktop Dungeons", platform: steam, hours: 0.0}
+  - {title: "Anomaly Warzone Earth Mobile Campaign", platform: steam, hours: 0.0}
+  - {title: "Anomaly Korea", platform: steam, hours: 0.0}
+  - {title: "Anomaly 2", platform: steam, hours: 0.0}
+  - {title: "Hotline Miami", platform: steam, hours: 0.0}
+  - {title: "Bastion", platform: steam, hours: 0.0}
+  - {title: "Anomaly Warzone Earth", platform: steam, hours: 0.0}
+  - {title: "Darksiders", platform: steam, hours: 0.0}
+  - {title: "LIMBO", platform: steam, hours: 0.0}
+  - {title: "Portal", platform: steam, hours: 0.0}
+  - {title: "Half-Life 2", platform: steam, hours: 0.0}

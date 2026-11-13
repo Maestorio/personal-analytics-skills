@@ -1,0 +1,67 @@
+:root{
+  --canvas:#f4f1ea; --paper:#fbf9f4; --card:#fff; --ink:#2b2823; --muted:#766f63; --line:#ddd6c8;
+  --accent:oklch(0.50 0.072 192); --warn:oklch(0.62 0.115 65);
+  --danger:oklch(0.55 0.15 28); --info:oklch(0.53 0.07 248);
+  --font-display:'IBM Plex Sans','IBM Plex Mono','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  --font-body:'IBM Plex Sans','IBM Plex Mono','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono','Apple SD Gothic Neo','Malgun Gothic',monospace;
+  --font-label:'IBM Plex Sans','IBM Plex Mono',system-ui,sans-serif;
+  --fs-cover:38px; --fs-sub:14px; --fs-plate:13px; --fs-title:16px;
+  --fs-body:13px; --fs-small:11.5px; --fs-micro:10px;
+  --display-w:700; --display-ls:-0.02em; --title-w:600; --plate-w:600;
+  --sub-style:italic; --plate-ls:.06em; --plate-transform:uppercase;
+  --s0:6px; --s1:9px; --s2:13px; --s3:18px; --s4:26px;
+  --pad:48px; --radius:5px; --radius-sm:4px; --tbl-top:3px; --passport-k:118px;
+  --plate-bg:var(--accent); --plate-fg:#fff; --plate-pad:9px 14px; --plate-rule:0;
+  --chip-radius:4px; --chip-pad:4px 8px;
+  --book-bg:oklch(0.50 0.072 192 / .12); --book-fg:oklch(0.37 0.072 192); --book-bd:1px solid oklch(0.50 0.072 192 / .4);
+  --weather-bg:oklch(0.53 0.07 248 / .14); --weather-fg:oklch(0.40 0.08 248); --weather-bd:1px solid oklch(0.53 0.07 248 / .4);
+  --todo-bg:oklch(0.62 0.115 65 / .16); --todo-fg:oklch(0.44 0.10 55); --todo-bd:1px solid oklch(0.62 0.115 65 / .45);
+  --mark-glyph:"\25B8"; --mark-size:10px;
+  --box-pad:11px 13px; --box-mark-size:12px; --box-edge-w:3px;
+  --warn-bg:oklch(0.62 0.115 65 / .12); --warn-line:oklch(0.62 0.115 65 / .38); --warn-mark:"\25B2";
+  --danger-bg:oklch(0.55 0.15 28 / .10); --danger-line:oklch(0.55 0.15 28 / .38);
+  --info-bg:oklch(0.53 0.07 248 / .10); --info-line:oklch(0.53 0.07 248 / .3); --info-mark:"\25CF";
+  --date-pad:3px 7px; --date-bg:oklch(0.50 0.072 192 / .12);
+  --hotel-pad:11px 12px; --hotel-bg:#ffffff; --hotel-edge:3px;
+  --prog-time-col:46px;
+  --td-pad:7px 8px; --thead-border:2px solid var(--accent); --row-emph:oklch(0.50 0.072 192 / .06);
+  --total-border:2px solid var(--accent); --total-bg:oklch(0.50 0.072 192 / .10);
+}
+
+/* ── тёмная тема — ТОЛЬКО экран: печать и HTML→PDF всегда светлые.
+   Атрибут data-theme="dark" ставит скрипт из html_lib ТОЛЬКО при
+   localStorage hub-theme==="dark" (синхрон с кабинетом). Отдельный файл без
+   ключа — светлый; системную тёмную схему НЕ подхватываем. ── */
+@media screen{
+  [data-theme="dark"]{
+    --canvas:#1c1a17; --paper:#24211d; --card:#2c2823; --ink:#ece6da; --muted:#a39a89; --line:#3a352d;
+    --accent:oklch(0.72 0.07 192); --warn:oklch(0.75 0.10 70);
+    --danger:oklch(0.70 0.12 28); --info:oklch(0.72 0.07 248);
+    --plate-fg:#16140f;
+    --book-bg:oklch(0.72 0.07 192 / .16); --book-fg:oklch(0.82 0.06 192); --book-bd:1px solid oklch(0.72 0.07 192 / .4);
+    --weather-bg:oklch(0.72 0.07 248 / .16); --weather-fg:oklch(0.82 0.06 248); --weather-bd:1px solid oklch(0.72 0.07 248 / .4);
+    --todo-bg:oklch(0.75 0.10 70 / .18); --todo-fg:oklch(0.85 0.09 70); --todo-bd:1px solid oklch(0.75 0.10 70 / .45);
+    --warn-bg:oklch(0.75 0.10 70 / .14); --warn-line:oklch(0.75 0.10 70 / .4);
+    --danger-bg:oklch(0.70 0.12 28 / .14); --danger-line:oklch(0.70 0.12 28 / .4);
+    --info-bg:oklch(0.72 0.07 248 / .12); --info-line:oklch(0.72 0.07 248 / .35);
+    --date-bg:oklch(0.72 0.07 192 / .16);
+    --hotel-bg:#2c2823;
+    --row-emph:oklch(0.72 0.07 192 / .09);
+    --total-bg:oklch(0.72 0.07 192 / .16);
+  }
+  /* компонентные фиксы: тёмный текст на посветлевшем акценте, светлые fg сигналов */
+  [data-theme="dark"] .verdict-badge{ color:#16140f; }
+  [data-theme="dark"] .check-item.done .check-box::after{ color:#16140f; }
+  [data-theme="dark"] .tip,[data-theme="dark"] .loc-badge,[data-theme="dark"] .leg-no,
+  [data-theme="dark"] .opt-letter,[data-theme="dark"] .opt-chosen-tag{ color:#16140f; }
+  [data-theme="dark"] .sig--strong{ color:oklch(0.82 0.06 192); background:oklch(0.72 0.07 192 / .18); }
+  [data-theme="dark"] .sig--weak{ color:oklch(0.82 0.06 248); background:oklch(0.72 0.07 248 / .16); }
+  [data-theme="dark"] .sig--gem{ color:oklch(0.85 0.09 70); background:oklch(0.75 0.10 70 / .18); }
+  [data-theme="dark"] .sig--low{ color:var(--muted); background:var(--line); }
+  [data-theme="dark"] .data-table--zebra tbody tr:nth-child(even) td{ background:oklch(0.72 0.07 192 / .05); }
+  [data-theme="dark"] .data-table td.is-chosen,[data-theme="dark"] .data-table th.is-chosen{ background:oklch(0.72 0.07 192 / .10); }
+  [data-theme="dark"] .day--transfer .day-date{ background:oklch(0.75 0.10 70 / .18); }
+  [data-theme="dark"] .verdict{ background:oklch(0.72 0.07 192 / .08); }
+  [data-theme="dark"] .region-tag{ background:oklch(0.75 0.10 70 / .10); border-color:oklch(0.75 0.10 70 / .5); }
+}
