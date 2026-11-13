@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-17T0000-RENI",
+  "key": "RENI",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-12-01",
+  "note": "Тезис жив, но без добора: 1П2026 — убыток 1,4 млрд и операционный спад (стр. результат −42%, LR non-life 98,5%); капитал 130%, байбек 5 млрд (~13% капитализации). Stress h12 EV +1,6% / tail −17% < ca…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-17T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

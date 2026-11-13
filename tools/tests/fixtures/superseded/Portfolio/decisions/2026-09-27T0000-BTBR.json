@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-27T0000-BTBR",
+  "key": "BTBR",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-11-26",
+  "note": "1П26: выручка+AM 5,45 млрд (+17%), EBITDA 53,1%, ЧП +9,4%; гайденс повышен (выручка 9,2–9,3 млрд, EBITDA 49–52%, payout >85%). Эксперимент 278-ФЗ узкий (образовательные учреждения, товары, ч.12 ст.93…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-27T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

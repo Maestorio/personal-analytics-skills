@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-09T0000-MBNK",
+  "key": "MBNK",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-08-27",
+  "note": "Пост-дивкапчур (09.07): Q1 2026 улучшился (ЧП x2.6, NIM 8.1%) но ROAE 7.9% слаб, opex +46%, ОФЗ-навес. HOLD-watch до Q2 МСФО, решение reduce/keep по тренду ROE. НЕ усреднять.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-07-09T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

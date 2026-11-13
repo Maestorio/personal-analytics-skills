@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-10-28T0000-DATA",
+  "key": "DATA",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2027-02-25",
+  "note": "Ориентир роста выручки 2026 срезан с ≥40% до ≥20% (31.08); 2П2026 при нижней границе всего +8% г/г; выручка признаётся в 4К, итоги — февраль–март 2027, отчёт 9М малоинформативен. Стресс-EV h12 +1,4%,…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-10-28T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

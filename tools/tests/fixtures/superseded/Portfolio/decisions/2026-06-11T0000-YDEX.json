@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-06-11T0000-YDEX",
+  "key": "YDEX",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-07-26",
+  "note": "Снимаю buy_more: цель 7–8% перевыполнена — реальный вес 10,7% L2 ≈ planned/IE 10%, anchor у целевой доли. Фундаментал силён (выручка +25%, EBITDA +40%, stress h12 +1,0%), но deep-value add-сигнал исч…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-06-11T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

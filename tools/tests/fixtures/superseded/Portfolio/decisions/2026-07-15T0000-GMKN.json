@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-15T0000-GMKN",
+  "key": "GMKN",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-09-13",
+  "note": "Mode 8 15.07: anchor-хедж (стресс +16% h12 / +21% h24, β usdrub/металлы), у IE-цели 3% (факт 2,51%). Кандидат №1 на выручку от среза Сбера 20.07. Гейт истёк 14.07 — refresh.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-07-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

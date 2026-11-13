@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-05-15T0000-MDMG",
+  "key": "MDMG",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-05-29",
+  "note": "XIRR -97.68% — артефакт data-loader (ГДР US55279C2008 → МКПАО конвертация 2025-06-30). Реальный убыток ~−34% на cost basis ~2074 RUB/акцию. Sell-side consensus 1072 RUB < текущей 1367 RUB. 3-й транш:…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-05-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-10-29T0000-GMKN",
+  "key": "GMKN",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-12-13",
+  "note": "Тезис жив (МСФО 1П2026 сильная, гайденс подтверждён, ND/EBITDA 1,3×), но три неизвестных: масштаб ремонта ПВП-1 в 2027–2028, итоговый налог на сверхдоходы (125–171 млрд ₽), Pd −17% за октябрь вне стр…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": "Portfolio/reports/2026-10-29-single-analysis-gmkn.md",
+    "mode_codes": [
+      "4a"
+    ],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-10-29T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

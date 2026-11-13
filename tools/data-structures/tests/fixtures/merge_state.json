@@ -1,0 +1,308 @@
+{
+  "schema_version": "conditions-state@1",
+  "events": [
+    {
+      "condition_id": "c-fired",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-20T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-price-fired",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-15T11:00:00+03:00",
+      "by": "notifier",
+      "data": {
+        "price": 89.5
+      }
+    },
+    {
+      "condition_id": "c-done",
+      "version": 1,
+      "event": "done",
+      "at": "2026-10-22T12:00:00+03:00",
+      "by": "owner",
+      "data": {
+        "trade_date": "2026-10-22"
+      }
+    },
+    {
+      "condition_id": "c-done",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-20T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-withdrawn",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-21T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-multi",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-10T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-expired-event",
+      "version": 1,
+      "event": "expired",
+      "at": "2026-10-29T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-orphan",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-29T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-reopened",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-10T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-reopened",
+      "version": 1,
+      "event": "done",
+      "at": "2026-10-12T09:00:00+03:00",
+      "by": "owner",
+      "data": {
+        "note": "ok"
+      }
+    },
+    {
+      "condition_id": "c-reopened",
+      "version": 1,
+      "event": "reopened",
+      "at": "2026-10-20T09:00:00+03:00",
+      "by": "owner",
+      "data": {}
+    },
+    {
+      "condition_id": "c-reopened-fired",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-10T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-reopened-fired",
+      "version": 1,
+      "event": "done",
+      "at": "2026-10-12T09:00:00+03:00",
+      "by": "owner",
+      "data": {
+        "note": "ok"
+      }
+    },
+    {
+      "condition_id": "c-reopened-fired",
+      "version": 1,
+      "event": "reopened",
+      "at": "2026-10-20T09:00:00+03:00",
+      "by": "owner",
+      "data": {}
+    },
+    {
+      "condition_id": "c-reopened-fired",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-25T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-mark-done",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-20T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-mark-done",
+      "version": 1,
+      "event": "done",
+      "at": "2026-10-21T09:00:00+03:00",
+      "by": "owner",
+      "data": {
+        "note": "сделал"
+      }
+    },
+    {
+      "condition_id": "c-mark-dismissed",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-20T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-mark-dismissed",
+      "version": 1,
+      "event": "owner_mark",
+      "at": "2026-10-21T09:00:00+03:00",
+      "by": "site",
+      "data": {
+        "mark": "dismissed"
+      }
+    },
+    {
+      "condition_id": "c-deferred",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-20T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-deferred",
+      "version": 1,
+      "event": "owner_mark",
+      "at": "2026-10-21T09:00:00+03:00",
+      "by": "site",
+      "data": {
+        "mark": "deferred",
+        "until": "2026-11-10"
+      }
+    },
+    {
+      "condition_id": "c-deferred-past",
+      "version": 1,
+      "event": "fired",
+      "at": "2026-10-10T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-deferred-past",
+      "version": 1,
+      "event": "owner_mark",
+      "at": "2026-10-11T09:00:00+03:00",
+      "by": "site",
+      "data": {
+        "mark": "deferred",
+        "until": "2026-10-25"
+      }
+    },
+    {
+      "condition_id": "c-deferred-deadline",
+      "version": 1,
+      "event": "owner_mark",
+      "at": "2026-10-21T09:00:00+03:00",
+      "by": "site",
+      "data": {
+        "mark": "deferred",
+        "until": "2026-11-05"
+      }
+    },
+    {
+      "condition_id": "c-found",
+      "version": 1,
+      "event": "event_found",
+      "at": "2026-10-28T09:00:00+03:00",
+      "by": "monitor",
+      "data": {
+        "doc": "https://example.test/report"
+      }
+    },
+    {
+      "condition_id": "c-found-fired",
+      "event": "event_found",
+      "at": "2026-10-28T09:00:00+03:00",
+      "by": "site",
+      "data": {
+        "doc": "https://example.test/rsbu"
+      }
+    },
+    {
+      "condition_id": "c-found-fired",
+      "event": "fired",
+      "at": "2026-10-28T09:00:00+03:00",
+      "by": "site",
+      "data": {
+        "doc": "https://example.test/rsbu"
+      }
+    },
+    {
+      "condition_id": "c-defer-before-fire",
+      "event": "owner_mark",
+      "at": "2026-10-14T09:00:00+03:00",
+      "by": "site",
+      "data": {
+        "mark": "deferred",
+        "until": "2026-11-20"
+      }
+    },
+    {
+      "condition_id": "c-defer-before-fire",
+      "event": "fired",
+      "at": "2026-10-15T09:00:00+03:00",
+      "by": "notifier",
+      "data": {
+        "price": 151
+      }
+    },
+    {
+      "condition_id": "c-expired-then-done",
+      "event": "expired",
+      "at": "2026-10-10T09:00:00+03:00",
+      "by": "notifier",
+      "data": {}
+    },
+    {
+      "condition_id": "c-expired-then-done",
+      "event": "done",
+      "at": "2026-10-12T09:00:00+03:00",
+      "by": "owner",
+      "data": {
+        "note": "поздно"
+      }
+    },
+    {
+      "condition_id": "c-multi-after",
+      "event": "fired",
+      "at": "2026-10-05T09:00:00+03:00",
+      "by": "notifier",
+      "data": {
+        "price": 301
+      }
+    },
+    {
+      "condition_id": "c-multi-after",
+      "event": "done",
+      "at": "2026-10-06T09:00:00+03:00",
+      "by": "owner",
+      "data": {
+        "note": "срезал"
+      }
+    },
+    {
+      "condition_id": "c-multi-after",
+      "event": "fired",
+      "at": "2026-10-15T09:00:00+03:00",
+      "by": "notifier",
+      "data": {
+        "price": 321
+      }
+    }
+  ]
+}

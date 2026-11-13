@@ -1,0 +1,279 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: inflation-ru-2026-09-17.md
+status: active
+replaces:
+  - inflation-ru-2026-07-29.yaml
+recompute_note: >
+  Пересчитан по явному запросу пользователя 2026-09-17 (тот же день, что и предыдущая
+  версия этого файла). Методология и источники собраны заново независимо; расхождения
+  с предыдущей версией от сегодня — в пределах шума одного и того же информационного
+  среза (SberCIB/ЦБ РФ не поменяли позицию в течение дня), но покрытие лагерей §2.2
+  расширено (добавлен Ренессанс Капитал для издержечного лагеря). weighted_consensus.py
+  не выполнялся напрямую в этой сессии (временная недоступность code-execution
+  инструмента) — числа посчитаны вручную по тому же детерминированному алгоритму.
+
+forecast:
+  date: 2026-09-17
+  horizon: 2028-12-31
+  horizons:
+    - 2026-12-31
+    - 2027-06-30
+    - 2027-12-31
+    - 2028-12-31
+  domain: ru-macro
+  topic: inflation-ru
+  method: fca
+  unit: "%"
+  basis: "ИПЦ РФ, прирост к соответствующей дате предыдущего года (YoY), Росстат"
+  central_estimate: "CPI РФ (YoY) Layer 1: 6.5% к 2026-12-31; 4.2% к 2027-06-30; 4.0% к 2027-12-31; 4.0% к 2028-12-31 (n=1 SberCIB MEDIUM с весом>0; anchor_share=1.00; ЦБ РФ официальный 6-7%/2026 совпадает по центру, но LOW trust вес 0). L2 by_scenario: A 7.6/5.8/5.2/5.6 · B 6.7/4.6/4.1/4.2 · C 6.5/4.3/4.0/4.0 · D 5.9/3.9/3.6/3.6"
+  confidence: 0.40
+  confidence_note: >
+    weighted_consensus.py (расчёт вручную) = 0.40 (n_high=0, in_consensus=1, asymmetry_warning=false:
+    camp_distribution {monetary:2, cost_push:1, fiscal:0, expectational:0} → доля доминирующего
+    лагеря 2/3=0.67 < порога 0.7 FCA-1 → без штрафа за асимметрию, в отличие от версии этого же
+    файла раньше сегодня (0.8 → штраф). Улучшение — артефакт расширения знаменателя (добавлен
+    Ренессанс Капитал), а НЕ рост трек-рекорда источников; бюджетно-фискальный и
+    институционально-ожиданческий лагеря §2.2 всё ещё без именного представителя.
+  source_coverage_score: 0.40
+  confidence_by_horizon:
+    "2026-12-31": 0.30
+    "2027-06-30": 0.30
+    "2027-12-31": 0.30
+    "2028-12-31": 0.22
+  anchor_share: 1.00
+  camp_distribution: {monetary: 2, cost_push: 1, fiscal: 0, expectational: 0}
+  camp_coverage:
+    monetary: {status: covered, level: Dominant, sources: [cbr-official, sbercib]}
+    cost_push: {status: covered, level: Significant, sources: [renaissance-capital]}
+    fiscal: {status: gap, level: Significant, sources: []}
+    expectational: {status: gap, level: Minority, sources: []}
+  upstream_snapshot:
+    - factor: usdrub
+      central_estimate: "L1 DERIVED (unweighted median, 0 trust-weighted источников): 82.25 к 2026-12-31, ~86.5 (интерполяция) к 2027-06-30, 90.8 к 2027-12-31, 92.7 к 2028-12-31"
+      confidence: 0.40
+      forecast_date: 2026-09-17
+      source_file: "forecasts/usdrub-rate-2026-09-17.yaml"
+    - factor: brent
+      central_estimate: "$85/bbl к 2026-12-31; $77/bbl к 2027-06-30; ~$77.5/bbl к 2027-12-31; нет консенсуса к 2028-12-31"
+      confidence: 0.50
+      forecast_date: 2026-09-17
+      source_file: "forecasts/brent-price-2026-09-17.yaml"
+    - factor: budget_deficit_ru
+      central_estimate: "8.2 трлн ₽ (~3.6% ВВП) к 2026-12-31; структурный первичный дефицит 1.0% ВВП к 2027-12-31; 0.5% ВВП к 2028-12-31"
+      confidence: 0.40
+      forecast_date: 2026-09-17
+      source_file: "forecasts/budget-deficit-ru-2026-09-17.yaml"
+    - factor: urals_brent_discount
+      central_estimate: "$22/bbl к 2026-12-31, $15 к 2027-06-30, $14 к 2027-12-31, $12 к 2028-12-31"
+      confidence: 0.40
+      forecast_date: 2026-09-17
+      source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+    - factor: sanctions
+      central_estimate: "modal holding ~52% (2026-12-31) → ~46% (2027-06-30) → ~40% (2028-06-30) → ~37% (2028-12-31)"
+      confidence: 0.60
+      forecast_date: 2026-09-17
+      source_file: "forecasts/sanctions-russia-2026-28-2026-09-17.yaml"
+
+geopolitics_translation:
+  method: axis_dependent
+  source_scenario_matrix: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  axis: "conflict_intensity + sanctions_intensity (joint, D1 no_modal)"
+  distribution_used: true
+
+conditional_on_scenarios:
+  source_matrix: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  fact_anchor: { value: 6.3, as_of: "2026-09-07", source: "Rosstat via finance.mail.ru/Vedomosti" }
+  by_scenario:
+    A:
+      label: "Затяжная осада"
+      values:
+        "2026-12-31": { central: 7.6, range: [7.0, 8.2] }
+        "2027-06-30": { central: 5.8, range: [5.0, 6.5] }
+        "2027-12-31": { central: 5.2, range: [4.4, 6.0] }
+        "2028-12-31": { central: 5.6, range: [4.6, 6.6] }
+      provenance: inferred_from_content
+      coverage_quality: DERIVED
+      sources_used:
+        - source_id: sbercib
+          camp_weight: 0.25
+          reasoning: "Agnostic источник, скорректирован вверх: axis_x=HIGH (война продолжается) → устойчивый cost-push через топливо/логистику/НПЗ-атаки (подтверждено Ренессанс Капитал этого прогона)."
+    B:
+      label: "Война на расколотом фронте"
+      values:
+        "2026-12-31": { central: 6.7, range: [6.1, 7.3] }
+        "2027-06-30": { central: 4.6, range: [3.9, 5.3] }
+        "2027-12-31": { central: 4.1, range: [3.5, 4.8] }
+        "2028-12-31": { central: 4.2, range: [3.5, 5.0] }
+      provenance: inferred_from_content
+      coverage_quality: DERIVED
+      sources_used:
+        - source_id: sbercib
+          camp_weight: 0.25
+          reasoning: "Agnostic, умеренно вверх: axis_x=HIGH но axis_y=LOW (санкции фрагментируются) — частичное облегчение курса/импорта компенсирует часть cost-push."
+    C:
+      label: "Замороженный конфликт под давлением"
+      values:
+        "2026-12-31": { central: 6.5, range: [6.0, 7.0] }
+        "2027-06-30": { central: 4.3, range: [3.7, 4.9] }
+        "2027-12-31": { central: 4.0, range: [3.5, 4.5] }
+        "2028-12-31": { central: 4.0, range: [3.4, 4.6] }
+      provenance: inferred_from_content
+      coverage_quality: DERIVED
+      sources_used:
+        - source_id: sbercib
+          camp_weight: 0.7
+          reasoning: "SberCIB/ЦБ де-факто прогнозируют мир, близкий к статус-кво Sc-C (модальный сценарий на h6, 0.42) — Layer 1 практически совпадает с C по построению."
+        - source_id: cbr-official
+          camp_weight: 0.3
+          reasoning: "Официальная коммуникация ЦБ описывает постепенную стабилизацию без явной геополитической премии — ближе всего к Sc-C."
+    D:
+      label: "Большая сделка и разрядка"
+      values:
+        "2026-12-31": { central: 5.9, range: [5.3, 6.5] }
+        "2027-06-30": { central: 3.9, range: [3.2, 4.6] }
+        "2027-12-31": { central: 3.6, range: [3.0, 4.2] }
+        "2028-12-31": { central: 3.6, range: [3.0, 4.2] }
+      provenance: inferred_from_content
+      coverage_quality: DERIVED
+      sources_used:
+        - source_id: sbercib
+          camp_weight: 0.25
+          reasoning: "Agnostic, вниз: axis_x=LOW + axis_y=LOW (перемирие + снятие санкций) → укрепление рубля и снижение импортных издержек (cross-effects usdrub/imoex relief-ралли)."
+  marginal:
+    method: linear
+    values:
+      "2026-12-31": { central: 6.72 }
+      "2027-06-30": { central: 4.43 }
+      "2027-12-31": { central: 4.13 }
+      "2028-12-31": { central: 4.32 }
+  coherence_diagnostic:
+    "2026-12-31": { layer1_marginal: 6.5, layer2_marginal: 6.72, divergence_pct: 3.4, severity: LOW }
+    "2027-06-30": { layer1_marginal: 4.2, layer2_marginal: 4.43, divergence_pct: 5.5, severity: MEDIUM }
+    "2027-12-31": { layer1_marginal: 4.0, layer2_marginal: 4.13, divergence_pct: 3.3, severity: LOW }
+    "2028-12-31":
+      layer1_marginal: 4.0
+      layer2_marginal: 4.32
+      divergence_pct: 8.0
+      severity: MEDIUM
+      warning: >
+        Layer 2 систематически выше Layer 1 на дальних горизонтах — Layer 1 держится на одном
+        источнике (SberCIB), не взвешивающем tail-риск Sc-A/B, тогда как Layer 2 явно их закладывает
+        через матрицу. Не критично (MEDIUM < 15%), но не игнорировать при следующем ревью.
+  one_sided_cone:
+    "2026-12-31": { one_sided_cone: false, cone_side: mixed }
+    "2027-06-30":
+      one_sided_cone: true
+      cone_side: down
+      counter_world_reason: >
+        Все 4 сценария дают дезинфляцию от текущего спота 6.3% (2026-09-07): инфляция измеряется
+        г/г от уже пройденной высокой базы 2026 года, и база механически тянет YoY вниз к 2027-2028
+        даже при продолжении войны (Sc-A уже закладывает топливный/НПЗ-шок). Мир «ускорение выше
+        6.3% на этом горизонте» требовал бы НОВОГО дискретного шока сверх интенсивности
+        конфликта/санкций — оси матрицы geopolitics-ru-west его не описывают, поэтому не добавлен
+        как 5-й сценарий.
+    "2027-12-31": { one_sided_cone: true, cone_side: down, counter_world_reason: "См. 2027-06-30 — тот же базовый эффект, выражен сильнее." }
+    "2028-12-31": { one_sided_cone: true, cone_side: down, counter_world_reason: "См. 2027-06-30." }
+
+fca_stats:
+  "2026-12-31": { kind: level, unit: percent_annual, l1_weighted: 6.5, l1_unweighted: 6.5, l2_ev: 6.72, p10: 6.5, p90: 6.5 }
+  "2027-06-30": { kind: level, unit: percent_annual, l1_weighted: 4.2, l1_unweighted: 4.35, l2_ev: 4.43, p10: 4.2, p90: 4.2 }
+  "2027-12-31": { kind: level, unit: percent_annual, l1_weighted: 4.0, l1_unweighted: 4.0, l2_ev: 4.13, p10: 4.0, p90: 4.0 }
+  "2028-12-31": { kind: level, unit: percent_annual, l1_weighted: 4.0, l1_unweighted: 4.0, l2_ev: 4.32, p10: 4.0, p90: 4.0 }
+
+sources_snapshot:
+  - id: cbr-official
+    name: "ЦБ РФ (официальный среднесрочный прогноз)"
+    values: { "2026-12-31": 6.5, "2027-06-30": 4.5, "2027-12-31": 4.0, "2028-12-31": 4.0 }
+    applied_level: LOW
+    matched_subdomain: "ru-inflation (12+ мес)"
+    published: "2026-08-05"
+    url: "https://www.kommersant.ru/doc/8863243"
+    audited: true
+  - id: sbercib
+    name: "SberCIB Investment Research"
+    values: { "2026-12-31": 6.5, "2027-06-30": 4.2, "2027-12-31": 4.0, "2028-12-31": 4.0 }
+    applied_level: null
+    matched_subdomain: null
+    fallback_medium: true
+    published: "2026-09-10"
+    url: "https://sbercib.ru/publication/inflyatsiya-v-rossii-v-2026-godu-dinamika-i-prognozi"
+    audited: true
+  - id: cbr-macro-survey-meta
+    name: "Макроэкономический опрос Банка России (~31 экономист, мета-агрегат)"
+    values: { "2026-12-31": 6.6, "2027-12-31": 4.6, "2028-12-31": 4.1 }
+    role: "cross-check only, not in consensus (aggregate of other analysts)"
+    published: "2026-09-02"
+    url: "https://www.vedomosti.ru/economics/news/2026/09/02/1225735-prognoz-po-inflyatsii"
+  - id: renaissance-capital
+    name: "Ренессанс Капитал"
+    values_qualitative: "~6.3% near-term (Q3 2026), ускорение риска выше июльского прогноза ЦБ"
+    audited: false
+    camp: cost_push
+    published: "2026-09-07"
+    url: "https://ru.themoscowtimes.com/2026/09/07/mnenie-rost-riskov-i-prodolzhitelnoe-vybytie-moschnostey-zastavyat-tsbr-proyavit-ostorozhnost-renessans-kapital-a205448"
+  - id: vtb-moi-investitsii
+    name: "ВТБ Мои Инвестиции"
+    values: { "2026-12-31": 5.5 }
+    published: "2025-12-03"
+    status: excluded_stale
+    stale_reason: "публикация старше 6 мес. на момент прогноза (2026-09-17); нет свежей позиции"
+    url: "https://www.rbc.ru/quote/news/article/69302c4a9a7947c6f4a7fd28"
+
+not_covered_camps:
+  - camp: fiscal
+    level: Significant
+    attempted_sources: ["Ренессанс Капитал (частичное упоминание бюджетной неопределённости)", "IMF Article IV Russia (не найден свежий 2026)", "Bloomberg Economics RU (не найден)"]
+    recommendation: "целевой поиск в следующем запуске: Bloomberg Economics Russia coverage, IMF Article IV Russia 2026"
+  - camp: expectational
+    level: Minority
+    attempted_sources: ["БКС (bcs-express.ru — fetch не удался, SSL/robots)", "Альфа-Капитал (alfabank.ru — fetch не удался, SSL/robots)"]
+    recommendation: "повторить с иным транспортом (кэш/агрегатор) в следующем запуске; данные ЦБ по ожиданиям (13.7% медиана) сами по себе не FCA-источник"
+
+reviews:
+  interval_months: 3
+  next_due: 2026-12-17
+  last_completed: null
+  history: []
+
+monitoring:
+  - id: cbr-key-rate-oct
+    description: "Решение ЦБ РФ по ключевой ставке на ближайшем заседании (октябрь 2026)"
+    source: "https://www.cbr.ru/dkp/mp_dec/"
+    threshold: "снижение >25 б.п. = дезинфляционный сигнал (Sc-C/D); пауза/повышение = проинфляционный (Sc-A/B)"
+    check_date: 2026-10-24
+    impact: mixed
+    severity: high
+    auto_checkable: true
+    side: both
+  - id: fuel-market-recovery
+    description: "Восстановление производства бензина к докризисному уровню после атак на НПЗ"
+    source: "https://ru.themoscowtimes.com/2026/09/07/mnenie-rost-riskov-i-prodolzhitelnoe-vybytie-moschnostey-zastavyat-tsbr-proyavit-ostorozhnost-renessans-kapital-a205448"
+    threshold: "восстановление >90% от среднего потребления к 2026-12-31"
+    check_date: 2026-12-31
+    impact: invalidates
+    severity: high
+    auto_checkable: false
+    side: up
+  - id: tariff-indexation-oct
+    description: "Индексация тарифов ЖКХ, перенесённая на октябрь 2026 (+0.6–0.7 п.п.)"
+    source: "https://ru.themoscowtimes.com/2026/09/07/mnenie-rost-riskov-i-prodolzhitelnoe-vybytie-moschnostey-zastavyat-tsbr-proyavit-ostorozhnost-renessans-kapital-a205448"
+    threshold: "фактическая индексация состоялась в заявленном размере в октябре 2026"
+    check_date: 2026-10-31
+    impact: supports
+    severity: medium
+    auto_checkable: true
+    side: up
+  - id: household-inflation-expectations
+    description: "Медиана инфляционных ожиданий населения (опрос ЦБ, следующая публикация)"
+    source: "https://www.cbr.ru/analytics/dkp/inflationary_expectations/"
+    threshold: "рост выше 14% = усиление институционально-ожиданческого канала"
+    check_date: 2026-10-15
+    impact: invalidates
+    severity: medium
+    auto_checkable: true
+    side: up
+
+final_audit:
+  due: 2028-12-31
+  status: pending

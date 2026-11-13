@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-10-28T0000-POSI",
+  "key": "POSI",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-11-27",
+  "note": "Тезис жив (отгрузки 1П +45%, АКРА AA(RU), ND/EBITDA 0,46× в 1К), но цена +12% за 12 дней (1 112,8→1 250,8 ₽), +25% к входу IE, отчёт 9М 10.11, итог года решает 4К (гайденс 4К +4…+27%). Не открывать д…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-10-28T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

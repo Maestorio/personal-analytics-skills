@@ -1,0 +1,132 @@
+schema_version: 1
+type: scenario-events
+scenario_ref: scenario-usd-rub-sept-2026-2026-04-30.md
+status: resolved
+
+matrix:
+  date: 2026-04-30
+  horizon: 2026-09-01
+  domain: ru-macro
+  topic: usd-rub-sept-2026
+  axis_x: "Нефтяная конъюнктура: Brent $72+ (A) vs Brent <$65 (B)"
+  axis_y: "Санкционный режим: Статус-кво/смягчение (C) vs Новый ударный пакет (D)"
+
+scenario_triggers:
+  - scenario_id: A
+    label: "Нефтяной щит"
+    probability: 0.25
+    enabling_conditions:
+      - "Brent держится выше $72/bbl в июне–августе 2026"
+      - "OFAC не вводит SDN против китайских банков с российской экспозицией"
+      - "ЦБ снижает ставку умеренно (−150–200 б.п. к сентябрю)"
+    leading_indicators:
+      - id: brent-above-72-june
+        description: "Brent spot выше $72/bbl в июне 2026 (EIA weekly)"
+        threshold: "Brent > $72/bbl по состоянию на 30 июня"
+        check_date: 2026-06-30
+        auto_checkable: true
+      - id: no-ofac-sdn-july
+        description: "Нет SDN-листинга китайских банков с рос. экспозицией к июлю"
+        threshold: "0 новых SDN среди китайских банков (Treasury.gov)"
+        check_date: 2026-07-01
+        auto_checkable: false
+      - id: cbr-moderate-cut-june
+        description: "ЦБ снижает ставку не более 200 б.п. суммарно к июлю"
+        threshold: "Ключевая ставка ≥ 19% после заседания 2026-06-20"
+        check_date: 2026-06-20
+        auto_checkable: true
+
+  - scenario_id: B
+    label: "Пробитый щит"
+    probability: 0.25
+    enabling_conditions:
+      - "Brent держится выше $72/bbl"
+      - "OFAC вводит SDN против 3+ китайских банков-посредников РФ"
+      - "Дисконт Urals расширяется до $15+ от Brent"
+    leading_indicators:
+      - id: ofac-sdn-china-3plus
+        description: "SDN-листинг 3+ китайских банков за один пакет (Treasury.gov)"
+        threshold: "≥3 новых SDN среди китайских банков"
+        check_date: 2026-08-01
+        auto_checkable: false
+      - id: urals-discount-15
+        description: "Дисконт Urals к Brent расширяется выше $15/bbl (Reuters/Argus)"
+        threshold: "Urals discount > $15/bbl устойчиво >2 недель"
+        check_date: 2026-07-30
+        auto_checkable: false
+      - id: moex-usd-rub-premium
+        description: "USD/RUB на МосБирже с устойчивой премией к рынку NDF"
+        threshold: "Спред МосБиржа vs NDF > 3 руб. в течение 3+ торговых дней"
+        check_date: 2026-07-30
+        auto_checkable: false
+
+  - scenario_id: C
+    label: "Медленный дрейф"
+    probability: 0.25
+    enabling_conditions:
+      - "Brent падает ниже $65/bbl из-за разлада ОПЕК+ или слабости спроса"
+      - "Санкционный режим без новых ударных мер"
+      - "Торговый профицит РФ сжимается до $4–7 млрд/мес."
+    leading_indicators:
+      - id: brent-below-65-june
+        description: "Brent spot ниже $65/bbl (EIA weekly)"
+        threshold: "Brent < $65/bbl по состоянию на 30 июня"
+        check_date: 2026-06-30
+        auto_checkable: true
+      - id: trade-balance-below-7
+        description: "Торговый баланс РФ ниже $7 млрд/мес. (ЦБ)"
+        threshold: "Торговый баланс < $7 млрд за май или июнь 2026"
+        check_date: 2026-07-15
+        auto_checkable: true
+      - id: opec-output-increase
+        description: "ОПЕК+ объявляет повышение добычи на 500+ тыс. б/д"
+        threshold: "Официальное решение ОПЕК+ об увеличении добычи на ≥500 тыс. б/д"
+        check_date: 2026-07-01
+        auto_checkable: false
+
+  - scenario_id: D
+    label: "Двойной шок"
+    probability: 0.25
+    enabling_conditions:
+      - "Brent устойчиво ниже $62/bbl в течение 3+ недель"
+      - "SDN-листинг 3+ китайских банков ИЛИ нефтяные ограничения третьих стран"
+      - "Торговый профицит РФ близок к нулю или отрицательный"
+    leading_indicators:
+      - id: brent-below-60-sustained
+        description: "Brent ниже $60/bbl устойчиво >3 недель (EIA weekly)"
+        threshold: "Brent < $60/bbl за 3 последовательных недели"
+        check_date: 2026-07-30
+        auto_checkable: true
+      - id: cbr-emergency-signal
+        description: "Внеплановое заседание ЦБ РФ или заявление о повышенной волатильности (cbr.ru)"
+        threshold: "Пресс-релиз cbr.ru о внеплановом заседании или экстренной мере"
+        check_date: 2026-09-01
+        auto_checkable: false
+      - id: usd-rub-above-95
+        description: "USD/RUB spot МосБиржа пробивает 95 и держится 3+ дня подряд"
+        threshold: "USD/RUB > 95 за 3+ торговых дня подряд"
+        check_date: 2026-09-01
+        auto_checkable: true
+
+reviews:
+  interval_months: 2
+  next_due: 2026-09-01
+  last_completed: 2026-07-07
+  history:
+    - date: 2026-07-07
+      method: fca
+      note: >-
+        FCA-ревью (revise-memory-remote). Спот USD/RUB 77.96 (ЦБ, 07.07). Взвешенного
+        consensus нет — все источники по usd-rub = IGNORE/неаудированы (вес 0);
+        невзвеш. медиана 90, спред 77 (БКС)–96 (SberCIB пессим.), Эйлер 94.3, ВТБ 80.
+        Модальный сдвиг: апрельский центр 85–90 теперь на верхней границе — при споте 78
+        квадранты «сильный рубль» (A+C 83–88, B+C) вероятнее равновесных 0.25; хвост 95+ =
+        SberCIB/Эйлер. Полный re-weight вероятностей — через scenario-builder (не переписан здесь).
+
+final_audit:
+  due: 2026-09-01
+  status: done
+  completed: 2026-10-29
+  result: "Реализовался A «Нефтяной щит» (ближайший квадрант, с оговоркой). Факт USD/RUB 86,3793 (ЦБ, 01.09.2026) — в диапазоне 85–90, который .md связывает с A. Нефть: Brent > $72 (авг ~$90, сент avg ~$114 по monitor-report). Санкции: SDN на 3+ китайских банка за май–август не найдено (OFAC 30.07 — 5 лиц КСИР/Mahan Air, из КНР две логистические компании; ВТБ переобозначен 14.09 по иранской программе — вне окна и не китайский банк) → B и D по санкционной ветке исключены. Оговорка: enabling-условие A «ставка ≥19% после 20.06» не выполнено (ставка 14,25% после 19.06, 14,00% с 24.07), т.е. ЦБ снижал заметно быстрее заложенного; отсутствие SDN установлено поиском, а не полной сверкой списка OFAC. Вероятность A в матрице была 0.25. Брент-драйвер реализовался сильнее ожидаемого, поэтому попадание по курсу нельзя считать подтверждением всей causal-цепочки."
+  realized_scenario: A
+  prior_probability: 0.25

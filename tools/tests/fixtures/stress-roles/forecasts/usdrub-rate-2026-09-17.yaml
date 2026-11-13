@@ -1,0 +1,284 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: usdrub-rate-2026-09-17.md
+status: active
+replaces:
+  - usdrub-rate-2026-07-29
+
+forecast:
+  date: 2026-09-17
+  horizon: 2028-12-31
+  horizons:
+    - 2026-12-31
+    - 2027-06-30
+    - 2027-12-31
+    - 2028-12-31
+  domain: ru-macro
+  topic: usdrub-rate
+  method: fca
+  unit: "RUB/USD"
+  basis: "Официальный курс ЦБ РФ, USD/RUB, точка на дату горизонта (кроме ЦБ-опроса — среднегодовые, methodological caveat см. .md)"
+  central_estimate: "USD/RUB L1 DERIVED (unweighted median, 0 trust-weighted источников): 82.25 к 2026-12-31, ~86.5 (интерполяция) к 2027-06-30, 90.8 к 2027-12-31, 92.7 к 2028-12-31; L2 EV 83.7/86.4/91.5/93.5 (by_scenario унаследован пропорционально из 07-29, non-monotone responder — свежая сценарная FCA не проводилась)"
+  confidence: 0.40
+  source_coverage_score: 0.40
+  confidence_by_horizon:
+    "2026-12-31": 0.30
+    "2027-06-30": 0.30
+    "2027-12-31": 0.30
+    "2028-12-31": 0.23
+  anchor_share: null
+  upstream_snapshot:
+    - factor: brent
+      central_estimate: "$85/bbl к 2026-12-31; L2 EV 75.4/76.65 на 2027-06-30/2027-12-31"
+      confidence: 0.50
+      forecast_date: 2026-09-17
+      source_file: "forecasts/brent-price-2026-09-17.yaml"
+    - factor: urals_discount
+      central_estimate: "$22/$15/$14/$12 по горизонтам"
+      confidence: 0.40
+      forecast_date: 2026-09-17
+      source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+    - factor: sanctions_intensity
+      central_estimate: "holding модальна 52%→46%→40%→37%"
+      confidence: 0.60
+      forecast_date: 2026-09-17
+      source_file: "forecasts/sanctions-russia-2026-28-2026-09-17.yaml"
+    - factor: budget_deficit_ru
+      central_estimate: "8.2 трлн руб к 2026-12-31; 1.0%/0.5% ВВП структурный 2027/2028"
+      confidence: 0.40
+      forecast_date: 2026-09-17
+      source_file: "forecasts/budget-deficit-ru-2026-09-17.yaml"
+  notes:
+    - "0 источников с trust-весом >0 по usd-rub-forecast (все аудированные — IGNORE: CBR, SberCIB; остальные не аудированы) — L1 = unweighted median 4 outliers, не weighted median"
+    - "2027-06-30: 0 источников с прямой точкой — значение получено линейной интерполяцией между 2026-12-31 и 2027-12-31, индикативно"
+    - "USD/RUB задокументирован в матрице как non-monotone responder по обеим осям — Layer 2 не пересчитан заново по сценариям, коэффициенты (A×1.098/B×0.914/C×1.009/D×0.981) перенесены из usdrub-rate-2026-07-29.yaml, усреднённые по двум прошлым горизонтам с явной сценарной разбивкой"
+    - "ЦБ-опрос — среднегодовые значения (не точка на конец года), базис не совпадает со остальными источниками — methodological caveat, не усреднено напрямую без оговорки"
+    - "l2_informative: false — by_scenario полностью производный от L1 через унаследованные коэффициенты, не несёт независимого сигнала о сценарных хвостах"
+
+isolated: false
+isolated_reason: null
+
+conditional_on_scenarios:
+  source_matrix: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  scenario_id_format: short
+  unit: "RUB/USD"
+  l2_informative: false
+
+  fact_anchor:
+    value: 84.1732
+    as_of: 2026-09-17
+    source: "Банк России, официальный курс (установлен 2026-09-16 на 2026-09-17)"
+
+  one_sided_cone: true
+  cone_side:
+    "2026-12-31": two_sided
+    "2027-06-30": two_sided
+    "2027-12-31": two_sided
+    "2028-12-31": down
+  counter_world_reason: >-
+    На горизонте 2028-12-31 ни один из четырёх сценариев матрицы, включая самый мирный (Sc-D,
+    "Большая сделка и разрядка"), не предполагает курс крепче сегодняшнего спота 84.17 — минимум
+    диапазона (Sc-B, 84.73) уже выше факта. Все 4 найденных институциональных источника (ЦБ-опрос,
+    SberCIB, Т-Инвестиции, Альфа-Банк) без исключения прогнозируют дальнейшее ослабление рубля, а не
+    стабилизацию. Встречный мир (рубль крепче 84.17 к 2028) институционально не представлен в
+    6-месячном окне поиска; структурные факторы (дефицит бюджета, санкционный навес, инфляционный
+    дифференциал ставок) действуют во всех четырёх сценариях одновременно, различается только темп.
+    На горизонтах 2026–2027 конус двусторонний — факт пока внутри диапазона сценариев.
+
+  by_scenario:
+    A:
+      label: "Затяжная осада (tightening)"
+      values:
+        "2026-12-31": { central: 90.3, range: [80, 100] }
+        "2027-06-30": { central: 95.0, range: [82, 108] }
+        "2027-12-31": { central: 99.7, range: [85, 115] }
+        "2028-12-31": { central: 101.8, range: [86, 120] }
+      provenance: derived_from_marginal
+      reasoning_summary: >
+        Коэффициент ×1.098 к L1 marginal, унаследован (усреднён по двум горизонтам) из
+        usdrub-rate-2026-07-29.yaml — сценарная привязка не пересобиралась заново в этом запуске.
+      sources_used: []
+      coverage_quality: DERIVED
+    B:
+      label: "Война на расколотом фронте (fragmentation)"
+      values:
+        "2026-12-31": { central: 75.2, range: [66, 84] }
+        "2027-06-30": { central: 79.1, range: [68, 90] }
+        "2027-12-31": { central: 83.0, range: [70, 96] }
+        "2028-12-31": { central: 84.7, range: [70, 100] }
+      provenance: derived_from_marginal
+      reasoning_summary: >
+        Коэффициент ×0.914, унаследован из 07-29. Non-monotone: несмотря на продолжение войны, эта
+        ветка даёт САМЫЙ крепкий рубль из всех четырёх сценариев (ниже, чем даже Sc-D) — унаследованная
+        форма из предыдущего снапшота, не пересчитана; см. предупреждение о non-monotone responder.
+      sources_used: []
+      coverage_quality: DERIVED
+    C:
+      label: "Замороженный конфликт под давлением (holding → relief)"
+      values:
+        "2026-12-31": { central: 83.0, range: [72, 94] }
+        "2027-06-30": { central: 87.3, range: [75, 100] }
+        "2027-12-31": { central: 91.6, range: [78, 106] }
+        "2028-12-31": { central: 93.5, range: [79, 110] }
+      provenance: derived_from_marginal
+      reasoning_summary: "Коэффициент ×1.009, унаследован из 07-29 — близко к marginal."
+      sources_used: []
+      coverage_quality: DERIVED
+    D:
+      label: "Большая сделка и разрядка (relief)"
+      values:
+        "2026-12-31": { central: 80.7, range: [70, 92] }
+        "2027-06-30": { central: 84.9, range: [73, 98] }
+        "2027-12-31": { central: 89.1, range: [76, 104] }
+        "2028-12-31": { central: 90.9, range: [77, 108] }
+      provenance: derived_from_marginal
+      reasoning_summary: >
+        Коэффициент ×0.981, унаследован из 07-29. Non-monotone: снятие санкций не даёт самого крепкого
+        рубля из четырёх сценариев (это Sc-B) — согласуется с явным bimodal-предупреждением матрицы
+        (разморозка активов + отток может частично компенсировать приток капитала).
+      sources_used: []
+      coverage_quality: DERIVED
+
+  marginal:
+    method: linear
+    modal_scenario_id: none
+    values:
+      "2026-12-31": { central: 83.7, range: [66, 100] }
+      "2027-06-30": { central: 86.4, range: [68, 108] }
+      "2027-12-31": { central: 91.5, range: [70, 115] }
+      "2028-12-31": { central: 93.5, range: [70, 120] }
+    aggregation_formula: "weighted_mean"
+
+  coverage_diagnostic:
+    per_scenario:
+      A: { sources_used: 0, confidence_level: DERIVED }
+      B: { sources_used: 0, confidence_level: DERIVED }
+      C: { sources_used: 0, confidence_level: DERIVED }
+      D: { sources_used: 0, confidence_level: DERIVED }
+    asymmetry_warning: "0 источников со сценарной атрибуцией в этом запуске — весь by_scenario перенесён из предыдущего снапшота (07-29), третий раз подряд без переоценки в семье usdrub/urals-discount"
+    dominant_implicit_world: C
+
+coherence_diagnostic:
+  layer1_marginal: 82.25
+  layer2_marginal: 83.7
+  divergence_pct: 1.8
+  severity: LOW
+  warning: >-
+    §18: by_scenario полностью DERIVED из L1 через унаследованные коэффициенты — низкое расхождение
+    частично тавтологично (L2 построен из L1), а не независимое подтверждение согласованности.
+  by_horizon:
+    "2026-12-31": { layer1_marginal: 82.25, layer2_marginal: 83.7, divergence_pct: 1.8, severity: LOW }
+    "2027-06-30": { layer1_marginal: 86.53, layer2_marginal: 86.4, divergence_pct: 0.2, severity: LOW, note: "L1 сам интерполирован — расхождение малоинформативно" }
+    "2027-12-31": { layer1_marginal: 90.8,  layer2_marginal: 91.5, divergence_pct: 0.8, severity: LOW }
+    "2028-12-31": { layer1_marginal: 92.7,  layer2_marginal: 93.5, divergence_pct: 0.9, severity: LOW }
+
+fca_stats:
+  "2026-12-31":
+    kind: level
+    unit: "RUB/USD"
+    l1_weighted: null   # TODO: 0 trust-weighted источников
+    l1_unweighted: 82.25
+    l2_ev: 83.7
+    p10: 75.2
+    p90: 90.3
+  "2027-06-30":
+    kind: level
+    unit: "RUB/USD"
+    l1_weighted: null
+    l1_unweighted: null   # 0 прямых источников на этот горизонт — 86.53 индикативная интерполяция, см. notes, не FCA-точка
+    l2_ev: 86.4
+    p10: null
+    p90: null
+  "2027-12-31":
+    kind: level
+    unit: "RUB/USD"
+    l1_weighted: null
+    l1_unweighted: 90.8
+    l2_ev: 91.5
+    p10: 86.6
+    p90: 95.0
+  "2028-12-31":
+    kind: level
+    unit: "RUB/USD"
+    l1_weighted: null
+    l1_unweighted: 92.7
+    l2_ev: 93.5
+    p10: 92.7
+    p90: 92.7
+
+reviews:
+  interval_months: 3
+  next_due: 2026-12-17
+  last_completed: null
+  history: []
+
+monitoring:
+  - id: budget-2027-29-fx-assumption
+    description: "Проект федерального бюджета 2027-2029 (ожидается конец сентября 2026) — заложенный курс рубля в бюджетном правиле даст прямую позицию 'управляемо-курсовой' школы, сейчас не покрытой"
+    source: "https://www.m24.ru/news/09092026/939457"
+    threshold: "публикация параметров курса в пояснительной записке к проекту бюджета"
+    check_date: 2026-09-30
+    impact: mixed
+    severity: high
+    auto_checkable: false
+    side: both
+  - id: usdrub-above-fact-anchor-2028
+    description: "USD/RUB опускается ниже сегодняшнего спота (84.17) на горизонте 2028 — пробитие одностороннего конуса вверх по рублю"
+    source: "https://www.cbr.ru/currency_base/daily/"
+    threshold: "официальный курс ЦБ РФ < 84.17 устойчиво (месячная средняя) в любой момент до 2028-12-31"
+    check_date: 2028-12-31
+    impact: invalidates
+    severity: high
+    auto_checkable: true
+    side: down
+  - id: alfa-tinkoff-tier1-citation
+    description: "Проверка цитирования Альфа-Банка/Т-Инвестиций по usd-rub Tier-1 агрегатором или ведущим деловым изданием — предпосылка для рекомендации аудита"
+    source: "n/a"
+    threshold: "найдено цитирование в Reuters/Bloomberg/РБК/Ведомости по теме курса рубля"
+    check_date: 2026-12-17
+    impact: mixed
+    severity: medium
+    auto_checkable: false
+    side: both
+
+assumptions:
+  - id: unweighted-median-substitute
+    text: "Unweighted median 4 найденных прогнозов — приемлемая замена weighted median при 0 trust-weighted источников по usd-rub-forecast"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+  - id: cbr-survey-basis-mismatch
+    text: "Среднегодовые значения ЦБ-опроса сопоставимы с точечными прогнозами брокеров без явной поправки на базис"
+    robustness: LOW
+    sensitivity: high
+    auto_checkable: false
+  - id: scenario-ratios-carried-forward-3x
+    text: "Коэффициенты by_scenario, перенесённые из 07-29 (третий раз подряд без переоценки в семье usdrub/urals), всё ещё отражают актуальную нелинейную чувствительность курса к осям матрицы"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+  - id: linear-scaling-despite-nonmonotone
+    text: "Линейное масштабирование L1→L2 фиксированными коэффициентами допустимо, несмотря на явное non-monotone предупреждение матрицы по обеим осям для usdrub"
+    robustness: LOW
+    sensitivity: high
+    auto_checkable: false
+
+final_audit:
+  due: 2028-12-31
+  status: pending
+
+outcome_log:
+  - resolve_date: 2026-12-31
+    logged_at: 2026-09-17
+    record_type: horizon_resolve
+    kind: level
+    forecast_l1_weighted: null
+    forecast_l1_unweighted: 82.25
+    forecast_l2_ev: 83.7
+    p10_p90: [75.2, 90.3]
+    confidence_at_forecast: 0.30
+    actual: null
+    in_p10_p90: null
+    error_pct: null
+    actual_source: null
+    shock_flag: none

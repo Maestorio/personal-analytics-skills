@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-06-29T0000-SBERP",
+  "key": "SBERP",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-07-17",
+  "note": "Time-gate 17.07: HOLD до отсечки → TRIM до 8% после (основной срез связки, цель сумм. 19%). Директива пользователя 29.06.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-06-29T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

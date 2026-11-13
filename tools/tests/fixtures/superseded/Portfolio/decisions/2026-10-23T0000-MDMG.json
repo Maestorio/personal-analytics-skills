@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-10-23T0000-MDMG",
+  "key": "MDMG",
+  "verdict": "TRIM",
+  "target_pct": null,
+  "review_by": "2026-11-06",
+  "note": "Подтверждаю срез до плана 5,0% L2 (24 акции, ≈92 400 ₽) после реестра 19.10. 1П2026: выручка +28,8%, но чистая прибыль +5,1% (чистая маржа ≈ −4,8 пп), дивиденд 38 ₽ против 42 ₽ г/г. Стресс-EV +1,8% <…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-10-23T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-10-28T0000-PRMD",
+  "key": "PRMD",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-12-12",
+  "note": "1П2026: выручка +76%, EBITDA +76%, ЧП +83%; но FCF −4,5 млрд, чистый долг 25,1→33,3 млрд, ND/EBITDA 1,79×. Гайденс маржи EBITDA 45% требует маржу 2П ≈52% (2П2025 ≈42%). Стресс-EV h12 +1,8% < книга +4…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-10-28T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

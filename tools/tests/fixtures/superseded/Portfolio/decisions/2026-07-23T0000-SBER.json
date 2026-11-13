@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-23T0000-SBER",
+  "key": "SBER",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-09-06",
+  "note": "Div-capture 17.07 закрыт (дивиденд 37.64 зафиксирован, реестр 20.07). После гэпа SBER ~11% L2 = цель — отдельного среза не требует, срез связки приходится на SBERP. HOLD anchor; фундаментал HIGH (РПБ…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "owner",
+  "recorded_at": "2026-07-23T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-05-15T0001-UPRO",
+  "key": "UPRO",
+  "verdict": "TRIM",
+  "target_pct": null,
+  "review_by": "2026-05-29",
+  "note": "Forward-тезис мёртв (Mode 8 deep analysis 2026-05-15): (1) 83.73% акций Uniper SE во временном управлении Росимущества с 25.04.2023 (указ Президента №302); (2) дивиденды приостановлены ≥3 года; (3) U…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-05-15T00:01:00+03:00",
+  "recorded_at_estimated": true
+}

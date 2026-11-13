@@ -1,0 +1,517 @@
+schema_version: 2
+type: weekly-stocks-review
+review_date: '2026-10-08'
+recorded_at: "2026-10-08T00:00:00+03:00"
+recorded_at_estimated: true
+horizons:
+- 6
+- 12
+- 24
+horizon_ends:
+  h6: '2027-04-30'
+  h12: '2027-10-31'
+  h24: '2028-10-31'
+primary_horizon: 12
+horizon_mode: rolling
+snapshot_id: portfolio-2026-10-08.json
+snapshot_date: '2026-10-08'
+producer: claude-sonnet-5-5
+portfolio_summary:
+  total_excl_iis_rub: 3433406.69
+  total_stocks_value_rub: 1131816.57
+  stocks_share_actual_pct: 32.96
+  stocks_share_target_pct: 40.0
+  stocks_undershoot_pct: -7.04
+  stocks_undershoot_rub: -241711.83
+  active_ru_tickers: 21
+  ie_model_tickers: 16
+  ie_overlap: 14
+  ie_changes_count: 0
+  flagged_frozen_us_share_pct: 0.0
+  returns:
+    portfolio_xirr_total: 0.0321
+    portfolio_xirr_restricted: 0.0721
+    stocks_xirr: -0.021
+    stocks_pnl_rub: -55433.83
+  book_change_period:
+    from_rub: 14009617.23
+    to_rub: 1131800.9
+    change_pct: 2.22
+    note: 'Изменение стоимости книги акций 01.10 (закрытие) → 08.10 (снапшот 09:18
+      MSK): переоценка, выплат дивидендов в окне нет (ближайшие реестры 11–19.10).
+      IMOEX +2,48% (2 280,79 → 2 337,41 по закрытию 07.10), MCFTR в этом прогоне не
+      собирался. Книга отстала от индекса на 0,26 пп.'
+coverage:
+  tickers_total: 5
+  checked_this_run:
+  - SBER
+  - RENI
+  - YDEX
+  - MOEX
+  - T
+  - MDMG
+  - X5
+  - MBNK
+  - PLZL
+  - PRMD
+  - GMKN
+  - NVTK
+  - BTBR
+  - GLRX
+  carried_over:
+  - SBERP
+  - OZON
+  - CNRU
+  - MRKP
+  - DATA
+  - LSNGP
+  - LENT
+  not_checked: []
+  note: 'Свежий прогон 08.10: ярус 1 (4 haiku-агента) — SBER, RENI, MOEX, T, MBNK,
+    MDMG, PRMD, BTBR, GLRX, PLZL, GMKN, NVTK, MRKP, LSNGP, YDEX, OZON, X5, LENT, CNRU,
+    DATA + UPRO/WUSH (не в книге). Собственная проверка родителя первичкой: T (e-disclosure),
+    NVTK (novatek.ru), GLRX (текст решения), X5 (календарь x5.ru), MDMG, BTBR, YDEX
+    (ЦОД), PLZL/GMKN (налог), PRMD, RENI. Spot-аудит «тихих» строк ярус-1: X5, OZON,
+    LENT, CNRU, DATA, NVTK, MRKP, LSNGP — ложное «тихо» найдено по GLRX и X5; по остальным
+    находок нет. carried_over — SBERP (собственных новостей нет, фундамент общий со
+    SBER), OZON, LENT, CNRU, DATA, MRKP, LSNGP: фундаментальный блок перенесён из
+    обзоров 26.09/01.10, последняя реальная проверка 08.10 (новостей нет; у LENT найдена
+    только повестка СД 12.10). Аудит родителя не проводился: SBER, SBERP, RENI(частично),
+    MOEX, MBNK, PRMD(частично), YDEX(частично) — только ярус 1 и точечные поиски.
+    TMON и TPAY (денежные фонды) в per_stock не входят, как и в обзоре 01.10.'
+per_stock:
+  SBER:
+    sector: Финансовый
+    sector_ru: Финансовый
+    weight_real_pct: 10.9201
+    weight_user_planned_pct: 10.5
+    weight_ie_target_pct: 6.0
+    weight_divergence_vs_planned_pp: 0.4201
+    weight_divergence_vs_ie_pp: 4.9201
+    weight_divergence_pp: 4.9201
+    listing_age_quarters: 59
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 281.44
+    xirr: 0.1911
+    pnl_rub: 48539.34
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: HIGH
+    fundamental_score_basis: 'Сбербанк: 10,92% L2 (3,60% NAV; план 10,5%, IE 6,0%),
+      цена 281,44 ₽ (+1,91% к 01.10). Новое за окно (ярус 1, investmint): 06.10 ЦБ
+      оставил Сбербанк в списке системно значимых банков, внёс в реестр цифровых депозитариев
+      и выдал лицензию на допуск к крипторынку; кассационная жалоба Euroclear по иску
+      Сбербанка отложена на 18.11; выдача ипотеки в сентябре на годовом максимуме
+      (+65,8% к августу). Тезис прежний — Греф 22.09: рекордная прибыль 2026 и payout
+      50%, РПБУ 8М ЧП +19%, ROE 23,1%. Связка SBER+SBERP 19,63% при исключении 20,0%.'
+    fundamental_score_sources:
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://investmint.ru/sber/news/
+      label: 'investmint: новости Сбербанка 06.10 (ЦБ: СЗКО, реестр цифровых депозитариев,
+        крипто; суд Euroclear 18.11) — вторичный источник, sweep яруса 1'
+      accessed_date: '2026-10-08'
+    - url: https://www.dp.ru/a/2026/09/22/gref-podtverdil-plani-sbera
+      label: 'dp.ru: Греф подтвердил payout 50% (22.09) — свежих событий 25.09–01.10
+        нет'
+      accessed_date: '2026-10-01'
+    - url: https://abn.agency/2026/09/22/sberbank-zhdet-rekordnuyu-pribyl-v-2026-godu-i-50-dividendov/
+      label: 'ABN 22.09: Греф — рекордная прибыль 2026, 50% на дивиденды'
+      accessed_date: '2026-09-26'
+    - url: https://www.vbr.ru/novosti/investicii/2026/09/03/sberbank-dividendi-za-2026/
+      label: 'vbr.ru 03.09: консенсус дивиденда Сбера за 2026 ≈42 ₽'
+      accessed_date: '2026-09-19'
+    div_yield_12m_pct:
+      value: 15.21
+      ci_pct:
+      - 13.62
+      - 16.32
+    div_confidence: MEDIUM
+    div_basis: 'Дивиденд за 2026 выплачивается летом 2027 (в окне 12 мес). Консенсус
+      ≈42 ₽ (vbr.ru, 03.09) при payout 50% МСФО, подтверждённом Грефом 22.09 → 15,2%
+      к 276,48 ₽. Решение НС — весной 2027, дата не назначена. CI: 37,64 ₽ (прошлогодний)
+      … 45 ₽ (оценка IE).'
+    div_sources:
+    - url: https://abn.agency/2026/09/22/sberbank-zhdet-rekordnuyu-pribyl-v-2026-godu-i-50-dividendov/
+      label: 'Греф 22.09: 50% прибыли на дивиденды'
+      accessed_date: '2026-09-26'
+    - url: https://www.vbr.ru/novosti/investicii/2026/09/03/sberbank-dividendi-za-2026/
+      label: Консенсус ≈42 ₽
+      accessed_date: '2026-09-19'
+    - url: https://www.sberbank.com/ru/investor-relations/dividends
+      label: Дивидендная политика и история выплат Сбербанка
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 15.21
+      year2_yield_pct: 15.21
+      year2_basis: carry_forward
+      source: дивполитика 50% МСФО (Греф 22.09.2026) + консенсус ≈42 ₽ (vbr.ru 03.09)
+      as_of: '2026-10-01'
+      confidence: MEDIUM
+      note: Пересчитано на цену 01.10.2026 (276.17 ₽); политика не менялась.
+    catalyst:
+    - id: sber_div_2026_announce
+      kind: binary
+      trigger: Рекомендация СД по дивиденду за 2026 (ожидается весна 2027, дата не
+        назначена)
+      date_window: 2027-Q2
+      p: 0.85
+      upside_pct: 0.0
+      upside_ci_pct:
+      - -4.0
+      - 4.0
+      source: 'advisor estimate: дивполитика 50% ЧП МСФО, история выплат 2024–2026;
+        дата СД на 27.08.2026 не назначена'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - id: sber_rate_cycle_nim
+      kind: quantitative
+      trigger: 'Траектория КС: снижение ставки → расширение NIM и разворот стоимости
+        риска'
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 8.0
+        B: 14.0
+        C: 18.0
+        D: 6.0
+      upside_ci_by_scenario:
+        A:
+        - -6.0
+        - 20.0
+        B:
+        - 0.0
+        - 26.0
+        C:
+        - 4.0
+        - 30.0
+        D:
+        - -10.0
+        - 20.0
+      source: 'advisor estimate: чувствительность банковской маржи к КС 14,0% и траектории
+        снижения'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.75
+    advisor_verdict_basis: Тезис подтверждён, оснований для сделок нет. Перевес +0,42
+      пп — в гистерезисе; связка SBER+SBERP 19,63% у потолка 20% — добавлять некуда.
+      Держать на плане 10,5%.
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+  YDEX:
+    sector: Коммуникации и развлечения
+    sector_ru: Коммуникации и развлечения
+    weight_real_pct: 9.7596
+    weight_user_planned_pct: 10.0
+    weight_ie_target_pct: 10.0
+    weight_divergence_vs_planned_pp: -0.2404
+    weight_divergence_vs_ie_pp: -0.2404
+    weight_divergence_pp: -0.2404
+    listing_age_quarters: 9
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 3574.5
+    xirr: -0.0382
+    pnl_rub: -6573.68
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: HIGH
+    fundamental_score_basis: 'Яндекс: 9,76% L2 (план 10,0%), цена 3 574,5 ₽ (−0,91%
+      к 01.10; 08.10 утром −3,2% к закрытию 07.10 — 3 693,5 ₽). 08.10 атака БПЛА на
+      дата-центр «Яндекс ДЦ Сасово» (Рязанская обл.): пожар, затронута часть инфраструктуры,
+      часть сервисов может быть недоступна; компания устраняет последствия (РБК, РГ,
+      smart-lab). Масштаб ущерба и сроки восстановления не раскрыты. Допэмиссия 11
+      млн акций (≈2,8% капитала) под мотивацию 2027 — в ноябре (Интерфакс, Коммерсантъ,
+      29.09): ожидаема и перекрывается байбэком.'
+    fundamental_score_sources:
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://rg.ru/2026/10/08/reg-cfo/v-data-centre-iandeksa-v-riazanskoj-oblasti-nachalsia-pozhar-posle-ataki-bpla.html
+      label: 'РГ, 08.10: пожар в дата-центре Яндекса в Рязанской области после атаки
+        БПЛА'
+      accessed_date: '2026-10-08'
+    - url: https://amp.rbc.ru/rbcnews/rbcfreenews/6ac738965ecb179a64305326
+      label: 'РБК, 08.10: Яндекс предупредил о сбое в работе сервисов'
+      accessed_date: '2026-10-08'
+    - url: https://smart-lab.ru/blog/1360270.php
+      label: 'smart-lab, 08.10: инцидент в ЦОД Сасово затронул часть инфраструктуры'
+      accessed_date: '2026-10-08'
+    - url: https://www.interfax.ru/business/1119142
+      label: 'Интерфакс, 29.09: допэмиссия 11 млн акций в ноябре'
+      accessed_date: '2026-10-08'
+    - url: https://www.vedomosti.ru/investments/articles/2026/09/30/1232896-yandeks-provedet-dopemissiyu
+      label: 'Ведомости: одна допэмиссия 11 млн акций вместо квартальных (30.09)'
+      accessed_date: '2026-10-01'
+    - url: https://www.finam.ru/publications/item/yandeks-menyaet-podkhod-k-upravleniyu-programmoy-motivatsii-20260929-1715/
+      label: 'Финам: эффект допэмиссии минимизируется байбэком (29.09)'
+      accessed_date: '2026-10-01'
+    - url: https://1prime.ru/20260925/rynok-873697496.html
+      label: 'ПРАЙМ 25.09: рынок −1,66%, Яндекс −4,2%, Новатэк −3,2%, Полюс +1,9%'
+      accessed_date: '2026-09-26'
+    div_yield_12m_pct:
+      value: 6.1
+      ci_pct:
+      - 2.99
+      - 6.98
+    div_confidence: MEDIUM
+    div_basis: '110 ₽ за 1П2026 отсечены 21.09. Следующие 12 мес: финальный дивиденд
+      за 2026 (весна–лето 2027) и промежуточный за 1П2027 (сентябрь 2027, на краю
+      окна). Ожидание 2×110 ₽ = 6,1% к 3 599,5 ₽; решения СД ещё нет.'
+    div_sources:
+    - url: https://www.vedomosti.ru/investments/news/2026/09/15/1228886-yandeksa-dividendi
+      label: Дивиденд 110 ₽ за 1П2026
+      accessed_date: '2026-09-16'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 6.1
+      year2_yield_pct: 6.1
+      year2_basis: carry_forward
+      source: практика двух выплат в год (110 ₽ за 1П2026)
+      as_of: '2026-10-01'
+      confidence: MEDIUM
+      note: Пересчитано на цену 01.10.2026 (3607.5 ₽); политика не менялась.
+    catalyst:
+    - id: ydex_ecommerce_sustained_profit
+      kind: binary
+      trigger: Закрепление e-commerce в устойчивой прибыли (менеджмент ждёт на горизонте
+        12 мес)
+      date_window: 2026-Q4..2027-Q3
+      p: 0.6
+      upside_pct: 14.0
+      upside_ci_pct:
+      - 2.0
+      - 26.0
+      source: https://yastatic.net/s3/ir-docs/docs/2026/q2/9616f5e520b9c0d999be8066069d154d/2Q26_Press%20Release_RUS_8066.pdf
+        — сегментные результаты Q2 2026
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: ydex_marketplace_warehouse_strike
+      kind: binary
+      trigger: Прямые удары БПЛА по складам Яндекс Маркета (прецеденты по WB и Ozon
+        уже реализованы)
+      date_window: 2026-Q3..2027-Q2
+      p: 0.35
+      downside_pct: 12.0
+      downside_ci_pct:
+      - 4.0
+      - 25.0
+      source: 'advisor estimate: перенос реализованного сценария Ozon (22–24.08.2026)
+        на сопоставимую складскую сеть'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: D
+    - id: ydex_buyback_execution
+      kind: quantitative
+      trigger: Исполнение байбека 50 млрд ₽ (25% выбрано за май–июль) на фоне слабого
+        рынка
+      date_window: 2026-Q3..2028-Q2
+      upside_by_scenario:
+        A: 5.0
+        B: 7.0
+        C: 8.0
+        D: 4.0
+      upside_ci_by_scenario:
+        A:
+        - 0.0
+        - 10.0
+        B:
+        - 1.0
+        - 13.0
+        C:
+        - 2.0
+        - 15.0
+        D:
+        - -2.0
+        - 10.0
+      source: 'advisor estimate: объём программы и темп выкупа раскрыты эмитентом'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: ydex_motivation_issue_nov
+      kind: binary
+      trigger: Допэмиссия 11 млн акций под мотивацию (ноябрь 2026), компенсируется
+        байбэком
+      date_window: 2026-11
+      p: 0.95
+      downside_pct: 1.0
+      downside_ci_pct:
+      - 0.0
+      - 3.0
+      source: https://www.vedomosti.ru/investments/articles/2026/09/30/1232896-yandeks-provedet-dopemissiyu
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: ydex_dc_sasovo_incident
+      kind: binary
+      trigger: 'Раскрытие ущерба от атаки БПЛА на ЦОД Сасово 08.10: длительный сбой
+        сервисов или рост капзатрат на резервирование'
+      date_window: 2026-10..2026-11
+      p: 0.4
+      downside_pct: 3.0
+      downside_ci_pct:
+      - 0.0
+      - 8.0
+      source: https://rg.ru/2026/10/08/reg-cfo/v-data-centre-iandeksa-v-riazanskoj-oblasti-nachalsia-pozhar-posle-ataki-bpla.html
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: secondary
+      macro_dependency: D
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.65
+    advisor_verdict_basis: 'Событие 08.10 пока операционное, не финансовое: ущерб
+      и срок восстановления не раскрыты. Держать на плане 10,0% (недобор −0,24 пп);
+      не докупать и не резать до раскрытия эмитента. Если компания подтвердит длительный
+      сбой облачных или маркетплейс-сервисов либо рост капзатрат — Mode 4.'
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+  MOEX:
+    sector: banks_finance
+    sector_ru: Финансовый
+    weight_real_pct: 7.7195
+    weight_user_planned_pct: 8.0
+    weight_ie_target_pct: null
+    weight_divergence_vs_planned_pp: -0.2805
+    weight_divergence_vs_ie_pp: null
+    weight_divergence_pp: null
+    listing_age_quarters: 54
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 153.63
+    xirr: -0.0009
+    pnl_rub: -192.36
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP | [user_note_ai] trim до 5,0%'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Мосбиржа: 7,72% L2 (план 8,0%), цена 153,63 ₽ (+2,21%
+      к 01.10). Объём торгов на рынках биржи в сентябре — 220,8 трлн ₽ (moex.com,
+      30.09). Гейт reviewed_keep до 18.11 (Mode 8 19.09), план 8,0% подтверждён; условие
+      moex-gate-review-3009 исполнено (разбор сделан 19.09) и снято при evaluate 08.10.
+      В Numbers по-прежнему пометка «trim до 5,0%» — противоречит решению 19.09.'
+    fundamental_score_sources:
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://www.moex.com/n104744
+      label: 'Мосбиржа: итоги сентября 2026, объём торгов 220,8 трлн ₽ (30.09)'
+      accessed_date: '2026-10-08'
+    - url: https://www.finmarket.ru/shares/news/6691540
+      label: 'Финмаркет: индексы Мосбиржи во все торговые сессии (26.09)'
+      accessed_date: '2026-10-01'
+    - url: https://gov.cnews.ru/news/top/2026-09-23_mosbirzha_stroit_torgovyj
+      label: 'CNews: спот-торги криптовалютой готовятся (23.09)'
+      accessed_date: '2026-09-26'
+    - url: https://www.moex.com/n104244
+      label: 'Мосбиржа: запуск вечных фьючерсов на индексы криптовалют с 22.09'
+      accessed_date: '2026-09-26'
+    div_yield_12m_pct:
+      value: 9.23
+      ci_pct:
+      - 7.32
+      - 10.68
+    div_confidence: MEDIUM
+    div_basis: Дивполитика — не менее 50% ЧП по МСФО. Рекомендация СД по дивиденду
+      за 2026 ожидается весной 2027, дата на 27.08 не назначена. Оценка 9,4% — от
+      прогнозной ЧП 2026 при payout 65–75% к цене 151,20 ₽.
+    div_sources:
+    - url: https://www.moex.com/n103658
+      label: Пресс-релиз о результатах Q2 2026 (база для оценки ЧП)
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 9.23
+      year2_yield_pct: 8.82
+      year2_basis: carry_forward
+      source: дивполитика ≥50% ЧП МСФО; результаты Q2 2026 от 26.08.2026
+      as_of: '2026-10-01'
+      confidence: MEDIUM
+      note: Пересчитано на цену 01.10.2026 (150.31 ₽); политика не менялась.
+    catalyst:
+    - id: moex_fee_income_offset
+      kind: quantitative
+      trigger: Замещение процентного дохода комиссионным (комиссии +24,8% г/г против
+        ЧПД −16,4% г/г)
+      date_window: 2026-Q3..2027-Q4
+      upside_by_scenario:
+        A: 8.0
+        B: 12.0
+        C: 15.0
+        D: 5.0
+      upside_ci_by_scenario:
+        A:
+        - -4.0
+        - 18.0
+        B:
+        - 0.0
+        - 24.0
+        C:
+        - 3.0
+        - 28.0
+        D:
+        - -10.0
+        - 18.0
+      source: https://www.moex.com/n103658 — сегментная динамика доходов Q2 2026
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: A
+    - id: moex_crypto_spot_launch
+      kind: binary
+      trigger: Запуск спот-торгов криптовалютами (биткоин–рубль / квазидоллар) на
+        Мосбирже — новый комиссионный поток
+      date_window: 2027-Q1..2027-Q4
+      p: 0.4
+      upside_pct: 4.0
+      upside_ci_pct:
+      - 0.0
+      - 8.0
+      source: https://gov.cnews.ru/news/top/2026-09-23_mosbirzha_stroit_torgovyj —
+        Швецов 23.09, сроки не названы
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.65
+    advisor_verdict_basis: Держать на плане 8,0% (недобор −0,28 пп). Повторный разбор
+      гейта не нужен. Пометку «trim до 5,0%» в Numbers подтвердить или убрать.
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+    user_constraints: []
+key_risks: []

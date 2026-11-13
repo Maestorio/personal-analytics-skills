@@ -1,0 +1,136 @@
+schema_version: 1
+type: monitor-report
+generated_at: "2026-10-25T21:40:00Z"
+producer: "forecast-monitor"
+horizon_window_days: 7
+
+alerts:
+  - severity: HIGH
+    category: factor_breach
+    target: "cbr-rate-2026-2027"
+    target_file: "forecasts/cbr-rate-2026-2027-2026-09-17.yaml"
+    target_kind: forecast
+    message: "ЦБ 23.10.2026 сохранил ставку 14% (пауза), модальная траектория −25 б.п. до 13,75% не реализована"
+    detected_at: "2026-10-26"
+    web_search_summary: "Интерфакс 23.10.2026: ставка 14%, вторая пауза подряд, следующее заседание 18.12"
+    suggested_action: "/forecast-confidence-applier Обнови прогноз cbr-rate-2026-2027-2026-09-17.yaml"
+  - severity: HIGH
+    category: stale
+    target: "us-technical-recession-2026"
+    target_file: "forecasts/us-technical-recession-2026-2026-04-30.yaml"
+    target_kind: forecast
+    message: "Ревью просрочено на 88 дней; Q1 +2,5%, Q2 +2,2% (порог <0% не достигнут); Q3 advance 30.10"
+    detected_at: "2026-10-26"
+    web_search_summary: "BEA/AdvisorPerspectives 30.09.2026: Q2 third estimate +2,2%, Q1 +2,5%; Brent Sep ~$114, Aug ~$91"
+    suggested_action: "/forecast-confidence-applier Обнови прогноз us-technical-recession-2026-2026-04-30.yaml"
+  - severity: HIGH
+    category: stale
+    target: "ai-capex-slowdown-2026"
+    target_file: "forecasts/ai-capex-slowdown-2026-2026-04-30.yaml"
+    target_kind: forecast
+    message: "Ревью просрочено на 88 дней; данных по Q2/Q3 capex guidance и NVIDIA в окне проверки не найдено"
+    detected_at: "2026-10-26"
+    suggested_action: "/forecast-confidence-applier Обнови прогноз ai-capex-slowdown-2026-2026-04-30.yaml"
+  - severity: HIGH
+    category: stale
+    target: "ukraine-russia-war-end-2026"
+    target_file: "forecasts/ukraine-russia-war-end-2026-05-02.yaml"
+    target_kind: forecast
+    message: "Ревью просрочено на 85 дней; 11.10.2026 объявлено энергетическое перемирие (двусторонне не подтверждено)"
+    detected_at: "2026-10-26"
+    suggested_action: "/forecast-confidence-applier Обнови прогноз ukraine-russia-war-end-2026-05-02.yaml"
+  - severity: HIGH
+    category: stale
+    target: "geopolitics-ru-west"
+    target_file: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+    target_kind: scenario
+    message: "Ревью просрочено на 25 дней (сценарий и ru-west-fragmented-front)"
+    detected_at: "2026-10-26"
+    suggested_action: "/scenario-builder Обнови сценарии scenario-geopolitics-ru-west-2026-07-01.yaml"
+  - severity: HIGH
+    category: event_window
+    target: "sanctions-russia-2026-28"
+    target_file: "forecasts/sanctions-russia-2026-28-2026-09-17.yaml"
+    target_kind: forecast
+    message: "Окно подписания Graham Act (30.09) прошло 26 дней назад; статус подписания не проверен"
+    detected_at: "2026-10-26"
+    suggested_action: "Проверить подписание Graham Act вручную; при подтверждении пересобрать sanctions_position по рубрике"
+  - severity: HIGH
+    category: event_window
+    target: "condition ru000a107795-date-2110"
+    target_file: "Portfolio/conditions.yaml"
+    target_kind: view
+    message: "Контрольная дата 21.10 прошла, урегулирование претензии ФНС к МФК «Лайм-Займ» не найдено"
+    detected_at: "2026-10-26"
+    suggested_action: "Условие ru000a107795-date-2110 — разбираем"
+  - severity: MEDIUM
+    category: event_window
+    target: "cpi-yoy-ocr-2026"
+    target_file: "forecasts/cpi-yoy-ocr-2026-2026-10-10.yaml"
+    target_kind: forecast
+    message: "Недельная оценка МЭР на 26.10 выходит ~28.10 (порог ≤6,35% г/г), не проверено"
+    detected_at: "2026-10-26"
+    suggested_action: "/forecast-monitor Проверь cpi-yoy-ocr-2026-2026-10-10.yaml"
+  - severity: MEDIUM
+    category: stale
+    target: "china-taiwan-forecast"
+    target_file: "forecasts/china-taiwan-forecast-2026-04-28.yaml"
+    target_kind: forecast
+    message: "Плановое ревью через 2 дня (28.10); также russia-europe-war-2030 и ukraine-postwar-forecast (29.10)"
+    detected_at: "2026-10-26"
+    suggested_action: "/forecast-confidence-applier Обнови прогноз china-taiwan-forecast-2026-04-28.yaml"
+  - severity: MEDIUM
+    category: event_window
+    target: "budget-deficit-ru"
+    target_file: "forecasts/budget-deficit-ru-2026-09-17.yaml"
+    target_kind: forecast
+    message: "Проект бюджета 2027–2029: срок проверки 30.09 прошёл, затрагивает usdrub-rate, cnyrub-rate, cbr-rate-2026-2027"
+    detected_at: "2026-10-26"
+    suggested_action: "Проверить публикацию проекта бюджета вручную и обновить budget-deficit-ru"
+
+freshness_audit:
+  integrated_view: { age_days: 22, next_due: null, due_for_refresh: false }
+  stress: { age_days: 22, threshold_days: 90, due_for_refresh: false, message: "stress-2026-10-04" }
+  weekly_review: { age_days: 10, threshold_days: 14, due_for_refresh: false }
+  macro_snapshot: { age_days: 5, threshold_days: 14, due_for_refresh: false }
+  trust_matrix: { age_days: 22, threshold_days: 90, due_for_refresh: false }
+
+predictions:
+  total_active: 22
+  overdue_count: 8
+  due_30d_count: 4
+  overdue_list:
+    - { id: ai-capex-slowdown-2026, file: "forecasts/ai-capex-slowdown-2026-2026-04-30.yaml", days_overdue: 88 }
+    - { id: us-technical-recession-2026, file: "forecasts/us-technical-recession-2026-2026-04-30.yaml", days_overdue: 88 }
+    - { id: scenario-ai-capex-scenarios-2026, file: "scenarios/scenario-ai-capex-scenarios-2026-2026-04-30.yaml", days_overdue: 88 }
+    - { id: scenario-brent-dec-2026, file: "scenarios/scenario-brent-dec-2026-2026-04-30.yaml", days_overdue: 88 }
+    - { id: ukraine-russia-war-end-2026, file: "forecasts/ukraine-russia-war-end-2026-05-02.yaml", days_overdue: 85 }
+    - { id: scenario-usd-rub-sept-2026, file: "scenarios/scenario-usd-rub-sept-2026-2026-04-30.yaml", days_overdue: 55 }
+    - { id: ru-west-fragmented-front, file: "forecasts/ru-west-fragmented-front-2026-07-01.yaml", days_overdue: 25 }
+    - { id: scenario-geopolitics-ru-west, file: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml", days_overdue: 25 }
+
+condition_events:
+  - { condition_id: "ru000a107795-date-2110", ticker: "RU000A107795", event: "Урегулирование претензии ФНС к МФК «Лайм-Займ» / разблокировка счетов", status: not_found, event_date: null, fact: null, url: null, deadline: "2026-10-21", checked: "2026-10-26" }
+
+outcome_log_updates:
+  - target_file: "forecasts/cbr-rate-oct23-2026-2026-10-20.yaml"
+    resolve_date: "2026-10-23"
+    kind: event
+    resolved: 0
+    actual_source: "https://www.interfax.ru/business/1124522"
+    shock_flag: none
+    detected_at: "2026-10-26"
+  - target_file: "forecasts/cbr-rate-2026-2027-2026-09-17.yaml"
+    resolve_date: "2026-10-23"
+    kind: event
+    resolved: 0
+    actual_source: "https://www.interfax.ru/business/1124522"
+    shock_flag: none
+    detected_at: "2026-10-26"
+
+caveats:
+  - { severity: INFO, message: "Калибровка: clean-исходов 7/15 (M1) · ad-hoc отчётов 0/2 (M2) · 7/30 (M3) · catalyst н/д/30 (M4)" }
+  - { severity: MEDIUM, message: "sanctions-position-restage: пересобрать sanctions_position по рубрике docs/investment/portfolio/sanctions-position-rubric.md" }
+  - { severity: INFO, message: "web_search 10/10; 41 из 51 кандидатов не проверены (лимит запусков); события условий LSNGP, X5, OZON, RENI, ПР-Лизинг, YDEX не проверялись" }
+  - { severity: INFO, message: "stale_flags.yaml не перезаписан: действующий флаг usdrub-rate от 08.10 оставлен (прогноз usdrub-rate от 17.09 старше апдейта Brent от 08.10)" }
+  - { severity: INFO, message: "DEPENDENCY-MAP.md без таблицы downstream; использован fallback brent-price → urals-discount, usdrub-rate" }

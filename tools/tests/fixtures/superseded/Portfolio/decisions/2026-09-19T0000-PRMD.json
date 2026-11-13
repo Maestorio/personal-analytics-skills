@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-PRMD",
+  "key": "PRMD",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-10-19",
+  "note": "Выручка 1П +76%, ND/EBITDA 1,8×, гайденс подтверждён, регистрация Тирзетты в Казахстане 09.09. SberCIB 650 → 600 ₽. Перевес 0,51 пп в гистерезисе.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

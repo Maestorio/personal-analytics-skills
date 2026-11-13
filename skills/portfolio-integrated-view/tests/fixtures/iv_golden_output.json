@@ -1,0 +1,2774 @@
+{
+ "carry_source": "bond_carry",
+ "ci_method": "mc",
+ "diff": null,
+ "frontmatter_portfolio_by_horizon": {
+  "ci_method": "mc",
+  "horizons": {
+   "12": {
+    "bond": {
+     "ci": [
+      16.5,
+      44.05
+     ],
+     "value": 30.86
+    },
+    "end": "2027-08-31",
+    "equity": {
+     "ci": [
+      -14.56,
+      60.16
+     ],
+     "value": 21.15
+    },
+    "spread": {
+     "ci": [
+      -39.25,
+      26.7
+     ],
+     "value": -9.71
+    }
+   },
+   "24": {
+    "bond": {
+     "ci": [
+      42.76,
+      75.56
+     ],
+     "value": 59.48
+    },
+    "end": "2028-08-31",
+    "equity": {
+     "ci": [
+      -6.2,
+      69.3
+     ],
+     "value": 30.01
+    },
+    "spread": {
+     "ci": [
+      -58.66,
+      7.97
+     ],
+     "value": -29.48
+    }
+   },
+   "6": {
+    "bond": {
+     "ci": [
+      1.65,
+      26.87
+     ],
+     "value": 14.62
+    },
+    "end": "2027-02-28",
+    "equity": {
+     "ci": [
+      -18.6,
+      55.97
+     ],
+     "value": 16.98
+    },
+    "spread": {
+     "ci": [
+      -28.32,
+      38.53
+     ],
+     "value": 2.36
+    }
+   }
+  },
+  "primary_horizon": 12
+ },
+ "frontmatter_total_return": {
+  "horizons": {
+   "12": {
+    "expected": {
+     "bond": 27.0,
+     "cash": null,
+     "equity": 13.66,
+     "portfolio": 18.38
+    },
+    "layers": {
+     "bond": {
+      "carry": 13.69,
+      "idio": 3.86,
+      "price": 13.31
+     },
+     "equity": {
+      "dividend": 9.54,
+      "idio": 7.49,
+      "price": 4.12
+     }
+    }
+   },
+   "24": {
+    "expected": {
+     "bond": 55.62,
+     "cash": null,
+     "equity": 22.51,
+     "portfolio": 34.24
+    },
+    "layers": {
+     "bond": {
+      "carry": 27.37,
+      "idio": 3.86,
+      "price": 28.25
+     },
+     "equity": {
+      "dividend": 18.33,
+      "idio": 7.49,
+      "price": 4.19
+     }
+    }
+   },
+   "6": {
+    "expected": {
+     "bond": 10.76,
+     "cash": null,
+     "equity": 9.49,
+     "portfolio": 9.94
+    },
+    "layers": {
+     "bond": {
+      "carry": 6.84,
+      "idio": 3.86,
+      "price": 3.91
+     },
+     "equity": {
+      "dividend": 4.77,
+      "idio": 7.49,
+      "price": 4.72
+     }
+    }
+   }
+  },
+  "note": "by_scenario = price_delta + bond_carry + dividend (БЕЗ идиосинкратики — она в per_position.total и portfolio_by_horizon по METH-1)"
+ },
+ "horizon_ends": {
+  "h12": "2027-08-31",
+  "h24": "2028-08-31",
+  "h6": "2027-02-28"
+ },
+ "horizon_months": 12,
+ "horizons": [
+  6,
+  12,
+  24
+ ],
+ "layer_shares": {
+  "h12": {
+   "buckets": {
+    "bond": {
+     "expected_without_idio": 26.9993,
+     "headline_with_idio": 30.8612,
+     "income_kind": "carry",
+     "layers_pp": {
+      "idio": 3.8612,
+      "income": 13.686,
+      "price": 13.3139
+     },
+     "share_of_headline": {
+      "idio": 0.1251,
+      "income": 0.4435,
+      "price": 0.4314
+     }
+    },
+    "equity": {
+     "expected_without_idio": 13.6576,
+     "headline_with_idio": 21.1483,
+     "income_kind": "dividend",
+     "layers_pp": {
+      "idio": 7.4895,
+      "income": 9.5378,
+      "price": 4.1211
+     },
+     "share_of_headline": {
+      "idio": 0.3541,
+      "income": 0.451,
+      "price": 0.1949
+     }
+    }
+   },
+   "denominator": "headline_with_idio",
+   "note": "Доли слоёв цитировать ТОЛЬКО из share_of_headline — у всех слоёв и обеих ног знаменатель один (заголовочное ожидание ноги, с идиосинкратикой)."
+  },
+  "h24": {
+   "buckets": {
+    "bond": {
+     "expected_without_idio": 55.6249,
+     "headline_with_idio": 59.4821,
+     "income_kind": "carry",
+     "layers_pp": {
+      "idio": 3.8612,
+      "income": 27.3721,
+      "price": 28.2488
+     },
+     "share_of_headline": {
+      "idio": 0.0649,
+      "income": 0.4602,
+      "price": 0.4749
+     }
+    },
+    "equity": {
+     "expected_without_idio": 22.5126,
+     "headline_with_idio": 30.0058,
+     "income_kind": "dividend",
+     "layers_pp": {
+      "idio": 7.4895,
+      "income": 18.3279,
+      "price": 4.1884
+     },
+     "share_of_headline": {
+      "idio": 0.2496,
+      "income": 0.6108,
+      "price": 0.1396
+     }
+    }
+   },
+   "denominator": "headline_with_idio",
+   "note": "Доли слоёв цитировать ТОЛЬКО из share_of_headline — у всех слоёв и обеих ног знаменатель один (заголовочное ожидание ноги, с идиосинкратикой)."
+  },
+  "h6": {
+   "buckets": {
+    "bond": {
+     "expected_without_idio": 10.7602,
+     "headline_with_idio": 14.6189,
+     "income_kind": "carry",
+     "layers_pp": {
+      "idio": 3.8612,
+      "income": 6.843,
+      "price": 3.9148
+     },
+     "share_of_headline": {
+      "idio": 0.2641,
+      "income": 0.4681,
+      "price": 0.2678
+     }
+    },
+    "equity": {
+     "expected_without_idio": 9.486,
+     "headline_with_idio": 16.9767,
+     "income_kind": "dividend",
+     "layers_pp": {
+      "idio": 7.4895,
+      "income": 4.7689,
+      "price": 4.7184
+     },
+     "share_of_headline": {
+      "idio": 0.4412,
+      "income": 0.2809,
+      "price": 0.2779
+     }
+    }
+   },
+   "denominator": "headline_with_idio",
+   "note": "Доли слоёв цитировать ТОЛЬКО из share_of_headline — у всех слоёв и обеих ног знаменатель один (заголовочное ожидание ноги, с идиосинкратикой)."
+  }
+ },
+ "mc": {
+  "paths": 10000,
+  "seed": 42
+ },
+ "mc_divergence": [],
+ "per_position": [
+  {
+   "asset_class": "equity",
+   "by_horizon": {
+    "h12": {
+     "div_or_carry": {
+      "ci": [
+       2.8,
+       8.4
+      ],
+      "flags": [],
+      "source": "dividend_forward",
+      "value": 5.6
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         -2.24,
+         2.24
+        ],
+        "formula": "binary: p=0.8 × mass=0.7000 × upside=0.0 × src=1.0",
+        "id": "ydex_board_div_confirm",
+        "kind": "binary",
+        "value": 0.0,
+        "warnings": []
+       },
+       {
+        "ci": [
+         -0.5775,
+         0.5775
+        ],
+        "formula": "binary: p=0.55 × mass=0.7000 × upside=0.0 × src=0.5",
+        "id": "ydex_h2_div",
+        "kind": "binary",
+        "value": 0.0,
+        "warnings": []
+       },
+       {
+        "ci": [
+         0.0,
+         8.75
+        ],
+        "formula": "binary: p=0.5 × mass=0.7000 × upside=12.0 × src=1.0",
+        "id": "ydex_ai_monetisation",
+        "kind": "binary",
+        "value": 4.2,
+        "warnings": []
+       },
+       {
+        "ci": [
+         -0.75,
+         3.75
+        ],
+        "formula": "quantitative: Σ_s p(s) × upside_s × src",
+        "id": "synthetic_scenario_quant",
+        "kind": "quantitative",
+        "value": 1.5,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       -3.5675,
+       15.317499999999999
+      ],
+      "ignored_catalysts": [],
+      "value": 5.699999999999999
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       -5.88,
+       5.11
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": -0.38
+     },
+     "total": {
+      "ci": [
+       -21.8278,
+       44.6835
+      ],
+      "value": 10.919999999999998
+     }
+    },
+    "h24": {
+     "div_or_carry": {
+      "ci": [
+       5.6,
+       16.8
+      ],
+      "flags": [],
+      "source": "dividend_forward",
+      "value": 11.2
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         -2.24,
+         2.24
+        ],
+        "formula": "binary: p=0.8 × mass=0.7000 × upside=0.0 × src=1.0",
+        "id": "ydex_board_div_confirm",
+        "kind": "binary",
+        "value": 0.0,
+        "warnings": []
+       },
+       {
+        "ci": [
+         -0.5775,
+         0.5775
+        ],
+        "formula": "binary: p=0.55 × mass=0.7000 × upside=0.0 × src=0.5",
+        "id": "ydex_h2_div",
+        "kind": "binary",
+        "value": 0.0,
+        "warnings": []
+       },
+       {
+        "ci": [
+         0.0,
+         8.75
+        ],
+        "formula": "binary: p=0.5 × mass=0.7000 × upside=12.0 × src=1.0",
+        "id": "ydex_ai_monetisation",
+        "kind": "binary",
+        "value": 4.2,
+        "warnings": []
+       },
+       {
+        "ci": [
+         -0.75,
+         3.75
+        ],
+        "formula": "quantitative: Σ_s p(s) × upside_s × src",
+        "id": "synthetic_scenario_quant",
+        "kind": "quantitative",
+        "value": 1.5,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       -3.5675,
+       15.317499999999999
+      ],
+      "ignored_catalysts": [],
+      "value": 5.699999999999999
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       -5.28,
+       6.15
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 0.44
+     },
+     "total": {
+      "ci": [
+       -15.5888,
+       50.8257
+      ],
+      "value": 17.339999999999996
+     }
+    },
+    "h6": {
+     "div_or_carry": {
+      "ci": [
+       1.4,
+       4.2
+      ],
+      "flags": [],
+      "source": "dividend_forward",
+      "value": 2.8
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         -2.24,
+         2.24
+        ],
+        "formula": "binary: p=0.8 × mass=0.7000 × upside=0.0 × src=1.0",
+        "id": "ydex_board_div_confirm",
+        "kind": "binary",
+        "value": 0.0,
+        "warnings": []
+       },
+       {
+        "ci": [
+         -0.5775,
+         0.5775
+        ],
+        "formula": "binary: p=0.55 × mass=0.7000 × upside=0.0 × src=0.5",
+        "id": "ydex_h2_div",
+        "kind": "binary",
+        "value": 0.0,
+        "warnings": []
+       },
+       {
+        "ci": [
+         0.0,
+         8.75
+        ],
+        "formula": "binary: p=0.5 × mass=0.7000 × upside=12.0 × src=1.0",
+        "id": "ydex_ai_monetisation",
+        "kind": "binary",
+        "value": 4.2,
+        "warnings": []
+       },
+       {
+        "ci": [
+         -0.75,
+         3.75
+        ],
+        "formula": "quantitative: Σ_s p(s) × upside_s × src",
+        "id": "synthetic_scenario_quant",
+        "kind": "quantitative",
+        "value": 1.5,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       -3.5675,
+       15.317499999999999
+      ],
+      "ignored_catalysts": [],
+      "value": 5.699999999999999
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       -6.18,
+       4.87
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": -0.65
+     },
+     "total": {
+      "ci": [
+       -24.8537,
+       41.2329
+      ],
+      "value": 7.85
+     }
+    }
+   },
+   "currency": "RUB",
+   "div_or_carry": {
+    "ci": [
+     2.8,
+     8.4
+    ],
+    "flags": [],
+    "source": "dividend_forward",
+    "value": 5.6
+   },
+   "idio": {
+    "catalysts_applied": [
+     {
+      "ci": [
+       -2.24,
+       2.24
+      ],
+      "formula": "binary: p=0.8 × mass=0.7000 × upside=0.0 × src=1.0",
+      "id": "ydex_board_div_confirm",
+      "kind": "binary",
+      "value": 0.0,
+      "warnings": []
+     },
+     {
+      "ci": [
+       -0.5775,
+       0.5775
+      ],
+      "formula": "binary: p=0.55 × mass=0.7000 × upside=0.0 × src=0.5",
+      "id": "ydex_h2_div",
+      "kind": "binary",
+      "value": 0.0,
+      "warnings": []
+     },
+     {
+      "ci": [
+       0.0,
+       8.75
+      ],
+      "formula": "binary: p=0.5 × mass=0.7000 × upside=12.0 × src=1.0",
+      "id": "ydex_ai_monetisation",
+      "kind": "binary",
+      "value": 4.2,
+      "warnings": []
+     },
+     {
+      "ci": [
+       -0.75,
+       3.75
+      ],
+      "formula": "quantitative: Σ_s p(s) × upside_s × src",
+      "id": "synthetic_scenario_quant",
+      "kind": "quantitative",
+      "value": 1.5,
+      "warnings": []
+     }
+    ],
+    "ci": [
+     -3.5675,
+     15.317499999999999
+    ],
+    "ignored_catalysts": [],
+    "value": 5.699999999999999
+   },
+   "is_blocked": false,
+   "macro": {
+    "blindspot": false,
+    "ci": [
+     -5.88,
+     5.11
+    ],
+    "coherence_gap": null,
+    "l1_point": null,
+    "l1_status": null,
+    "l1_unmatched_factors": [],
+    "layer": "L2",
+    "source": "stress",
+    "value": -0.38
+   },
+   "on_iis": false,
+   "primary_horizon_key": "h12",
+   "ticker": "YDEX",
+   "total": {
+    "ci": [
+     -21.8278,
+     44.6835
+    ],
+    "value": 10.919999999999998
+   },
+   "verdict": "HOLD",
+   "verification_priority": "LOW",
+   "weight_pct": 3.7996,
+   "weight_source": "stress"
+  },
+  {
+   "asset_class": "equity",
+   "by_horizon": {
+    "h12": {
+     "div_or_carry": {
+      "ci": [
+       10.125,
+       16.875
+      ],
+      "flags": [],
+      "source": "dividend_forward",
+      "value": 13.5
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         -1.785,
+         5.95
+        ],
+        "formula": "binary: p=0.85 × mass=0.7000 × upside=4.0 × src=1.0",
+        "id": "sber_h1_2026_ifrs",
+        "kind": "binary",
+        "value": 2.38,
+        "warnings": []
+       },
+       {
+        "ci": [
+         0.77,
+         7.7
+        ],
+        "formula": "binary: p=0.55 × mass=0.7000 × upside=10.0 × src=1.0",
+        "id": "sber_rate_cut_rerating",
+        "kind": "binary",
+        "value": 3.85,
+        "warnings": []
+       },
+       {
+        "ci": [
+         -2.52,
+         3.36
+        ],
+        "formula": "binary: p=0.6 × mass=0.7000 × upside=3.0 × src=1.0",
+        "id": "sber_div_policy_2027_2029",
+        "kind": "binary",
+        "value": 1.26,
+        "warnings": []
+       },
+       {
+        "ci": [
+         0.8,
+         2.8
+        ],
+        "formula": "binary: p=0.4 × mass=0.5000 × upside=9.0 × src=1.0",
+        "id": "synthetic_scenario_binary",
+        "kind": "binary",
+        "value": 1.8,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       -2.7350000000000003,
+       19.81
+      ],
+      "ignored_catalysts": [],
+      "value": 9.290000000000001
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       -0.72,
+       18.02
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 8.65
+     },
+     "total": {
+      "ci": [
+       -11.9164,
+       84.2933
+      ],
+      "value": 31.439999999999998
+     }
+    },
+    "h24": {
+     "div_or_carry": {
+      "ci": [
+       19.125,
+       31.875
+      ],
+      "flags": [],
+      "source": "dividend_forward",
+      "value": 25.5
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         -1.785,
+         5.95
+        ],
+        "formula": "binary: p=0.85 × mass=0.7000 × upside=4.0 × src=1.0",
+        "id": "sber_h1_2026_ifrs",
+        "kind": "binary",
+        "value": 2.38,
+        "warnings": []
+       },
+       {
+        "ci": [
+         0.77,
+         7.7
+        ],
+        "formula": "binary: p=0.55 × mass=0.7000 × upside=10.0 × src=1.0",
+        "id": "sber_rate_cut_rerating",
+        "kind": "binary",
+        "value": 3.85,
+        "warnings": []
+       },
+       {
+        "ci": [
+         -2.52,
+         3.36
+        ],
+        "formula": "binary: p=0.6 × mass=0.7000 × upside=3.0 × src=1.0",
+        "id": "sber_div_policy_2027_2029",
+        "kind": "binary",
+        "value": 1.26,
+        "warnings": []
+       },
+       {
+        "ci": [
+         0.8,
+         2.8
+        ],
+        "formula": "binary: p=0.4 × mass=0.5000 × upside=9.0 × src=1.0",
+        "id": "synthetic_scenario_binary",
+        "kind": "binary",
+        "value": 1.8,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       -2.7350000000000003,
+       19.81
+      ],
+      "ignored_catalysts": [],
+      "value": 9.290000000000001
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       -1.9,
+       17.81
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 7.96
+     },
+     "total": {
+      "ci": [
+       -1.8015,
+       97.0137
+      ],
+      "value": 42.75
+     }
+    },
+    "h6": {
+     "div_or_carry": {
+      "ci": [
+       5.0625,
+       8.4375
+      ],
+      "flags": [],
+      "source": "dividend_forward",
+      "value": 6.75
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         -1.785,
+         5.95
+        ],
+        "formula": "binary: p=0.85 × mass=0.7000 × upside=4.0 × src=1.0",
+        "id": "sber_h1_2026_ifrs",
+        "kind": "binary",
+        "value": 2.38,
+        "warnings": []
+       },
+       {
+        "ci": [
+         0.77,
+         7.7
+        ],
+        "formula": "binary: p=0.55 × mass=0.7000 × upside=10.0 × src=1.0",
+        "id": "sber_rate_cut_rerating",
+        "kind": "binary",
+        "value": 3.85,
+        "warnings": []
+       },
+       {
+        "ci": [
+         -2.52,
+         3.36
+        ],
+        "formula": "binary: p=0.6 × mass=0.7000 × upside=3.0 × src=1.0",
+        "id": "sber_div_policy_2027_2029",
+        "kind": "binary",
+        "value": 1.26,
+        "warnings": []
+       },
+       {
+        "ci": [
+         0.8,
+         2.8
+        ],
+        "formula": "binary: p=0.4 × mass=0.5000 × upside=9.0 × src=1.0",
+        "id": "synthetic_scenario_binary",
+        "kind": "binary",
+        "value": 1.8,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       -2.7350000000000003,
+       19.81
+      ],
+      "ignored_catalysts": [],
+      "value": 9.290000000000001
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       0.78,
+       19.47
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 10.12
+     },
+     "total": {
+      "ci": [
+       -16.2465,
+       79.5021
+      ],
+      "value": 26.159999999999997
+     }
+    }
+   },
+   "currency": "RUB",
+   "div_or_carry": {
+    "ci": [
+     10.125,
+     16.875
+    ],
+    "flags": [],
+    "source": "dividend_forward",
+    "value": 13.5
+   },
+   "idio": {
+    "catalysts_applied": [
+     {
+      "ci": [
+       -1.785,
+       5.95
+      ],
+      "formula": "binary: p=0.85 × mass=0.7000 × upside=4.0 × src=1.0",
+      "id": "sber_h1_2026_ifrs",
+      "kind": "binary",
+      "value": 2.38,
+      "warnings": []
+     },
+     {
+      "ci": [
+       0.77,
+       7.7
+      ],
+      "formula": "binary: p=0.55 × mass=0.7000 × upside=10.0 × src=1.0",
+      "id": "sber_rate_cut_rerating",
+      "kind": "binary",
+      "value": 3.85,
+      "warnings": []
+     },
+     {
+      "ci": [
+       -2.52,
+       3.36
+      ],
+      "formula": "binary: p=0.6 × mass=0.7000 × upside=3.0 × src=1.0",
+      "id": "sber_div_policy_2027_2029",
+      "kind": "binary",
+      "value": 1.26,
+      "warnings": []
+     },
+     {
+      "ci": [
+       0.8,
+       2.8
+      ],
+      "formula": "binary: p=0.4 × mass=0.5000 × upside=9.0 × src=1.0",
+      "id": "synthetic_scenario_binary",
+      "kind": "binary",
+      "value": 1.8,
+      "warnings": []
+     }
+    ],
+    "ci": [
+     -2.7350000000000003,
+     19.81
+    ],
+    "ignored_catalysts": [],
+    "value": 9.290000000000001
+   },
+   "is_blocked": false,
+   "macro": {
+    "blindspot": false,
+    "ci": [
+     -0.72,
+     18.02
+    ],
+    "coherence_gap": null,
+    "l1_point": null,
+    "l1_status": null,
+    "l1_unmatched_factors": [],
+    "layer": "L2",
+    "source": "stress",
+    "value": 8.65
+   },
+   "on_iis": false,
+   "primary_horizon_key": "h12",
+   "ticker": "SBER",
+   "total": {
+    "ci": [
+     -11.9164,
+     84.2933
+    ],
+    "value": 31.439999999999998
+   },
+   "verdict": "HOLD",
+   "verification_priority": "LOW",
+   "weight_pct": 3.7762,
+   "weight_source": "stress"
+  },
+  {
+   "asset_class": "bond",
+   "by_horizon": {
+    "h12": {
+     "div_or_carry": {
+      "by_scenario": {
+       "A": {
+        "carry_pct": 13.1287,
+        "ci_pct": [
+         11.8158,
+         14.4416
+        ],
+        "components": {
+         "coupons": 13.1287,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "B": {
+        "carry_pct": 13.1287,
+        "ci_pct": [
+         11.8158,
+         14.4416
+        ],
+        "components": {
+         "coupons": 13.1287,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "C": {
+        "carry_pct": 13.1287,
+        "ci_pct": [
+         11.8158,
+         14.4416
+        ],
+        "components": {
+         "coupons": 13.1287,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "D": {
+        "carry_pct": 13.1287,
+        "ci_pct": [
+         11.8158,
+         14.4416
+        ],
+        "components": {
+         "coupons": 13.1287,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       }
+      },
+      "ci": [
+       11.8158,
+       14.4416
+      ],
+      "flags": [],
+      "matures_within": false,
+      "source": "bond_carry",
+      "value": 13.1287
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         1.47,
+         7.77
+        ],
+        "formula": "binary: p=0.6 × mass=0.7000 × upside=10.5 × src=1.0",
+        "id": "rate_cut_capital_gain",
+        "kind": "binary",
+        "value": 4.41,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       1.47,
+       7.77
+      ],
+      "ignored_catalysts": [],
+      "value": 4.41
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       8.22,
+       21.82
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 15.03
+     },
+     "total": {
+      "ci": [
+       15.4732,
+       49.0329
+      ],
+      "value": 32.5687
+     }
+    },
+    "h24": {
+     "div_or_carry": {
+      "by_scenario": {
+       "A": {
+        "carry_pct": 26.2574,
+        "ci_pct": [
+         23.6317,
+         28.8831
+        ],
+        "components": {
+         "coupons": 26.2574,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "B": {
+        "carry_pct": 26.2574,
+        "ci_pct": [
+         23.6317,
+         28.8831
+        ],
+        "components": {
+         "coupons": 26.2574,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "C": {
+        "carry_pct": 26.2574,
+        "ci_pct": [
+         23.6317,
+         28.8831
+        ],
+        "components": {
+         "coupons": 26.2574,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "D": {
+        "carry_pct": 26.2574,
+        "ci_pct": [
+         23.6317,
+         28.8831
+        ],
+        "components": {
+         "coupons": 26.2574,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       }
+      },
+      "ci": [
+       23.6317,
+       28.8831
+      ],
+      "flags": [],
+      "matures_within": false,
+      "source": "bond_carry",
+      "value": 26.2574
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         1.47,
+         7.77
+        ],
+        "formula": "binary: p=0.6 × mass=0.7000 × upside=10.5 × src=1.0",
+        "id": "rate_cut_capital_gain",
+        "kind": "binary",
+        "value": 4.41,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       1.47,
+       7.77
+      ],
+      "ignored_catalysts": [],
+      "value": 4.41
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       18.57,
+       45.21
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 31.89
+     },
+     "total": {
+      "ci": [
+       42.7173,
+       83.5077
+      ],
+      "value": 62.5574
+     }
+    },
+    "h6": {
+     "div_or_carry": {
+      "by_scenario": {
+       "A": {
+        "carry_pct": 6.5643,
+        "ci_pct": [
+         5.9079,
+         7.2208
+        ],
+        "components": {
+         "coupons": 6.5643,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "B": {
+        "carry_pct": 6.5643,
+        "ci_pct": [
+         5.9079,
+         7.2208
+        ],
+        "components": {
+         "coupons": 6.5643,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "C": {
+        "carry_pct": 6.5643,
+        "ci_pct": [
+         5.9079,
+         7.2208
+        ],
+        "components": {
+         "coupons": 6.5643,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "D": {
+        "carry_pct": 6.5643,
+        "ci_pct": [
+         5.9079,
+         7.2208
+        ],
+        "components": {
+         "coupons": 6.5643,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       }
+      },
+      "ci": [
+       5.9079,
+       7.2208
+      ],
+      "flags": [],
+      "matures_within": false,
+      "source": "bond_carry",
+      "value": 6.5643
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         1.47,
+         7.77
+        ],
+        "formula": "binary: p=0.6 × mass=0.7000 × upside=10.5 × src=1.0",
+        "id": "rate_cut_capital_gain",
+        "kind": "binary",
+        "value": 4.41,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       1.47,
+       7.77
+      ],
+      "ignored_catalysts": [],
+      "value": 4.41
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       -0.58,
+       9.42
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 4.42
+     },
+     "total": {
+      "ci": [
+       0.2477,
+       30.6661
+      ],
+      "value": 15.394300000000001
+     }
+    }
+   },
+   "currency": "RUB",
+   "div_or_carry": {
+    "by_scenario": {
+     "A": {
+      "carry_pct": 13.1287,
+      "ci_pct": [
+       11.8158,
+       14.4416
+      ],
+      "components": {
+       "coupons": 13.1287,
+       "fx_income": 0.0,
+       "pull_to_par": 0.0,
+       "reinvest": 0.0
+      }
+     },
+     "B": {
+      "carry_pct": 13.1287,
+      "ci_pct": [
+       11.8158,
+       14.4416
+      ],
+      "components": {
+       "coupons": 13.1287,
+       "fx_income": 0.0,
+       "pull_to_par": 0.0,
+       "reinvest": 0.0
+      }
+     },
+     "C": {
+      "carry_pct": 13.1287,
+      "ci_pct": [
+       11.8158,
+       14.4416
+      ],
+      "components": {
+       "coupons": 13.1287,
+       "fx_income": 0.0,
+       "pull_to_par": 0.0,
+       "reinvest": 0.0
+      }
+     },
+     "D": {
+      "carry_pct": 13.1287,
+      "ci_pct": [
+       11.8158,
+       14.4416
+      ],
+      "components": {
+       "coupons": 13.1287,
+       "fx_income": 0.0,
+       "pull_to_par": 0.0,
+       "reinvest": 0.0
+      }
+     }
+    },
+    "ci": [
+     11.8158,
+     14.4416
+    ],
+    "flags": [],
+    "matures_within": false,
+    "source": "bond_carry",
+    "value": 13.1287
+   },
+   "idio": {
+    "catalysts_applied": [
+     {
+      "ci": [
+       1.47,
+       7.77
+      ],
+      "formula": "binary: p=0.6 × mass=0.7000 × upside=10.5 × src=1.0",
+      "id": "rate_cut_capital_gain",
+      "kind": "binary",
+      "value": 4.41,
+      "warnings": []
+     }
+    ],
+    "ci": [
+     1.47,
+     7.77
+    ],
+    "ignored_catalysts": [],
+    "value": 4.41
+   },
+   "is_blocked": false,
+   "macro": {
+    "blindspot": false,
+    "ci": [
+     8.22,
+     21.82
+    ],
+    "coherence_gap": null,
+    "l1_point": null,
+    "l1_status": null,
+    "l1_unmatched_factors": [],
+    "layer": "L2",
+    "source": "stress",
+    "value": 15.03
+   },
+   "on_iis": true,
+   "primary_horizon_key": "h12",
+   "ticker": "RU000A1038V6",
+   "total": {
+    "ci": [
+     15.4732,
+     49.0329
+    ],
+    "value": 32.5687
+   },
+   "verdict": "HOLD_TO_MAT",
+   "verification_priority": "LOW",
+   "weight_pct": 0.5358,
+   "weight_source": "stress"
+  },
+  {
+   "asset_class": "bond",
+   "by_horizon": {
+    "h12": {
+     "div_or_carry": {
+      "by_scenario": {
+       "A": {
+        "carry_pct": 13.7685,
+        "ci_pct": [
+         12.3916,
+         15.1453
+        ],
+        "components": {
+         "coupons": 13.7685,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "B": {
+        "carry_pct": 13.7685,
+        "ci_pct": [
+         12.3916,
+         15.1453
+        ],
+        "components": {
+         "coupons": 13.7685,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "C": {
+        "carry_pct": 13.7685,
+        "ci_pct": [
+         12.3916,
+         15.1453
+        ],
+        "components": {
+         "coupons": 13.7685,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "D": {
+        "carry_pct": 13.7685,
+        "ci_pct": [
+         12.3916,
+         15.1453
+        ],
+        "components": {
+         "coupons": 13.7685,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       }
+      },
+      "ci": [
+       12.3916,
+       15.1453
+      ],
+      "flags": [],
+      "matures_within": false,
+      "source": "bond_carry",
+      "value": 13.7685
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         1.26,
+         6.72
+        ],
+        "formula": "binary: p=0.6 × mass=0.7000 × upside=9.0 × src=1.0",
+        "id": "rate_cut_capital_gain",
+        "kind": "binary",
+        "value": 3.78,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       1.26,
+       6.72
+      ],
+      "ignored_catalysts": [],
+      "value": 3.78
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       6.99,
+       19.14
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 13.06
+     },
+     "total": {
+      "ci": [
+       15.6923,
+       44.9102
+      ],
+      "value": 30.6085
+     }
+    },
+    "h24": {
+     "div_or_carry": {
+      "by_scenario": {
+       "A": {
+        "carry_pct": 27.537,
+        "ci_pct": [
+         24.7833,
+         30.2907
+        ],
+        "components": {
+         "coupons": 27.537,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "B": {
+        "carry_pct": 27.537,
+        "ci_pct": [
+         24.7833,
+         30.2907
+        ],
+        "components": {
+         "coupons": 27.537,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "C": {
+        "carry_pct": 27.537,
+        "ci_pct": [
+         24.7833,
+         30.2907
+        ],
+        "components": {
+         "coupons": 27.537,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "D": {
+        "carry_pct": 27.537,
+        "ci_pct": [
+         24.7833,
+         30.2907
+        ],
+        "components": {
+         "coupons": 27.537,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       }
+      },
+      "ci": [
+       24.7833,
+       30.2907
+      ],
+      "flags": [],
+      "matures_within": false,
+      "source": "bond_carry",
+      "value": 27.537
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         1.26,
+         6.72
+        ],
+        "formula": "binary: p=0.6 × mass=0.7000 × upside=9.0 × src=1.0",
+        "id": "rate_cut_capital_gain",
+        "kind": "binary",
+        "value": 3.78,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       1.26,
+       6.72
+      ],
+      "ignored_catalysts": [],
+      "value": 3.78
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       16.13,
+       39.3
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 27.71
+     },
+     "total": {
+      "ci": [
+       41.8006,
+       76.8151
+      ],
+      "value": 59.027
+     }
+    },
+    "h6": {
+     "div_or_carry": {
+      "by_scenario": {
+       "A": {
+        "carry_pct": 6.8842,
+        "ci_pct": [
+         6.1958,
+         7.5727
+        ],
+        "components": {
+         "coupons": 6.8842,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "B": {
+        "carry_pct": 6.8842,
+        "ci_pct": [
+         6.1958,
+         7.5727
+        ],
+        "components": {
+         "coupons": 6.8842,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "C": {
+        "carry_pct": 6.8842,
+        "ci_pct": [
+         6.1958,
+         7.5727
+        ],
+        "components": {
+         "coupons": 6.8842,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       },
+       "D": {
+        "carry_pct": 6.8842,
+        "ci_pct": [
+         6.1958,
+         7.5727
+        ],
+        "components": {
+         "coupons": 6.8842,
+         "fx_income": 0.0,
+         "pull_to_par": 0.0,
+         "reinvest": 0.0
+        }
+       }
+      },
+      "ci": [
+       6.1958,
+       7.5727
+      ],
+      "flags": [],
+      "matures_within": false,
+      "source": "bond_carry",
+      "value": 6.8842
+     },
+     "idio": {
+      "catalysts_applied": [
+       {
+        "ci": [
+         1.26,
+         6.72
+        ],
+        "formula": "binary: p=0.6 × mass=0.7000 × upside=9.0 × src=1.0",
+        "id": "rate_cut_capital_gain",
+        "kind": "binary",
+        "value": 3.78,
+        "warnings": []
+       }
+      ],
+      "ci": [
+       1.26,
+       6.72
+      ],
+      "ignored_catalysts": [],
+      "value": 3.78
+     },
+     "macro": {
+      "blindspot": false,
+      "ci": [
+       -1.16,
+       8.84
+      ],
+      "coherence_gap": null,
+      "l1_point": null,
+      "l1_status": null,
+      "l1_unmatched_factors": [],
+      "layer": "L2",
+      "source": "stress",
+      "value": 3.84
+     },
+     "total": {
+      "ci": [
+       1.036,
+       27.9556
+      ],
+      "value": 14.504199999999999
+     }
+    }
+   },
+   "currency": "RUB",
+   "div_or_carry": {
+    "by_scenario": {
+     "A": {
+      "carry_pct": 13.7685,
+      "ci_pct": [
+       12.3916,
+       15.1453
+      ],
+      "components": {
+       "coupons": 13.7685,
+       "fx_income": 0.0,
+       "pull_to_par": 0.0,
+       "reinvest": 0.0
+      }
+     },
+     "B": {
+      "carry_pct": 13.7685,
+      "ci_pct": [
+       12.3916,
+       15.1453
+      ],
+      "components": {
+       "coupons": 13.7685,
+       "fx_income": 0.0,
+       "pull_to_par": 0.0,
+       "reinvest": 0.0
+      }
+     },
+     "C": {
+      "carry_pct": 13.7685,
+      "ci_pct": [
+       12.3916,
+       15.1453
+      ],
+      "components": {
+       "coupons": 13.7685,
+       "fx_income": 0.0,
+       "pull_to_par": 0.0,
+       "reinvest": 0.0
+      }
+     },
+     "D": {
+      "carry_pct": 13.7685,
+      "ci_pct": [
+       12.3916,
+       15.1453
+      ],
+      "components": {
+       "coupons": 13.7685,
+       "fx_income": 0.0,
+       "pull_to_par": 0.0,
+       "reinvest": 0.0
+      }
+     }
+    },
+    "ci": [
+     12.3916,
+     15.1453
+    ],
+    "flags": [],
+    "matures_within": false,
+    "source": "bond_carry",
+    "value": 13.7685
+   },
+   "idio": {
+    "catalysts_applied": [
+     {
+      "ci": [
+       1.26,
+       6.72
+      ],
+      "formula": "binary: p=0.6 × mass=0.7000 × upside=9.0 × src=1.0",
+      "id": "rate_cut_capital_gain",
+      "kind": "binary",
+      "value": 3.78,
+      "warnings": []
+     }
+    ],
+    "ci": [
+     1.26,
+     6.72
+    ],
+    "ignored_catalysts": [],
+    "value": 3.78
+   },
+   "is_blocked": false,
+   "macro": {
+    "blindspot": false,
+    "ci": [
+     6.99,
+     19.14
+    ],
+    "coherence_gap": null,
+    "l1_point": null,
+    "l1_status": null,
+    "l1_unmatched_factors": [],
+    "layer": "L2",
+    "source": "stress",
+    "value": 13.06
+   },
+   "on_iis": false,
+   "primary_horizon_key": "h12",
+   "ticker": "RU000A106E90",
+   "total": {
+    "ci": [
+     15.6923,
+     44.9102
+    ],
+    "value": 30.6085
+   },
+   "verdict": "ADD",
+   "verification_priority": "LOW",
+   "weight_pct": 3.6209,
+   "weight_source": "stress"
+  }
+ ],
+ "portfolio": {
+  "bond": {
+   "expected_pct_annualized": {
+    "ci": [
+     20.752995664830266,
+     41.39539106743331
+    ],
+    "method": "geometric",
+    "value": 30.861170426059136
+   },
+   "expected_pct_horizon": {
+    "ci": [
+     16.5016,
+     44.0505
+    ],
+    "value": 30.861170426059136
+   },
+   "weight_pct": 4.1567
+  },
+  "equity": {
+   "expected_pct_annualized": {
+    "ci": [
+     -0.009317431822386535,
+     41.726285012803935
+    ],
+    "method": "geometric",
+    "value": 21.148309089469098
+   },
+   "expected_pct_horizon": {
+    "ci": [
+     -14.56,
+     60.162
+    ],
+    "value": 21.148309089469098
+   },
+   "weight_pct": 7.575799999999999
+  },
+  "spread_pp_horizon": {
+   "ci": [
+    -39.2522,
+    26.6977
+   ],
+   "ci_method": "mc",
+   "point": -9.712861336590038
+  }
+ },
+ "portfolio_by_horizon": {
+  "h12": {
+   "bond": {
+    "expected_pct_annualized": {
+     "ci": [
+      20.752995664830266,
+      41.39539106743331
+     ],
+     "method": "geometric",
+     "value": 30.861170426059136
+    },
+    "expected_pct_horizon": {
+     "ci": [
+      16.5016,
+      44.0505
+     ],
+     "value": 30.861170426059136
+    },
+    "weight_pct": 4.1567
+   },
+   "equity": {
+    "expected_pct_annualized": {
+     "ci": [
+      -0.009317431822386535,
+      41.726285012803935
+     ],
+     "method": "geometric",
+     "value": 21.148309089469098
+    },
+    "expected_pct_horizon": {
+     "ci": [
+      -14.56,
+      60.162
+     ],
+     "value": 21.148309089469098
+    },
+    "weight_pct": 7.575799999999999
+   },
+   "spread_pp_horizon": {
+    "ci": [
+     -39.2522,
+     26.6977
+    ],
+    "ci_method": "mc",
+    "point": -9.712861336590038
+   }
+  },
+  "h24": {
+   "bond": {
+    "expected_pct_annualized": {
+     "ci": [
+      19.31741040345085,
+      33.051270640308616
+     ],
+     "method": "geometric",
+     "value": 26.286210539226662
+    },
+    "expected_pct_horizon": {
+     "ci": [
+      42.7603,
+      75.5586
+     ],
+     "value": 59.482069723578796
+    },
+    "weight_pct": 4.1567
+   },
+   "equity": {
+    "expected_pct_annualized": {
+     "ci": [
+      2.7588713242824525,
+      24.029441069075986
+     ],
+     "method": "geometric",
+     "value": 14.020067100384015
+    },
+    "expected_pct_horizon": {
+     "ci": [
+      -6.2021,
+      69.2982
+     ],
+     "value": 30.005757015760715
+    },
+    "weight_pct": 7.575799999999999
+   },
+   "spread_pp_horizon": {
+    "ci": [
+     -58.6596,
+     7.9682
+    ],
+    "ci_method": "mc",
+    "point": -29.47631270781808
+   }
+  },
+  "h6": {
+   "bond": {
+    "expected_pct_annualized": {
+     "ci": [
+      13.12560396650342,
+      52.02260562788683
+     ],
+     "method": "geometric",
+     "value": 31.375000733309278
+    },
+    "expected_pct_horizon": {
+     "ci": [
+      1.6537,
+      26.8742
+     ],
+     "value": 14.618934183366612
+    },
+    "weight_pct": 4.1567
+   },
+   "equity": {
+    "expected_pct_annualized": {
+     "ci": [
+      -5.205807867591372,
+      85.00479934377371
+     ],
+     "method": "geometric",
+     "value": 36.83553535335471
+    },
+    "expected_pct_horizon": {
+     "ci": [
+      -18.6047,
+      55.9736
+     ],
+     "value": 16.976722194355713
+    },
+    "weight_pct": 7.575799999999999
+   },
+   "spread_pp_horizon": {
+    "ci": [
+     -28.3179,
+     38.527
+    ],
+    "ci_method": "mc",
+    "point": 2.3577880109891005
+   }
+  }
+ },
+ "predictions_for_review": [
+  {
+   "catalyst_id": "sber_h1_2026_ifrs",
+   "date_window": "2026-08..2026-09",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "SBER",
+   "trigger": "Публикация МСФО 1П2026 (дата не объявлена)"
+  },
+  {
+   "catalyst_id": "sber_rate_cut_rerating",
+   "date_window": "2026-Q3..2027-Q1",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "SBER",
+   "trigger": "Продолжение цикла снижения КС → рост P/B (заседание 11.09.2026)"
+  },
+  {
+   "catalyst_id": "sber_div_policy_2027_2029",
+   "date_window": "2026-Q4..2027-Q1",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "SBER",
+   "trigger": "Утверждение стратегии 2027–2029 с сохранением payout 50% ЧП"
+  },
+  {
+   "catalyst_id": "synthetic_scenario_binary",
+   "date_window": "2026-09..2027-03",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "SBER",
+   "trigger": "СИНТЕТИЧЕСКИЙ катализатор фикстуры: покрытие ветки active_scenarios"
+  },
+  {
+   "catalyst_id": "ydex_board_div_confirm",
+   "date_window": "2026-07..2026-08",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "YDEX",
+   "trigger": "Решение СД 31.07.2026 по дивиденду 110 ₽ за 1П2026 (итог не опубликован на момент обзора)"
+  },
+  {
+   "catalyst_id": "ydex_h2_div",
+   "date_window": "2027-Q1..2027-Q2",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "YDEX",
+   "trigger": "Объявление дивиденда за 2П2026 (симметрично 1П)"
+  },
+  {
+   "catalyst_id": "ydex_ai_monetisation",
+   "date_window": "2026-Q4..2027-Q1",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "YDEX",
+   "trigger": "Сохранение темпа скорр. EBITDA +35% г/г в 3К–4К2026 (отчёт ~октябрь 2026)"
+  },
+  {
+   "catalyst_id": "synthetic_scenario_quant",
+   "date_window": "2026-10..2027-06",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "YDEX",
+   "trigger": "СИНТЕТИЧЕСКИЙ катализатор фикстуры: покрытие quantitative-ветки"
+  },
+  {
+   "catalyst_id": "rate_cut_capital_gain",
+   "date_window": "2026-09 to 2027-12",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "RU000A1038V6",
+   "trigger": "Продолжение цикла снижения КС (14.00% на 24.07.2026 → прогноз ЦБ по средней ставке 2027 10.5–12.5%) → переоценка тела, дюрация 7.2 г"
+  },
+  {
+   "catalyst_id": "rate_cut_capital_gain",
+   "date_window": "2026-09 to 2027-12",
+   "horizons": [
+    6,
+    12,
+    24
+   ],
+   "ticker": "RU000A106E90",
+   "trigger": "Продолжение цикла снижения КС (14.00% на 24.07.2026 → прогноз ЦБ по средней ставке 2027 10.5–12.5%) → переоценка тела, дюрация 6.2 г"
+  }
+ ],
+ "primary_horizon": 12,
+ "review_schema": "v2",
+ "sanity_by_horizon": {
+  "h12": [
+   {
+    "message": "Σ weight_pct (stress) = 11.73% ≠ 100 ± 0.5",
+    "severity": "HIGH",
+    "type": "weight_sum_off",
+    "weight_sum": 11.7325
+   }
+  ],
+  "h24": [
+   {
+    "message": "Σ weight_pct (stress) = 11.73% ≠ 100 ± 0.5",
+    "severity": "HIGH",
+    "type": "weight_sum_off",
+    "weight_sum": 11.7325
+   }
+  ],
+  "h6": [
+   {
+    "message": "Σ weight_pct (stress) = 11.73% ≠ 100 ± 0.5",
+    "severity": "HIGH",
+    "type": "weight_sum_off",
+    "weight_sum": 11.7325
+   }
+  ]
+ },
+ "share_bases": {
+  "main_account": {
+   "basis_rub": null,
+   "label": "Основной счёт (balance_summary.by_account.main)",
+   "shares_pct": {},
+   "used_in": "§5 — сверка с моделью IE и цель по доле акций"
+  },
+  "stress_weights": {
+   "basis_rub": null,
+   "label": "Полный портфель по стресс-тесту (после маршрутизации фондов)",
+   "shares_pct": {
+    "bond": 4.1567,
+    "equity": 7.5758
+   },
+   "used_in": "§2, §3, §4 — все агрегаты"
+  },
+  "unblocked_holdings": {
+   "basis_rub": 4640815.17,
+   "label": "Бумаги без кэша (holdings снапшота, без заблокированных)",
+   "shares_pct": {
+    "bond": 34.2749,
+    "equity": 65.7251
+   },
+   "used_in": "«Базовые суммы» шапки"
+  }
+ },
+ "spread_switch": {
+  "basis": "спред = акции − облигации, цена + carry + дивиденды по сценариям, БЕЗ идиосинкратики (не равен headline-спреду §2); вес одного сценария меняется, остальные делят остаток в текущих пропорциях; порог по точке, не по CI",
+  "by_horizon": {
+   "h12": {
+    "by_scenario": {
+     "A": {
+      "direction": null,
+      "spread_in_scenario_pp": -28.3822,
+      "w_flip": null,
+      "w_now": 0.25
+     },
+     "B": {
+      "direction": null,
+      "spread_in_scenario_pp": -19.3085,
+      "w_flip": null,
+      "w_now": 0.25
+     },
+     "C": {
+      "direction": null,
+      "spread_in_scenario_pp": -12.5644,
+      "w_flip": null,
+      "w_now": 0.25
+     },
+     "D": {
+      "direction": "up",
+      "spread_in_scenario_pp": 6.8882,
+      "w_flip": 0.7446,
+      "w_now": 0.25
+     }
+    },
+    "spread_now_pp": -13.3417
+   },
+   "h24": {
+    "by_scenario": {
+     "A": {
+      "direction": null,
+      "spread_in_scenario_pp": -46.9118,
+      "w_flip": null,
+      "w_now": 0.25
+     },
+     "B": {
+      "direction": null,
+      "spread_in_scenario_pp": -39.2745,
+      "w_flip": null,
+      "w_now": 0.25
+     },
+     "C": {
+      "direction": null,
+      "spread_in_scenario_pp": -32.8996,
+      "w_flip": null,
+      "w_now": 0.25
+     },
+     "D": {
+      "direction": null,
+      "spread_in_scenario_pp": -13.3635,
+      "w_flip": null,
+      "w_now": 0.25
+     }
+    },
+    "spread_now_pp": -33.1123
+   },
+   "h6": {
+    "by_scenario": {
+     "A": {
+      "direction": "down",
+      "spread_in_scenario_pp": -17.7002,
+      "w_flip": 0.1918,
+      "w_now": 0.25
+     },
+     "B": {
+      "direction": "down",
+      "spread_in_scenario_pp": -7.0965,
+      "w_flip": 0.0859,
+      "w_now": 0.25
+     },
+     "C": {
+      "direction": "up",
+      "spread_in_scenario_pp": 0.1279,
+      "w_flip": 0.9316,
+      "w_now": 0.25
+     },
+     "D": {
+      "direction": "up",
+      "spread_in_scenario_pp": 19.5719,
+      "w_flip": 0.2958,
+      "w_now": 0.25
+     }
+    },
+    "spread_now_pp": -1.2742
+   }
+  }
+ },
+ "tail_flags": {
+  "fired": true,
+  "flags": [
+   {
+    "action": "Знак доходности на значимой позиции (доля 3.80%) не разрешён интервалом — это реальный риск, не шум. Учесть при сайзинге.",
+    "code": "sign_unresolved",
+    "severity": "HIGH",
+    "ticker": "YDEX",
+    "type": "ЗНАК НЕ РАЗРЕШЁН",
+    "weight_pct": 3.8
+   },
+   {
+    "action": "Знак доходности на значимой позиции (доля 3.78%) не разрешён интервалом — это реальный риск, не шум. Учесть при сайзинге.",
+    "code": "sign_unresolved",
+    "severity": "HIGH",
+    "ticker": "SBER",
+    "type": "ЗНАК НЕ РАЗРЕШЁН",
+    "weight_pct": 3.78
+   }
+  ],
+  "portfolio_downside": 2.882,
+  "thresholds": {
+   "portfolio_tail_floor": 3.0,
+   "skew_threshold": 2.0,
+   "tail_cap": 3,
+   "tail_share_threshold": 0.15,
+   "weight_floor_pct": 2.0
+  }
+ },
+ "tail_flags_by_horizon": {
+  "h12": {
+   "fired": true,
+   "flags": [
+    {
+     "action": "Знак доходности на значимой позиции (доля 3.80%) не разрешён интервалом — это реальный риск, не шум. Учесть при сайзинге.",
+     "code": "sign_unresolved",
+     "severity": "HIGH",
+     "ticker": "YDEX",
+     "type": "ЗНАК НЕ РАЗРЕШЁН",
+     "weight_pct": 3.8
+    },
+    {
+     "action": "Знак доходности на значимой позиции (доля 3.78%) не разрешён интервалом — это реальный риск, не шум. Учесть при сайзинге.",
+     "code": "sign_unresolved",
+     "severity": "HIGH",
+     "ticker": "SBER",
+     "type": "ЗНАК НЕ РАЗРЕШЁН",
+     "weight_pct": 3.78
+    }
+   ],
+   "portfolio_downside": 2.882,
+   "thresholds": {
+    "portfolio_tail_floor": 3.0,
+    "skew_threshold": 2.0,
+    "tail_cap": 3,
+    "tail_share_threshold": 0.15,
+    "weight_floor_pct": 2.0
+   }
+  },
+  "h24": {
+   "fired": true,
+   "flags": [
+    {
+     "action": "Знак доходности на значимой позиции (доля 3.80%) не разрешён интервалом — это реальный риск, не шум. Учесть при сайзинге.",
+     "code": "sign_unresolved",
+     "severity": "HIGH",
+     "ticker": "YDEX",
+     "type": "ЗНАК НЕ РАЗРЕШЁН",
+     "weight_pct": 3.8
+    },
+    {
+     "action": "Знак доходности на значимой позиции (доля 3.78%) не разрешён интервалом — это реальный риск, не шум. Учесть при сайзинге.",
+     "code": "sign_unresolved",
+     "severity": "HIGH",
+     "ticker": "SBER",
+     "type": "ЗНАК НЕ РАЗРЕШЁН",
+     "weight_pct": 3.78
+    }
+   ],
+   "portfolio_downside": 2.934,
+   "thresholds": {
+    "portfolio_tail_floor": 3.0,
+    "skew_threshold": 2.0,
+    "tail_cap": 3,
+    "tail_share_threshold": 0.15,
+    "weight_floor_pct": 2.0
+   }
+  },
+  "h6": {
+   "fired": true,
+   "flags": [
+    {
+     "action": "Знак доходности на значимой позиции (доля 3.80%) не разрешён интервалом — это реальный риск, не шум. Учесть при сайзинге.",
+     "code": "sign_unresolved",
+     "severity": "HIGH",
+     "ticker": "YDEX",
+     "type": "ЗНАК НЕ РАЗРЕШЁН",
+     "weight_pct": 3.8
+    },
+    {
+     "action": "Знак доходности на значимой позиции (доля 3.78%) не разрешён интервалом — это реальный риск, не шум. Учесть при сайзинге.",
+     "code": "sign_unresolved",
+     "severity": "HIGH",
+     "ticker": "SBER",
+     "type": "ЗНАК НЕ РАЗРЕШЁН",
+     "weight_pct": 3.78
+    }
+   ],
+   "portfolio_downside": 2.844,
+   "thresholds": {
+    "portfolio_tail_floor": 3.0,
+    "skew_threshold": 2.0,
+    "tail_cap": 3,
+    "tail_share_threshold": 0.15,
+    "weight_floor_pct": 2.0
+   }
+  }
+ },
+ "total_return_by_horizon": {
+  "by_horizon": {
+   "h12": {
+    "by_scenario": {
+     "A": {
+      "bond": 17.7634,
+      "cash": null,
+      "equity": -10.6188,
+      "portfolio": -0.5633
+     },
+     "B": {
+      "bond": 30.4957,
+      "cash": null,
+      "equity": 11.1872,
+      "portfolio": 18.028
+     },
+     "C": {
+      "bond": 28.1106,
+      "cash": null,
+      "equity": 15.5462,
+      "portfolio": 19.9976
+     },
+     "D": {
+      "bond": 31.6276,
+      "cash": null,
+      "equity": 38.5158,
+      "portfolio": 36.0754
+     }
+    },
+    "expected": {
+     "bond": 26.9993,
+     "cash": null,
+     "equity": 13.6576,
+     "portfolio": 18.3844
+    },
+    "layers": {
+     "bond": {
+      "idio": {
+       "ci": [
+        1.2871,
+        6.8553
+       ],
+       "value": 3.8612
+      },
+      "income": {
+       "ci": [
+        12.3174,
+        15.0546
+       ],
+       "value": 13.686
+      },
+      "income_kind": "carry",
+      "price": {
+       "ci": [
+        7.1485,
+        19.4855
+       ],
+       "value": 13.3139
+      }
+     },
+     "equity": {
+      "idio": {
+       "ci": [
+        -3.1525,
+        17.5568
+       ],
+       "value": 7.4895
+      },
+      "income": {
+       "ci": [
+        6.4512,
+        12.6244
+       ],
+       "value": 9.5378
+      },
+      "income_kind": "dividend",
+      "price": {
+       "ci": [
+        -3.308,
+        11.5451
+       ],
+       "value": 4.1211
+      }
+     }
+    }
+   },
+   "h24": {
+    "by_scenario": {
+     "A": {
+      "bond": 44.9559,
+      "cash": null,
+      "equity": -1.9559,
+      "portfolio": 14.6645
+     },
+     "B": {
+      "bond": 59.2492,
+      "cash": null,
+      "equity": 19.9747,
+      "portfolio": 33.8892
+     },
+     "C": {
+      "bond": 57.3931,
+      "cash": null,
+      "equity": 24.4935,
+      "portfolio": 36.1495
+     },
+     "D": {
+      "bond": 60.9014,
+      "cash": null,
+      "equity": 47.5379,
+      "portfolio": 52.2725
+     }
+    },
+    "expected": {
+     "bond": 55.6249,
+     "cash": null,
+     "equity": 22.5126,
+     "portfolio": 34.2439
+    },
+    "layers": {
+     "bond": {
+      "idio": {
+       "ci": [
+        1.2871,
+        6.8553
+       ],
+       "value": 3.8612
+      },
+      "income": {
+       "ci": [
+        24.6349,
+        30.1093
+       ],
+       "value": 27.3721
+      },
+      "income_kind": "carry",
+      "price": {
+       "ci": [
+        16.4445,
+        40.0618
+       ],
+       "value": 28.2488
+      }
+     },
+     "equity": {
+      "idio": {
+       "ci": [
+        -3.1525,
+        17.5568
+       ],
+       "value": 7.4895
+      },
+      "income": {
+       "ci": [
+        12.3416,
+        24.3142
+       ],
+       "value": 18.3279
+      },
+      "income_kind": "dividend",
+      "price": {
+       "ci": [
+        -3.5952,
+        11.962
+       ],
+       "value": 4.1884
+      }
+     }
+    }
+   },
+   "h6": {
+    "by_scenario": {
+     "A": {
+      "bond": 2.9895,
+      "cash": null,
+      "equity": -14.7107,
+      "portfolio": -8.4397
+     },
+     "B": {
+      "bond": 14.1222,
+      "cash": null,
+      "equity": 7.0257,
+      "portfolio": 9.5399
+     },
+     "C": {
+      "bond": 11.2067,
+      "cash": null,
+      "equity": 11.3346,
+      "portfolio": 11.2893
+     },
+     "D": {
+      "bond": 14.7225,
+      "cash": null,
+      "equity": 34.2944,
+      "portfolio": 27.3603
+     }
+    },
+    "expected": {
+     "bond": 10.7602,
+     "cash": null,
+     "equity": 9.486,
+     "portfolio": 9.9375
+    },
+    "layers": {
+     "bond": {
+      "idio": {
+       "ci": [
+        1.2871,
+        6.8553
+       ],
+       "value": 3.8612
+      },
+      "income": {
+       "ci": [
+        6.1587,
+        7.5273
+       ],
+       "value": 6.843
+      },
+      "income_kind": "carry",
+      "price": {
+       "ci": [
+        -1.0852,
+        8.9148
+       ],
+       "value": 3.9148
+      }
+     },
+     "equity": {
+      "idio": {
+       "ci": [
+        -3.1525,
+        17.5568
+       ],
+       "value": 7.4895
+      },
+      "income": {
+       "ci": [
+        3.2256,
+        6.3122
+       ],
+       "value": 4.7689
+      },
+      "income_kind": "dividend",
+      "price": {
+       "ci": [
+        -2.7107,
+        12.1475
+       ],
+       "value": 4.7184
+      }
+     }
+    }
+   }
+  },
+  "cash_included": false,
+  "div_sanctions_haircut": {
+   "applied_in": [],
+   "haircut": 0.25
+  },
+  "note": "by_scenario = price_delta + bond_carry + dividend (БЕЗ идиосинкратики — она в per_position.total и portfolio_by_horizon по METH-1)",
+  "weights_basis": "позиции — stress weight_pct (R-SNAP, % от non-cash unblocked); портфель — стоимостной базис снапшота: holdings 4640815 ₽ + кэш 1218628 ₽"
+ },
+ "validation": {
+  "blindspot_coverage": {
+   "flagged_total": 0,
+   "flagged_weight_pct": 0.0,
+   "from_position_flag": [],
+   "from_stress_table": [],
+   "table_rows": 0
+  },
+  "fund_unrouted": [],
+  "horizon_anchor_drift": {
+   "affected_catalysts": [],
+   "by_horizon": {
+    "h12": {
+     "days": 31,
+     "review": "2027-07-31",
+     "stress": "2027-08-31"
+    },
+    "h24": {
+     "days": 31,
+     "review": "2028-07-31",
+     "stress": "2028-08-31"
+    },
+    "h6": {
+     "days": 28,
+     "review": "2027-01-31",
+     "stress": "2027-02-28"
+    }
+   },
+   "drift": true,
+   "message": "якоря горизонтов stress и weekly-review расходятся (h12: 2027-08-31 против 2027-07-31, h24: 2028-08-31 против 2028-07-31, h6: 2027-02-28 против 2027-01-31; максимум 31 дн.). За истину взят stress. Катализаторов, меняющих горизонт из-за подмены даты: 0. Перечислить в §0 и оговоркой СРЕДНЕЙ серьёзности в §9.",
+   "source_of_truth": "stress"
+  },
+  "idio_layer_unlinked": true,
+  "l1_overlay": {
+   "applied_positions": 0,
+   "message": null,
+   "requested": false
+  },
+  "merged_duplicate_tickers": [],
+  "missing_scenario_ids": [],
+  "sanity_warnings": [
+   {
+    "message": "Σ weight_pct (stress) = 11.73% ≠ 100 ± 0.5",
+    "severity": "HIGH",
+    "type": "weight_sum_off",
+    "weight_sum": 11.7325
+   }
+  ],
+  "scenario_p_sum": 1.0,
+  "scenario_p_warning_severity": null,
+  "snapshot_drift": {
+   "drift_warning": true,
+   "max_drift_days": 4,
+   "review_bonds_snapshot_id": "portfolio-2026-07-31.json",
+   "review_stocks_snapshot_id": "portfolio-2026-07-31.json",
+   "stress_snapshot_id": "portfolio-2026-08-04.json"
+  },
+  "snapshot_quality_flags": [],
+  "stale_pipeline_gate": "PASS",
+  "stale_pipeline_message": "идио-слой развязан со сценарным: 0 из 10 катализаторов несут macro_dependency — все получат плоский дисконт 0.7 вместо сценарной массы. Это HIGH-оговорка §0/§9, а не чистый PASS. Производитель привязки — Mode 1/2 ru-portfolio-advisor (сценарные ID — из SSOT-матрицы scenarios/).",
+  "total_catalysts": 10,
+  "trust_coverage": {
+   "ignored_applied": 0,
+   "ignored_catalysts": [],
+   "matrix_ignored_keys": 0,
+   "message": null,
+   "tagged": 0,
+   "total_catalysts": 10,
+   "untagged": 10
+  },
+  "unresolved_macro_dependency": [],
+  "unresolved_share": 0.0
+ }
+}

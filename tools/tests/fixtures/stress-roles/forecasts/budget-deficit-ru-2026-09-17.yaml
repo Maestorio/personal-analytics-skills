@@ -1,0 +1,301 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: budget-deficit-ru-2026-09-17.md
+status: active
+replaces:
+  - budget-deficit-ru-2026-07-29
+
+forecast:
+  date: 2026-09-17
+  horizon: 2028-12-31
+  horizons:
+    - 2026-12-31
+    - 2027-06-30
+    - 2027-12-31
+    - 2028-12-31
+  domain: ru-macro
+  topic: budget-deficit-ru
+  method: fca
+  unit: "mixed: trln_rub_annual (2026) | percent_gdp_annual (2027-2028) — см. методологическое предупреждение о разнородности метрик в .md"
+  central_estimate: "Дефицит федерального бюджета РФ: 8.2 трлн руб (~3.6% ВВП) к 2026-12-31; первичный структурный 1.0% ВВП к 2027-12-31 (P10-P90: 1.0-2.6%); 0.5% ВВП к 2028-12-31"
+  confidence: 0.40
+  source_coverage_score: 0.40
+  confidence_by_horizon:
+    "2026-12-31": 0.30
+    "2027-06-30": 0.30
+    "2027-12-31": 0.33
+    "2028-12-31": 0.23
+  upstream_snapshot:
+    - factor: brent
+      central_estimate: "$85/bbl к 2026-12-31; $77/bbl к 2027-06-30; нет консенсуса на 2027-12-31/2028-12-31"
+      confidence: 0.40
+      forecast_date: 2026-09-17
+      source_file: "forecasts/brent-price-2026-09-17.yaml"
+    - factor: urals_discount
+      central_estimate: "$22/bbl к 2026-12-31; $15 к 2027-06-30; $14 к 2027-12-31; $12 к 2028-12-31 (L1, единственный весовой якорь — МЭР fallback)"
+      confidence: 0.40
+      forecast_date: 2026-09-17
+      source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+    - factor: sanctions_intensity
+      central_estimate: "holding модальна на всех горизонтах (h6 52%/h12 46%/h24 40%/h30 37%), дрейф к relief/lift замедляется"
+      confidence: 0.60
+      forecast_date: 2026-09-17
+      source_file: "forecasts/sanctions-russia-2026-28-2026-09-17.yaml"
+  notes:
+    - "Три несовместимые метрики под словом «дефицит»: головной федеральный (Минфин/ЦБ/ЦМАКП), первичный структурный (ЦБ, уже головного), консолидированный (МЭР/World Bank, шире федерального). См. методологическое предупреждение в .md — цифры НЕ усреднены напрямую между определениями"
+    - "2026-12-31 L1 держится на единственном взвешенном якоре (ЦБ, fallback MEDIUM); 2027-06-30 нет ни одного источника с точкой на середину года — использована индикативная интерполяция, отмеченная отдельно от FCA-консенсуса"
+    - "One-sided cone пробит на 2027-2028 (все институциональные позиции, включая World Bank и Layer 2, ниже текущего годового темпа факта 3.82% ВВП) — counter_world_reason заполнен, встречный мир в discourse не найден"
+    - "Layer 2 построен как двухосевой derived_from_upstream (расходы ~ conflict_intensity, доходы ~ sanctions_intensity через net Urals), а не через прямую атрибуцию источников — ни один из 10 проверенных источников не даёт сценарной привязки"
+
+geopolitics_translation:
+  method: axis_dependent
+  source_scenario_matrix: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  axis: "joint: conflict_intensity (расходы) + sanctions_intensity (доходы)"
+  note: "Бюджетный дефицит — джойнт-респондер на обе оси матрицы, не одна ось (в отличие от urals_discount/brent)"
+
+isolated: false
+isolated_reason: null
+
+conditional_on_scenarios:
+  source_matrix: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  scenario_id_format: short
+  unit: "mixed: trln_rub_annual (2026) | percent_gdp_annual (2027-2028)"
+  fact_anchor:
+    value: 3.82
+    unit: "percent_gdp_annualized"
+    as_of: 2026-09-09
+    source: "Минфин РФ (YTD янв-авг 2026, линейная аннуализация 5.795 трлн / 8 мес. x 12)"
+  one_sided_cone: true
+  cone_side:
+    "2026-12-31": two_sided
+    "2027-12-31": down
+    "2028-12-31": down
+  counter_world_reason: "Ни один институциональный источник (включая наиболее пессимистичный World Bank и оппозиционный RE:Russia) не формулирует количественный сценарий ухудшения темпа сверх уровня 2026 года на 2027-2028; консолидация ожидается всеми лагерями, расходится только её скорость."
+
+  by_scenario:
+    A:
+      label: "Затяжная осада (война + ужесточение)"
+      values:
+        "2026-12-31": { central: 9.85, range: [9.4, 10.3] }
+        "2027-12-31": { central: 3.4, range: [3.0, 3.8] }
+        "2028-12-31": { central: 3.6, range: [3.2, 4.0] }
+      provenance: derived_from_upstream
+      upstream_used:
+        - factor: urals_discount_2026
+          value: 27
+          unit: "USD/bbl"
+          source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+        - factor: urals_discount_2027
+          value: 24
+          unit: "USD/bbl"
+          source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+        - factor: brent_2026
+          value: 91
+          unit: "USD/bbl"
+          source_file: "forecasts/brent-price-2026-09-17.yaml"
+        - factor: brent_2027
+          value: 83
+          unit: "USD/bbl"
+          source_file: "forecasts/brent-price-2026-09-17.yaml"
+        - factor: sanctions_axis_y_value
+          value: 1.0
+          unit: "axis_fraction_HIGH"
+          source_file: "forecasts/sanctions-russia-2026-28-2026-09-17.yaml"
+      sources_used: []
+      coverage_quality: LOW
+    B:
+      label: "Война на расколотом фронте (война + фрагментация санкций)"
+      values:
+        "2026-12-31": { central: 8.8, range: [8.6, 9.0] }
+        "2027-12-31": { central: 2.5, range: [2.2, 2.8] }
+        "2028-12-31": { central: 2.3, range: [2.0, 2.6] }
+      provenance: derived_from_upstream
+      upstream_used:
+        - factor: urals_discount_2026
+          value: 22
+          unit: "USD/bbl"
+          source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+        - factor: urals_discount_2027
+          value: 14
+          unit: "USD/bbl"
+          source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+        - factor: brent_2026
+          value: 87
+          unit: "USD/bbl"
+          source_file: "forecasts/brent-price-2026-09-17.yaml"
+        - factor: brent_2027
+          value: 79
+          unit: "USD/bbl"
+          source_file: "forecasts/brent-price-2026-09-17.yaml"
+      sources_used: []
+      coverage_quality: LOW
+    C:
+      label: "Замороженный конфликт под давлением (перемирие + holding)"
+      values:
+        "2026-12-31": { central: 7.2, range: [7.0, 7.4] }
+        "2027-12-31": { central: 1.55, range: [1.3, 1.8] }
+        "2028-12-31": { central: 1.25, range: [1.0, 1.5] }
+      provenance: derived_from_upstream
+      upstream_used:
+        - factor: urals_discount_2026
+          value: 17
+          unit: "USD/bbl"
+          source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+        - factor: urals_discount_2027
+          value: 11
+          unit: "USD/bbl"
+          source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+        - factor: brent_2026
+          value: 83
+          unit: "USD/bbl"
+          source_file: "forecasts/brent-price-2026-09-17.yaml"
+        - factor: brent_2027
+          value: 75
+          unit: "USD/bbl"
+          source_file: "forecasts/brent-price-2026-09-17.yaml"
+      sources_used: []
+      coverage_quality: LOW
+    D:
+      label: "Большая сделка и разрядка (мир + снятие санкций)"
+      values:
+        "2026-12-31": { central: 5.75, range: [5.3, 6.2] }
+        "2027-12-31": { central: 0.85, range: [0.6, 1.1] }
+        "2028-12-31": { central: 0.55, range: [0.3, 0.8] }
+      provenance: derived_from_upstream
+      upstream_used:
+        - factor: urals_discount_2026
+          value: 11
+          unit: "USD/bbl"
+          source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+        - factor: urals_discount_2027
+          value: 7
+          unit: "USD/bbl"
+          source_file: "forecasts/urals-brent-discount-2026-09-17.yaml"
+        - factor: brent_2026
+          value: 79
+          unit: "USD/bbl"
+          source_file: "forecasts/brent-price-2026-09-17.yaml"
+        - factor: brent_2027
+          value: 72
+          unit: "USD/bbl"
+          source_file: "forecasts/brent-price-2026-09-17.yaml"
+      sources_used: []
+      coverage_quality: LOW
+
+  marginal:
+    method: linear
+    modal_scenario_id: none
+    values:
+      "2026-12-31": { central: 7.7, range: [5.3, 10.3] }
+      "2027-12-31": { central: 1.9, range: [0.6, 3.8] }
+      "2028-12-31": { central: 1.8, range: [0.3, 4.0] }
+    aggregation_formula: "weighted_mean"
+
+coherence_diagnostic:
+  layer1_marginal: 8.2
+  layer2_marginal: 7.7
+  divergence_pct: 6.1
+  severity: MEDIUM
+  warning: "Расхождение на 2026 умеренное (6.1%); на 2027-2028 расхождение крупное (90%+/260%), но методологическое — L1 держится исключительно на узком первичном структурном якоре ЦБ (fallback MEDIUM), тогда как L2 использует более широкую консолидированную шкалу. См. by_horizon."
+  by_horizon:
+    "2026-12-31": { layer1: 8.2, layer2: 7.7, divergence_pct: 6.1, severity: MEDIUM }
+    "2027-12-31": { layer1: 1.0, layer2: 1.9, divergence_pct: 90.0, severity: HIGH, note: "L1 держится на узком первичн.-структурн. якоре ЦБ (fallback MEDIUM, единственный источник); L2 использует более широкую консолидированную шкалу — расхождение методологическое, не событийное" }
+    "2028-12-31": { layer1: 0.5, layer2: 1.8, divergence_pct: 260.0, severity: HIGH, note: "то же методологическое расхождение, усилено экстраполяцией" }
+
+fca_stats:
+  "2026-12-31":
+    kind: level
+    unit: "trln_rub_annual"
+    l1_weighted: 8.2
+    l1_unweighted: 6.5
+    l2_ev: 7.7
+    p10: 8.2
+    p90: 8.2
+  "2027-06-30":
+    kind: level
+    unit: "trln_rub_annual"
+    l1_weighted: null
+    l1_unweighted: null
+    l2_ev: null
+    p10: null
+    p90: null
+  "2027-12-31":
+    kind: level
+    unit: "percent_gdp_annual"
+    l1_weighted: 1.0
+    l1_unweighted: 1.95
+    l2_ev: 1.9
+    p10: 1.0
+    p90: 2.6
+  "2028-12-31":
+    kind: level
+    unit: "percent_gdp_annual"
+    l1_weighted: 0.5
+    l1_unweighted: 1.3
+    l2_ev: 1.8
+    p10: 0.5
+    p90: 0.5
+
+reviews:
+  interval_months: 3
+  next_due: 2026-12-17
+  last_completed: null
+  history: []
+
+monitoring:
+  - id: minfin-budget-2027-29
+    description: "Публикация проекта федерального бюджета на 2027-2029 годы (объявлена на последнюю декаду сентября 2026)"
+    source: "https://www.m24.ru/news/09092026/939457"
+    threshold: "внесение проекта в Госдуму / публикация параметров дефицита по годам"
+    check_date: 2026-09-30
+    impact: supports
+    severity: high
+    auto_checkable: false
+    side: both
+  - id: minfin-full-year-2026-actual
+    description: "Фактический годовой дефицит федерального бюджета 2026 (публикуется обычно в январе-феврале 2027)"
+    source: "https://minfin.gov.ru"
+    threshold: "публикация факта за 12 мес. 2026"
+    check_date: 2027-02-15
+    impact: invalidates
+    severity: critical
+    auto_checkable: true
+    side: both
+  - id: cbr-primary-deficit-risk
+    description: "Оценка ЦБ РФ риска превышения первичного структурного дефицита (Ганган: 'риски невысокие')"
+    source: "https://finance.mail.ru/article/v-cb-ocenili-riski-povysheniya-pervichnogo-deficita-byudzheta-69227886/"
+    threshold: "пересмотр ЦБ параметров бюджета на трёхлетку в следующем МДП/ОНЕГДКП"
+    check_date: 2026-12-17
+    impact: mixed
+    severity: medium
+    auto_checkable: false
+    side: up
+  - id: fnb-liquid-share
+    description: "Ликвидная часть ФНБ (BOFIT: 1.8% ВВП на конец 2025, против 6.5% до 2022) — буфер финансирования дефицита"
+    source: "https://www.bofit.fi/en/forecasting/latest-forecast-for-russia/"
+    threshold: "ликвидная часть ФНБ падает ниже ~1% ВВП"
+    check_date: 2027-06-30
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+    side: down
+
+final_audit:
+  due: 2028-12-31
+  status: pending
+
+outcome_log:
+  - resolve_date: 2026-12-31
+    logged_at: 2026-09-17
+    record_type: horizon_resolve
+    kind: level
+    forecast_l1_weighted: 8.2
+    forecast_l1_unweighted: 6.5
+    forecast_l2_ev: 7.7
+    p10_p90: [8.2, 8.2]
+    confidence_at_forecast: 0.40
+    actual: null
+    in_p10_p90: null
+    error_pct: null
+    actual_source: null
+    shock_flag: none

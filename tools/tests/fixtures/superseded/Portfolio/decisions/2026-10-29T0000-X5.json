@@ -1,0 +1,22 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-10-29T0000-X5",
+  "key": "X5",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-12-13",
+  "note": "МСФО 3К26: скорр. EBITDA-маржа 6,7% (+28 б.п.), ЧП +3,8% (до налога +21%); гайденс подтверждён с понижением (выручка ~12%, капекс ~4%); дивиденд за 9М ≈125–190 ₽ (расчёт), СД не объявил. Доля ≈6,3% п…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "report",
+    "doc": "Portfolio/reports/2026-10-29-single-analysis-x5-ifrs-3q26.md",
+    "mode_codes": [
+      "4a"
+    ],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-10-29T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

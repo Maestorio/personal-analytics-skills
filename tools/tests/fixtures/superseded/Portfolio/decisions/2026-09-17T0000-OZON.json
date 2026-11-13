@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-17T0000-OZON",
+  "key": "OZON",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-12-01",
+  "note": "Повторные удары (22–24.08, 11.09 Саратов), ущерб не раскрыт; финтех-прибыль и страховка ограничивают потери (Т-Инв: −1% EBITDA на склад). Stress h12 EV +3,5% / tail −16% < carry облигаций. План 5,5→5…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-17T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

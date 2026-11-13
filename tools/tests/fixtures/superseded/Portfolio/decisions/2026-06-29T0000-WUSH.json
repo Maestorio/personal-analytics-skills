@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-06-29T0000-WUSH",
+  "key": "WUSH",
+  "verdict": "TRIM",
+  "target_pct": null,
+  "review_by": "2026-08-21",
+  "note": "Уточнён target 0.5% + 2-траншевое исполнение (T1 сейчас → ~1.0%, T2 post-1П2026/декабрь). Добавлен next_review-триггер на 1П2026 МСФО. Налог: harvest убытка против реализованной прибыли года.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-06-29T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

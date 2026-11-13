@@ -1,0 +1,136 @@
+schema_version: 1
+type: scenario-events
+scenario_ref: scenario-brent-dec-2026-2026-04-30.md
+status: active
+
+matrix:
+  date: 2026-04-30
+  horizon: 2026-12-31
+  domain: global-markets
+  topic: brent-dec-2026
+  axis_x: "Сроки нормализации Ормуза: до июля vs сентябрь–декабрь 2026"
+  axis_y: "Глобальный спрос: устойчивый (China+US soft landing) vs слабеющий (US рецессия+China стагнация)"
+
+scenario_triggers:
+  - scenario_id: A
+    label: "Плавный откат"
+    probability: 0.25
+    enabling_conditions:
+      - "Ормуз открывается для коммерческого судоходства до 31.07.2026"
+      - "US ВВП Q2 2026 ≥ 0% (нет технической рецессии)"
+      - "China crude imports ≥10.5 mb/d в июне–июле"
+    leading_indicators:
+      - id: vlcc-transit-hormuz-july
+        description: "VLCC transit через Ормуз ≥30 судов/день"
+        threshold: "≥30 VLCC/день к 31.07.2026"
+        check_date: 2026-07-31
+        auto_checkable: true
+      - id: china-imports-june
+        description: "China crude imports стабилизируются на уровне stockpiling"
+        threshold: "≥10.5 mb/d в июне–июле 2026"
+        check_date: 2026-07-31
+        auto_checkable: true
+      - id: opec-compliance-may-jun
+        description: "ОПЕК+ MOMR compliance rate"
+        threshold: "≥90% в мае–июне"
+        check_date: 2026-06-30
+        auto_checkable: false
+      - id: dec26-future-below-90
+        description: "Dec-26 фьючерс ICE Brent при открытом Ормузе"
+        threshold: "<$90/b к 15.07.2026"
+        check_date: 2026-07-15
+        auto_checkable: true
+
+  - scenario_id: B
+    label: "Пиррова нормализация"
+    probability: 0.25
+    enabling_conditions:
+      - "Ормуз открывается до 31.07.2026"
+      - "US ВВП Q1 и Q2 2026 оба отрицательные"
+      - "ОПЕК+ overproduction >500 kb/d два месяца подряд"
+    leading_indicators:
+      - id: us-gdp-q2-negative
+        description: "US GDP Q2 2026 advance estimate"
+        threshold: "<0% (технрецессия подтверждена)"
+        check_date: 2026-08-01
+        auto_checkable: true
+      - id: opec-overproduction-q2
+        description: "ОПЕК+ overproduction из MOMR два месяца подряд"
+        threshold: ">500 kb/d относительно квот"
+        check_date: 2026-07-15
+        auto_checkable: false
+      - id: china-imports-collapse
+        description: "China crude imports сигнал спросового коллапса"
+        threshold: "<9.5 mb/d в июне–июле"
+        check_date: 2026-07-31
+        auto_checkable: true
+      - id: us-jobless-claims-300k
+        description: "US initial jobless claims устойчиво повышены"
+        threshold: ">300K/неделю с июня 2026"
+        check_date: 2026-06-30
+        auto_checkable: true
+
+  - scenario_id: C
+    label: "Война за баррель"
+    probability: 0.25
+    enabling_conditions:
+      - "Ормуз <50% пропускной способности на 31.08.2026"
+      - "Gulf production <45% от базы февраля к Q3"
+      - "US без технической рецессии (ВВП Q2 ≥ 0%)"
+    leading_indicators:
+      - id: cape-freight-rates
+        description: "VLCC/Aframax ставки фрахта через Cape of Good Hope"
+        threshold: ">40% к базе февраля к 15.06.2026"
+        check_date: 2026-06-15
+        auto_checkable: false
+      - id: us-spr-below-300m
+        description: "US DOE Strategic Petroleum Reserve уровень"
+        threshold: "<300 млн баррелей"
+        check_date: 2026-07-31
+        auto_checkable: true
+      - id: gulf-export-below-45
+        description: "Gulf crude export tracker (Kpler/Vortexa)"
+        threshold: "<4.5 mb/d на 31.07.2026"
+        check_date: 2026-07-31
+        auto_checkable: false
+      - id: us-iran-talks-collapse
+        description: "Срыв или отмена раунда переговоров США–Иран"
+        check_date: 2026-06-30
+        auto_checkable: false
+
+  - scenario_id: D
+    label: "Геополитический тупик"
+    probability: 0.25
+    enabling_conditions:
+      - "Ормуз <50% пропускной способности на 31.08.2026"
+      - "US ВВП Q2 2026 < 0%"
+      - "Brent Dec-26 фьючерс в диапазоне $85–96 несмотря на закрытый Ормуз"
+    leading_indicators:
+      - id: dual-signal-recession-hormuz
+        description: "Одновременно: US GDP Q2 < 0% И Ормуз <50% на 31.08.2026"
+        check_date: 2026-08-31
+        auto_checkable: false
+      - id: opec-no-emergency-meeting
+        description: "Отсутствие экстренных заседаний ОПЕК+ по смягчению квот"
+        check_date: 2026-08-31
+        auto_checkable: false
+      - id: iea-omr-demand-downgrade
+        description: "IEA Oil Market Report — пересмотр глобального спроса"
+        threshold: "Downgrade >500 kb/d в августовском OMR"
+        check_date: 2026-08-15
+        auto_checkable: false
+      - id: dec26-range-85-96-closed-hormuz
+        description: "Brent Dec-26 в диапазоне $85–96 при закрытом Ормузе"
+        threshold: "$85–96/b при Ормузе <50%"
+        check_date: 2026-08-31
+        auto_checkable: true
+
+reviews:
+  interval_months: 3
+  next_due: 2026-07-30
+  last_completed: null
+  history: []
+
+final_audit:
+  due: 2026-12-31
+  status: pending

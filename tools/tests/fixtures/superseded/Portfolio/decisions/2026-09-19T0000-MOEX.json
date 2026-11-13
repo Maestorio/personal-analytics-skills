@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-MOEX",
+  "key": "MOEX",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-11-18",
+  "note": "Лучший хвост книги (−9,2% Sc-A против −21,8% у банков) при EV +4,08%. Первый претендент на резервный 1,0 пп после разрешения условия moex-gate-review-3009 (30.09).",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-08-15T0000-PLZL",
+  "key": "PLZL",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-09-14",
+  "note": "Hedge-тезис (золото+рубль) жив и подтверждён стресс-моделью по всем 4 сценариям (h12 +19.6...+32.7%), оценка дешёвая (P/E 4.76). Но фундаментал ухудшился за 5 недель: дивиденды приостановлены до 2030…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-08-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

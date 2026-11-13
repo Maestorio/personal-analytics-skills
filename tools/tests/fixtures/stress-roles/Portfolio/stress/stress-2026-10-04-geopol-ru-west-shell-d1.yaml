@@ -1,0 +1,257 @@
+schema_version: 2
+type: portfolio-stress-test
+date: '2026-10-04'
+horizons:
+- 6
+- 12
+- 24
+horizon_ends:
+  h6: '2027-03-31'
+  h12: '2027-09-30'
+  h24: '2028-09-30'
+primary_horizon: 12
+horizon_mode: rolling
+portfolio_snapshot_id: portfolio-2026-10-01.json
+scenario_source: macro-forecast-chain
+weight_type: probability
+scenario_count: 4
+run_id: PSS-20261004-GEOPOL_RU_WEST_SHELL_D1
+review_date: '2027-04-04'
+modal_flag: no_modal
+basis_contract: 1
+layers_included:
+  price: true
+  bond_carry: true
+  dividends: false
+per_position_basis: price
+base_value_rub: 3520549
+base_value_note: holdings unblocked + кэш; blocked исключены
+p_basis: primary_horizon
+baseline_spot:
+  brent_price: 104.18
+  urals_brent_discount: 24.14
+  usdrub_rate: 84.1732
+  cnyrub_rate: 12.5457
+  inflation_ru: 6.3
+  cbr_rate: 14.0
+  budget_deficit_ru_pct_gdp: 3.82
+  xauusd_price: 4300
+scenarios:
+  A:
+    name: Затяжная осада
+    p: 0.195
+    p_by_horizon:
+      h6: 0.2154
+      h12: 0.195
+      h24: 0.24
+    factors_by_horizon:
+      h6:
+        brent: -16.47
+        usdrub: 10.06
+        cnyrub: 17.71
+        cbr_rate: 0.71
+        xauusd: 9.57
+        sanctions: 0.56
+        geopol: 0.72
+      h12:
+        brent: -20.33
+        usdrub: 15.65
+        cnyrub: 24.62
+        cbr_rate: 0.32
+        xauusd: 16.72
+        sanctions: 0.65
+        geopol: 0.77
+      h24:
+        brent: -20.33
+        usdrub: 20.31
+        cnyrub: 31.23
+        cbr_rate: -2.37
+        xauusd: 21.29
+        sanctions: 0.7
+        geopol: 0.8
+    portfolio_level_by_horizon:
+      h6:
+        price_delta_rub: -112811
+        price_delta_pct: -3.2044
+        carry_rub: 157650
+        carry_pct: 4.478
+        total_return_rub: 44839
+        total_return_pct: 1.2736
+      h12:
+        price_delta_rub: -79977
+        price_delta_pct: -2.2717
+        carry_rub: 317637
+        carry_pct: 9.0224
+        total_return_rub: 237660
+        total_return_pct: 6.7506
+      h24:
+        price_delta_rub: 52765
+        price_delta_pct: 1.4988
+        carry_rub: 573302
+        carry_pct: 16.2844
+        total_return_rub: 626067
+        total_return_pct: 17.7832
+  B:
+    name: Война на расколотом фронте
+    p: 0.155
+    p_by_horizon:
+      h6: 0.1349
+      h12: 0.155
+      h24: 0.16
+    factors_by_horizon:
+      h6:
+        brent: -20.31
+        usdrub: -8.36
+        cnyrub: -7.08
+        cbr_rate: -0.34
+        xauusd: 9.57
+        sanctions: -0.29
+        geopol: 0.44
+      h12:
+        brent: -24.17
+        usdrub: -3.71
+        cnyrub: -1.6
+        cbr_rate: -0.83
+        xauusd: 16.72
+        sanctions: -0.41
+        geopol: 0.48
+      h24:
+        brent: -24.17
+        usdrub: 0.12
+        cnyrub: 3.58
+        cbr_rate: -3.7
+        xauusd: 21.29
+        sanctions: -0.5
+        geopol: 0.5
+    portfolio_level_by_horizon:
+      h6:
+        price_delta_rub: -59204
+        price_delta_pct: -1.6817
+        carry_rub: 100113
+        carry_pct: 2.8437
+        total_return_rub: 40909
+        total_return_pct: 1.162
+      h12:
+        price_delta_rub: 15738
+        price_delta_pct: 0.447
+        carry_rub: 227067
+        carry_pct: 6.4498
+        total_return_rub: 242805
+        total_return_pct: 6.8968
+      h24:
+        price_delta_rub: 169251
+        price_delta_pct: 4.8075
+        carry_rub: 456832
+        carry_pct: 12.9762
+        total_return_rub: 626082
+        total_return_pct: 17.7837
+  C:
+    name: Замороженный конфликт под давлением
+    p: 0.355
+    p_by_horizon:
+      h6: 0.3852
+      h12: 0.355
+      h24: 0.36
+    factors_by_horizon:
+      h6:
+        brent: -24.15
+        usdrub: 1.15
+        cnyrub: 2.09
+        cbr_rate: -0.59
+        xauusd: 9.57
+        sanctions: 0.0
+        geopol: -0.36
+      h12:
+        brent: -27.53
+        usdrub: 6.27
+        cnyrub: 8.04
+        cbr_rate: -1.03
+        xauusd: 16.72
+        sanctions: 0.0
+        geopol: -0.44
+      h24:
+        brent: -27.05
+        usdrub: 10.51
+        cnyrub: 13.7
+        cbr_rate: -3.87
+        xauusd: 21.29
+        sanctions: 0.0
+        geopol: -0.5
+    portfolio_level_by_horizon:
+      h6:
+        price_delta_rub: 77180
+        price_delta_pct: 2.1923
+        carry_rub: 126937
+        carry_pct: 3.6056
+        total_return_rub: 204117
+        total_return_pct: 5.7979
+      h12:
+        price_delta_rub: 147275
+        price_delta_pct: 4.1833
+        carry_rub: 265453
+        carry_pct: 7.5401
+        total_return_rub: 412728
+        total_return_pct: 11.7234
+      h24:
+        price_delta_rub: 898328
+        price_delta_pct: 8.5056
+        carry_rub: 503119
+        carry_pct: 14.2909
+        total_return_rub: 802561
+        total_return_pct: 22.7965
+  D:
+    name: Большая сделка и разрядка
+    p: 0.295
+    p_by_horizon:
+      h6: 0.2645
+      h12: 0.295
+      h24: 0.24
+    factors_by_horizon:
+      h6:
+        brent: -27.99
+        usdrub: -1.65
+        cnyrub: -2.25
+        cbr_rate: -1.09
+        xauusd: 9.57
+        sanctions: -0.52
+        geopol: -0.65
+      h12:
+        brent: -31.37
+        usdrub: 3.36
+        cnyrub: 3.46
+        cbr_rate: -1.43
+        xauusd: 16.72
+        sanctions: -0.74
+        geopol: -0.8
+      h24:
+        brent: -30.89
+        usdrub: 7.45
+        cnyrub: 8.94
+        cbr_rate: -4.27
+        xauusd: 21.29
+        sanctions: -0.9
+        geopol: -0.9
+    portfolio_level_by_horizon:
+      h6:
+        price_delta_rub: 197724
+        price_delta_pct: 5.6163
+        carry_rub: 117703
+        carry_pct: 3.3433
+        total_return_rub: 315428
+        total_return_pct: 8.9596
+      h12:
+        price_delta_rub: 912774
+        price_delta_pct: 8.6423
+        carry_rub: 250176
+        carry_pct: 7.1062
+        total_return_rub: 554433
+        total_return_pct: 15.7485
+      h24:
+        price_delta_rub: 1428519
+        price_delta_pct: 13.5255
+        carry_rub: 482764
+        carry_pct: 13.7127
+        total_return_rub: 958937
+        total_return_pct: 27.2383
+macro_input: macro-scenarios-2026-10-04.yaml
+scenario_matrix_ref: scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml

@@ -1,0 +1,4505 @@
+schema_version: 2
+type: weekly-stocks-review
+review_date: '2026-10-28'
+recorded_at: "2026-10-28T00:00:00+03:00"
+recorded_at_estimated: true
+horizons:
+- 6
+- 12
+- 24
+horizon_ends:
+  h6: '2027-04-30'
+  h12: '2027-10-31'
+  h24: '2028-10-31'
+primary_horizon: 12
+horizon_mode: rolling
+snapshot_id: portfolio-2026-10-28.json
+snapshot_date: '2026-10-28'
+advisor_version: ru-portfolio-advisor@2.x
+producer: claude-sonnet-5-5 (ru-portfolio-advisor, Mode 1)
+macro_input: null
+portfolio_summary:
+  total_excl_iis_rub: 3465012.63
+  total_stocks_value_rub: 1183114.75
+  stocks_share_actual_pct: 34.14
+  stocks_share_target_pct: 40.0
+  stocks_undershoot_pct: -5.86
+  stocks_undershoot_rub: -203049.74
+  active_ru_tickers: 21
+  ie_model_tickers: 16
+  ie_overlap: 13
+  ie_changes_count: 1
+  flagged_frozen_us_share_pct: 0.0
+  returns:
+    portfolio_xirr_total: 0.0337
+    portfolio_xirr_restricted: 0.0732
+    stocks_xirr: 0.0021
+    stocks_pnl_rub: 5834.04
+  book_change_period:
+    change_pct: 3.46
+    from_rub: 14469089.73
+    to_rub: 14969819.7
+    note: 'Книга акций (21 бумага, количества по снапшоту 28.10 неизменны): закрытие
+      15.10 → закрытие 27.10, +3,46% против IMOEX +5,53% (2 391,72 → 2 524,06); отставание
+      2,07 пп. Без дивидендов: в окне получены/начислены выплаты T (4,70 ₽), NVTK
+      (35,50 ₽), GMKN (1,85 ₽), BTBR (4,61 ₽) по реестрам 11–12.10 — цены уже скорректированы
+      на гэп, реальное отставание меньше. Продажа 24 акций MDMG в сравнении не отражена
+      (количества текущие). MCFTR в прогоне не собирался.'
+key_risks:
+- severity: HIGH
+  ticker: SBER
+  risk: 'Концентрация: SBER+SBERP 19,87% книги акций при исключении 20,0% (запас 0,13
+    пп ≈ 6 386 ₽). Обе бумаги выросли на +5% за 12 дней; опережение связкой остальной
+    книги на ≈0,8% нарушит лимит и потребует среза излишка внутри связки.'
+- severity: HIGH
+  ticker: null
+  risk: 'Удары БПЛА по IT- и логистической инфраструктуре продолжаются: ЦОД Сбербанка
+    (Балаково, 14.10), логистический центр Ozon в Омске (24.10, пожар), ЦОД Яндекса
+    (8–11.10; 26.10 компания сообщила, что суперкомпьютеры не пострадали). Резерв
+    Ozon под ущерб — 30,1 млрд ₽ за 3К; ущерб Яндекса эмитентом не раскрыт.'
+- severity: MEDIUM
+  ticker: null
+  risk: Ключевая ставка 14,00% (пауза 23.10; следующее заседание 18.12), инфляция
+    7,15% г/г (МЭР 19.10) против 6,8% в тексте решения ЦБ — расхождение не разрешено.
+    Давление на банки, RENI и дивидендные сети (MRKP, LSNGP) сохраняется; средняя
+    КС 2027 в прогнозе ЦБ — 12,5–13,5%.
+- severity: MEDIUM
+  ticker: OZON
+  risk: Перевес OZON +1,34 пп к плану 5,0% (6,34% L2) выше порога гистерезиса 1 пп;
+    отчёт 3К вышел (ЧП 3,67 млрд ₽ после резервов 30,1 млрд ₽), но прямые попадания
+    продолжаются, гайденса и суммы страхового возмещения нет. Решение о срезе ≈20
+    акций — за владельцем.
+- severity: MEDIUM
+  ticker: PLZL
+  risk: 'Налог на сверхдоходы (металлы, золото): повышение для золотодобытчиков поддержано
+    Госдумой 19.10, для никеля — предложение бюджетного комитета 27.10 (≈72 млрд ₽
+    по оценке razb0rka); пакет НДФЛ на пассивные доходы с 2027 за окно не перепроверялся.'
+- severity: MEDIUM
+  ticker: X5
+  risk: 'МСФО 3К X5 (29.10, x5.ru) и Яндекса (29.10 по агрегатору, не подтверждено)
+    выйдут сразу после даты обзора: цены X5 +11,07% и NVTK +11,07% за 12 дней опередили
+    отчёты.'
+- severity: MEDIUM
+  ticker: null
+  risk: Книга акций +3,46% против IMOEX +5,53% за 15.10–27.10 (отставание 2,07 пп,
+    без дивидендов); ликвидные средства выше ориентира на 107 282–542 250 ₽ (в зависимости
+    от среза OZON).
+- severity: MEDIUM
+  ticker: GLRX
+  risk: 'Выкуп по 44,57 ₽: срок подачи требований, лимит 10% СЧА и пропорциональность
+    в источниках этой недели не подтверждены; окно выкупа 20.11–19.12 (marketpower),
+    собрание — 05.10 или 07.10.'
+- severity: LOW
+  ticker: null
+  risk: Укрепление рубля (USD/RUB 84,18 → 81,03; CNY/RUB 12,4825 → 12,081) давит на
+    экспортёров (GMKN, NVTK, PLZL) и поддерживает импортозависимых.
+caveats:
+- severity: HIGH
+  message: Catalyst trees — экспертная оценка advisor, не калиброванная вероятностная
+    модель; p и Δ% — best estimate без backtesting.
+- severity: HIGH
+  message: Цифры МСФО 9М Сбербанка и МСФО 3К Озона взяты из вторичных пересказов (Интерфакс;
+    Moscow Times/Reuters, Ведомости, smart-lab) — пресс-релизы эмитентов и e-disclosure
+    не открывались; числа согласованы между источниками, но не сверены с первоисточником.
+- severity: MEDIUM
+  message: 'МСФО 3К X5 (29.10) и Яндекса (29.10 по агрегатору) на дату обзора не опубликованы:
+    вердикты по ним HOLD без учёта отчётов; даты собрания X5 по дивидендам (30.11)
+    и отчёта Яндекса первоисточником не подтверждены.'
+- severity: MEDIUM
+  message: 'Инцидент сбора: ярус 1 вернул «quiet» по CNRU, MDMG, YDEX, X5, PLZL, PRMD,
+    LENT, MRKP, LSNGP, GMKN, NVTK при наличии новостей — перепроверено вручную. BTBR
+    проверить не удалось (carried_over). События RENI и MBNK взяты из сводки яруса
+    1 с URL и родителем не перепроверялись.'
+- severity: MEDIUM
+  message: Скрипт стаба падал на by_account=None (использована исправленная копия)
+    и брал устаревший real_share_pct из снапшота; веса L2 пересчитаны из количеств
+    и цен закрытия 27.10 и записаны через override_stub.
+- severity: MEDIUM
+  message: 'Даты, не подтверждённые первоисточником: МСФО 3К Яндекса (29.10), собрание
+    X5 по дивиденду (30.11), срок подачи требования GLRX и пропорциональность выкупа,
+    РСБУ 9М Ленэнерго, МСФО 9М Мосбиржи, МСФО 3К Т-Технологий (10.11), выплата дивиденда
+    MDMG (02.11 или 23.11).'
+- severity: MEDIUM
+  message: 'Дивиденд MDMG 38 ₽ положен владельцам на реестр 19.10: сумма зависит от
+    даты продажи 24 акций (до 8 094 ₽ при 213 акциях) — сверить с брокерским отчётом.'
+- severity: MEDIUM
+  message: 'OZON: владелец 28.10 решил срезать ≈20 акций; на момент сохранения сделка
+    не подтверждена снапшотом, поэтому вердикт HOLD и условие ozon-date-2808 не менялись
+    — актуализировать в следующем обзоре после появления сделки.'
+- severity: LOW
+  message: Обзор от 26.10 по условию запроса не использовался; база переноса — обзор
+    16.10 и SSOT conditions.yaml / gate-reviews.yaml с решениями до 27.10.
+- severity: LOW
+  message: Цены снапшота — закрытие 27.10; живые значения ISS 28.10 приходят с задержкой
+    ≈15 мин и использованы только как справка (OZON 3 727,5 ₽, NVTK 1 208,5 ₽).
+sources:
+  snapshot: Portfolio/snapshots/portfolio-2026-10-28.json
+  prior_review: Portfolio/weekly-reviews/weekly-review-stock-2026-10-16.yaml
+  free_form_reports:
+  - 'Portfolio/reports/2026-10-23-single-analysis-ydex-mdmg-plzl.md (Mode 4: YDEX,
+    MDMG, PLZL)'
+  - 'Portfolio/reports/2026-10-27-single-analysis-nvtk.md (Mode 4: NVTK)'
+  - 'Portfolio/reports/2026-10-16-… (Mode 3: IE-ребалансировка 16.10)'
+  external_reviews: []
+  macro_input: null
+  moex_quotes: 'MOEX ISS TQBR: закрытие 27.10.2026 (цены снапшота 28.10) и живые значения
+    28.10 ≈11:06 МСК (задержка ≈15 мин); сравнение 15.10 → 27.10 по историческим закрытиям
+    ISS; котировки получены с компьютера владельца (из облачной среды ISS недоступен).'
+  macro:
+  - url: https://iss.moex.com/iss/history/engines/stock/markets/index/boards/SNDX/securities/IMOEX.json
+    label: 'MOEX ISS: IMOEX 2 391,72 (15.10) → 2 524,06 (27.10); внутри дня 28.10
+      — 2 530,43'
+    accessed_date: '2026-10-28'
+  - url: https://iss.moex.com/iss/history/engines/stock/markets/index/securities/RGBI.json
+    label: 'MOEX ISS: RGBI 111,68 (15.10) → 112,45 (27.10)'
+    accessed_date: '2026-10-28'
+  - url: https://iss.moex.com/iss/engines/currency/markets/selt/boards/CETS/securities.json
+    label: 'MOEX ISS: USD/RUB 84,18 → 81,03, CNY/RUB 12,4825 → 12,081; GLDRUB_TOM
+      11 211,5 → 10 535; BRX6 105,77 → 114,14 (15.10 → 27.10)'
+    accessed_date: '2026-10-28'
+  - url: https://ru.themoscowtimes.com/2026/10/23/tekst-soobschenie-tsbr-o-klyuchevoy-stavke-a209415
+    label: 'Moscow Times, 23.10: текст сообщения ЦБ — КС 14,00%, прогноз КС 2027,
+      инфляция'
+    accessed_date: '2026-10-28'
+  - url: https://www.bfm.ru/news/621580
+    label: 'BFM: годовая инфляция 7,15% на 19.10, недельная 0,05% (Минэкономразвития)'
+    accessed_date: '2026-10-28'
+  - url: https://www.interfax.ru/business/1125404
+    label: 'Интерфакс, 28.10: МСФО 9М2026 Сбербанка (рыночный фон)'
+    accessed_date: '2026-10-28'
+period:
+  from: '2026-10-16'
+  to: '2026-10-28'
+macro_context:
+  as_of: '2026-10-28'
+  key_rate_pct: 14.0
+  next_cbr_meeting: '2026-12-18'
+  cbr_decision_2026_10_23: КС сохранена на 14,00%, все 20 аналитиков опроса ждали
+    паузы; средняя КС 2027 — 12,5–13,5%, инфляция 2026 — 7,1–7,6%, возврат к 4% в
+    2027; резюме обсуждения — 05.11 (текст решения ЦБ, Moscow Times 23.10)
+  inflation_yoy_pct: 7.15
+  inflation_yoy_date: '2026-10-19'
+  inflation_yoy_note: 'Минэкономразвития по данным Росстата (BFM 22.10): 7,15%; в
+    тексте решения ЦБ от 23.10 годовая инфляция на 19.10 указана 6,8% — расхождение
+    не разрешено, в расчётах используется 7,15% (прошлый обзор: 7,22% на 12.10)'
+  inflation_week_pct: 0.05
+  inflation_week_note: 13–19.10 (Минэкономразвития через BFM)
+  imoex_2026_10_15: 2391.72
+  imoex_2026_10_27: 2524.06
+  imoex_2026_10_28_intraday: 2530.43
+  imoex_period_change_pct: 5.53
+  imoex_period_note: закрытие 15.10 → закрытие 27.10; 28.10 — внутридневное значение
+    ISS с задержкой ≈15 мин
+  usdrub_moex_2026_10_15: 84.18
+  usdrub_moex_2026_10_27: 81.03
+  cnyrub_moex_2026_10_15: 12.4825
+  cnyrub_moex_2026_10_27: 12.081
+  gold_gldrub_tom_rub_per_g: 2497.85
+  gold_gldrub_tom_2026_10_15: 11211.5
+  gold_note: 'GLDRUB_TOM по MOEX ISS: 11 211,5 → 31 605 ₽/г (−6,0%) за 15.10–27.10;
+    долларовая котировка золота не собиралась (домен металлов IE — IGNORE)'
+  brent_futures_brx6_usd_2026_10_15: 105.77
+  brent_futures_brx6_usd_2026_10_27: 114.14
+  rgbi_2026_10_15: 111.68
+  rgbi_2026_10_27: 112.45
+  rgbi_period_change_pct: 0.69
+  tax_package_2026_10_28: 'Налог на сверхдоходы: 19.10 Госдума поддержала повышение
+    налога для золотодобытчиков (Т-Инвестиции: Полюс ≈30 млрд ₽ за два года); 27.10
+    бюджетный комитет предложил учесть финансовое положение налогоплательщика (оценка
+    razb0rka: ≈72 млрд ₽ для Норникеля за 2026). Пакет НДФЛ на пассивные доходы (до
+    7,2 млн ₽ — 13%, выше — шкала до 22%; судьба ИИС и ЛДВ не раскрыта) за окно не
+    перепроверялся.'
+  note: Точечная проверка advisor 28.10 (MOEX ISS, Moscow Times, BFM, Интерфакс);
+    макропанель в этом прогоне не собиралась, z-оценки недели не приводятся. Снапшот
+    и закрытия — по 27.10; BRX6 +7,9% за период — значение ISS без перепроверки по
+    второму источнику.
+  source: MOEX ISS (закрытия 15.10 и 27.10), текст решения ЦБ 23.10 (Moscow Times),
+    BFM 22.10, Investmint
+gate_aware_sizing:
+  base_pct_nav: 33.22
+  base_rub: 1151245
+  base_source: fixed_point
+  blocked_gap_pp_nav: 6.38
+  blocked_gap_rub: 220986
+  blocked_tickers:
+  - YDEX
+  - LSNGP
+  buy_total_rub: 0
+  cash_after_cycle_rub: 98899
+  class_plan_rub: 1372231
+  note: 'Прогон scripts/gate_aware_sizing.py --trim OZON=5.0 --selling GLRX на снапшоте
+    28.10 + gate-reviews.yaml + conditions.yaml. Сценарий A (срез OZON до плана 5,0%):
+    база докупки 14 566 575 ₽ (33,22% NAV), план класса 17 362 692 ₽, заблокированный
+    разрыв 2 796 117 ₽ (6,4 пп NAV: YDEX до 07.12 — гейт «На пересмотре», LSNGP до 31.10
+    — условие транша). Срез OZON 220 407 ₽ (≈20 акций, 316 245 → 728 328 ₽) — вариант
+    на решение владельца; manual-условия ozon-date-2808 и ozon-below-1610 удерживают
+    HOLD. Сценарий B (без среза): база 14 786 982 ₽ (33,73% NAV), разрыв 2 575 710 ₽.
+    Открытых к докупке нет: докупок в обзоре нет. GLRX выходит через требование выкупа
+    (выручка 20.11–19.12) — в базу не входит. Концентрация: SBER+SBERP 2 974 806 ₽ =
+    19,872% книги акций при исключении 20,0% (запас 0,128 пп ≈ 6 386 ₽); лимит будет
+    нарушен при опережении связкой остальной книги на ≈0,8%. Ликвидные 4 871 658 ₽
+    при ожидаемых 4 549 815 ₽ (буфер 4% NAV + 2 796 117 ₽ под гейты): выше ориентира
+    на 321 846 ₽ в сценарии A (542 250 ₽ в сценарии B).'
+  open_tickers: []
+  shares_to_base_pct:
+    OZON: 5.0
+  trim_tickers:
+  - OZON
+  trim_total_rub: 17419
+conditions_evaluated:
+  added: []
+  backup: Portfolio/.backups/conditions-2026-10-28-1135.yaml
+  evaluated_at: '2026-10-28'
+  fired: []
+  note: 'Записано в этом прогоне (исключение D3): вычищены 5 исполненных или закрытых
+    маркеров — x5-date-3110 (закрыт владельцем 26.10), mdmg-trim-after-1910 (срез
+    исполнен: 189 акций, 4,89% L2), ofz-long-tranche2-exec-2310, ru000a10est2-above-1310,
+    ru000a107795-date-2110 (облигации — по обзору облигаций). Сработавших условий
+    нет. Новые условия не добавлены; по OZON решение владельца (срез ≈20 акций до
+    5,0%) ожидается — manual-условия ozon-date-2808 и ozon-below-1610 держат HOLD.'
+  pending_next_7_30d:
+  - id: x5-ifrs3q-review
+    ticker: X5
+    trigger: date 2026-10-29
+  - id: lsngp-tranche2-rsbu9m
+    ticker: LSNGP
+    trigger: date 2026-10-31
+  - id: tmon-date-3110
+    ticker: TMON
+    trigger: date 2026-10-31
+  - id: ru000a106ep1-coupon-0511
+    ticker: RU000A106EP1
+    trigger: date 2026-11-05
+  - id: eseg-redemption-1711
+    ticker: RU000A108FX8
+    trigger: date 2026-11-17
+  - id: pik-redemption-1911
+    ticker: RU000A105146
+    trigger: date 2026-11-19
+  pruned:
+  - x5-date-3110
+  - ofz-long-tranche2-exec-2310
+  - mdmg-trim-after-1910
+  - ru000a10est2-above-1310
+  - ru000a107795-date-2110
+  ssot: Portfolio/conditions.yaml
+  status_pushes: []
+  status_pushes_rejected: []
+  written_back: true
+gate_review_directives: []
+proposed_gate_review_directives: []
+ie_discipline:
+  deviations_ge_threshold:
+  - ie: 6.0
+    mark: '✓ решение: план 10,5% (Mode 8 19.09) осознанно выше IE; добор закрыт лимитом
+      связки SBER+SBERP'
+    planned: 10.5
+    real: 11.06
+    ticker: SBER
+  - ie: 12.0
+    mark: '✓ решение: план 10,5% (Mode 4 17.09), добор по МСФО 9М'
+    planned: 10.5
+    real: 10.07
+    ticker: RENI
+  - ie: 10.0
+    mark: '✓ решение: план 4,0% (Mode 4 17.09, подтверждён 23.10), металлы IGNORE'
+    planned: 4.0
+    real: 4.06
+    ticker: PLZL
+  - ie: 8.0
+    mark: '✓ решение: IE-цель 8% не принята (dividend-stocks = IGNORE), план 2,0%'
+    planned: 2.0
+    real: 2.4
+    ticker: MRKP
+  - ie: 4.0
+    mark: '✓ решение: транш 2 по условию до 31.10'
+    planned: 3.0
+    real: 1.72
+    ticker: LSNGP
+  - ie: 4.0
+    mark: '✓ решение: позиция микро, вопрос о выходе — Mode 3'
+    planned: 1.0
+    real: 0.92
+    ticker: LENT
+  drifts_without_decision: 1
+  ie_changes_this_period: 'ie_changes_count = 1: IE-модель изменила MRKP 7 → 8%, исключила
+    CNRU (было 5%), добавила POSI (0 → 4%); решения владельца — Mode 3 от 16.10 (CNRU
+    план 3,0%; POSI в IPO-гейте не принимается). Сумма IE-модели 93,0% (флаг ie_model_total_mismatch).'
+  ie_materials_this_period: 'Материалы IE за период не приложены; новых стримов в
+    запросе нет. Из прошлого обзора (стрим 15.10) в вердикты не вошло ничего: уровни
+    входа/выхода — LOW, металлы и дивиденды — IGNORE.'
+  ie_not_in_portfolio:
+  - UPRO — ⚠ дрейф без решения (IE 4%, плана нет)
+  - WUSH — ✓ осознанный выход (продан)
+  - POSI — ✓ IPO-гейт (Mode 3 16.10)
+  outside_ie:
+  - BTBR
+  - GMKN
+  - MOEX
+  - NVTK
+  - OZON
+  - PRMD
+  - SBERP
+  - CNRU
+  real_share_total_in_ie_pct: 68.41
+  threshold_pp: 1.5
+  trust_note: '[lib] Invest Era: аудит 02.10.2026 (N=5) — рублёвые облигации HIGH;
+    финансы РФ, ставка, инфляция, тайминг геособытий MEDIUM; тайминг входа в акции
+    LOW; прогноз USD/RUB, нефть, металлы, дивидендные истории IGNORE. Из стрима 15.10
+    в вердикты не вошло ничего: уровни входа/выхода — LOW, металлы и дивиденды — IGNORE;
+    геотайминг (НПЗ/перемирие) — только как контекст.'
+per_stock:
+  SBER:
+    sector: Финансовый
+    sector_ru: Финансовый
+    name: Сбербанк
+    weight_real_pct: 11.0609
+    weight_user_planned_pct: 10.5
+    weight_ie_target_pct: 6.0
+    weight_divergence_vs_planned_pp: 0.5609
+    weight_divergence_vs_ie_pp: 5.0609
+    weight_divergence_pp: 5.0609
+    listing_age_quarters: 59
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 298.18
+    xirr: 0.2097
+    pnl_rub: 55807.06
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: HIGH
+    fundamental_score_basis: 'Сбербанк: 11,06% L2 (план 10,5%, IE 6,0%), цена 298,18
+      ₽ (+5,13%, закрытие 15.10 → закрытие 27.10). МСФО 9М2026 (28.10, 10:06 МСК;
+      Интерфакс — пересказ, пресс-релиз эмитента не открывался): ЧП 1 529,9 млрд ₽
+      (+17,0% г/г), ROE 24,0%; 3К — ЧП 510,8 млрд ₽ (+13,9% г/г; во 2К 511,2 млрд
+      ₽, +20,9%), ROE 23,5%, NIM 6,7%, CoR 1,1%. ЧПД 3К +24,0% до 1 107,7 млрд ₽,
+      комиссии 3К −1,9% г/г (9М +2,8%), расходы на резервы 9М −12,2%. CET1 12,9% (+0,3
+      пп за квартал; норматив группы снизился до 13,7% из-за дивидендов 850,2 млрд
+      ₽ за 2025, выплаченных в августе). Результат на уровне консенсуса (1 529 млрд
+      ₽ за 9М, 510 за 3К) — сюрприза нет, но темп прибыли замедлился, комиссии в минусе.
+      15.10 аналитики понизили рейтинг обыкновенных акций с «Покупать» до «Держать»,
+      цель 340 ₽ (fomag, вторично, текст не открывался). 22.10 НС рассмотрит назначение
+      Д. Григоренко заместителем председателя правления (T-Инвестиции, вторично).
+      Греф 23.10 оценил ЧП 2026 в ≈2 трлн ₽, 08.10 обещал «очень хорошие» дивиденды
+      (заголовки на странице Интерфакса, тексты не открывались). Связка SBER+SBERP
+      — 19,87% книги акций при исключении 20,0% (запас 0,13 пп ≈ 6 386 ₽).'
+    fundamental_score_sources:
+    - url: https://smart-lab.ru/blog/news/1360770.php
+      label: 'smart-lab, 09.10: СБЕР РСБУ 9М2026 — ЧП 1 501,2 млрд ₽ (+18,2%), ROE
+        23,0% (пересказ пресс-релиза; webarchive от владельца)'
+      accessed_date: '2026-10-16'
+    - url: https://www.finam.ru/publications/item/rezultaty-sberbanka-po-rsbu-za-9-mesyatsev-osnovnye-sobytiya-9-oktyabrya-20261009-0900/
+      label: 'Финам, 09.10: Сбербанк опубликовал РПБУ за 9М2026 (анонс; цифры — по
+        smart-lab)'
+      accessed_date: '2026-10-16'
+    - url: https://ru.themoscowtimes.com/2026/10/14/update-1-sberbank-soobschil-ob-atake-bpla-na-tsod-v-saratovskoy-oblasti-a208560
+      label: 'Moscow Times, 14.10: Сбербанк подтвердил атаку БПЛА на ЦОД в Саратовской
+        обл.; сервисы штатно'
+      accessed_date: '2026-10-16'
+    - url: https://www.rbc.ru/quote/14/10/2026/6acf511a9a7947a8ccec763e
+      label: 'РБК Инвестиции, 14.10: акции Сбербанка снижались на фоне атаки на ЦОД
+        (вторичный)'
+      accessed_date: '2026-10-16'
+    - url: https://www.interfax.ru/business/1125404
+      label: 'Интерфакс, 28.10: Сбербанк МСФО 9М2026 — ЧП 1 529,9 млрд ₽ (+17,0%),
+        3К 510,8 млрд ₽ (+13,9%), ROE 24,0%, CET1 12,9%, консенсус'
+      accessed_date: '2026-10-28'
+    - url: https://www.interfax.ru/business/1106241
+      label: 'Интерфакс, 29.07: МСФО 1П2026 (база сравнения: 2К ЧП 511,2 млрд ₽, +20,9%)'
+      accessed_date: '2026-10-28'
+    - url: https://fomag.ru/news/u-sberbanka-vyrosli-infrastrukturnye-riski/
+      label: 'fomag, 15.10: понижение рейтинга SBER до «Держать», цель 340 ₽ (вторично;
+        по сводке сбора, текст не открывался)'
+      accessed_date: '2026-10-28'
+    - url: https://investmint.ru/sber/news/
+      label: 'Investmint (агрегатор), 27.10: Алор — дивиденд 2026 ≈44 ₽ при ЧП ≈2
+        трлн ₽; Сбер ждёт КС 12% к концу 2027'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 14.09
+      ci_pct:
+      - 12.61
+      - 15.11
+    div_confidence: MEDIUM
+    div_basis: 'Дивиденд за 2026 выплачивается летом 2027 (в окне 12 мес). Консенсус
+      ≈42 ₽ (vbr.ru, 03.09) при payout 50% МСФО, подтверждённом Грефом 22.09 → 14,09%
+      к 298,18 ₽ (закрытие 27.10); Алор (investmint 27.10) ≈44 ₽ при ЧП ≈2 трлн ₽
+      → 14,76%. Решение НС — весной 2027, дата не назначена. CI доходности 12,61–15,11%:
+      37,64 ₽ (прошлогодний) … 45 ₽ (оценка IE).'
+    div_sources:
+    - url: https://abn.agency/2026/09/22/sberbank-zhdet-rekordnuyu-pribyl-v-2026-godu-i-50-dividendov/
+      label: 'Греф 22.09: 50% прибыли на дивиденды'
+      accessed_date: '2026-09-26'
+    - url: https://www.vbr.ru/novosti/investicii/2026/09/03/sberbank-dividendi-za-2026/
+      label: Консенсус ≈42 ₽
+      accessed_date: '2026-09-19'
+    - url: https://www.sberbank.com/ru/investor-relations/dividends
+      label: Дивидендная политика и история выплат Сбербанка
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 14.09
+      year2_yield_pct: 14.09
+      year2_basis: carry_forward
+      source: дивполитика 50% МСФО (Греф 22.09.2026) + консенсус ≈42 ₽ (vbr.ru 03.09)
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: Пересчитано на цену 27.10.2026 (298,18 ₽); дивполитика не менялась.
+    catalyst:
+    - id: sber_div_2026_announce
+      kind: binary
+      trigger: Рекомендация СД по дивиденду за 2026 (ожидается весна 2027, дата не
+        назначена)
+      date_window: 2027-Q2
+      p: 0.85
+      upside_pct: 0.0
+      upside_ci_pct:
+      - -4.0
+      - 4.0
+      source: 'advisor estimate: дивполитика 50% ЧП МСФО, история выплат 2024–2026;
+        дата СД на 27.08.2026 не назначена'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - id: sber_rate_cycle_nim
+      kind: quantitative
+      trigger: 'Траектория КС: снижение ставки → расширение NIM и разворот стоимости
+        риска'
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 8.0
+        B: 14.0
+        C: 18.0
+        D: 6.0
+      upside_ci_by_scenario:
+        A:
+        - -6.0
+        - 20.0
+        B:
+        - 0.0
+        - 26.0
+        C:
+        - 4.0
+        - 30.0
+        D:
+        - -10.0
+        - 20.0
+      source: 'advisor estimate: чувствительность банковской маржи к КС 14,0% и траектории
+        снижения'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: sber_dc_attacks_repeat
+      kind: binary
+      trigger: Повторные удары БПЛА по ЦОД Сбербанка (после Балаково 14.10) с реальным
+        перебоем сервисов
+      date_window: 2026-10..2027-Q1
+      p: 0.35
+      downside_pct: 2.0
+      downside_ci_pct:
+      - 0.0
+      - 6.0
+      source: https://ru.themoscowtimes.com/2026/10/14/update-1-sberbank-soobschil-ob-atake-bpla-na-tsod-v-saratovskoy-oblasti-a208560
+        — атака 14.10, сервисы штатно
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: media
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.75
+    confidence_basis: источник МСФО 9М — пересказ Интерфакса, а не пресс-релиз Сбера;
+      рост ЧП 3К замедлился
+    advisor_verdict_basis: 'Тезис подтверждён: МСФО 9М в консенсус, ROE 24,0%, CET1
+      12,9%; замедление ЧП 3К (+13,9% против +20,9% во 2К) и минус по комиссиям вердикт
+      не меняют. Вес 11,06% (+0,56 пп к плану 10,5%) в гистерезисе. Добирать нельзя:
+      связка SBER+SBERP 19,87% книги при исключении 20,0% (запас 0,13 пп ≈ 6 386 ₽);
+      при опережении связкой остальной книги на ≈0,8% лимит будет нарушен — тогда
+      срез излишка внутри связки (решение по лимиту, не по тезису). Держать на плане
+      10,5%.'
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+    user_constraints: []
+    last_corp_event: '2026-10-28: МСФО 9М2026 — ЧП 1 529,9 млрд ₽ (+17,0% г/г), ROE
+      24,0%'
+    week_note:
+      what_happened:
+      - '28.10 МСФО 9М2026 (Интерфакс, пересказ): ЧП 1 529,9 млрд ₽ (+17,0% г/г),
+        3К — 510,8 млрд ₽ (+13,9%; во 2К 511,2 млрд ₽, +20,9%), ROE 24,0%, NIM 3К
+        6,7%, CoR 1,1%, CET1 12,9%. Комиссии 3К −1,9% г/г.'
+      - Результат в консенсус (1 529 млрд ₽ за 9М, 510 за 3К) — сюрприза нет; ЧП 3К
+        замедлилась.
+      - 15.10 рейтинг понижен до «Держать», цель 340 ₽ (fomag, вторично); Алор ждёт
+        дивиденд ≈44 ₽ (консенсус 42 ₽) — 14,1–14,8% к 298,18 ₽.
+      recommendation:
+      - 'держать на плане 10,5%. Добирать нельзя: связка SBER+SBERP — 19,87% книги
+        акций при исключении 20,0%. Срез излишка внутри связки — только если лимит
+        будет нарушен.'
+      macro_link: снижение КС в 2027 (прогноз ЦБ 12,5–13,5%) поддерживает маржу и
+        стоимость риска.
+  RENI:
+    sector: Финансовый
+    sector_ru: Финансовый
+    name: Ренессанс Страхование
+    weight_real_pct: 10.0682
+    weight_user_planned_pct: 10.5
+    weight_ie_target_pct: 12.0
+    weight_divergence_vs_planned_pp: -0.4318
+    weight_divergence_vs_ie_pp: -1.9318
+    weight_divergence_pp: -1.9318
+    listing_age_quarters: 20
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 70.96
+    xirr: -0.1801
+    pnl_rub: -25340.53
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Ренессанс Страхование: 10,07% L2 (план 10,5%, IE 12,0%),
+      цена 70,96 ₽ (−0,22%, закрытие 15.10 → закрытие 27.10). 16.10 РСБУ 9М2026: ЧП
+      5,5 млрд ₽, −36,2% г/г (Финам); МСФО 1П2026 — убыток 1,4 млрд ₽ из-за переоценки
+      портфеля ОФЗ, МСФО 9М — по условию reni-9m2026-review до 30.11. Выкуп акций
+      идёт: 14.10 — 20 000 акций на 4,4 млн ₽, 19.10 — 812 000 акций на 58,37 млн
+      ₽ (0,2% общего количества), 20.10 объявлен выкуп ещё на 92,7 млн ₽ (Telegram
+      smartlab.news, вторично). 22.10 компания ждёт чистого эффекта от ИИ-трансформации
+      1 млрд ₽ (Финам). Аналитики: Финам «Покупать», цель 99,5 ₽ на 12 мес. (16.10);
+      БКС — шорт от 72,7 ₽ с целями 70,1 и 68,6 ₽ (20.10): цена 70,96 ₽ уже у первой
+      цели. Решения по дивиденду за 1П2026 в окне не найдено. Факты окна взяты из
+      сводки сбора (ярус 1) с URL источников; страницы родителем не перепроверялись.'
+    fundamental_score_sources:
+    - url: https://t.me/newssmartlab/133892
+      label: 'smartlab.news (Telegram), 08.10: RENI выкупила 20 000 акций на 1,47
+        млн ₽ (вторичный)'
+      accessed_date: '2026-10-16'
+    - url: https://investmint.ru/reni/news/
+      label: 'investmint: аналитики снизили прогнозы прибыли RENI 2026–2028 на 9–47%
+        (01.10) — вторичный источник, sweep яруса 1'
+      accessed_date: '2026-10-08'
+    - url: https://finance.mail.ru/article/analitiki-market-power-otsenili-otchet-renessans-strahovaniya-posle-ubyitka-v-14-milliard
+      label: 'Market Power (finance.mail.ru): отчёт RENI за 1П2026, выкуп в 4К2026
+        (материал от 21.08)'
+      accessed_date: '2026-10-08'
+    - url: https://www.finam.ru/publications/item/chistaya-pribyl-renessans-strakhovaniya-po-rsbu-za-9-mesyatsev-snizilas-do-55-mlrd-rubley-20261016-1638/
+      label: 'Финам, 16.10: РСБУ 9М2026 — ЧП 5,5 млрд ₽, −36,2% г/г (по сводке сбора,
+        страница не открывалась)'
+      accessed_date: '2026-10-28'
+    - url: https://t.me/newssmartlab/134317
+      label: 'smartlab.news (Telegram), 19.10: выкуп 812 000 акций на 175,1 млн ₽
+        (вторично, по сводке сбора)'
+      accessed_date: '2026-10-28'
+    - url: https://t.me/bcs_express/26279
+      label: 'БКС Экспресс (Telegram), 20.10: шорт RENI от 72,7 ₽, цели 70,1 и 68,6
+        ₽ (по сводке сбора)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 0.0
+      ci_pct:
+      - 0.0
+      - 6.34
+    div_confidence: LOW
+    div_basis: 'IE (09.09) предполагает отказ от дивиденда за 1П2026: по политике
+      прибыль не корректируется, а за полугодие убыток; вместо финального дивиденда
+      за 2025 запущен байбек 5 млрд ₽. Дивиденд за 2026 IE оценивает в ≈4,5 ₽ (6,34%
+      к 70,96 ₽ на закрытие 27.10), но это аналитическая оценка без решения СД. Точечно
+      0% — консервативно; верх CI = сценарий IE. Новых решений по дивиденду в окне
+      14–28.10 не найдено.'
+    div_sources:
+    - url: https://invest-era.ru/analytics-and-news/renessans-strakhovanie-davlenie-na-ofz-sdelaet-god-slabim-20260908-142917
+      label: 'Invest Era: Ренессанс Страхование — давление на ОФЗ сделает год слабым
+        (МСФО 1П2026, 09.09.2026; приложен владельцем)'
+      accessed_date: '2026-09-16'
+    - url: https://invest-era.ru/analytics-and-news/renessans-strakhovanie-ubitok-po-investportfelyu-20260824-130155
+      label: 'Комментарий менеджмента: решение по дивидендам в конце августа, конкретики
+        нет'
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: uncertain
+      year2_basis: none
+      source: 'Invest Era 09.09.2026: ожидание отказа за 1П2026, ≈4,5 ₽ за 2026; решения
+        СД нет'
+      as_of: '2026-10-28'
+      confidence: LOW
+      note: Дивидендный доход не учтён — политика на 2026 неизвестна (IE допускает
+        4,5 ₽ за год, но и отмену). Это ПРОПУСК, не ноль.
+    catalyst:
+    - id: reni_div_1h2026_decision
+      kind: binary
+      trigger: 'Решение по дивиденду за 1П2026: обещанное «в конце августа» на 16.09
+        не раскрыто; IE (09.09) ждёт отказа из-за убытка'
+      date_window: 2026-09..2026-10
+      p: 0.25
+      upside_pct: 0.0
+      upside_ci_pct:
+      - -6.0
+      - 5.0
+      source: https://invest-era.ru/analytics-and-news/renessans-strakhovanie-davlenie-na-ofz-sdelaet-god-slabim-20260908-142917
+        — прогноз IE по дивиденду за 1П2026 и 2026
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: reni_ofz_revaluation_reversal
+      kind: quantitative
+      trigger: Разворот переоценки облигационного портфеля при росте ОФЗ или по мере
+        погашения (≈10 млрд ₽ бумажного убытка)
+      date_window: 2027-Q1..2028-Q2
+      upside_by_scenario:
+        A: 10.0
+        B: 22.0
+        C: 30.0
+        D: 4.0
+      upside_ci_by_scenario:
+        A:
+        - -12.0
+        - 28.0
+        B:
+        - 0.0
+        - 40.0
+        C:
+        - 8.0
+        - 50.0
+        D:
+        - -20.0
+        - 24.0
+      source: https://invest-era.ru/analytics-and-news/renessans-strakhovanie-davlenie-na-ofz-sdelaet-god-slabim-20260908-142917
+        — «убыток перекрыт ещё в июле» (заявление компании); без переоценки ЧП 1П2026
+        была бы 8,3 млрд ₽; advisor-оценка скорости разворота по КС/RGBI
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: reni_buyback_cancellation
+      kind: binary
+      trigger: 'Гашение выкупленных акций (~5% капитала), запуск объявлен на Q4 2026;
+        выкуп идёт: 19.10 — 812 000 акций (0,2%) на 175,1 млн ₽, 20.10 объявлен ещё
+        на 92,7 млн ₽ (Telegram, вторично)'
+      date_window: 2026-Q4
+      p: 0.6
+      upside_pct: 4.0
+      upside_ci_pct:
+      - 0.0
+      - 8.0
+      source: https://invest-era.ru/analytics-and-news/renessans-strakhovanie-davlenie-na-ofz-sdelaet-god-slabim-20260908-142917
+        — выкуплено ~2% капитала с июня; гашение около половины байбека (~5% капитала)
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: reni_insurance_margin_pressure
+      kind: binary
+      trigger: Сохранение loss ratio non-life ≥95% и отставания премий от рынка во
+        2П2026 (давление на страховой результат)
+      date_window: 2026-Q4..2027-Q1
+      p: 0.5
+      downside_pct: 8.0
+      downside_ci_pct:
+      - 2.0
+      - 15.0
+      source: https://invest-era.ru/analytics-and-news/renessans-strakhovanie-davlenie-na-ofz-sdelaet-god-slabim-20260908-142917
+        — loss ratio non-life 98,5% (+12,5 пп), премии +8% при рынке +14%
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: B
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.6
+    confidence_basis: РСБУ 9М −36,2% г/г при убытке 1П по МСФО; факты окна — из сводки
+      сбора (Telegram, Финам), не из раскрытий эмитента
+    advisor_verdict_basis: 'Держать на 10,5% без добора до МСФО 9М (условие reni-9m2026-review,
+      30.11): РСБУ 9М −36,2% г/г ослабляет тезис, но критерии решения Mode 4 от 17.09
+      заданы по МСФО (ЧП 3К > 0, loss ratio non-life < 95%, достаточность капитала
+      ≥ 120%), а не по РСБУ. Недобор −0,43 пп к плану в гистерезисе. Выкуп — поддержка
+      цены, не повод для добора до отчёта.'
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-17'
+      set_by: mode_4
+    advisor_verdict_constraints:
+    - id: reni-9m2026-review
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-09-17'
+      summary: 'Mode 4 от 17.09.2026: убыток 1П2026 (−1,4 млрд ₽) и операционное ухудшение
+        (страховой результат −42%, LR non-life 98,5%). Stress h12 EV +1,6% при хвосте
+        −17% против carry облигаций +10,4%. План 12% → 10,5% L2 (= факт), без сделок.
+        Дата отчёта 9М не объявлена'
+    user_constraints:
+    - id: reni-9m2026-review
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-09-17'
+      summary: 'Mode 4 от 17.09.2026: убыток 1П2026 (−1,4 млрд ₽) и операционное ухудшение
+        (страховой результат −42%, LR non-life 98,5%). Stress h12 EV +1,6% при хвосте
+        −17% против carry облигаций +10,4%. План 12% → 10,5% L2 (= факт), без сделок.
+        Дата отчёта 9М не объявлена'
+    unconstrained_verdict: HOLD
+    unconstrained_verdict_confidence: 0.6
+    last_corp_event: '2026-10-16: РСБУ 9М2026 — ЧП 5,5 млрд ₽ (−36,2% г/г)'
+    week_note:
+      what_happened:
+      - '16.10 РСБУ 9М: ЧП 5,5 млрд ₽ (−36,2% г/г, Финам). Выкуп акций продолжается:
+        19.10 — 812 000 акций на 175,1 млн ₽, 20.10 объявлен ещё на 92,7 млн ₽ (Telegram,
+        вторично).'
+      - 'БКС: шорт от 72,7 ₽ с целями 70,1 и 68,6 ₽ — цена 70,96 ₽ у первой цели.'
+      recommendation:
+      - 'держать на 10,5% без добора до МСФО 9М (условие `reni-9m2026-review`, 30.11):
+        критерии решения заданы по МСФО, не по РСБУ.'
+      macro_link: null
+  YDEX:
+    sector: Коммуникации и развлечения
+    sector_ru: Коммуникации и развлечения
+    name: Yandex
+    weight_real_pct: 9.1245
+    weight_user_planned_pct: 10.0
+    weight_ie_target_pct: 10.0
+    weight_divergence_vs_planned_pp: -0.8755
+    weight_divergence_vs_ie_pp: -0.8755
+    weight_divergence_pp: -0.8755
+    listing_age_quarters: 9
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 3529.5
+    xirr: -0.0512
+    pnl_rub: -9081.72
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Яндекс: 9,12% L2 (план 10,0%, IE 10,0%), цена 3 529,5
+      ₽ (+2,99%, закрытие 15.10 → закрытие 27.10). Новое за окно: 26.10 компания сообщила,
+      что три суперкомпьютера (Ляпунов, Галушкин, Червоненкис) не пострадали и перенесены
+      на новые площадки (Investmint, вторично); акции +1,5–2,7% до ≈3 490 ₽. МСФО
+      3К2026: агрегатор Investmint называет 29.10; на ir.yandex/events даты 3К нет
+      (виден только релиз 2К от 29.07) — дата не подтверждена первоисточником. Ожидания
+      Т-Инвестиций: выручка ≈412 млрд ₽ (+12,5% г/г, ниже гайденса +20%), скорр. EBITDA
+      ≈89,8 млрд ₽ (маржа 21,8%); база 2К: выручка +16% (≈386 млрд ₽), скорр. ЧП +56%
+      (≈48 млрд ₽). Freedom Global (12.10): на 3К удары не повлияют, критические сбои
+      пришлись на 4К; Cloud ≤2% выручки, B2B ≤4% — «Держать», цель 5 000 ₽ (fomag).
+      Один из аналитиков временно отозвал рекомендацию до пояснений менеджмента (Investmint).
+      27.10 — жалобы на сбой Яндекс Почты (≈1,6 тыс. за час, Investmint). Эмитент
+      ущерб ЦОД, капзатраты и сроки восстановления по-прежнему не раскрыл. Гейт «На
+      пересмотре» до 07.12 (разбор 23.10).'
+    fundamental_score_sources:
+    - url: https://www.currenttime.tv/a/33875174.html
+      label: 'Настоящее время, 09.10: атаки 8–11.10 вывели из строя 3 из 6 ЦОД Яндекса
+        (Калуга, Владимир, Рязань)'
+      accessed_date: '2026-10-16'
+    - url: https://istories.media/news/2026/10/08/posle-ataki-dronov-polnostyu-ostanovilsya-data-tsentr-yandeksa-v-ryazanskoi-oblasti/
+      label: 'iStories, 08.10: после атаки дронов полностью остановился ЦОД Яндекса
+        в Рязанской области'
+      accessed_date: '2026-10-16'
+    - url: https://techora.ru/news/shadaev-yandeks-perenes-klyuchevye-sistemy-na-2026-10-14
+      label: 'techora, 14.10: Шадаев — «Яндекс перенёс ключевые системы» (по заголовку,
+        текст не читался — бот-защита)'
+      accessed_date: '2026-10-16'
+    - url: https://amp.rbc.ru/rbcnews/rbcfreenews/6ac738965ecb179a64305326
+      label: 'РБК, 08.10: Яндекс предупредил о сбое в работе сервисов'
+      accessed_date: '2026-10-08'
+    - url: https://smart-lab.ru/blog/1360270.php
+      label: 'smart-lab, 08.10: инцидент в ЦОД Сасово затронул часть инфраструктуры'
+      accessed_date: '2026-10-08'
+    - url: https://www.interfax.ru/business/1119142
+      label: 'Интерфакс, 29.09: допэмиссия 11 млн акций в ноябре'
+      accessed_date: '2026-10-08'
+    - url: https://www.vedomosti.ru/investments/articles/2026/09/30/1232896-yandeks-provedet-dopemissiyu
+      label: 'Ведомости: одна допэмиссия 11 млн акций вместо квартальных (30.09)'
+      accessed_date: '2026-10-01'
+    - url: https://investmint.ru/ydex/news/
+      label: 'Investmint (агрегатор), 14–28.10: суперкомпьютеры не пострадали (26.10),
+        МСФО 3К 29.10, ожидания Т-Инвестиций, сбой почты 27.10'
+      accessed_date: '2026-10-28'
+    - url: https://ir.yandex/events
+      label: 'ir.yandex/events: даты 3К2026 нет (виден релиз 2К 29.07)'
+      accessed_date: '2026-10-28'
+    - url: https://fomag.ru/news/yandeks-nuzhdaetsya-v-zashchite-chto-budet-s-finrezultatami/
+      label: 'fomag/Freedom Global, 12.10: влияние ЦОД на 3К не ожидается, Cloud ≤2%
+        выручки, цель 5 000 ₽'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 6.23
+      ci_pct:
+      - 3.05
+      - 7.12
+    div_confidence: MEDIUM
+    div_basis: '110 ₽ за 1П2026 отсечены 21.09. Следующие 12 мес: финальный дивиденд
+      за 2026 (весна–лето 2027) и промежуточный за 1П2027 (сентябрь 2027, на краю
+      окна). Ожидание 2×110 ₽ = 220 ₽ → 6,23% к 3 529,5 ₽ (закрытие 27.10); решения
+      СД ещё нет.'
+    div_sources:
+    - url: https://www.vedomosti.ru/investments/news/2026/09/15/1228886-yandeksa-dividendi
+      label: Дивиденд 110 ₽ за 1П2026
+      accessed_date: '2026-09-16'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 6.23
+      year2_yield_pct: 6.23
+      year2_basis: carry_forward
+      source: практика двух выплат в год (110 ₽ за 1П2026)
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: 'Пересчитано на цену 27.10.2026 (3 529,5 ₽): 2×110 ₽ — практика двух выплат;
+        политика не менялась.'
+    catalyst:
+    - id: ydex_ecommerce_sustained_profit
+      kind: binary
+      trigger: Закрепление e-commerce в устойчивой прибыли (менеджмент ждёт на горизонте
+        12 мес)
+      date_window: 2026-Q4..2027-Q3
+      p: 0.6
+      upside_pct: 14.0
+      upside_ci_pct:
+      - 2.0
+      - 26.0
+      source: https://yastatic.net/s3/ir-docs/docs/2026/q2/9616f5e520b9c0d999be8066069d154d/2Q26_Press%20Release_RUS_8066.pdf
+        — сегментные результаты Q2 2026
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: ydex_marketplace_warehouse_strike
+      kind: binary
+      trigger: Прямые удары БПЛА по складам Яндекс Маркета (прецеденты по WB и Ozon
+        уже реализованы)
+      date_window: 2026-Q3..2027-Q2
+      p: 0.35
+      downside_pct: 12.0
+      downside_ci_pct:
+      - 4.0
+      - 25.0
+      source: 'advisor estimate: перенос реализованного сценария Ozon (22–24.08.2026)
+        на сопоставимую складскую сеть'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: D
+    - id: ydex_buyback_execution
+      kind: quantitative
+      trigger: Исполнение байбека 50 млрд ₽ (25% выбрано за май–июль) на фоне слабого
+        рынка
+      date_window: 2026-Q3..2028-Q2
+      upside_by_scenario:
+        A: 5.0
+        B: 7.0
+        C: 8.0
+        D: 4.0
+      upside_ci_by_scenario:
+        A:
+        - 0.0
+        - 10.0
+        B:
+        - 1.0
+        - 13.0
+        C:
+        - 2.0
+        - 15.0
+        D:
+        - -2.0
+        - 10.0
+      source: 'advisor estimate: объём программы и темп выкупа раскрыты эмитентом'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: ydex_motivation_issue_nov
+      kind: binary
+      trigger: Допэмиссия 11 млн акций под мотивацию (ноябрь 2026), компенсируется
+        байбэком
+      date_window: 2026-11
+      p: 0.95
+      downside_pct: 1.0
+      downside_ci_pct:
+      - 0.0
+      - 3.0
+      source: https://www.vedomosti.ru/investments/articles/2026/09/30/1232896-yandeks-provedet-dopemissiyu
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: ydex_dc_multiple_outage
+      kind: binary
+      trigger: Эмитент раскроет ущерб по ЦОД (по СМИ 3 из 6 выведены 8–11.10) в МСФО
+        3К (29.10 по агрегатору, не подтверждено первоисточником), подтвердит длительные
+        сбои Cloud/Go/Еды/Лавки/Pay и рост капзатрат; 26.10 — суперкомпьютеры не пострадали
+        (вторично)
+      date_window: 2026-10..2026-12
+      p: 0.65
+      downside_pct: 6.0
+      downside_ci_pct:
+      - 2.0
+      - 14.0
+      source: https://www.currenttime.tv/a/33875174.html ; https://istories.media/news/2026/10/08/posle-ataki-dronov-polnostyu-ostanovilsya-data-tsentr-yandeksa-v-ryazanskoi-oblasti/
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: media
+      macro_dependency: null
+    - id: ydex_further_dc_strikes
+      kind: binary
+      trigger: 'Новые удары по уцелевшим ЦОД и IT-инфраструктуре (после Сбера 14.10):
+        перебои сервисов и миграция клиентов к конкурентам'
+      date_window: 2026-10..2027-Q1
+      p: 0.4
+      downside_pct: 5.0
+      downside_ci_pct:
+      - 1.0
+      - 12.0
+      source: https://ru.themoscowtimes.com/2026/10/14/update-1-sberbank-soobschil-ob-atake-bpla-na-tsod-v-saratovskoy-oblasti-a208560
+        — удары по ЦОД продолжаются
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: media
+      macro_dependency: null
+    - id: ydex_systems_migration
+      kind: binary
+      trigger: Подтверждённый перенос ключевых систем на уцелевшие мощности (Шадаев,
+        14.10) и возврат сервисов в штатный режим
+      date_window: 2026-10..2026-12
+      p: 0.6
+      upside_pct: 3.0
+      upside_ci_pct:
+      - 0.0
+      - 7.0
+      source: https://techora.ru/news/shadaev-yandeks-perenes-klyuchevye-sistemy-na-2026-10-14
+        — по заголовку
+      source_quality: LOW
+      source_trust:
+        analyst: external
+        subdomain: media
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.55
+    confidence_basis: ущерб ЦОД эмитентом не раскрыт; дата МСФО 3К (29.10) — по агрегатору,
+      ir.yandex.com её не содержит
+    advisor_verdict_basis: 'Держать на 9,12% (недобор −0,88 пп к плану 10,0%, в гистерезисе):
+      докупать нельзя (гейт «На пересмотре» до 07.12, ущерб ЦОД не раскрыт), резать
+      не за что — операционный ущерб подтверждён СМИ, финансовый не раскрыт. Ближайшая
+      проверка — МСФО 3К (дата 29.10 не подтверждена эмитентом): гайденс скорр. EBITDA
+      2026, блок «События после отчётной даты», капзатраты на ЦОД; условие ydex-q3-ifrs-guidance
+      (30.11) закрепляет разбор.'
+    verification_priority: HIGH
+    gate_status_snapshot:
+      status: reviewed_under_review
+      set_date: '2026-10-23'
+      set_by: mode_4
+    advisor_verdict_constraints:
+    - id: ydex-q3-ifrs-guidance
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-23'
+      summary: 'Mode 4 от 23.10.2026 (Portfolio/reports/2026-10-23-single-analysis-ydex-mdmg-plzl.md):
+        YDEX HOLD 8,97% L2 без добора, гейт reviewed_under_review. Удары 8–11.10 остановили
+        ЦОД в Сасово, Калуге и Владимире; эмитент ущерб и капзатраты не раскрыл. Дата
+        Q3 МСФО на IR-странице не объявлена — 30.11 стоит как крайний срок, не как
+        дата отчёта'
+    user_constraints:
+    - id: ydex-q3-ifrs-guidance
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-23'
+      summary: 'Mode 4 от 23.10.2026 (Portfolio/reports/2026-10-23-single-analysis-ydex-mdmg-plzl.md):
+        YDEX HOLD 8,97% L2 без добора, гейт reviewed_under_review. Удары 8–11.10 остановили
+        ЦОД в Сасово, Калуге и Владимире; эмитент ущерб и капзатраты не раскрыл. Дата
+        Q3 МСФО на IR-странице не объявлена — 30.11 стоит как крайний срок, не как
+        дата отчёта'
+    unconstrained_verdict: HOLD
+    unconstrained_verdict_confidence: 0.55
+    last_corp_event: '2026-10-26: компания сообщила, что 3 суперкомпьютера не пострадали
+      и перенесены (по Investmint)'
+    next_corp_event: 'не подтверждено: МСФО 3К2026 — 29.10 по агрегатору, на ir.yandex/events
+      даты нет'
+    week_note:
+      what_happened:
+      - 26.10 компания сообщила, что три суперкомпьютера не пострадали и перенесены
+        на новые площадки (Investmint, вторично); акции ≈3 490 ₽.
+      - 'МСФО 3К — 29.10 по агрегатору; на ir.yandex/events даты 3К нет. Ожидания
+        Т-Инвестиций: выручка ≈412 млрд ₽ (+12,5%), скорр. EBITDA ≈89,8 млрд ₽.'
+      - 'Freedom Global (12.10): на 3К удары не повлияют, критические сбои — в 4К.
+        Эмитент ущерб ЦОД и капзатраты не раскрыл.'
+      recommendation:
+      - 'держать (недобор к плану 10,0% в гистерезисе); докупать нельзя — гейт «На
+        пересмотре» до 07.12. Проверка — МСФО 3К: гайденс, события после отчётной
+        даты, капзатраты на ЦОД.'
+      macro_link: null
+  SBERP:
+    sector: banks_finance
+    sector_ru: Финансовый
+    name: Сбербанк-п
+    weight_real_pct: 8.8111
+    weight_user_planned_pct: 8.5
+    weight_ie_target_pct: null
+    weight_divergence_vs_planned_pp: 0.3111
+    weight_divergence_vs_ie_pp: null
+    weight_divergence_pp: null
+    listing_age_quarters: 59
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 297.88
+    xirr: 0.2521
+    pnl_rub: 58332.62
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: HIGH
+    fundamental_score_basis: 'Сбербанк-п: 8,81% L2 (план 8,5%), цена 297,88 ₽ (+5,02%,
+      закрытие 15.10 → закрытие 27.10). Собственных новостей нет; фундамент общий
+      со SBER: МСФО 9М2026 (28.10) — ЧП 1 529,9 млрд ₽ (+17,0% г/г), ROE 24,0%, 3К
+      +13,9% г/г, в консенсус (Интерфакс, пересказ). Дивиденд на префы равен обыкновенным
+      (устав). Премия префа к обыкновенной −0,10% (297,88 против 298,18 ₽) — ниже
+      порога арбитража 1%. Связка SBER+SBERP — 19,87% книги акций при исключении 20,0%
+      (запас 0,13 пп).'
+    fundamental_score_sources:
+    - url: https://smart-lab.ru/blog/news/1360770.php
+      label: 'smart-lab, 09.10: СБЕР РСБУ 9М2026 — ЧП 1 501,2 млрд ₽ (+18,2%), ROE
+        23,0% (пересказ пресс-релиза; webarchive от владельца)'
+      accessed_date: '2026-10-16'
+    - url: https://www.finam.ru/publications/item/rezultaty-sberbanka-po-rsbu-za-9-mesyatsev-osnovnye-sobytiya-9-oktyabrya-20261009-0900/
+      label: 'Финам, 09.10: Сбербанк опубликовал РПБУ за 9М2026 (общий эмитент со
+        SBER)'
+      accessed_date: '2026-10-16'
+    - url: https://ru.themoscowtimes.com/2026/10/14/update-1-sberbank-soobschil-ob-atake-bpla-na-tsod-v-saratovskoy-oblasti-a208560
+      label: 'Moscow Times, 14.10: атака БПЛА на ЦОД Сбербанка; сервисы штатно (общий
+        эмитент со SBER)'
+      accessed_date: '2026-10-16'
+    - url: https://www.interfax.ru/business/1125404
+      label: 'Интерфакс, 28.10: Сбербанк МСФО 9М2026 (общий фундамент SBER/SBERP)'
+      accessed_date: '2026-10-28'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: SBER 298,18 и SBERP 297,88 ₽ — закрытие 27.10 (премия префа
+        −0,10%)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 14.1
+      ci_pct:
+      - 12.65
+      - 15.07
+    div_confidence: MEDIUM
+    div_basis: Дивиденд на префы равен обыкновенным (устав). Консенсус ≈42 ₽ за 2026
+      при payout 50% → 14,10% к 297,88 ₽ (закрытие 27.10); Алор ≈44 ₽ → 14,77% (investmint
+      27.10). Решение — весной 2027.
+    div_sources:
+    - url: https://abn.agency/2026/09/22/sberbank-zhdet-rekordnuyu-pribyl-v-2026-godu-i-50-dividendov/
+      label: 'Греф 22.09: 50% прибыли на дивиденды'
+      accessed_date: '2026-09-26'
+    - url: https://www.sberbank.com/ru/investor-relations/dividends
+      label: Дивидендная политика и история выплат Сбербанка
+      accessed_date: '2026-09-03'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 14.1
+      year2_yield_pct: 14.1
+      year2_basis: carry_forward
+      source: дивполитика 50% МСФО + консенсус ≈42 ₽
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: Пересчитано на цену 27.10.2026 (297,88 ₽); дивполитика не менялась.
+    catalyst:
+    - id: sberp_rate_cycle_nim
+      kind: quantitative
+      trigger: 'Траектория КС: снижение ставки → расширение NIM и разворот стоимости
+        риска'
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 8.0
+        B: 14.0
+        C: 18.0
+        D: 6.0
+      upside_ci_by_scenario:
+        A:
+        - -6.0
+        - 20.0
+        B:
+        - 0.0
+        - 26.0
+        C:
+        - 4.0
+        - 30.0
+        D:
+        - -10.0
+        - 20.0
+      source: 'advisor estimate: чувствительность банковской маржи к КС 14,0% и траектории
+        снижения'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: sberp_pref_premium_arbitrage
+      kind: binary
+      trigger: Премия префа к обыкновенной превысит 1% — сигнал к перетоку SBERP→SBER
+        внутри связки (правило Mode 8 от 19.09)
+      date_window: 2026-Q4..2027-Q3
+      p: 0.25
+      upside_pct: 1.0
+      upside_ci_pct:
+      - 0.0
+      - 2.0
+      source: 'advisor estimate: MOEX ISS 26.09 — премия +0,28% (277,25 vs 276,48
+        ₽); порог из отчёта Mode 8 от 19.09'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.75
+    confidence_basis: 'фундамент общий со SBER: МСФО 9М взяты из пересказа Интерфакса'
+    advisor_verdict_basis: 'Держать на плане 8,5% (+0,31 пп, в гистерезисе). Арбитража
+      обычка/преф нет (премия −0,10% при пороге 1%). Добирать нельзя: связка 19,87%
+      книги при исключении 20,0%.'
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+    user_constraints: []
+    last_corp_event: '2026-10-28: МСФО 9М2026 Сбербанка — ЧП 1 529,9 млрд ₽ (+17,0%
+      г/г)'
+  MOEX:
+    sector: banks_finance
+    sector_ru: Финансовый
+    name: МосБиржа
+    weight_real_pct: 7.8465
+    weight_user_planned_pct: 8.0
+    weight_ie_target_pct: null
+    weight_divergence_vs_planned_pp: -0.1535
+    weight_divergence_vs_ie_pp: null
+    weight_divergence_pp: null
+    listing_age_quarters: 54
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 163.14
+    xirr: 0.025
+    pnl_rub: 5270.42
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Мосбиржа: 7,85% L2 (план 8,0%), цена 163,14 ₽ (+6,27%,
+      закрытие 15.10 → закрытие 27.10). Новое за окно (Investmint, 22–24.10): с 30.11
+      биржа ужесточает лимиты цены заявок по облигациям (лимитные ±5%, рыночные 0,8%,
+      ОФЗ и бумаги ЦБ 0,4%); торги криптовалютой планируются с 01.12 через маркет-мейкеров
+      и партнёрский цифровой депозитарий; у Самолёта акции не проходят требования
+      к корпоративному управлению для 1-го уровня. МСФО 9М2026: дата не опубликована
+      (moex.com/s1456 содержит 1К 21.05 и 2К 26.08; 9М2025 вышла 26.11.2025). КС 14%
+      сохранена 23.10. Гейт «Держать» до 18.11 (Mode 8 19.09), план 8,0% подтверждён.
+      Дивидендный домен IE — IGNORE.'
+    fundamental_score_sources:
+    - url: https://www.moex.com/n104956
+      label: 'Московская биржа, 09.10: итоги срочного рынка за сентябрь 2026 (20,6
+        трлн ₽, +75% г/г)'
+      accessed_date: '2026-10-16'
+    - url: https://www.moex.com/n104744
+      label: 'Московская биржа, 01.10: итоги торгов за сентябрь 2026 (220,8 трлн ₽)'
+      accessed_date: '2026-10-16'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://gov.cnews.ru/news/top/2026-09-23_mosbirzha_stroit_torgovyj
+      label: 'CNews: спот-торги криптовалютой готовятся (23.09)'
+      accessed_date: '2026-09-26'
+    - url: https://investmint.ru/moex/news/
+      label: 'Investmint (агрегатор), 22–24.10: лимиты цены заявок по облигациям с
+        30.11, крипто-торги с 01.12'
+      accessed_date: '2026-10-28'
+    - url: https://moex.com/s1456
+      label: 'moex.com/s1456: календарь отчётности (МСФО 2К — 26.08; 3К/9М 2026 даты
+        нет)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 8.51
+      ci_pct:
+      - 6.75
+      - 9.84
+    div_confidence: MEDIUM
+    div_basis: Дивполитика — не менее 50% ЧП по МСФО. Рекомендация СД по дивиденду
+      за 2026 ожидается весной 2027, дата на 27.08 не назначена. Оценка 9,4% — от
+      прогнозной ЧП 2026 при payout 65–75% к цене 151,20 ₽. На закрытие 27.10 (163,14
+      ₽) доходность 8,51% — пересчёт прошлой оценки по цене (153,51 → 163,14 ₽, закрытие
+      15.10 → 27.10); допущения по DPS не менялись.
+    div_sources:
+    - url: https://www.moex.com/n103658
+      label: Пресс-релиз о результатах Q2 2026 (база для оценки ЧП)
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 8.51
+      year2_yield_pct: 8.13
+      year2_basis: carry_forward
+      source: дивполитика ≥50% ЧП МСФО; результаты Q2 2026 от 26.08.2026
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: Пересчитано на цену 27.10.2026 (163,14 ₽); политика не менялась.
+    catalyst:
+    - id: moex_fee_income_offset
+      kind: quantitative
+      trigger: Замещение процентного дохода комиссионным (комиссии +24,8% г/г против
+        ЧПД −16,4% г/г)
+      date_window: 2026-Q3..2027-Q4
+      upside_by_scenario:
+        A: 8.0
+        B: 12.0
+        C: 15.0
+        D: 5.0
+      upside_ci_by_scenario:
+        A:
+        - -4.0
+        - 18.0
+        B:
+        - 0.0
+        - 24.0
+        C:
+        - 3.0
+        - 28.0
+        D:
+        - -10.0
+        - 18.0
+      source: https://www.moex.com/n103658 — сегментная динамика доходов Q2 2026
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: A
+    - id: moex_crypto_spot_launch
+      kind: binary
+      trigger: Запуск торгов криптовалютами на Мосбирже — по плану биржи с 01.12.2026
+        (через маркет-мейкеров и партнёрский цифровой депозитарий; Investmint 22–24.10,
+        вторично) — новый комиссионный поток
+      date_window: 2026-12..2027-Q2
+      p: 0.6
+      upside_pct: 4.0
+      upside_ci_pct:
+      - 0.0
+      - 8.0
+      source: https://gov.cnews.ru/news/top/2026-09-23_mosbirzha_stroit_torgovyj —
+        Швецов 23.09, сроки не названы
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.65
+    confidence_basis: дата МСФО 9М не объявлена; новости окна — из агрегатора Investmint
+    advisor_verdict_basis: Держать на плане 8,0% (недобор −0,15 пп в гистерезисе).
+      Повторный разбор гейта не нужен. Рост +6,27% за 12 дней без корпоративной причины,
+      кроме общего фона рынка (IMOEX +5,53%) — добирать на росте нет оснований.
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+    user_constraints: []
+    week_note:
+      what_happened:
+      - С 30.11 ужесточаются лимиты цены заявок по облигациям; торги криптовалютой
+        планируются с 01.12 (Investmint, вторично). Дата МСФО 9М не объявлена.
+      recommendation:
+      - держать на плане 8,0%; на росте +6,27% без корпоративной причины не добирать.
+      macro_link: null
+  T:
+    sector: Финансовый
+    sector_ru: Финансовый
+    name: Т-Технологии
+    weight_real_pct: 6.4555
+    weight_user_planned_pct: 6.0
+    weight_ie_target_pct: 6.0
+    weight_divergence_vs_planned_pp: 0.4555
+    weight_divergence_vs_ie_pp: 0.4555
+    weight_divergence_pp: 0.4555
+    listing_age_quarters: 118
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 276.98
+    xirr: -0.0398
+    pnl_rub: -2533.58
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: HIGH
+    fundamental_score_basis: 'Т-Технологии: 6,46% L2 (план 6,0%, IE 6,0%), цена 276,98
+      ₽ (+3,67%, закрытие 15.10 → закрытие 27.10). 23.10 Т-Банк по РСБУ за 9М2026:
+      ЧП 156,6 млрд ₽ (в 3,3 раза выше г/г), кредитный портфель +28% г/г до 4,1 трлн
+      ₽, 56,6 млн клиентов (Финмаркет/T-Инвестиции, вторично). 23.10 названы параметры
+      допэмиссии для покупки «Точки»: размер меньше ожиданий рынка (Alfa Investments,
+      Telegram) — по цене 320 ₽ размытие ≈3,2% (прошлый обзор). Аналитики: БКС поднял
+      цель на год до 360 ₽ (13.10), Alfa — покупать не дороже 270 ₽, цель от 350 ₽
+      (23.10), Финам — идея с целью 323,76 ₽ (21.10). МСФО 3К2026 — 10.11 по сообщениям
+      Investmint и Telegram (первоисточник не открывался). Дивиденд 4,70 ₽: реестр
+      закрыт 12.10.'
+    fundamental_score_sources:
+    - url: https://www.finam.ru/publications/item/zakrytie-dividendnykh-reestrov-nornikelya-novateka-i-t-tekhnologiy-osnovnye-sobytiya-12-oktyabrya-20261012-0900/
+      label: 'Финам, 12.10: закрытие дивидендных реестров Норникеля, НОВАТЭКа и Т-Технологий'
+      accessed_date: '2026-10-16'
+    - url: https://t.me/markettwits/388460
+      label: 'markettwits (Telegram), 12.10: МСФО 3К2026 Т-Технологий — 10.11 (вторичный)'
+      accessed_date: '2026-10-16'
+    - url: https://e-disclosure.ru/portal/event.aspx?EventId=RF99w5stGkeEbm1qhmdNlw-B-B
+      label: 'e-disclosure: Т-Технологии — ВОСА 01.10 утвердило дивиденды 4,70 ₽ за
+        1П2026, реестр 12.10 (протокол №16 от 02.10)'
+      accessed_date: '2026-10-08'
+    - url: https://www.finam.ru/publications/item/aktsionery-t-tekhnologiy-odobrili-dividendy-za-1-polugodie-v-razmere-47-rublya-20261002-1408/
+      label: 'Финам, 02.10: акционеры одобрили дивиденды 4,7 ₽; 09.10 — последний
+        день покупки'
+      accessed_date: '2026-10-08'
+    - url: https://www.vedomosti.ru/investments/news/2026/10/01/1233330-100-tochki
+      label: 'Ведомости: СД оценил 100% «Точки» в 84,8 млрд ₽, цена 320 ₽ (01.10)'
+      accessed_date: '2026-10-01'
+    - url: https://investmint.ru/t/news/
+      label: 'Investmint (агрегатор), 12–23.10: РСБУ 9М ЧП 156,6 млрд ₽, допэмиссия
+        под «Точку», МСФО 3К — 10.11, цели БКС/Alfa/Финам'
+      accessed_date: '2026-10-28'
+    - url: https://www.finmarket.ru/currency/news/6734293
+      label: 'Финмаркет, 23.10: Т-Банк по РСБУ за 9М — ЧП 156,6 млрд ₽ (×3,3 г/г)
+        (по сводке сбора)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 6.95
+      ci_pct:
+      - 5.54
+      - 10.08
+    div_confidence: MEDIUM
+    div_basis: 'Объявлено: 4,70 ₽ за 1П2026, реестр 12.10, последний день покупки
+      09.10 (≈1,76% к цене, ≈5,5 тыс ₽ до налога на 1 163 акции). Годовая оценка 12м
+      и CI — из прошлого обзора, не пересчитывались. На закрытие 27.10 (276,98 ₽)
+      доходность 6,95% — пересчёт прошлой оценки по цене (267,18 → 276,98 ₽, закрытие
+      15.10 → 27.10); допущения по DPS не менялись.'
+    div_sources:
+    - url: https://e-disclosure.ru/portal/event.aspx?EventId=RF99w5stGkeEbm1qhmdNlw-B-B
+      label: 'e-disclosure: дивиденд 4,70 ₽, реестр 12.10'
+      accessed_date: '2026-10-08'
+    - url: https://www.dohod.ru/analytic/research/t-texnologii-%E2%80%93-dividendy-ii-kv-2026
+      label: 'dohod.ru: дивиденд T за 2К2026 4,7 ₽'
+      accessed_date: '2026-09-16'
+    - url: https://investmint.ru/t/
+      label: 'investmint: T — 4,7 ₽ за Q2 2026, реестр 12.10.2026 (вторичный источник)'
+      accessed_date: '2026-09-16'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 6.95
+      year2_yield_pct: 6.95
+      year2_basis: carry_forward
+      source: 'run-rate обзора 08.10 (МСФО 2К2026, гайд, байбэк) + факт: реестр 4,70
+        ₽ закрыт 12.10 (e-disclosure, Финам)'
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: Run-rate прошлого обзора (≈19,24 ₽ на 12 мес) пересчитан на цену 15.10.2026.
+        Объявленные 4,70 ₽ отсечены 12.10 и в окно не входят; следующий дивиденд не
+        объявлен — оценка механическая.
+    catalyst:
+    - id: t_profit_trajectory
+      kind: quantitative
+      trigger: Выполнение гайда 2026 (операционная ЧП >+20% г/г, ROE ~30%) при паузе
+        КС 14%
+      date_window: 2026-Q4..2027-Q4
+      upside_by_scenario:
+        A: 10.0
+        B: 16.0
+        C: 20.0
+        D: 6.0
+      upside_ci_by_scenario:
+        A:
+        - -5.0
+        - 22.0
+        B:
+        - 2.0
+        - 28.0
+        C:
+        - 6.0
+        - 32.0
+        D:
+        - -12.0
+        - 22.0
+      source: 'https://invest-era.ru/analytics-and-news/t-tekhnologii-otsenka-sopostavima-so-sberom-20260904-142450
+        — МСФО Q2 2026: операционная ЧП +25%, ROE 28,1%, NIM 11,6%, гайд подтверждён'
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: A
+    - id: t_buyback_5pct
+      kind: binary
+      trigger: Исполнение байбека до 5% капитала до конца 2026 (выкуплено ~1%)
+      date_window: 2026-Q4
+      p: 0.6
+      upside_pct: 4.0
+      upside_ci_pct:
+      - 0.0
+      - 8.0
+      source: https://invest-era.ru/analytics-and-news/t-tekhnologii-otsenka-sopostavima-so-sberom-20260904-142450
+        — «до конца 2026 намерены выкупить до 5% капитала»
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: t_retail_credit_quality
+      kind: binary
+      trigger: Рост NPL розницы/МСБ выше коридора 6,5–7,5% на паузе КС (NPL 7,3%,
+        +0,8 пп г/г)
+      date_window: 2026-Q4..2027-Q2
+      p: 0.3
+      downside_pct: 10.0
+      downside_ci_pct:
+      - 4.0
+      - 20.0
+      source: https://invest-era.ru/analytics-and-news/t-tekhnologii-otsenka-sopostavima-so-sberom-20260904-142450
+        — NPL 7,3%, риск «рост просрочек в МСБ»
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: B
+    - id: t_tochka_consolidation_close
+      kind: binary
+      trigger: Закрытие консолидации 100% «Точки» по 320 ₽/акция (размытие ~3,2%,
+        36% в долг) до конца 2026; 23.10 объявлены параметры допэмиссии — размер меньше
+        ожиданий рынка (Alfa Investments); рост DPS 2026 >20% (Малиновский)
+      date_window: 2026-10..2026-12
+      p: 0.85
+      upside_pct: 3.0
+      upside_ci_pct:
+      - 0.0
+      - 8.0
+      source: https://www.vedomosti.ru/investments/news/2026/10/01/1233330-100-tochki
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: t_msfo_3q2026
+      kind: binary
+      trigger: 'МСФО 3К2026 (10.11) подтверждает гайд: операционная ЧП >+20% г/г,
+        ROE ~30%'
+      date_window: '2026-11-10'
+      p: 0.7
+      upside_pct: 5.0
+      upside_ci_pct:
+      - -3.0
+      - 12.0
+      source: https://t.me/markettwits/388460 — дата МСФО 3К 10.11 (вторичный источник)
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: secondary
+      macro_dependency: A
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.72
+    confidence_basis: РСБУ 9М и параметры допэмиссии — из агрегатора/пересказов; дата
+      МСФО 3К (10.11) не подтверждена эмитентом
+    advisor_verdict_basis: 'Тезис без изменений: РСБУ 9М ЧП ×3,3, портфель +28%, дивиденд
+      4,70 ₽ получен в реестре 12.10. Перевес +0,46 пп в гистерезисе. Держать; идея
+      Mode 8 «план 6 → 7%» — решать в Mode 3 после МСФО 3К (10.11, дата не подтверждена
+      эмитентом). Цена выше потолка покупки Alfa (270 ₽) — на росте не добирать.'
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+    user_constraints: []
+    last_corp_event: '2026-10-23: РСБУ 9М2026 — ЧП 156,6 млрд ₽ (×3,3 г/г)'
+    next_corp_event: 'не подтверждено первоисточником: МСФО 3К2026 — 10.11 (Investmint,
+      Telegram)'
+    week_note:
+      what_happened:
+      - '23.10 РСБУ 9М2026: ЧП 156,6 млрд ₽ (в 3,3 раза выше г/г), кредитный портфель
+        +28% до 4,1 трлн ₽, 56,6 млн клиентов.'
+      - 23.10 параметры допэмиссии под покупку «Точки» — меньше ожиданий рынка. МСФО
+        3К — 10.11 (агрегаторы, не подтверждено эмитентом).
+      recommendation:
+      - держать; идею «план 6 → 7%» решать в разборе ребалансировки (Mode 3) после
+        МСФО 3К. Цена выше потолка покупки Alfa (270 ₽).
+      macro_link: null
+  OZON:
+    sector: it_telecom
+    sector_ru: Потребительский цикличный
+    name: Озон
+    weight_real_pct: 6.3377
+    weight_user_planned_pct: 5.0
+    weight_ie_target_pct: null
+    weight_divergence_vs_planned_pp: 1.3377
+    weight_divergence_vs_ie_pp: null
+    weight_divergence_pp: null
+    listing_age_quarters: 23
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 3635.0
+    xirr: -0.2154
+    pnl_rub: -14209.31
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Озон: 6,34% L2 (план 5,0%), цена 3 635 ₽ (+4,42%, закрытие
+      15.10 → закрытие 27.10). МСФО 3К2026 (28.10; Moscow Times/Reuters, Ведомости,
+      smart-lab — вторично): выручка 421,2 млрд ₽ (×1,6; +63% г/г), оборот с услугами
+      1,6 трлн ₽ (+42%), скорр. EBITDA 93,0 млрд ₽ (+124%; маржа от оборота 6,0%,
+      +2,2 пп), ЧП 3,67 млрд ₽ (+25% г/г) — ПОСЛЕ оценочных резервов 30,1 млрд ₽ под
+      убытки от ударов БПЛА по 11 логистическим объектам (товары, выбытие и обесценение
+      оборудования, прочее; ≈7,2% выручки 3К). Часть рисков застрахована, возмещение
+      обсуждается со страховщиками, суммы нет. 9М: выручка 1,06 трлн ₽ (+53%), ЧП
+      18,3 млрд ₽ (против убытка 4,6 млрд), скорр. EBITDA 199,7 млрд ₽ (+76%). Финтех:
+      выручка 85,2 млрд ₽ (+57%), прибыль до налогов 27,1 млрд ₽. Чистые финансовые
+      расходы 16,3 млрд ₽. До отчёта Совкомбанк ждал чистый убыток ≈31 млрд ₽ из-за
+      списаний, БКС — убыток ≈2,6 млрд ₽ (Investmint 24–27.10): факт лучше обоих.
+      Официального гайденса 2026 в источниках нет. 24.10 — новый удар по логистическому
+      центру в Омске (пожар, пострадавших нет; Investmint): прямое попадание в окне
+      окт–ноя. 28.10 в 11:06 МСК цена 3 727,5 ₽ (+2,5% к цене снапшота 3 635 ₽, ISS
+      с задержкой ≈15 мин). Ущерб раскрыт цифрой, но первоисточник (ir.ozon.ru, e-disclosure)
+      не открывался.'
+    fundamental_score_sources:
+    - url: https://t-j.ru/news/bpla-ozon-glavnoe/
+      label: 'Т—Ж: удары по складам Ozon, ущерб компанией не раскрыт'
+      accessed_date: '2026-10-16'
+    - url: https://new-retail.ru/novosti/retail/poteri_ozon_mogli_prevysit_100_mlrd_rubley/
+      label: 'New Retail: оценка Data Insight потерь Ozon (вторичный)'
+      accessed_date: '2026-10-16'
+    - url: https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/OZON.json
+      label: 'MOEX ISS: OZON 3 245 → 3 481 ₽ за 08.10–15.10 (+7,27%)'
+      accessed_date: '2026-10-16'
+    - url: https://ru.themoscowtimes.com/2026/10/28/chistaya-pribyl-ozon-v-3kv-v-37-mlrd-r-otsenochnye-rezervy-pod-ubytki-ot-atak-na-sklady-301-mlrd-r-a209791
+      label: 'Moscow Times/Reuters, 28.10: Ozon 3К — ЧП 3,7 млрд ₽, резервы 30,1 млрд
+        ₽ под убытки от атак на склады'
+      accessed_date: '2026-10-28'
+    - url: https://www.vedomosti.ru/business/news/2026/10/28/1240700-viruchka-ozon
+      label: 'Ведомости, 28.10: выручка Ozon за 9М +53%, ЧП 18,3 млрд ₽, скорр. EBITDA
+        199,7 млрд ₽'
+      accessed_date: '2026-10-28'
+    - url: https://smart-lab.ru/blog/news/1367532.php
+      label: 'smart-lab, 28.10: Ozon МСФО 3К — оборот 1,6 трлн ₽ (+42%), выручка 421,2
+        млрд ₽, скорр. EBITDA 93,0 млрд ₽, финтех'
+      accessed_date: '2026-10-28'
+    - url: https://investmint.ru/ozon/news/
+      label: 'Investmint (агрегатор), 24–27.10: удар по ЛЦ в Омске 24.10, ожидания
+        Совкомбанка/БКС/Альфа-Банка до отчёта'
+      accessed_date: '2026-10-28'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: OZON 3 727,5 ₽ на 11:06 МСК 28.10 (закрытие 27.10 — 3 635
+        ₽ по снапшоту)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 0.0
+      ci_pct:
+      - 0.0
+      - 0.0
+    div_confidence: HIGH
+    div_basis: Компания дивидендов не платит и о намерении их вводить не заявляла.
+    div_sources:
+    - url: https://ir.ozon.com/
+      label: Раздел для инвесторов Ozon
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: none
+      year2_basis: none
+      source: дивидендов нет; политика не объявлена
+      as_of: '2026-10-28'
+      confidence: HIGH
+      note: Вклад в total return — только курсовой.
+    catalyst:
+    - id: ozon_further_strikes
+      kind: binary
+      trigger: Продолжение ударов по складской сети — реализовано повторно 11.09 (Саратов)
+        и 24.10 (Омск, пожар); резервы 3К — 30,1 млрд ₽ по 11 объектам; риск ущерба
+        для операций и оценки
+      date_window: 2026-Q3..2027-Q1
+      p: 0.8
+      downside_pct: 20.0
+      downside_ci_pct:
+      - 8.0
+      - 40.0
+      source: https://71.ru/text/incidents/2026/09/11/76636261/ — удар 11.09.2026;
+        https://invest-era.ru/analytics-and-news/ozon-chto-zhdet-kompaniyu-posle-udarov-20260824-080924
+        — оценка IE
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: D
+    - id: ozon_fund_liquidation
+      kind: binary
+      trigger: Выход институциональных фондов из позиции (основной фактор дальнейшего
+        падения по оценке IE)
+      date_window: 2026-Q3..2026-Q4
+      p: 0.4
+      downside_pct: 40.0
+      downside_ci_pct:
+      - 20.0
+      - 50.0
+      source: https://invest-era.ru/analytics-and-news/ozon-chto-zhdet-kompaniyu-posle-udarov-20260824-080924
+        — сценарий распродажи фондами
+      source_quality: LOW
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: D
+    - id: ozon_balance_resilience
+      kind: quantitative
+      trigger: 'Запас прочности: отрицательный чистый долг, диверсификация сети, перевод
+        товаров в ПВЗ и склады вглубь страны'
+      date_window: 2026-Q4..2027-Q4
+      upside_by_scenario:
+        A: 25.0
+        B: 35.0
+        C: 45.0
+        D: 10.0
+      upside_ci_by_scenario:
+        A:
+        - -15.0
+        - 55.0
+        B:
+        - -5.0
+        - 70.0
+        C:
+        - 5.0
+        - 85.0
+        D:
+        - -30.0
+        - 40.0
+      source: https://invest-era.ru/analytics-and-news/ozon-chto-zhdet-kompaniyu-posle-udarov-20260824-080924
+        — точки опоры Ozon против WB
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: A
+    - kind: binary
+      source_trust:
+        analyst: external
+        subdomain: primary
+      id: ozon_gov_procurement_marketplaces
+      trigger: Госзакупки бюджетных учреждений через маркетплейсы с 01.10.2026 — новый
+        B2G-канал GMV
+      date_window: 2026-Q4..2027-Q4
+      p: 0.6
+      upside_pct: 5.0
+      upside_ci_pct:
+      - 0.0
+      - 12.0
+      source: https://finance.mail.ru/article/putin-obyavil-o-zapuske-eksperimenta-s-goszakupkami-cherez-marketplejsy-69225866/
+      source_quality: MEDIUM
+      macro_dependency: null
+    - id: ozon_tax_deferral_support
+      kind: binary
+      trigger: Решение Минфина об отсрочке/рассрочке налогов Ozon и продавцам по образцу
+        WB (обсуждается с 22.09, решения нет на 01.10)
+      date_window: 2026-10..2026-12
+      p: 0.5
+      upside_pct: 3.0
+      upside_ci_pct:
+      - 0.0
+      - 6.0
+      source: https://finance.mail.ru/article/aktsii-ozon-otyigrali-vsyu-prosadku-posle-atak-na-skladyi-kompanii-69229375/
+        — комментарий БКС 24.09, решения нет
+      source_quality: LOW
+      source_trust:
+        analyst: external
+        subdomain: media
+      macro_dependency: null
+    - id: ozon_insurance_compensation
+      kind: binary
+      trigger: 'Страховое возмещение по ущербу от ударов БПЛА: часть рисков застрахована,
+        компания обсуждает выплаты со страховщиками (28.10), сумма и сроки не названы'
+      date_window: 2026-Q4..2027-Q2
+      p: 0.5
+      upside_pct: 4.0
+      upside_ci_pct:
+      - 0.0
+      - 8.0
+      source: 'https://ru.themoscowtimes.com/2026/10/28/chistaya-pribyl-ozon-v-3kv-v-37-mlrd-r-otsenochnye-rezervy-pod-ubytki-ot-atak-na-sklady-301-mlrd-r-a209791
+        — оценка advisor: размер возмещения не раскрыт, Δ% условная'
+      source_quality: LOW
+      source_trust:
+        analyst: external
+        subdomain: media
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.6
+    confidence_basis: МСФО 3К взят из СМИ (Moscow Times/Reuters, Ведомости, smart-lab),
+      не из релиза эмитента; гайденса нет; страховое возмещение не раскрыто
+    advisor_verdict_basis: 'Эффективный вердикт HOLD из-за manual-условий (ozon-date-2808
+      до 30.11, ozon-below-1610: цена ≤3 250 ₽ → разбор), но фундаментально TRIM:
+      перевес +1,34 пп к плану 5,0% (6,34% L2) сверх порога 1 пп. Отчёт 3К снял главную
+      неопределённость (ущерб оценён резервом 30,1 млрд ₽, ЧП положительна), но не
+      снимает перевес и не даёт условий докупки: прямые попадания продолжаются (Омск
+      24.10), гайденса нет, страховое возмещение не раскрыто — добор запрещён (гейт
+      «На пересмотре»). Владелец 16.10 решил срез ≈20 акций не делать; факты изменились
+      (отчёт вышел, перевес вырос с +1,24 до +1,34 пп). Решение владельца 28.10: срезать
+      ≈20 акций (расчёт gate_aware_sizing до плана 5,0% — ≈220 500 ₽; 20 акций по закрытию
+      27.10 = 218 100 ₽, доля после среза ≈4,88% L2). Сделку исполняет владелец; до
+      исполнения в снапшоте остаётся 87 акций, а условие ozon-date-2808 — в очереди:
+      после среза пересмотреть его (закрыть или перенести) в следующем обзоре.'
+    verification_priority: HIGH
+    gate_status_snapshot:
+      status: reviewed_under_review
+      set_date: '2026-09-17'
+      set_by: mode_4
+    advisor_verdict_constraints:
+    - id: ozon-date-2808
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-08-02'
+      summary: 'Mode 4 от 17.09.2026: предпосылка «нет прямых попаданий» нарушена
+        11.09 (Саратов). Условие переведено из buy-гейта в review-гейт: план 5,5%
+        → 5,0% L2 (= факт), добор отменён. Дата 31.10 → 30.11 под результаты 3К2026
+        (дата отчёта не объявлена; исторически Ozon отчитывается за 3К в ноябре)'
+    - id: ozon-below-1610
+      type: manual
+      expires:
+        type: price_below
+        value: 3250
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-16'
+      summary: 'Решение владельца 16.10 (обзор акций 16.10): держим, срез ≈20 акций
+        не делаем; ручное условие на анализ при цене ниже 3 250 ₽ (цена 15.10 — 3
+        481 ₽). Формулировка подтверждена владельцем 26.10: «анализ с возможной продажей».'
+    user_constraints:
+    - id: ozon-date-2808
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-08-02'
+      summary: 'Mode 4 от 17.09.2026: предпосылка «нет прямых попаданий» нарушена
+        11.09 (Саратов). Условие переведено из buy-гейта в review-гейт: план 5,5%
+        → 5,0% L2 (= факт), добор отменён. Дата 31.10 → 30.11 под результаты 3К2026
+        (дата отчёта не объявлена; исторически Ozon отчитывается за 3К в ноябре)'
+    - id: ozon-below-1610
+      type: manual
+      expires:
+        type: price_below
+        value: 3250
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-16'
+      summary: 'Решение владельца 16.10 (обзор акций 16.10): держим, срез ≈20 акций
+        не делаем; ручное условие на анализ при цене ниже 3 250 ₽ (цена 15.10 — 3
+        481 ₽). Формулировка подтверждена владельцем 26.10: «анализ с возможной продажей».'
+    unconstrained_verdict: TRIM
+    unconstrained_verdict_confidence: 0.6
+    p_outperform_3m: 0.55
+    last_corp_event: '2026-10-28: МСФО 3К2026 — выручка 421,2 млрд ₽, скорр. EBITDA
+      93,0 млрд ₽, ЧП 3,67 млрд ₽ после резервов 30,1 млрд ₽'
+    next_corp_event: '2026-11-30: срок условия ozon-date-2808 (разбор Mode 4 по результатам
+      3К)'
+    week_note:
+      what_happened:
+      - '28.10 МСФО 3К2026 (Moscow Times/Reuters, Ведомости, smart-lab — вторично):
+        выручка 421,2 млрд ₽ (+63%), оборот с услугами 1,6 трлн ₽ (+42%), скорр. EBITDA
+        93,0 млрд ₽ (+124%), ЧП 3,67 млрд ₽ после резервов 30,1 млрд ₽ под ущерб от
+        ударов БПЛА по 11 логистическим объектам.'
+      - Часть рисков застрахована, возмещение обсуждается со страховщиками, суммы
+        нет. До отчёта Совкомбанк ждал убыток ≈31 млрд ₽, БКС — ≈2,6 млрд ₽.
+      - 24.10 новый удар по логистическому центру в Омске (пожар). Гайденса 2026 в
+        источниках нет.
+      - Цена 3 635 ₽ (+4,42% за 15.10–27.10); live 28.10 — 3 727,5 ₽.
+      recommendation:
+      - 'эффективный вердикт HOLD (manual-условия `ozon-date-2808` до 30.11 и `ozon-below-1610`),
+        фундаментально — TRIM: перевес +1,34 пп к плану 5,0% выше порога 1 пп. Решение
+        владельца 28.10: срезать ≈20 акций (≈220 500 ₽ по расчёту до плана 5,0%). Добор
+        запрещён (гейт «На пересмотре»).'
+      macro_link: сильный рубль и снижение КС поддерживают потребителя; риск — продолжение
+        ударов по инфраструктуре.
+  X5:
+    sector: Потребительский защитный
+    sector_ru: Потребительский защитный
+    name: X5
+    weight_real_pct: 6.2729
+    weight_user_planned_pct: 6.0
+    weight_ie_target_pct: 6.0
+    weight_divergence_vs_planned_pp: 0.2729
+    weight_divergence_vs_ie_pp: 0.2729
+    weight_divergence_pp: 0.2729
+    listing_age_quarters: 118
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 2353.5
+    xirr: 0.136
+    pnl_rub: 7194.45
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'X5: 6,27% L2 (план 6,0%, IE 6,0%), цена 2 353,5 ₽ (+11,07%,
+      закрытие 15.10 → закрытие 27.10). Операционные результаты 3К2026 (16.10; Retail.ru):
+      выручка 1,31 трлн ₽ (+13%), LFL +7,4% (трафик +2,3%), 30 981 магазин (+7,2%
+      г/г, +377 за квартал); «Чижик» +34,5% до 139,6 млрд ₽ (Investmint). 9М: чистая
+      розничная выручка +11,1% до 3,731 трлн ₽ (Финам, 26.10). МСФО 3К2026 — 29.10
+      (календарь инвестора x5.ru — первоисточник): маржа и ЧП там. База 2К: ЧП −29%,
+      скорр. EBITDA −2%. Рост цены +11,07% за 12 дней перед отчётом: выше цели Т-Инвестиций
+      («держать», 2 160 ₽), у цели Финама (2 416,9 ₽, стоп 2 141,9), в 6% от справедливой
+      цены IE (≈2 500 ₽, стрим 15.10); БКС — «позитивный», P/E 7,2×. Дивиденд за 9М:
+      по Investmint (22.10) акционеры рассмотрят выплату на собрании 30.11 (реестр
+      для участия — 06.11), БКС ждёт 175 ₽, рынок — 150–200 ₽; Т-Инвестиции ждут рекомендацию
+      СД 05–06.11. Даты собрания на x5.ru/investors нет — не подтверждено первоисточником.
+      Условие x5-date-3110 закрыто владельцем 26.10 (X5 на плане 6,0%).'
+    fundamental_score_sources:
+    - url: https://www.x5.ru/ru/investors/
+      label: 'X5, 16.10: предварительные операционные результаты 3К и 9М2026 — выручка
+        +13,0%, LFL +7,4% (PDF от владельца)'
+      accessed_date: '2026-10-16'
+    - url: https://www.x5.ru/ru/investors/
+      label: 'x5.ru/investors: МСФО 3К и 9М2026 — 29.10; операционные результаты —
+        16.10'
+      accessed_date: '2026-10-16'
+    - url: https://www.x5.ru/ru/investors/investors-calendar/
+      label: 'x5.ru: календарь инвестора — операционные результаты 3К и 9М2026 16.10.2026'
+      accessed_date: '2026-10-08'
+    - url: https://www.aton.ru/ideas/x5_operatsionnye_rezultaty_za_vtoroy_kvartal_2026_goda/
+      label: 'АТОН, 16.07: операционные результаты 2К2026 — выручка +9,9%, LFL слабее
+        ожиданий'
+      accessed_date: '2026-10-08'
+    - url: https://www.x5.ru/ru/investors/
+      label: 'x5.ru/investors: МСФО 3К2026 — 29.10 (календарь инвестора); даты собрания
+        по дивидендам нет'
+      accessed_date: '2026-10-28'
+    - url: https://retail.ru/news/vyruchka-x5-v-3-kvartale-2026-goda-vyrosla-na-13--16-oktyabrya-2026-283373
+      label: 'Retail.ru, 16.10: операционные результаты X5 за 3К2026 — выручка 1,31
+        трлн ₽ (+13%), LFL +7,4%'
+      accessed_date: '2026-10-28'
+    - url: https://investmint.ru/x5/news/
+      label: 'Investmint (агрегатор), 21–26.10: собрание по дивидендам 30.11, прогноз
+        БКС 175 ₽, цели Т-Инвестиций/Финама'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 8.89
+      ci_pct:
+      - 7.02
+      - 11.18
+    div_confidence: MEDIUM
+    div_basis: 'Оценка 21.08, пересчитана на цену 01.10. Основной дивиденд за 9М:
+      рекомендация ожидается в ноябре. IE 29.09: щедрая выплата за 2026 с вероятностью
+      60–70%, сохранение дивидендов в 2027 — 40–50%. Число IE «≈150 ₽ / 25%» внутренне
+      не сходится (150 ₽ = 7,8% к цене) — не используется; дивидендный домен IE =
+      IGNORE. На закрытие 27.10 (2 353,5 ₽) доходность 8,89% — пересчёт прошлой оценки
+      по цене (2 119 → 2 353,5 ₽, закрытие 15.10 → 27.10); допущения по DPS не менялись.'
+    div_sources:
+    - url: https://www.x5.ru/ru/investors/dividends/
+      label: Дивидендная страница ИКС 5
+      accessed_date: '2026-08-27'
+    - url: https://invest-era.ru/
+      label: 'Invest Era 29.09: дивиденды 2026 (60–70%), 2027 (40–50%) — домен dividend-stocks
+        = IGNORE'
+      accessed_date: '2026-10-01'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 8.89
+      year2_yield_pct: 8.5
+      year2_basis: carry_forward
+      source: прогноз выплаты по дивполитике; ближайший анонс октябрь–ноябрь 2026
+      as_of: '2026-10-28'
+      confidence: LOW
+      note: Пересчитано на цену 15.10 (2 119 ₽). Год 2 — перенос года 1; IE 29.09
+        оценивает сохранение дивидендов в 2027 в 40–50% — риск вниз.
+    catalyst:
+    - id: x5_q3_margin_stabilization
+      kind: binary
+      trigger: 'МСФО 3К2026 (29.10, календарь x5.ru): стабилизация скорр. EBITDA-маржи
+        ≥6,0% и остановка падения ЧП г/г — предусловие добора до 6%'
+      date_window: '2026-10-29'
+      p: 0.5
+      upside_pct: 10.0
+      upside_ci_pct:
+      - -6.0
+      - 22.0
+      source: 'advisor estimate: условие x5-date-3110 в Portfolio/conditions.yaml,
+        порог задан владельцем; дата МСФО 3К в календаре x5.ru не указана'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - id: x5_dividend_announcement
+      kind: binary
+      trigger: 'Рекомендация дивиденда за 9М2026: СД ждут 05–06.11 (Т-Инвестиции),
+        собрание — 30.11 (реестр для участия 06.11) по Investmint; БКС ждёт 175 ₽,
+        рынок 150–200 ₽; дата первоисточником не подтверждена'
+      date_window: 2026-11
+      p: 0.7
+      upside_pct: 0.0
+      upside_ci_pct:
+      - -5.0
+      - 6.0
+      source: 'https://investmint.ru/x5/news/ — Investmint 22–23.10: собрание 30.11,
+        реестр для участия 06.11, прогноз БКС 175 ₽ (вторично, первоисточником не
+        подтверждено)'
+      source_quality: LOW
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: x5_guidance_cut_2026
+      kind: binary
+      trigger: 'Снижение гайденса 2026 (выручка +12–16%, маржа скорр. EBITDA ≥6%)
+        с операционными результатами 3К (16.10) или с МСФО 3К — риск по IE 29.09 (p
+        снижена 0,45 → 0,35 после ops 3К: выручка +13,0%)'
+      date_window: 2026-10..2026-11
+      p: 0.35
+      downside_pct: 6.0
+      downside_ci_pct:
+      - 0.0
+      - 12.0
+      source: 'https://www.x5.ru/ru/investors/investors-calendar/ — дата 16.10; Invest
+        Era 29.09.2026 (consumer trust MEDIUM): маржа 6,0% на нижней границе, LFL
+        Пятёрочки +3,9%, финрасходы ≈20% EBITDA'
+      source_quality: LOW
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: x5_dividend_cut_2027
+      kind: binary
+      trigger: 'Снижение дивидендов в 2027 (IE: вероятность сохранения 40–50%)'
+      date_window: 2027-Q2..2027-Q3
+      p: 0.5
+      downside_pct: 8.0
+      downside_ci_pct:
+      - 2.0
+      - 15.0
+      source: 'Invest Era 29.09.2026: на дивиденды в лучшем случае 100% FCF, ND/EBITDA
+        приближается к 1,2–1,4'
+      source_quality: LOW
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.6
+    confidence_basis: маржа и ЧП 3К — только в МСФО 29.10; ВОСА по дивиденду (30.11)
+      подтверждено агрегатором, не первоисточником
+    advisor_verdict_basis: 'Держать 6,27% (+0,27 пп к плану 6,0%, в гистерезисе).
+      Добора нет: цена +11,07% до отчёта, гейт «Решение устарело» запрещает докупку,
+      а условие x5-ifrs3q-review (29.10) требует разбора бумаги после МСФО 3К. Смотреть
+      в отчёте: скорр. EBITDA-маржа ≥6,0%, ЧП г/г (в 2К −29%), гайденс 2026, дивидендный
+      календарь. Без отчёта вердикт тоже HOLD.'
+    verification_priority: HIGH
+    gate_status_snapshot:
+      status: review_aging
+      set_date: '2026-09-16'
+      set_by: auto
+    advisor_verdict_constraints:
+    - id: x5-ifrs3q-review
+      type: manual
+      expires:
+        type: date
+        value: '2026-10-29'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-26'
+      summary: 'Владелец 26.10: разбор бумаги после МСФО 3К2026 (ожидаются 29.10).
+        Гейт «Решение устарело» с 16.09 — разбор его обновит. Позиция на плане 6,0%.'
+    user_constraints:
+    - id: x5-ifrs3q-review
+      type: manual
+      expires:
+        type: date
+        value: '2026-10-29'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-26'
+      summary: 'Владелец 26.10: разбор бумаги после МСФО 3К2026 (ожидаются 29.10).
+        Гейт «Решение устарело» с 16.09 — разбор его обновит. Позиция на плане 6,0%.'
+    - id: x5-date-3110
+      type: no_buy_until_date
+      expires:
+        type: date
+        value: '2026-10-31'
+      on_trigger_verdict: BUY
+      source: Portfolio/conditions.yaml
+      active: false
+      derived: true
+      set_date: '2026-08-15'
+      summary: 'Закрыто владельцем 26.10: X5 на плане 6,0%, добор не нужен; разбор
+        после МСФО 3К — условие x5-ifrs3q-review.'
+      closed_date: '2026-10-26'
+      closed_reason: manual_removed
+    unconstrained_verdict: HOLD
+    unconstrained_verdict_confidence: 0.6
+    last_corp_event: '2026-10-16: операционные результаты 3К2026 — выручка 1,31 трлн
+      ₽ (+13%), LFL +7,4%'
+    next_corp_event: '2026-10-29: МСФО 3К2026 (календарь инвестора x5.ru)'
+    week_note:
+      what_happened:
+      - '16.10 операционные результаты 3К: выручка 1,31 трлн ₽ (+13%), LFL +7,4% (трафик
+        +2,3%), 30 981 магазин; «Чижик» +34,5% до 139,6 млрд ₽.'
+      - 'МСФО 3К — 29.10 (календарь инвестора x5.ru): маржа и ЧП там. Цена +11,07%
+        за 12 дней перед отчётом — у цели Финама (2 416,9 ₽), выше цели Т-Инвестиций
+        (2 160 ₽, «держать»).'
+      - 'Дивиденд за 9М: собрание 30.11, СД ждут 05–06.11, БКС — 175 ₽ (Investmint;
+        даты первоисточником не подтверждены).'
+      recommendation:
+      - 'держать на плане 6,0%. До выхода отчёта не добирать; разбор бумаги (Mode
+        4) — по условию `x5-ifrs3q-review` после 29.10. Смотреть: скорр. EBITDA-маржа
+        ≥6,0%, ЧП г/г (во 2К −29%), гайденс 2026, дивидендный календарь.'
+      macro_link: null
+  MDMG:
+    sector: Здравоохранение
+    sector_ru: Здравоохранение
+    name: MD Medical
+    weight_real_pct: 4.8913
+    weight_user_planned_pct: 5.0
+    weight_ie_target_pct: 5.0
+    weight_divergence_vs_planned_pp: -0.1087
+    weight_divergence_vs_ie_pp: -0.1087
+    weight_divergence_pp: -0.1087
+    listing_age_quarters: 23
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 1291.4
+    xirr: 0.11
+    pnl_rub: 4041.94
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: HIGH
+    fundamental_score_basis: 'МД Медикал: 4,89% L2 (план 5,0%, IE 5,0%), цена 1 291,4
+      ₽ (−4,60%, закрытие 15.10 → закрытие 27.10). Срез исполнен: по снапшоту 28.10
+      в позиции 189 акций (в сделках за период — продажа 24 акции), вес 4,89% при
+      плане 5,0%. Дивиденд 38 ₽ за 1П2026: решение принял совет директоров (по marketpower
+      — по уставу простым большинством СД, собрание акционеров не упоминается), реестр
+      19.10 закрыт (19.10 акции −3,6% — гэп; Fomag, NewsSmartLab), последний день
+      покупки был 16.10; дата выплаты не подтверждена: 02.11 (РБК, пересказ Investmint)
+      против 23.11 (Интерфакс, обзор 08.10). 1П2026 (IF Stocks, 16.10): выручка +28,8%
+      до 24,8 млрд ₽, EBITDA 6,9 млрд ₽, ЧП 5,3 млрд ₽ (+5,1%) — маржа размывается
+      интеграцией «Эксперта». Новостей эмитента за 20–28.10 нет. Гейт «Сократить»
+      (до 06.11) исполнен.'
+    fundamental_score_sources:
+    - url: https://marketpower.pro/post/gk-md-medikal-vyplatit-dividendy-za-1-polugodie
+      label: 'marketpower, 16.10: дивиденд 38 ₽ за 1П2026, реестр на конец дня 19.10
+        (подтверждён sweep яруса 1)'
+      accessed_date: '2026-10-16'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://www.interfax.ru/quote/MDMG/Dividends
+      label: 'Интерфакс: MDMG — 38 ₽, реестр 19.10, выплата 23.11, доходность 2,96%'
+      accessed_date: '2026-10-08'
+    - url: https://www.vedomosti.ru/investments/news/2026/09/30/1233032-sovet-direktorov
+      label: 'Ведомости, 30.09: СД рекомендовал 38 ₽ за 1П; выручка 1П +28,8%'
+      accessed_date: '2026-10-08'
+    - url: https://smart-lab.ru/blog/news/1357291.php
+      label: 'smart-lab: СД 30.09 — 38 ₽ за 1П2026, отсечка 19.10 (ссылка на раскрытие
+        disclosure.1prime.ru)'
+      accessed_date: '2026-10-01'
+    - url: https://investmint.ru/mdmg/news/
+      label: 'Investmint (агрегатор), 14–28.10: реестр 19.10 (акции −3,6%), 1П2026
+        выручка +28,8%, ЧП +5,1%, выплата 02.11 (РБК)'
+      accessed_date: '2026-10-28'
+    - url: https://marketpower.pro/publications/md-medikal-grup-napravit-na-vyplatu-dividendov-38-na-odnu-aktsiiu
+      label: 'MarketPower, 30.09: дивиденд 38 ₽ — решение СД, не общего собрания'
+      accessed_date: '2026-10-28'
+    - url: https://fomag.ru/news-streem/kompaniya-mat-i-ditya-mozhet-vyplatit-dividendy-za-6-mesyatsev-v-38-rub-na-aktsiyu/
+      label: 'Fomag, 30.09: дивиденд 38 ₽ за 1П2026, реестр 19.10'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 0.0
+      ci_pct:
+      - 0.0
+      - 3.01
+    div_confidence: HIGH
+    div_basis: 'Промежуточный дивиденд 38 ₽ за 1П2026: решение СД 30.09 (по marketpower
+      — решение СД, не ВОСА), реестр 19.10 закрыт, акции торгуются без дивиденда (19.10
+      −3,6%). Доходность 2,94% к 1 291,4 ₽ — выплата владельцам реестра, а не доходность
+      покупки сейчас. Дата выплаты не подтверждена (02.11 или 23.11). Верх CI — с
+      учётом возможного финального дивиденда за 2026 (не объявлен).'
+    div_sources:
+    - url: https://www.interfax.ru/quote/MDMG/Dividends
+      label: 'Интерфакс: 38 ₽, реестр 19.10, выплата 23.11'
+      accessed_date: '2026-10-08'
+    - url: https://smart-lab.ru/blog/news/1357291.php
+      label: 'smart-lab: СД 30.09 — 38 ₽, отсечка 19.10'
+      accessed_date: '2026-10-01'
+    dividend_forward:
+      as_of: '2026-10-28'
+      confidence: HIGH
+      policy_state: none
+      year2_basis: none
+      year1_yield_pct: 0.0
+      source: решение СД 30.09 (38 ₽ за 1П2026), реестр 19.10 закрыт; новых объявленных
+        выплат нет
+      note: Реестр на 38 ₽ закрыт 19.10 — для покупателя сейчас объявленных выплат
+        в окне нет; верх CI — возможный финальный дивиденд за 2026 (не объявлен).
+    catalyst:
+    - id: mdmg_h1_2026_dividend
+      kind: binary
+      trigger: 'Промежуточный дивиденд 38 ₽ за 1П2026: решение СД 30.09 (по marketpower
+        — СД, не ВОСА), реестр 19.10 закрыт; дата выплаты не подтверждена (02.11 по
+        РБК через агрегатор, 23.11 по Интерфаксу)'
+      date_window: 2026-10..2026-11
+      p: 0.95
+      upside_pct: 0.0
+      upside_ci_pct:
+      - -1.0
+      - 1.0
+      source: https://www.interfax.ru/quote/MDMG/Dividends — реестр 19.10, выплата
+        23.11; https://www.vedomosti.ru/investments/news/2026/09/30/1233032-sovet-direktorov
+        — рекомендация СД 30.09
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: secondary
+      macro_dependency: null
+    - id: mdmg_ma_expansion
+      kind: quantitative
+      trigger: Рост через M&A и региональную экспансию клиник при слабом потребительском
+        цикле
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 9.0
+        B: 13.0
+        C: 16.0
+        D: 8.0
+      upside_ci_by_scenario:
+        A:
+        - -4.0
+        - 20.0
+        B:
+        - 0.0
+        - 24.0
+        C:
+        - 3.0
+        - 28.0
+        D:
+        - -6.0
+        - 20.0
+      source: 'advisor estimate: траектория выручки FY2025 и стратегия M&A эмитента'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.7
+    confidence_basis: 'дата выплаты дивиденда расходится: 02.11 (РБК через агрегатор)
+      и 23.11 (Интерфакс, обзор 08.10); первоисточник не открывался'
+    advisor_verdict_basis: 'Срез выполнен: доля 4,89% при плане 5,0% (недобор −0,11
+      пп в гистерезисе) — дальше не резать и не докупать. Условие mdmg-trim-after-1910
+      закрыто как исполненное. Дивиденд 38 ₽ положен владельцам на реестр 19.10: сумма
+      зависит от даты продажи 24 акций (до 8 094 ₽ при 213 акциях на реестр) — сверить
+      с брокерским отчётом. Гейт «Сократить» действует до 06.11 — переподтвердить
+      «Держать» на аудите или в Mode 4.'
+    verification_priority: MEDIUM
+    gate_status_snapshot:
+      status: reviewed_reduce
+      set_date: '2026-10-23'
+      set_by: mode_4
+    advisor_verdict_constraints: []
+    user_constraints:
+    - id: mdmg-trim-after-1910
+      type: manual
+      expires:
+        type: date
+        value: '2026-10-19'
+      on_trigger_verdict: TRIM
+      source: Portfolio/conditions.yaml
+      active: false
+      derived: true
+      set_date: '2026-10-01'
+      summary: 'Срез под реестр дивиденда 38 ₽ (реестр 19.10): исполнен — по снапшоту
+        28.10 в позиции 189 акций (продано 24), доля 4,89% при плане 5,0%.'
+      closed_date: '2026-10-28'
+      closed_reason: date_passed
+    unconstrained_verdict: HOLD
+    unconstrained_verdict_confidence: 0.7
+    last_corp_event: '2026-10-19: реестр дивиденда 38 ₽ за 1П2026 закрыт'
+    next_corp_event: 'не подтверждено: выплата дивиденда 38 ₽ — 02.11 (РБК через агрегатор)
+      или 23.11 (Интерфакс)'
+    week_note:
+      what_happened:
+      - 'Срез исполнен: 189 акций (продано 24), 4,89% L2 при плане 5,0%. Условие `mdmg-trim-after-1910`
+        закрыто.'
+      - 'Дивиденд 38 ₽ за 1П2026 — решение СД 30.09, реестр 19.10 закрыт (акции −3,6%
+        19.10). Дата выплаты не подтверждена: 02.11 (РБК) или 23.11 (Интерфакс).'
+      - '1П2026: выручка 24,8 млрд ₽ (+28,8%), ЧП 5,3 млрд ₽ (+5,1%).'
+      recommendation:
+      - держать; не резать и не докупать. Сверить дивиденд с брокером (до 8 094 ₽
+        при 213 акциях). Гейт «Сократить» действует до 06.11 — переподтвердить «Держать».
+      macro_link: null
+  PLZL:
+    sector: Добывающий
+    sector_ru: Добывающий
+    name: Полюс
+    weight_real_pct: 4.0573
+    weight_user_planned_pct: 4.0
+    weight_ie_target_pct: 10.0
+    weight_divergence_vs_planned_pp: 0.0573
+    weight_divergence_vs_ie_pp: -5.9427
+    weight_divergence_pp: -5.9427
+    listing_age_quarters: 81
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 1112.4
+    xirr: -0.1644
+    pnl_rub: -12810.87
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: LOW
+    fundamental_score_basis: 'Полюс: 4,06% L2 (план 4,0%, IE 10,0%), цена 1 112,4
+      ₽ (+1,72%, закрытие 15.10 → закрытие 27.10). Корпоративных раскрытий по акциям
+      за окно нет. Фон отрицательный: 19.10 Госдума поддержала повышение налога на
+      сверхдоходы для золотодобытчиков (Т-Инвестиции: для Полюса ≈30 млрд ₽ допнагрузки
+      за два года; отозвали рекомендацию по акциям); 21.10 БКС сохранил негативный
+      взгляд (цель 1 000 ₽), парная идея «лонг Норникель / шорт Полюс», 19.10 — шорт
+      от 1 167 ₽ с целью 1 092 ₽; 22.10 акции −3,8% на фоне крепкого рубля и снижения
+      цен на золото (РБК, пересказ Investmint). Золото в рублях (GLDRUB_TOM) 11 211,5
+      → 31 605 ₽/г (−6,0%), USD/RUB 84,18 → 81,03 (−3,7%). Итог 1П2026 (обзор 21.10):
+      выручка +13,8%, ЧП ≈−64%, дивиденды приостановлены до 2030. РСБУ 9М — будет
+      опубликована (дата в источниках не указана). 19.10 запущена первая очередь цементного
+      терминала в Якутии (позитив, малозначимо).'
+    fundamental_score_sources:
+    - url: https://raexpert.ru/releases/2026/oct08g
+      label: 'Эксперт РА, 08.10: подтверждён рейтинг ruAAA облигаций ПАО «Полюс» серии
+        ПБО-12 (sweep яруса 1)'
+      accessed_date: '2026-10-16'
+    - url: https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/PLZL.json
+      label: 'MOEX ISS: PLZL 977,6 → 1 093,6 ₽ за 08.10–15.10 (+11,87%); GLDRUB_TOM
+        33 633,5 ₽/г'
+      accessed_date: '2026-10-16'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://www.interfax.ru/business/1120433
+      label: 'Интерфакс, 05.10: Силуанов — компромисс по налогу на сверхдоходы; оценки
+        Т-Инвестиций (Полюс ≈49 млрд ₽ за 2026–2027)'
+      accessed_date: '2026-10-08'
+    - url: https://finance.mail.ru/article/v-gd-vnesli-proekt-o-naloge-na-sverhdohody-dlya-gorno-metallurgicheskih-kompanij-69230437/
+      label: 'Mail.ru: в ГД внесли проект о налоге на сверхдоходы ГМК — ставки, база,
+        сроки'
+      accessed_date: '2026-10-01'
+    - url: https://investmint.ru/plzl/news/
+      label: 'Investmint (агрегатор), 14–27.10: налог на сверхдоходы (19.10), БКС:
+        цель 1 000 ₽, шорт от 1 167 ₽, откат 22.10 на −3,8%'
+      accessed_date: '2026-10-28'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: GLDRUB_TOM 31 605 ₽/г и USD/RUB 81,03 — закрытие 27.10 (15.10:
+        11 211,5 и 84,18)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 0.0
+      ci_pct:
+      - 0.0
+      - 0.0
+    div_confidence: HIGH
+    div_basis: Дивиденды приостановлены до 2030 года — подтверждено в раскрытии по
+      1П2026 (01.09.2026). Выплата 29,1 ₽ за 1К2026 — последняя. Доходность на 12
+      мес вперёд = 0 по политике эмитента, а не по отсутствию данных.
+    div_sources:
+    - url: https://smart-lab.ru/blog/1346557.php
+      label: 'Полюс 1П2026 МСФО: подтверждён отказ от дивидендов до 2030'
+      accessed_date: '2026-09-03'
+    dividend_forward:
+      policy_state: suspended
+      year2_basis: none
+      source: решение о приостановке дивидендных выплат до 2030 года
+      as_of: '2026-10-28'
+      confidence: HIGH
+      note: Дивидендный канал закрыт до 2030 по решению компании — подтверждено раскрытием
+        01.09.2026. Вклад в total return нулевой по политике, не по незнанию.
+    catalyst:
+    - id: plzl_gold_fx_hedge
+      kind: quantitative
+      trigger: Цена золота × курс рубля — операционный рычаг при FWD P/E ≈4,8
+      date_window: 2026-Q4..2028-Q2
+      upside_by_scenario:
+        A: 14.0
+        B: 20.0
+        C: 28.0
+        D: 24.0
+      upside_ci_by_scenario:
+        A:
+        - -8.0
+        - 30.0
+        B:
+        - 0.0
+        - 38.0
+        C:
+        - 6.0
+        - 46.0
+        D:
+        - 2.0
+        - 44.0
+      source: 'advisor estimate: hedge-профиль подтверждён стресс-моделью по 4 сценариям
+        (обзор 15.08)'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: D
+    - id: plzl_sector_windfall_tax
+      kind: binary
+      trigger: Налог на сверхдоходы 20% для золота (законопроект внесён в Думу 30.09;
+        база — превышение мировой цены над 2025; за 2027 ≤4% выручки, остаток до 28.04.2029)
+      date_window: 2026-10..2026-12
+      p: 0.85
+      downside_pct: 3.0
+      downside_ci_pct:
+      - 0.0
+      - 8.0
+      source: https://finance.mail.ru/article/v-gd-vnesli-proekt-o-naloge-na-sverhdohody-dlya-gorno-metallurgicheskih-kompanij-69230437/
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: C
+    - id: plzl_h1_2026_fcf_deterioration
+      kind: binary
+      trigger: Подтверждение около-нулевого FCF в отчётности за 9М/12М2026 при сохранении
+        капекса
+      date_window: 2026-Q4..2027-Q1
+      p: 0.6
+      downside_pct: -12.0
+      downside_ci_pct:
+      - -22.0
+      - -2.0
+      source: https://smart-lab.ru/blog/1346557.php — отчётность 1П2026 МСФО, FCF
+        около нуля при EBITDA $3,13 млрд
+      source_quality: MEDIUM
+      source_trust:
+        analyst: smart-lab
+        subdomain: metals-mining-ru
+      macro_dependency: null
+    - id: plzl_unexplained_rally_reversal
+      kind: binary
+      trigger: Откат после роста +11,9% за неделю без раскрытий (гипотеза IE о выкупе
+        или байбэке не подтверждена)
+      date_window: 2026-10..2026-11
+      p: 0.35
+      downside_pct: 6.0
+      downside_ci_pct:
+      - 2.0
+      - 12.0
+      source: https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/PLZL.json
+        — цены 08.10–15.10
+      source_quality: LOW
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.55
+    confidence_basis: налог на сверхдоходы золота — законопроект; причина роста цены
+      не найдена; фактов эмитента за окно нет
+    advisor_verdict_basis: 'Держать 4,06% (план 4,0%, +0,06 пп) без добора: Mode 4
+      23.10 подтвердил HOLD. Цена +1,72% при золоте в рублях −6,0% — расхождение без
+      найденной причины. Условие plzl-above-1180-no-gold (цена ≥1 180 ₽ → TRIM) не
+      сработало: до порога +6,1%. Налог на сверхдоходы — риск для FCF; повторный разбор
+      — при втором чтении закона.'
+    verification_priority: MEDIUM
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-10-23'
+      set_by: mode_4
+    advisor_verdict_constraints:
+    - id: plzl-above-1180-no-gold
+      type: price_gate_sell
+      expires:
+        type: price_above
+        value: 1180
+      on_trigger_verdict: TRIM
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-23'
+      summary: 'Mode 4 от 23.10.2026 (Portfolio/reports/2026-10-23-single-analysis-ydex-mdmg-plzl.md):
+        PLZL HOLD 4,06% L2 без добора, гейт reviewed_keep. С 02.10 бумага +14,5% без
+        раскрытий; 19.10 закрытие 1 180 ₽ при GLDRUB_TOM 33 315 ₽/г. Стресс-EV от
+        текущей цены ≈ −4% (оценка advisor), при 1 180 ₽ ≈ −11%'
+    user_constraints:
+    - id: plzl-above-1180-no-gold
+      type: price_gate_sell
+      expires:
+        type: price_above
+        value: 1180
+      on_trigger_verdict: TRIM
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-23'
+      summary: 'Mode 4 от 23.10.2026 (Portfolio/reports/2026-10-23-single-analysis-ydex-mdmg-plzl.md):
+        PLZL HOLD 4,06% L2 без добора, гейт reviewed_keep. С 02.10 бумага +14,5% без
+        раскрытий; 19.10 закрытие 1 180 ₽ при GLDRUB_TOM 33 315 ₽/г. Стресс-EV от
+        текущей цены ≈ −4% (оценка advisor), при 1 180 ₽ ≈ −11%'
+    unconstrained_verdict: HOLD
+    unconstrained_verdict_confidence: 0.55
+    week_note:
+      what_happened:
+      - '19.10 Госдума поддержала повышение налога на сверхдоходы для золотодобытчиков
+        (Т-Инвестиции: ≈30 млрд ₽ за два года); БКС сохранил негативный взгляд (цель
+        1 000 ₽), парная идея «лонг GMKN / шорт PLZL». 22.10 акции −3,8%.'
+      - Золото в рублях −6,0% за период (11 211,5 → 31 605 ₽/г), цена акций +1,72%
+        — расхождение без найденной причины.
+      recommendation:
+      - 'держать на плане 4,0% без добора. Условие `plzl-above-1180-no-gold` (цена
+        ≥1 180 ₽ → TRIM) не сработало: до порога +6,1%.'
+      macro_link: null
+  MBNK:
+    sector: Финансовый
+    sector_ru: Финансовый
+    name: МТС Банк
+    weight_real_pct: 3.8668
+    weight_user_planned_pct: 4.0
+    weight_ie_target_pct: 4.0
+    weight_divergence_vs_planned_pp: -0.1332
+    weight_divergence_vs_ie_pp: -0.1332
+    weight_divergence_pp: -0.1332
+    listing_age_quarters: 10
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 950.5
+    xirr: -0.2713
+    pnl_rub: -11842.04
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'МТС Банк: 3,87% L2 (план 4,0%, IE 4,0%), цена 950,50
+      ₽ (+1,01%, закрытие 15.10 → закрытие 27.10). 26.10 МТС Банк по РСБУ за 9М2026:
+      ЧП 11,21 млрд ₽, −2% г/г (по сводке сбора, Investmint; в прошлом обзоре РСБУ
+      8М была +2% до ≈10,13 млрд ₽ — рост сменился снижением). РСБУ ≠ МСФО: тезис
+      ROE-нормализации (1П2026: ROE 13,6% против 7,4%) проверяется по МСФО 9М, даты
+      нет. Mode 4 от 27.09: гейт «Держать» до 26.11 — МСФО 2К26 ЧП 4,7 млрд, ROE 17,6%,
+      NIM 8,5%, CoR 6,7%; ограничитель — Н1.1 9,2% держит payout на минимуме 25%.
+      Фундамент снижен с HIGH до MEDIUM: свежий факт по прибыли негативный, причины
+      снижения не раскрыты.'
+    fundamental_score_sources:
+    - url: https://t.me/newssmartlab/133371
+      label: 'smartlab.news (Telegram), 08.10: «Эйлер» начал покрытие акций МТС Банка
+        (вторичный)'
+      accessed_date: '2026-10-16'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://investmint.ru/mbnk/news/
+      label: 'investmint: МТС Банк — РПБУ 8М2026, ЧП +2% до ≈10,13 млрд ₽ (24.09)
+        — вторичный источник, sweep яруса 1'
+      accessed_date: '2026-10-08'
+    - url: https://investmint.ru/mbnk/news/
+      label: 'Investmint, 26.10: МТС Банк РСБУ 9М2026 — ЧП 11,21 млрд ₽, −2% г/г (по
+        сводке сбора)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 9.66
+      ci_pct:
+      - 7.43
+      - 12.08
+    div_confidence: MEDIUM
+    div_basis: Дивполитика — от 25% до 50% ЧП по МСФО. Оценка 10,4% на 12 мес вперёд
+      к цене 906,50 ₽ при удвоившейся прибыли; решение по выплате за 2026 ожидается
+      весной 2027, дата СД не назначена. На закрытие 27.10 (950,50 ₽) доходность 9,66%
+      — пересчёт прошлой оценки по цене (941,00 → 950,50 ₽, закрытие 15.10 → 27.10);
+      допущения по DPS не менялись.
+    div_sources:
+    - url: https://rb.ru/news/mts-bank-uvelichil-chistuyu-pribyl-v-21-raza-za-polgoda-pokazatel-vyros-do-72-mlrd-rublej/
+      label: Прибыль 1П2026 — база для оценки выплаты
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 9.66
+      year2_yield_pct: 9.66
+      year2_basis: carry_forward
+      source: дивполитика 25–50% ЧП МСФО; ЧП 1П2026 7,2 млрд ₽ (×2,1 г/г)
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: Пересчитано на цену 27.10.2026 (950,50 ₽); политика не менялась.
+    catalyst:
+    - id: mbnk_roe_normalization
+      kind: quantitative
+      trigger: Нормализация ROE (13,6% в 1П2026 против 7,4% годом ранее) при снижении
+        КС и удержании CIR ниже 40%
+      date_window: 2026-Q4..2027-Q4
+      upside_by_scenario:
+        A: 12.0
+        B: 20.0
+        C: 26.0
+        D: 8.0
+      upside_ci_by_scenario:
+        A:
+        - -6.0
+        - 28.0
+        B:
+        - 2.0
+        - 36.0
+        C:
+        - 8.0
+        - 42.0
+        D:
+        - -14.0
+        - 26.0
+      source: https://rb.ru/news/mts-bank-uvelichil-chistuyu-pribyl-v-21-raza-za-polgoda-pokazatel-vyros-do-72-mlrd-rublej/
+        — фактические метрики 1П2026
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: A
+    - id: mbnk_rating_upgrade_effect
+      kind: binary
+      trigger: Повышение рейтинга НКР до A+ (24.08.2026) — удешевление фондирования
+      date_window: 2026-Q4..2027-Q2
+      p: 0.7
+      upside_pct: 5.0
+      upside_ci_pct:
+      - 0.0
+      - 10.0
+      source: https://www.vedomosti.ru/investments/news/2026/08/24/1223257-nkr-povisilo-kreditnii
+        — рейтинговое действие
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: mbnk_msfo_9m2026
+      kind: binary
+      trigger: 'МСФО 9М2026 (дата не объявлена): CoR ≤6,5%, ROE ≥15%, Н1.1 ≥9,5% —
+        условие пересмотра плана к 5% (Mode 4 27.09)'
+      date_window: 2026-11..2026-12
+      p: 0.5
+      upside_pct: 8.0
+      upside_ci_pct:
+      - -5.0
+      - 15.0
+      source: 'advisor estimate: пороги из Mode 4 27.09 (Portfolio/reports/2026-09-27-single-analysis-mbnk-btbr.md)'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.65
+    confidence_basis: РСБУ 9М −2% г/г получен из сводки сбора (URL указан), не открыт
+      родителем; МСФО 9М не опубликована
+    advisor_verdict_basis: 'Mode 4 27.09: тезис жив, держать на плане 4,0% (−0,13
+      пп). РСБУ 9М −2% г/г — повод следить, не повод менять вердикт: решение принимается
+      по МСФО. План 5% — только через Mode 3 после МСФО 9М при CoR ≤6,5%, ROE ≥15%,
+      Н1.1 ≥9,5%.'
+    verification_priority: MEDIUM
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-27'
+      set_by: mode_4
+    advisor_verdict_constraints: []
+    user_constraints: []
+    last_corp_event: '2026-10-26: РСБУ 9М2026 — ЧП 11,21 млрд ₽ (−2% г/г)'
+    week_note:
+      what_happened:
+      - '26.10 РСБУ 9М2026: ЧП 11,21 млрд ₽ (−2% г/г) — рост сменился снижением; причины
+        не раскрыты.'
+      recommendation:
+      - держать на плане 4,0%; решение — по МСФО 9М (даты нет). План 5% — только в
+        разборе ребалансировки (Mode 3) при CoR ≤6,5%, ROE ≥15%, Н1.1 ≥9,5%.
+      macro_link: null
+  CNRU:
+    sector: real_estate
+    sector_ru: Потребительский цикличный
+    name: iЦиан
+    weight_real_pct: 3.459
+    weight_user_planned_pct: 3.0
+    weight_ie_target_pct: null
+    weight_divergence_vs_planned_pp: 0.459
+    weight_divergence_vs_ie_pp: null
+    weight_divergence_pp: null
+    listing_age_quarters: 6
+    post_ipo_guard: true
+    on_iis: false
+    price_rub: 690.4
+    xirr: 0.9042
+    pnl_rub: 6489.23
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP | [user_note_ie] на фоне байбека, дивиденды
+      оказались ниже наших ожиданий. Оценка ближе к максимумам по отрасли, а рост
+      финансовых показателей не будет ускоряться в 2027 году. Высокие дивиденды были
+      ключевым драйвером роста. Поэтому фиксируем прибыль и перекладываемся в более
+      перспективные идеи.'
+    fundamental_score: HIGH
+    fundamental_score_basis: 'Циан: 3,46% L2 (план 3,0%), цена 690,40 ₽ (+2,19%, закрытие
+      15.10 → закрытие 27.10). 16.10 СД рекомендовал дивиденд 33 ₽ за 9М2026 (ниже
+      ожиданий Т-Инвестиций — 37 ₽; акции −4% в день): ВОСА 19.11, реестр на дивиденд
+      30.11, последний день покупки 27.11 (РБК). РСБУ 9М: ЧП 8,22 млрд ₽ (+9,7% г/г).
+      МСФО 1П2026: выручка 8,3 млрд ₽ (+20,5%), ЧП удвоилась до 2 млрд ₽ (налоговая
+      ставка ниже, нет отрицательной валютной переоценки; Investmint 26.10, вторично).
+      Компания планирует направлять акционерам 60–100% ЧП дивидендами и выкупом (Investmint
+      26.10). Аналитики 20.10: Т-Инвестиции «Покупать», цель 800 ₽; Freedom Global
+      «Держать», цель 740 ₽; Финам назвал дивиденд «проколом». IE исключил CNRU из
+      модели (было 5%: «фиксируем прибыль»). IPO-гейт: 6 кварталов на бирже. Гейт
+      «Держать» установлен владельцем 26.10 до 30.11.'
+    fundamental_score_sources:
+    - url: https://expert.ru/news/sovet-direktorov-tsiana-rekomendoval-dividendy-po-itogam-devyati-mesyatsev
+      label: 'Эксперт, 16.10: СД Циана рекомендовал 33 ₽ за 9М2026, реестр 30.11,
+        ВОСА 19.11 (со ссылкой на e-disclosure)'
+      accessed_date: '2026-10-16'
+    - url: https://www.vedomosti.ru/investments/news/2026/10/16/1237574-tsiana-dividendi
+      label: 'Ведомости, 16.10: дивиденды Циана за 9М — 33 ₽'
+      accessed_date: '2026-10-16'
+    - url: https://profile.ru/?p=1910570
+      label: 'Профиль, 08.10: сбой Циана из-за инфраструктурного партнёра'
+      accessed_date: '2026-10-16'
+    - url: https://www.rbc.ru/quote/16/10/2026/6ad113da9a7947e130aaa10c
+      label: 'РБК, 16.10: СД Циан рекомендовал 33 ₽ за 9М2026; ВОСА 19.11, последний
+        день покупки 27.11'
+      accessed_date: '2026-10-28'
+    - url: https://investmint.ru/cnru/news/
+      label: 'Investmint (агрегатор), 16–26.10: РСБУ 9М ЧП 8,22 млрд ₽, МСФО 1П2026,
+        цели Т-Инвестиций 800 ₽ / Freedom 740 ₽, политика 60–100% ЧП'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 4.78
+      ci_pct:
+      - 4.31
+      - 5.02
+    div_confidence: HIGH
+    div_basis: 'Рекомендация СД 16.10: 33 ₽ за 9М2026 → 4,78% к 690,40 ₽ (закрытие
+      27.10); утверждение ВОСА 19.11, реестр 30.11, последний день покупки 27.11 (РБК).
+      Следующие выплаты (2027) в окно не включены — решения нет.'
+    div_sources:
+    - url: https://www.e-disclosure.ru/portal/event.aspx?EventId=yQk-CiPh6X0iwD-AcZW6XJTA-B-B
+      label: 'e-disclosure: решение СД Циана 16.10 (ссылка из Эксперт)'
+      accessed_date: '2026-10-16'
+    - url: https://ir.cian.ru/
+      label: Раздел для инвесторов ЦИАН (дивидендные раскрытия)
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 4.78
+      year2_yield_pct: 4.78
+      year2_basis: carry_forward
+      source: 'рекомендация СД 16.10: 33 ₽ за 9М2026'
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: 'Пересчитано на цену 27.10.2026 (690,40 ₽): 33 ₽, реестр 30.11 (последний
+        день покупки 27.11); year2 — carry_forward, решений нет.'
+    catalyst:
+    - id: cnru_rate_cut_secondary_market
+      kind: quantitative
+      trigger: Снижение КС → рост числа сделок на вторичном рынке жилья → рост монетизации
+        листингов
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 12.0
+        B: 22.0
+        C: 30.0
+        D: 10.0
+      upside_ci_by_scenario:
+        A:
+        - -6.0
+        - 30.0
+        B:
+        - 2.0
+        - 42.0
+        C:
+        - 8.0
+        - 52.0
+        D:
+        - -10.0
+        - 30.0
+      source: 'advisor estimate: тезис владельца в user_status; чувствительность выручки
+        к активности вторички'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: cnru_ipo_gate_expiry
+      kind: binary
+      trigger: 'Истечение IPO-гейта: 8 полных кварталов торгов на MOEX (сейчас 6)'
+      date_window: 2027-Q1
+      p: 0.95
+      upside_pct: 0.0
+      upside_ci_pct:
+      - -3.0
+      - 3.0
+      source: 'advisor estimate: listing_age_quarters из снапшота, порог гейта — 8
+        кварталов'
+      source_quality: HIGH
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - id: cnru_9m_dividend_egm
+      kind: binary
+      trigger: ВОСА 19.11 утверждает 33 ₽ за 9М2026 (рекомендация СД 16.10, ниже ожиданий
+        Т-Инвестиций 37 ₽), реестр 30.11, последний день покупки 27.11 (РБК)
+      date_window: 2026-11-19..2026-11-30
+      p: 0.9
+      upside_pct: 1.0
+      upside_ci_pct:
+      - -1.0
+      - 3.0
+      source: 'https://www.rbc.ru/quote/16/10/2026/6ad113da9a7947e130aaa10c — РБК
+        16.10: решение СД, ВОСА 19.11'
+      source_quality: HIGH
+      source_trust:
+        analyst: issuer
+        subdomain: disclosure
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.7
+    confidence_basis: ВОСА 19.11 и реестр 30.11 — по РБК со ссылкой на сообщение компании,
+      e-disclosure не открывался
+    advisor_verdict_basis: 'Держать до реестра 30.11 (Mode 3 16.10; гейт «Держать»
+      до 30.11): дивиденд 33 ₽ = 4,78% к 690,40 ₽, ВОСА 19.11. Перевес +0,46 пп в
+      гистерезисе. IPO-гейт (6 кварталов из 8) запрещает добор. Исключение CNRU из
+      модели IE не меняет план владельца 3,0% (решение 16.10).'
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-10-26'
+      set_by: user
+    advisor_verdict_constraints: []
+    user_constraints: []
+    last_corp_event: '2026-10-16: СД рекомендовал дивиденд 33 ₽ за 9М2026'
+    next_corp_event: '2026-11-19: ВОСА по дивиденду 33 ₽ (РБК со ссылкой на сообщение
+      компании; e-disclosure не открывался)'
+    week_note:
+      what_happened:
+      - '16.10 СД рекомендовал 33 ₽ за 9М2026 (ожидали 37 ₽, акции −4%): ВОСА 19.11,
+        реестр 30.11, последний день покупки 27.11 (РБК).'
+      - 'РСБУ 9М: ЧП 8,22 млрд ₽ (+9,7%); политика — 60–100% ЧП акционерам. Т-Инвестиции
+        «Покупать» (800 ₽), Freedom «Держать» (740 ₽). IE исключил CNRU из модели.'
+      recommendation:
+      - держать до реестра 30.11 (гейт «Держать» до 30.11). IPO-гейт (6 кварталов
+        из 8) запрещает добор.
+      macro_link: null
+  PRMD:
+    sector: consumer
+    sector_ru: Здравоохранение
+    name: iПРОМОМЕД
+    weight_real_pct: 3.3111
+    weight_user_planned_pct: 3.0
+    weight_ie_target_pct: null
+    weight_divergence_vs_planned_pp: 0.3111
+    weight_divergence_vs_ie_pp: null
+    weight_divergence_pp: null
+    listing_age_quarters: 9
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 413.05
+    xirr: 0.0423
+    pnl_rub: 1731.33
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: HIGH
+    fundamental_score_basis: 'Промомед: 3,31% L2 (план 3,0%), цена 413,05 ₽ (+2,25%,
+      закрытие 15.10 → закрытие 27.10). Новое за окно (Investmint): 20.10 ориентиры
+      компании — выручка 2026 +60%, рентабельность EBITDA ≈45%, чистый долг/EBITDA
+      <2,5×; выручка 1П2026 +76% (Telegram nztrusfond — вторично, согласуется с прошлым
+      обзором). 21.10 «Доход» начал покрытие (оценка: цена ≈407 ₽ даёт доходность
+      выше рынка; дивидендная политика — не менее 25% скорр. ЧП, при ND/LTM EBITDA
+      1,79×); в 2026 дивидендов не будет (прошлый обзор по отчёту 31.08). 23.10 суд
+      по иску «Биохимика» о лицензии на каботегравир — к Промомеду не относится (тег
+      агрегатора). База 1П2026 (МСФО 31.08): выручка 22,8 млрд ₽, EBITDA 7,7 млрд,
+      чистый долг 33,3 млрд. Дата отчёта 9М не найдена. IPO-гейт снят (8 кварталов).
+      Гейт «Решение устарело» с 26.10.'
+    fundamental_score_sources:
+    - url: https://pharmvestnik.ru/content/news/otechestvennyi-givinostat-dlya-terapii-miodistrofii-dushenna-byl-predstavlen-na-bioprom-2026.html
+      label: 'Фармвестник, 06.10: регистрация гивиностата'
+      accessed_date: '2026-10-16'
+    - url: https://investmint.ru/prmd/news/
+      label: 'investmint: лента PRMD (ориентиры 06.10, Газпромбанк 07.10, муковисцидоз
+        09.10) — вторичный'
+      accessed_date: '2026-10-16'
+    - url: https://www.finam.ru/publications/item/minzdrav-zaregistriroval-preparat-promomeda-gleventra-ot-miodistrofii-dyushenna-20261006-1811/
+      label: 'Финам, 06.10: Минздрав зарегистрировал Глевентра (Промомед)'
+      accessed_date: '2026-10-08'
+    - url: https://abn.agency/2026/10/06/promomed-zhdet-rost-vyruchki-na-60-v-2026-godu/
+      label: 'ABN, 06.10: Промомед ждёт рост выручки ≈60% в 2026 (по данным Сберинвестиций)'
+      accessed_date: '2026-10-08'
+    - url: https://investmint.ru/prmd/news/
+      label: 'Investmint (агрегатор), 20–23.10: ориентиры 2026 (выручка +60%, EBITDA
+        ≈45%), покрытие «Дохода»; новость 23.10 к PRMD не относится'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 0.0
+      ci_pct:
+      - 0.0
+      - 0.0
+    div_confidence: HIGH
+    div_basis: Компания дивиденды не платит, направляя прибыль в разработку и вывод
+      препаратов.
+    div_sources:
+    - url: https://promomed.ru/investors
+      label: Раздел для инвесторов ГК «Промомед»
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: none
+      year2_basis: none
+      source: дивиденды не выплачиваются
+      as_of: '2026-10-28'
+      confidence: HIGH
+      note: Вклад в total return — только курсовой.
+    catalyst:
+    - id: prmd_new_drugs_pipeline
+      kind: quantitative
+      trigger: Вывод новых препаратов на рынок и рост выручки портфеля
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 10.0
+        B: 15.0
+        C: 20.0
+        D: 12.0
+      upside_ci_by_scenario:
+        A:
+        - -8.0
+        - 25.0
+        B:
+        - -2.0
+        - 32.0
+        C:
+        - 3.0
+        - 38.0
+        D:
+        - -6.0
+        - 28.0
+      source: 'advisor estimate: продуктовый пайплайн эмитента, раскрытия 2025–2026'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: prmd_fy2026_guidance_delivery
+      kind: binary
+      trigger: 'Исполнение гайденса 2026: рост выручки 60% и рентабельность EBITDA
+        45% по итогам года'
+      date_window: 2027-Q1..2027-Q2
+      p: 0.6
+      upside_pct: 18.0
+      upside_ci_pct:
+      - 2.0
+      - 32.0
+      source: https://www.vedomosti.ru/investments/news/2026/08/31/1224940-promomed-narastil-pribil
+        — гайденс подтверждён при публикации 1П2026 31.08.2026
+      source_quality: MEDIUM
+      source_trust:
+        analyst: vedomosti
+        subdomain: consumer-ru
+      macro_dependency: null
+    - id: prmd_gleventra_launch
+      kind: binary
+      trigger: Коммерческий запуск Глевентра после регистрации Минздравом 06.10 (миодистрофия
+        Дюшенна)
+      date_window: 2026-Q4..2027-Q2
+      p: 0.7
+      upside_pct: 5.0
+      upside_ci_pct:
+      - -2.0
+      - 12.0
+      source: https://www.finam.ru/publications/item/minzdrav-zaregistriroval-preparat-promomeda-gleventra-ot-miodistrofii-dyushenna-20261006-1811/
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: secondary
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.65
+    confidence_basis: ориентиры 20.10 — пересказ Telegram-канала; первоисточник презентации
+      не найден; дата отчёта 9М неизвестна
+    advisor_verdict_basis: 'Тезис роста без новых опровержений: ориентиры +60% выручки
+      и EBITDA ≈45% повторены 20.10 (вторично). Перевес +0,31 пп в гистерезисе. Держать.
+      IPO-гейт снят — формально BUY/ADD возможен, но гейт «Решение устарело» запрещает
+      докупку, а перевес над планом исключает добор; разбор назначен условием prmd-9m2026-review
+      (30.11).'
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: review_aging
+      set_date: '2026-10-26'
+      set_by: auto
+    advisor_verdict_constraints:
+    - id: prmd-9m2026-review
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-26'
+      summary: 'Владелец 26.10: гейт «Решение устарело» с 19.10 (оценка качества 19.09:
+        выручка 1П +76%, ND/EBITDA 1,8×, гайденс подтверждён). Старую оценку не переподтверждаем
+        — разбор по отчёту за 9М. Доля 3,36% при плане 3,0%: докупки и так нет.'
+    user_constraints:
+    - id: prmd-9m2026-review
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-26'
+      summary: 'Владелец 26.10: гейт «Решение устарело» с 19.10 (оценка качества 19.09:
+        выручка 1П +76%, ND/EBITDA 1,8×, гайденс подтверждён). Старую оценку не переподтверждаем
+        — разбор по отчёту за 9М. Доля 3,36% при плане 3,0%: докупки и так нет.'
+    unconstrained_verdict: HOLD
+    unconstrained_verdict_confidence: 0.65
+  GMKN:
+    sector: metals_mining
+    sector_ru: Добывающий
+    name: ГМКНорНик
+    weight_real_pct: 2.4147
+    weight_user_planned_pct: 2.0
+    weight_ie_target_pct: null
+    weight_divergence_vs_planned_pp: 0.4147
+    weight_divergence_vs_ie_pp: null
+    weight_divergence_pp: null
+    listing_age_quarters: 79
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 115.86
+    xirr: -0.1861
+    pnl_rub: -7930.54
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Норникель: 2,41% L2 (план 2,0%), цена 115,86 ₽ (+0,78%,
+      закрытие 15.10 → закрытие 27.10). 26.10 производство 3К2026: никель 61,1 тыс.
+      т (+14% г/г, +41% кв/кв), медь 108,7 тыс. т (+9%), палладий 736 тыс. унций (+19%),
+      платина 192 тыс. унций (+29%); план 2026 подтверждён; 9М: никель 146,1 тыс.
+      т (+4%), палладий −4%, платина −2% (Финам, Ведомости через Investmint). Компания
+      ждёт снижения выпуска в 2027 и, возможно, в 2028 из-за капремонта печи ПВП-1
+      на Надеждинском заводе (девять месяцев; масштаб не раскрыт — «Велес капитал»
+      отмечает нехватку публичной информации). 27.10 бюджетный комитет Госдумы предложил
+      учесть финансовое положение налогоплательщика при налоге на сверхдоходы (оценка
+      razb0rka: ≈72 млрд ₽ за 2026). Sinara (27.10): цель −2% до 131 ₽, «Держать»,
+      прогноз никеля 2027 — $16 000/т; Финам: цель 180 ₽; Finamalert: 195 ₽ / «Нейтральный».
+      26.10 арест бывшего члена СД Лучицкого по делу о мошенничестве — по заявлению
+      компании, не связано с её деятельностью. Дивиденд 1,85 ₽ получен (реестр 12.10).'
+    fundamental_score_sources:
+    - url: https://www.finam.ru/publications/item/zakrytie-dividendnykh-reestrov-nornikelya-novateka-i-t-tekhnologiy-osnovnye-sobytiya-12-oktyabrya-20261012-0900/
+      label: 'Финам, 12.10: закрытие дивидендного реестра Норникеля (1,85 ₽)'
+      accessed_date: '2026-10-16'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://www.interfax.ru/business/1120433
+      label: 'Интерфакс, 05.10: компромисс по налогу на сверхдоходы; Норникель ≈151
+        млрд ₽ за три года (Т-Инвестиции)'
+      accessed_date: '2026-10-08'
+    - url: https://finance.mail.ru/article/v-gd-vnesli-proekt-o-naloge-na-sverhdohody-dlya-gorno-metallurgicheskih-kompanij-69230437/
+      label: 'Mail.ru: параметры законопроекта о налоге на сверхдоходы'
+      accessed_date: '2026-10-01'
+    - url: https://investmint.ru/gmkn/news/
+      label: 'Investmint (агрегатор), 26–27.10: производство 3К2026, капремонт ПВП-1,
+        налог на сверхдоходы, цели Sinara/Финам'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 0.0
+      ci_pct:
+      - 0.0
+      - 9.5
+    div_confidence: LOW
+    div_basis: '1,85 ₽ за 1П2026 — рекомендация СД 26.08, ГОСА 30.09, реестр 12.10
+      закрыт (1,60% к 115,86 ₽ — выплата уже не входит в окно). Возобновление полноценных
+      выплат за 2026 под вопросом: налог на сверхдоход (~36% FCF по Т-Инвестициям;
+      27.10 бюджетный комитет Госдумы предложил смягчающий учёт финансового положения)
+      бьёт по базе выплат. Прошлый аналитический ориентир года 2 (~7%) снят до ясности
+      по налогу.'
+    div_sources:
+    - url: https://gold.1prime.ru/20260826/nornikel-1764697.html
+      label: 'ПРАЙМ: Норникель рекомендовал 1,85 ₽ за 1П2026'
+      accessed_date: '2026-09-26'
+    - url: https://ru.themoscowtimes.com/2026/09/25/focus-novyy-nalog-na-sverkhdokhody-metallurgov-rf-kto-zaplatit-bolshe-a207053
+      label: 'Reuters/MT 25.09: оценки брокеров по налогу на сверхдоход — Норникель
+        60–72 млрд ₽, Полюс 30–40 млрд ₽'
+      accessed_date: '2026-09-26'
+    - url: https://amp.rbc.ru/rbcnews/quote/26/08/2026/6a8e90e39a79475eb18f8427
+      label: 'РБК: параметры дивиденда Норникеля за 1П2026'
+      accessed_date: '2026-09-03'
+    dividend_forward:
+      policy_state: uncertain
+      year2_basis: none
+      source: 'ГОСА 30.09: 1,85 ₽ за 1П2026 — реестр закрыт 12.10 (Финам); итоговый
+        дивиденд за 2026 не объявлен, налог на сверхдоходы в законопроекте'
+      as_of: '2026-10-28'
+      confidence: LOW
+      note: Дивидендный доход на 12 мес не учтён — следующая выплата неизвестна (IE
+        ориентир ≈11 ₽ за 2026 — аналитическая оценка, дивдомен IE = IGNORE). Это
+        ПРОПУСК, не ноль.
+    catalyst:
+    - id: gmkn_dividend_resumption_signal
+      kind: binary
+      trigger: 'Возобновление регулярных выплат: итоговый дивиденд за 2026 (оценка
+        IE ≈11 ₽, ~9%) с выплатой летом 2027'
+      date_window: 2027-Q2..2027-Q3
+      p: 0.4
+      upside_pct: 12.0
+      upside_ci_pct:
+      - -4.0
+      - 25.0
+      source: https://invest-era.ru/analytics-and-news/gmk-norilskij-nikel-vikhodit-iz-tyazhelogo-perioda-20260824-130332
+        — консервативный сценарий 30% EBITDA
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: gmkn_metals_fx_leverage
+      kind: quantitative
+      trigger: Цены никеля/меди/МПГ × слабый рубль — операционный рычаг экспортёра
+        (FWD EV/EBITDA ≈4,4)
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 6.0
+        B: 10.0
+        C: 14.0
+        D: 9.0
+      upside_ci_by_scenario:
+        A:
+        - -8.0
+        - 18.0
+        B:
+        - -3.0
+        - 24.0
+        C:
+        - 0.0
+        - 30.0
+        D:
+        - -9.0
+        - 26.0
+      source: 'advisor estimate: обратная сценарная зависимость (разрядка = крепкий
+        рубль, минус экспортной выручке в ₽); прогнозы IE на 2026 — ЧП 250 млрд ₽,
+        EBITDA 600 млрд ₽'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: gmkn_windfall_tax
+      kind: binary
+      trigger: Налог на сверхдоходы 30% (законопроект внесён в Думу 30.09; 27.10 бюджетный
+        комитет Госдумы предложил учесть финансовое положение налогоплательщика; оценка
+        razb0rka ≈72 млрд ₽ за 2026; за 2027 ≤4% выручки, остаток до 28.04.2029)
+      date_window: 2026-10..2026-12
+      p: 0.85
+      downside_pct: 4.0
+      downside_ci_pct:
+      - 0.0
+      - 10.0
+      source: https://finance.mail.ru/article/v-gd-vnesli-proekt-o-naloge-na-sverhdohody-dlya-gorno-metallurgicheskih-kompanij-69230437/
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: C
+    - id: gmkn_pvp1_overhaul_2027
+      kind: binary
+      trigger: 'Капремонт печи ПВП-1 (Надеждинский завод, девять месяцев): компания
+        ждёт снижения выпуска основных металлов в 2027 и, возможно, в 2028 (26.10);
+        масштаб не раскрыт'
+      date_window: 2027..2028
+      p: 0.9
+      downside_pct: 3.0
+      downside_ci_pct:
+      - 0.0
+      - 8.0
+      source: 'https://investmint.ru/gmkn/news/ — Ведомости 26.10 через Investmint;
+        оценка advisor: масштаб не раскрыт, Δ% условная'
+      source_quality: LOW
+      source_trust:
+        analyst: external
+        subdomain: media
+      macro_dependency: C
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.55
+    confidence_basis: производственные результаты — по агрегатору; влияние капремонта
+      ПВП-1 не раскрыто; налог на сверхдоходы — законопроект
+    advisor_verdict_basis: 'Держать: план 2,0% (Mode 4 02.10), перевес +0,41 пп в
+      гистерезисе. Производство сильное, но предупреждение о снижении выпуска в 2027–2028
+      и налог на сверхдоходы ограничивают потенциал; следующий дивиденд (итог 2026)
+      остаётся под вопросом — пересматривать по тексту закона (второе чтение) и по
+      раскрытию масштаба ремонта ПВП-1.'
+    verification_priority: MEDIUM
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-10-02'
+      set_by: mode_4
+    advisor_verdict_constraints: []
+    user_constraints: []
+    last_corp_event: '2026-10-26: производство 3К2026 — никель 61,1 тыс. т (+14% г/г);
+      план 2026 подтверждён'
+    week_note:
+      what_happened:
+      - '26.10 производство 3К: никель 61,1 тыс. т (+14%), медь 108,7 тыс. т (+9%),
+        палладий 736 тыс. унций (+19%); план 2026 подтверждён. Компания ждёт снижения
+        выпуска в 2027, возможно и 2028, из-за капремонта печи ПВП-1 (масштаб не раскрыт).'
+      - 27.10 бюджетный комитет Госдумы предложил учесть финансовое положение налогоплательщика
+        в налоге на сверхдоходы (оценка ≈72 млрд ₽ за 2026).
+      recommendation:
+      - держать на плане 2,0%; пересматривать по тексту закона (второе чтение) и раскрытию
+        масштаба ремонта ПВП-1.
+      macro_link: null
+  MRKP:
+    sector: Коммунальный
+    sector_ru: Коммунальный
+    name: Россети Центр и Приволжье
+    weight_real_pct: 2.4032
+    weight_user_planned_pct: 2.0
+    weight_ie_target_pct: 8.0
+    weight_divergence_vs_planned_pp: 0.4032
+    weight_divergence_vs_ie_pp: -5.5968
+    weight_divergence_pp: -5.5968
+    listing_age_quarters: 74
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 0.5996
+    xirr: 0.7547
+    pnl_rub: 3489.62
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP | [user_note_ie] чем ближе к концу года,
+      тем сильнее может быть интерес к дивидендам.'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Россети Центр и Приволжье: 2,40% L2 (план 2,0%, IE 8,0%),
+      цена 0,5996 ₽ (+7,03%, закрытие 15.10 → закрытие 27.10). Новое за окно (Investmint):
+      24.10 аналитик Погорелый (mozgovikresearch) пересматривает оценку — бумаги +33%
+      с 07.07 после повышения рейтинга; 13.10 два агентских договора финансирования
+      по 10 млрд ₽ (возобновляемый лимит 20 млрд ₽, 10 лет, ставка КС + маржа), заявки
+      до 28.10, аукцион 06.11. РСБУ 9М, приказ ФАС по затратам на защиту сетей и новости
+      по тарифам в окне не найдены. IE повысил цель 7 → 8% (не принято: дивидендный
+      домен IE — IGNORE, план 2,0%). База: прогноз МЭР 24–25.09 (тарифы 2027 +16,7%).'
+    fundamental_score_sources:
+    - url: https://kommersant.ru/doc/8972352
+      label: 'Коммерсантъ, 22.09: проект приказа ФАС о затратах на защиту сетей'
+      accessed_date: '2026-10-16'
+    - url: https://ru.themoscowtimes.com/2026/09/25/tablitsa-vlasti-rf-povysili-ozhidaniya-rosta-tarifov-v-27-29gg-a207011
+      label: 'Moscow Times/Reuters, 25.09: прогноз МЭР по тарифам 2027–2029'
+      accessed_date: '2026-10-16'
+    - url: https://investmint.ru/mrkp/news/
+      label: 'investmint: лента MRKP (договоры финансирования 13.10) — вторичный'
+      accessed_date: '2026-10-16'
+    - url: https://t.me/newssmartlab/133760
+      label: 'smartlab.news (Telegram), 13.10: MRKP — два договора финансирования
+        по агентской схеме, 20 млрд ₽ (вторичный)'
+      accessed_date: '2026-10-16'
+    - url: https://www.fontanka.ru/2026/09/22/76655814/
+      label: 'Фонтанка, 22.09: ФАС опубликовала проект приказа о включении затрат
+        на защиту и восстановление сетей в тариф'
+      accessed_date: '2026-10-08'
+    - url: https://ru.themoscowtimes.com/2026/09/25/tablitsa-vlasti-rf-povysili-ozhidaniya-rosta-tarifov-v-27-29gg-a207011
+      label: 'Прогноз МЭР 24–25.09: индексация сетевых тарифов 2027 +16,7% (было 14,7%),
+        2028 +12,7%, 2029 +9,1%, с 1 июля'
+      accessed_date: '2026-09-26'
+    - url: https://investmint.ru/mrkp/news/
+      label: 'Investmint (агрегатор), 13–24.10: агентские договоры финансирования
+        (аукцион 06.11), рост +33% с 07.07'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 14.58
+      ci_pct:
+      - 11.07
+      - 16.56
+    div_confidence: MEDIUM
+    div_basis: Оценка от прибыли РСБУ 1П2026 (14,54 млрд ₽, +24,22% г/г) при payout
+      ≈36% к цене 0,4806 ₽. IE независимо даёт 19% за 2026. Рекомендация СД по дивиденду
+      за 2026 ожидается весной 2027, дата не назначена. На закрытие 27.10 (0,5996
+      ₽) доходность 14,58% — пересчёт прошлой оценки по цене (0,5602 → 0,5996 ₽, закрытие
+      15.10 → 27.10); допущения по DPS не менялись.
+    div_sources:
+    - url: https://cbonds.ru/news/4030923/
+      label: Прибыль РСБУ 1П2026 — база расчёта
+      accessed_date: '2026-08-27'
+    - url: https://invest-era.ru/analytics-and-news/renessans-strakhovanie-ubitok-po-investportfelyu-20260824-130155
+      label: Оценка дивдоходности MRKP за 2026 в 19% (Invest Era)
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 14.58
+      year2_yield_pct: 12.61
+      year2_basis: carry_forward
+      source: payout ≈36% от прибыли РСБУ; независимая оценка IE — 19% за 2026
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: Пересчитано на цену 27.10.2026 (0,5996 ₽); политика не менялась.
+    catalyst:
+    - id: mrkp_msfo_1h2026_check
+      kind: binary
+      trigger: МСФО 1П2026 подтвердила прибыль 14,84 млрд ₽ (+23,8%) — предпосылка
+        дивидендного тезиса закрыта; следующая проверка — 9М2026
+      date_window: 2026-Q4
+      p: 0.7
+      upside_pct: 0.0
+      upside_ci_pct:
+      - -8.0
+      - 8.0
+      source: https://cbonds.ru/news/4030923/ — результаты 1П2026, публикация 30.07.2026
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - id: mrkp_tariff_2027
+      kind: binary
+      trigger: Индексация сетевых тарифов 2027 +16,7% (прогноз МЭР к бюджету, было
+        14,7%); финальное решение ФАС/правительства в 4К
+      date_window: 2026-Q4
+      p: 0.85
+      upside_pct: 5.0
+      upside_ci_pct:
+      - 0.0
+      - 10.0
+      source: https://ru.themoscowtimes.com/2026/09/25/tablitsa-vlasti-rf-povysili-ozhidaniya-rosta-tarifov-v-27-29gg-a207011
+        — прогноз МЭР 24–25.09
+      source_quality: HIGH
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - id: mrkp_rate_cut_dividend_repricing
+      kind: quantitative
+      trigger: Переоценка дивидендной доходности 18–19% при снижении КС с 14,0%
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 14.0
+        B: 24.0
+        C: 32.0
+        D: 12.0
+      upside_ci_by_scenario:
+        A:
+        - -6.0
+        - 32.0
+        B:
+        - 2.0
+        - 44.0
+        C:
+        - 8.0
+        - 54.0
+        D:
+        - -10.0
+        - 32.0
+      source: 'advisor estimate: чувствительность дивидендных имён к траектории КС'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: mrkp_fas_order_grid_losses
+      kind: binary
+      trigger: Приказ ФАС об учёте затрат на защиту и восстановление сетей 2022–2025
+        в тарифе принят в близком к проекту виде (проект от 22.09)
+      date_window: 2026-Q4..2027-Q1
+      p: 0.6
+      upside_pct: 6.0
+      upside_ci_pct:
+      - 0.0
+      - 15.0
+      source: https://www.fontanka.ru/2026/09/22/76655814/ — проект приказа; Portfolio/reports/2026-10-02-general-ie-webinar-0110.md
+        — оценка p advisor
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: secondary
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.65
+    confidence_basis: РСБУ 9М, тарифы и приказ ФАС за окно в источниках не найдены;
+      факты — из агрегатора
+    advisor_verdict_basis: +0,40 пп к плану — в гистерезисе, но цена +7,03% за 12
+      дней при +33% с июля сжимает дивидендную доходность. Держать на плане 2,0%;
+      повод пересмотра — принятый приказ ФАС плюс тарифные решения 2027, не рост IE-цели.
+      Добирать на росте нет оснований.
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+    user_constraints: []
+    next_corp_event: '2026-11-06: аукцион по агентским договорам финансирования (Investmint,
+      вторично)'
+  DATA:
+    sector: IT
+    sector_ru: IT
+    name: Аренадата
+    weight_real_pct: 2.299
+    weight_user_planned_pct: 2.0
+    weight_ie_target_pct: 3.0
+    weight_divergence_vs_planned_pp: 0.299
+    weight_divergence_vs_ie_pp: -0.701
+    weight_divergence_pp: -0.701
+    listing_age_quarters: 8
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 95.6
+    xirr: 0.0368
+    pnl_rub: 495.9
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Аренадата: 2,30% L2 (план 2,0%, IE 3,0%), цена 95,60
+      ₽ (−1,85%, закрытие 15.10 → закрытие 27.10). 26.10 РСБУ 9М2026 (newssmartlab
+      через Investmint): выручка 1,28 млрд ₽ (×1,93 г/г), ЧП 1,22 млрд ₽ (×1,58) —
+      отчётность отдельной компании, не сопоставима с МСФО группы (1П2026: выручка
+      2,5 млрд ₽, +86%). Финам 15.10: главный риск оценки — отмена налоговых льгот
+      IT. Гайденс (31.08): рост выручки 2026 «не менее 20%», новых заявлений нет;
+      дивидендов нет. Рост цены прошлой недели (+8,5%) частично откатился (−1,85%):
+      95,6 ₽ — в зоне «держать» IE (спекулятивный портфель: держать при 96, продавать
+      ≈120, докупать 84–88; тайминг входа IE — LOW). IPO-гейт снят (8 кварталов).
+      Гейт «Решение устарело» с 26.10.'
+    fundamental_score_sources:
+    - url: https://investfuture.ru/articles/aktsii-arenadaty-pribavili-pochti-20-na-ozhidaniyakh-novykh-kontraktov-posle-problem-yandeksa
+      label: 'InvestFuture, 14.10: рост Аренадаты на ожиданиях после сбоев ЦОД Яндекса
+        (подтверждений контрактов нет)'
+      accessed_date: '2026-10-16'
+    - url: https://investmint.ru/data/news/
+      label: 'investmint: лента DATA (12–15.10) — вторичный'
+      accessed_date: '2026-10-16'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://investmint.ru/data/news/
+      label: 'Investmint (агрегатор), 15–26.10: РСБУ 9М2026 выручка 1,28 млрд ₽ (×1,93),
+        ЧП 1,22 млрд ₽; риск отмены льгот IT (Финам)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 3.6
+      ci_pct:
+      - 1.69
+      - 5.43
+    div_confidence: LOW
+    div_basis: Компания заявляла о намерении платить не менее 50% скорр. ЧП, но форвардного
+      решения СД на 27.08 нет. Оценка 4,3% — перенос с 21.08 к цене 80,08 ₽. На закрытие
+      27.10 (95,60 ₽) доходность 3,60% — пересчёт прошлой оценки по цене (97,40 →
+      95,60 ₽, закрытие 15.10 → 27.10); допущения по DPS не менялись.
+    div_sources:
+    - url: https://arenadata.tech/investors/
+      label: Раздел для инвесторов «Группы Аренадата»
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: uncertain
+      year2_basis: none
+      source: форвардного решения СД по дивиденду нет
+      as_of: '2026-10-28'
+      confidence: LOW
+      note: Дивидендный доход не учтён — форвардного решения нет. Это ПРОПУСК, не
+        отказ от выплат.
+    catalyst:
+    - id: data_ipo_gate_expiry
+      kind: binary
+      trigger: IPO-гейт снят (8 кварталов на бирже по снапшоту 08.10) — BUY/ADD формально
+        разрешён
+      date_window: 2026-10
+      p: 0.95
+      upside_pct: 0.0
+      upside_ci_pct:
+      - 0.0
+      - 0.0
+      source: 'Portfolio/snapshots/portfolio-2026-10-08.json: listing_age_quarters
+        = 8'
+      source_quality: HIGH
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - id: data_it_budget_recovery
+      kind: quantitative
+      trigger: Восстановление корпоративных ИТ-бюджетов при снижении КС
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 12.0
+        B: 20.0
+        C: 28.0
+        D: 10.0
+      upside_ci_by_scenario:
+        A:
+        - -10.0
+        - 30.0
+        B:
+        - -2.0
+        - 40.0
+        C:
+        - 4.0
+        - 50.0
+        D:
+        - -14.0
+        - 30.0
+      source: 'advisor estimate: чувствительность ИТ-расходов корпоративного сектора
+        к стоимости денег'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: data_guidance_cut_2026
+      kind: binary
+      trigger: Понижение годового ориентира до роста «не менее 20%» при +86% в 1П2026
+        — проверка фактического 2П2026
+      date_window: 2027-Q1
+      p: 0.55
+      downside_pct: -14.0
+      downside_ci_pct:
+      - -26.0
+      - -2.0
+      source: https://www.cnews.ru/news/line/2026-08-31_finansovye_rezultaty_gruppy
+        — релиз результатов 1П2026 от 31.08.2026
+      source_quality: MEDIUM
+      source_trust:
+        analyst: cnews
+        subdomain: it-tech-ru
+      macro_dependency: A
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.6
+    confidence_basis: РСБУ отдельной компании несопоставима с МСФО-базой группы; гайденс
+      обновлён 31.08
+    advisor_verdict_basis: +0,30 пп к плану — в гистерезисе; импульс предыдущей недели
+      откатился, гайденс не менялся. Держать. IPO-гейт снят, но гейт «Решение устарело»
+      запрещает докупку, а перевес над планом исключает добор; разбор назначен условием
+      data-9m2026-review (30.11).
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: review_aging
+      set_date: '2026-10-26'
+      set_by: auto
+    advisor_verdict_constraints:
+    - id: data-9m2026-review
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-26'
+      summary: 'Владелец 26.10: гейт «Решение устарело» с 19.10 (оценка качества 19.09:
+        выручка 1П +86%, ориентир года понижен до «не менее 20%», тезис завязан на
+        снижение ставки). Старую оценку не переподтверждаем — разбор по отчёту за
+        9М. Доля 2,31% при плане 2,0%: докупки и так нет.'
+    user_constraints:
+    - id: data-9m2026-review
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-26'
+      summary: 'Владелец 26.10: гейт «Решение устарело» с 19.10 (оценка качества 19.09:
+        выручка 1П +86%, ориентир года понижен до «не менее 20%», тезис завязан на
+        снижение ставки). Старую оценку не переподтверждаем — разбор по отчёту за
+        9М. Доля 2,31% при плане 2,0%: докупки и так нет.'
+    unconstrained_verdict: HOLD
+    unconstrained_verdict_confidence: 0.6
+    last_corp_event: '2026-10-26: РСБУ 9М2026 — выручка 1,28 млрд ₽ (×1,93), ЧП 1,22
+      млрд ₽ (×1,58)'
+  NVTK:
+    sector: oil_gas
+    sector_ru: Энергетический
+    name: Новатэк ао
+    weight_real_pct: 1.9687
+    weight_user_planned_pct: 2.0
+    weight_ie_target_pct: null
+    weight_divergence_vs_planned_pp: -0.0313
+    weight_divergence_vs_ie_pp: null
+    weight_divergence_pp: null
+    listing_age_quarters: 59
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 1198.0
+    xirr: 0.2269
+    pnl_rub: 18410.31
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'НОВАТЭК: 1,97% L2 (план 2,0%), цена 1 198 ₽ (+11,07%,
+      закрытие 15.10 → закрытие 27.10). Цена выше порога 1 200 ₽ (live 28.10 11:06
+      — 1 208,5 ₽), порог условия nvtk-sellgate формально пройден 27.10; после разбора
+      Mode 4 27.10 срез 30% перенесён на отчёт МСФО 9М (условие сохранено со сроком
+      30.11), добавлен триггер разбора nvtk-below-1100. Дивиденд 35,50 ₽ за 1П2026
+      получен в реестре 12.10 (гэп закрыт за 4 сессии). За окно (Investmint): США
+      и Россия обсуждают участие американских компаний в российских СПГ-проектах,
+      в т.ч. терминал на Аляске ≈$25 млрд в обмен на снятие санкций с «Арктик СПГ-2»
+      (БКС, цель 1 400 ₽; решений нет); ЕС планирует запретить импорт российского
+      СПГ с 01.01.2027; добыча 3К: углеводороды +4,2%, газ +4,9%; Т-Инвестиции — «Покупать»,
+      цель 1 380 ₽. Фундамент (МСФО 1П2026): EBITDA −8,8%, чистая денежная позиция.'
+    fundamental_score_sources:
+    - url: https://www.finam.ru/publications/item/zakrytie-dividendnykh-reestrov-nornikelya-novateka-i-t-tekhnologiy-osnovnye-sobytiya-12-oktyabrya-20261012-0900/
+      label: 'Финам, 12.10: закрытие дивидендного реестра НОВАТЭКа (35,50 ₽)'
+      accessed_date: '2026-10-16'
+    - url: https://www.novatek.ru/ru/investors/dividends/
+      label: 'novatek.ru: 35,50 ₽, ВОСА 30.09.2026, дата составления списка 12.10.2026'
+      accessed_date: '2026-10-08'
+    - url: https://www.interfax.ru/business/1119870
+      label: 'Интерфакс: акционеры НОВАТЭКа одобрили 35,5 ₽ за 1П2026, реестр 12.10'
+      accessed_date: '2026-10-08'
+    - url: https://investmint.ru/nvtk/news/
+      label: 'Investmint (агрегатор), 21–27.10: переговоры по СПГ-проекту на Аляске,
+        запрет ЕС с 2027, добыча 3К, цели БКС 1 400 ₽ / Т-Инвестиции 1 380 ₽'
+      accessed_date: '2026-10-28'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: NVTK 1 208,5 ₽ на 11:06 МСК 28.10 (закрытие 27.10 — 1 198
+        ₽ по снапшоту)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 6.09
+      ci_pct:
+      - 4.75
+      - 7.75
+    div_confidence: MEDIUM
+    div_basis: Объявленная выплата за 1П2026 — 35,50 ₽ на акцию (СД, реестр 12.10.2026)
+      = 3,56% при цене 996,7 ₽. Оценка на 12 месяцев вперёд предполагает сопоставимую
+      выплату за 2П2026 весной 2027 (не объявлена) — итого ~7,1%. На закрытие 27.10
+      (1 198 ₽) доходность 6,09% — пересчёт прошлой оценки по цене (1 078,6 → 1 198
+      ₽, закрытие 15.10 → 27.10); допущения по DPS не менялись.
+    div_sources:
+    - url: https://www.novatek.ru/ru/investors/dividends/
+      label: 'novatek.ru: 35,50 ₽, реестр 12.10'
+      accessed_date: '2026-10-08'
+    - url: https://smart-lab.ru/blog/news/1344061.php
+      label: Параметры промежуточного дивиденда НОВАТЭКа за 1П2026
+      accessed_date: '2026-09-03'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 6.09
+      year2_yield_pct: 6.09
+      year2_basis: carry_forward
+      source: 'novatek.ru: ВОСА 30.09 — 35,50 ₽ (реестр 12.10 закрыт; Финам 12.10);
+        следующая выплата — оценка по аналогии'
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: Run-rate прошлого обзора (≈72,9 ₽ на 12 мес) пересчитан на цену 15.10.2026.
+        Объявленные 35,50 ₽ отсечены 12.10 и в окно не входят; следующий дивиденд
+        не объявлен — оценка механическая.
+    catalyst:
+    - id: nvtk_european_contracts_2027
+      kind: binary
+      trigger: Истечение европейских контрактов в 2027 — перенаправление 4–5 млн т
+        СПГ в Азию с закреплением дисконта
+      date_window: '2027'
+      p: 0.75
+      downside_pct: 12.0
+      downside_ci_pct:
+      - 2.0
+      - 25.0
+      source: https://invest-era.ru/analytics-and-news/novatek-vinuzhden-prodavat-spg-s-diskontom-20260821-123958
+        — структура контрактного портфеля
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: nvtk_jkm_geopolitical_premium
+      kind: quantitative
+      trigger: 'Уровень JKM: напряжённость на Ближнем Востоке удерживает бенчмарк
+        высоко и подтягивает цену российского СПГ'
+      date_window: 2026-Q4..2027-Q4
+      upside_by_scenario:
+        A: 6.0
+        B: 8.0
+        C: 16.0
+        D: 14.0
+      upside_ci_by_scenario:
+        A:
+        - -14.0
+        - 20.0
+        B:
+        - -10.0
+        - 24.0
+        C:
+        - 0.0
+        - 34.0
+        D:
+        - -4.0
+        - 32.0
+      source: 'advisor estimate: зависимость экспортной выручки от JKM и геополитической
+        премии'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: C
+    - id: nvtk_sanctions_relief
+      kind: binary
+      trigger: Снятие санкционных ограничений с проектов НОВАТЭКа (идея IE — завершение
+        СВО); 24–27.10 сообщения об обсуждении СПГ-терминала на Аляске в обмен на
+        снятие санкций с «Арктик СПГ-2» (БКС, FT/NYT через агрегаторы) — решений нет
+      date_window: 2027..2028
+      p: 0.2
+      upside_pct: 30.0
+      upside_ci_pct:
+      - 5.0
+      - 60.0
+      source: https://invest-era.ru/analytics-and-news/novatek-vinuzhden-prodavat-spg-s-diskontom-20260821-123958
+        — тезис IE; вес сигнала понижен, см. basis
+      source_quality: LOW
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: B
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.65
+    confidence_basis: дата отчёта МСФО 9М не подтверждена; сообщения об Аляске/Арктик
+      СПГ-2 — переговоры без решений
+    advisor_verdict_basis: 'Держать: роль хеджа эскалации утрачена, фундамент нейтральный,
+      но срез 30% в одном шаге с отчётом 9М принимался бы вслепую (Mode 4 27.10).
+      Недобор −0,03 пп в гистерезисе. Следующая точка — МСФО 9М (не позже 30.11):
+      тогда срез 30% или держать; разбор раньше — при цене ниже 1 100 ₽ (nvtk-below-1100).
+      Гейт «Держать» до 18.11.'
+    verification_priority: MEDIUM
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints:
+    - id: nvtk-sellgate
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-06-29'
+      summary: '27.10.2026: ценовой порог 1200 пройден (live 1204, снапшот 1207),
+        срез отложен до отчёта. Исходная логика хеджа эскалации утратила силу (стресс
+        04.10: сценарий A −18%), план 2,0% KEEP, фундамент нейтральный. Дата отчёта
+        9М не объявлена — срок 30.11 с запасом.'
+    - id: nvtk-below-1100
+      type: manual
+      expires:
+        type: price_below
+        value: 1100
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-27'
+      summary: '27.10.2026: триггер на разбор, не сделка и не стоп. 1 100 ₽ ≈ закрытие
+        09.10 до отсечки (1 108); средняя цена позиции 1 176 ₽, при 1 100 позиция
+        в минусе ≈6,5%. Вероятность касания за 20 торговых дней ≈28–42% (волатильность
+        ≈41% годовых).'
+    user_constraints:
+    - id: nvtk-sellgate
+      type: manual
+      expires:
+        type: date
+        value: '2026-11-30'
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-06-29'
+      summary: '27.10.2026: ценовой порог 1200 пройден (live 1204, снапшот 1207),
+        срез отложен до отчёта. Исходная логика хеджа эскалации утратила силу (стресс
+        04.10: сценарий A −18%), план 2,0% KEEP, фундамент нейтральный. Дата отчёта
+        9М не объявлена — срок 30.11 с запасом.'
+    - id: nvtk-below-1100
+      type: manual
+      expires:
+        type: price_below
+        value: 1100
+      on_trigger_verdict: HOLD
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-10-27'
+      summary: '27.10.2026: триггер на разбор, не сделка и не стоп. 1 100 ₽ ≈ закрытие
+        09.10 до отсечки (1 108); средняя цена позиции 1 176 ₽, при 1 100 позиция
+        в минусе ≈6,5%. Вероятность касания за 20 торговых дней ≈28–42% (волатильность
+        ≈41% годовых).'
+    unconstrained_verdict: HOLD
+    unconstrained_verdict_confidence: 0.65
+    last_corp_event: '2026-10-12: реестр дивиденда 35,50 ₽ за 1П2026 закрыт'
+    week_note:
+      what_happened:
+      - 'Цена 1 198 ₽ (+11,07% за 12 дней), live 28.10 — 1 208,5 ₽: порог 1 200 ₽
+        формально пройден; по итогам разбора (Mode 4, 27.10) срез 30% перенесён на
+        МСФО 9М.'
+      - 'Обсуждение участия США в СПГ-проектах (терминал на Аляске ≈$25 млрд, БКС:
+        цель 1 400 ₽); ЕС планирует запретить российский СПГ с 01.01.2027. Добыча
+        3К: углеводороды +4,2%, газ +4,9%.'
+      recommendation:
+      - держать на плане 2,0%; срез 30% или удержание — после МСФО 9М (не позже 30.11);
+        разбор раньше — при цене ниже 1 100 ₽.
+      macro_link: null
+  LSNGP:
+    sector: Коммунальный
+    sector_ru: Коммунальный
+    name: Ленэнерго
+    weight_real_pct: 1.7239
+    weight_user_planned_pct: 3.0
+    weight_ie_target_pct: 4.0
+    weight_divergence_vs_planned_pp: -1.2761
+    weight_divergence_vs_ie_pp: -2.2761
+    weight_divergence_pp: -2.2761
+    listing_age_quarters: 93
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 374.0
+    xirr: 0.398
+    pnl_rub: 1589.2
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Ленэнерго-п: 1,72% L2 (план 3,0%, IE 4,0%), цена 374,00
+      ₽ (+8,80%, закрытие 15.10 → закрытие 27.10). Событий эмитента за 14–28.10 нет
+      (Investmint: последняя запись — 09.10, РСБУ 9М2026 не опубликована, дата не
+      найдена). Цена 374 ₽ выше цели идеи Финама (348,02 ₽, 09.10, срок 3–4 недели),
+      стоп 319,02 ₽. Тарифы: +15,2% с 01.10 и +15,3% с 01.07.2027 (Альфа-Инвестиции,
+      07.08); по бизнес-плану Альфа-Банка DPS 2026 — 42,9 ₽, 2027 — 66,1 ₽ (07.08,
+      вторично). База: РСБУ 1П2026 — выручка 80,52 млрд ₽ (+17,6%), ЧП 24,23 млрд
+      ₽ (+21,5%); МСФО 1П — выручка 80,6 млрд ₽, ЧП 24,5 млрд ₽. Уставная формула
+      — 10% ЧП по РСБУ на префы. Гейт «Новая позиция».'
+    fundamental_score_sources:
+    - url: https://marketpower.pro/post/rosseti-lenenergo-otchet-za-1-pol-2026-po-msfo
+      label: 'marketpower: Ленэнерго МСФО 1П2026'
+      accessed_date: '2026-10-16'
+    - url: https://investmint.ru/lsngp/news/
+      label: 'investmint: лента LSNGP (идея Финама 09.10) — вторичный'
+      accessed_date: '2026-10-16'
+    - url: https://t.me/finamalert/21976
+      label: 'Финам (Telegram), 09.10: идея по LSNGP — цель 348,02 ₽, стоп 319,02
+        ₽ (вторичный)'
+      accessed_date: '2026-10-16'
+    - url: https://investmint.ru/lsngp/news/
+      label: 'Investmint (агрегатор), на 28.10: событий за 14–28.10 нет; идея Финама
+        09.10 (цель 348,02 ₽), тарифы +15,2% с 01.10, РСБУ 1П2026'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 12.22
+      ci_pct:
+      - 9.69
+      - 15.0
+    div_confidence: MEDIUM
+    div_basis: 'Уставная формула: 10% чистой прибыли по РСБУ на привилегированные
+      акции. Оценка 13,9% на 12 мес вперёд к цене 327,75 ₽. Рекомендация СД по дивиденду
+      за 2026 ожидается весной 2027, дата не назначена. На закрытие 27.10 (374,00
+      ₽) доходность 12,22% — пересчёт прошлой оценки по цене (343,75 → 374,00 ₽, закрытие
+      15.10 → 27.10); допущения по DPS не менялись.'
+    div_sources:
+    - url: https://www.lenenergo.ru/shareholders-and-investors/dividends/
+      label: Дивидендная страница «Россети Ленэнерго» (уставная норма по префам)
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 12.22
+      year2_yield_pct: 11.22
+      year2_basis: carry_forward
+      source: уставные 10% ЧП РСБУ на префы; DSI 0,79
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: Пересчитано на цену 27.10.2026 (374,00 ₽); политика не менялась.
+    catalyst:
+    - id: lsngp_rsbu_9m2026
+      kind: binary
+      trigger: 'РСБУ за 9М2026: подтверждение сезонности второго полугодия — предусловие
+        транша 2 (условие до 31.10.2026)'
+      date_window: 2026-10..2026-11
+      p: 0.65
+      upside_pct: 8.0
+      upside_ci_pct:
+      - -6.0
+      - 18.0
+      source: 'advisor estimate: условие lsngp-tranche2-rsbu9m в Portfolio/conditions.yaml'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - id: lsngp_rate_cut_dividend_repricing
+      kind: quantitative
+      trigger: Переоценка дивидендной доходности ~14% при снижении КС с 14,0%
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 12.0
+        B: 20.0
+        C: 27.0
+        D: 10.0
+      upside_ci_by_scenario:
+        A:
+        - -6.0
+        - 28.0
+        B:
+        - 2.0
+        - 38.0
+        C:
+        - 7.0
+        - 46.0
+        D:
+        - -10.0
+        - 28.0
+      source: 'advisor estimate: чувствительность дивидендных имён к траектории КС'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.6
+    confidence_basis: дата РСБУ 9М Ленэнерго в источниках не найдена; цена +8,8% за
+      12 дней выше цели Финама; события эмитента за окно не найдены
+    p_outperform_3m: 0.5
+    advisor_verdict_basis: 'Недобор −1,28 пп закрывается решением, а не рынком: транш
+      2 (до плана 3,0%) — по условию lsngp-tranche2-rsbu9m после РСБУ 9М (срок 31.10)
+      и разбора Mode 4. Цена +8,8% за 12 дней выше цели Финама — добирать до отчётности
+      не за что; без условия аналитически остаётся BUY с пониженной уверенностью (доходность
+      ≈12% к 374 ₽). До 31.10 держать.'
+    verification_priority: HIGH
+    gate_status_snapshot:
+      status: new_position
+      set_date: '2026-08-06'
+      set_by: auto
+    advisor_verdict_constraints:
+    - id: lsngp-tranche2-rsbu9m
+      type: no_buy_until_date
+      expires:
+        type: date
+        value: '2026-10-31'
+      on_trigger_verdict: BUY
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-08-02'
+      summary: Вход траншами. Транш 1 (1,5%) — вне gate-реестра, осознанный override.
+        Цель 3,0% обоснована уставными 10% ЧП РСБУ на префы (DSI 0,79)
+    user_constraints:
+    - id: lsngp-tranche2-rsbu9m
+      type: no_buy_until_date
+      expires:
+        type: date
+        value: '2026-10-31'
+      on_trigger_verdict: BUY
+      source: Portfolio/conditions.yaml
+      active: true
+      derived: true
+      set_date: '2026-08-02'
+      summary: Вход траншами. Транш 1 (1,5%) — вне gate-реестра, осознанный override.
+        Цель 3,0% обоснована уставными 10% ЧП РСБУ на префы (DSI 0,79)
+    unconstrained_verdict: BUY
+    unconstrained_verdict_confidence: 0.5
+    next_corp_event: 'не подтверждено: РСБУ 9М2026 Ленэнерго — дата в источниках не
+      найдена; срок условия транша 2 — 31.10'
+    week_note:
+      what_happened:
+      - Событий эмитента за 14–28.10 нет; РСБУ 9М2026 не опубликована (дата не найдена).
+        Цена 374 ₽ (+8,8%) выше цели идеи Финама 348,02 ₽.
+      recommendation:
+      - до 31.10 держать; транш 2 (до плана 3,0%) — по условию `lsngp-tranche2-rsbu9m`
+        после РСБУ 9М и разбора бумаги (Mode 4). Без условия аналитически — BUY с
+        пониженной уверенностью.
+      macro_link: null
+  BTBR:
+    sector: it_telecom
+    sector_ru: IT
+    name: iВ2В-РТС
+    weight_real_pct: 1.4894
+    weight_user_planned_pct: 1.5
+    weight_ie_target_pct: null
+    weight_divergence_vs_planned_pp: -0.0106
+    weight_divergence_vs_ie_pp: null
+    weight_divergence_pp: null
+    listing_age_quarters: 2
+    post_ipo_guard: true
+    on_iis: false
+    price_rub: 123.87
+    xirr: 0.0517
+    pnl_rub: 384.81
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: HIGH
+    fundamental_score_basis: 'В2В-РТС (B2B-Center): 1,49% L2 (план 1,5%), цена 123,87
+      ₽ (+0,06%, закрытие 15.10 → закрытие 27.10). Новости за окно 14–28.10 не проверены:
+      страница Investmint не открылась (client_error), поиск вернул общие страницы
+      без дат. Известное из прошлого обзора: дивиденд 4,61 ₽ за 2К2026 (реестр 11.10,
+      выплата не позднее 21.10), lock-up 180 дней от 17.04 истёк около 14.10, гайденс
+      разбора 27.09 (выручка 9,2–9,3 млрд ₽, маржа EBITDA 49–52%, payout >85%) и расхождение
+      метрик («совокупный доход ≈10,7 млрд ₽») не разрешены. IPO-гейт: 2 квартала
+      на бирже.'
+    fundamental_score_sources:
+    - url: https://investfuture.ru/dividends/btbr
+      label: 'InvestFuture: дивиденд BTBR 4,61 ₽, реестр 11.10, выплата до 21.10'
+      accessed_date: '2026-10-16'
+    - url: https://marketpower.pro/publications/v2v-rts-provela-ipo-po-verkhnei-granitse-i-nachala-torgi-na-mosbirzhe
+      label: 'marketpower: IPO 17.04, lock-up 180 дней'
+      accessed_date: '2026-10-16'
+    - url: https://smart-lab.ru/forum/BTBR
+      label: 'smart-lab форум BTBR, 14.10: сообщение о заседании СД (вторичный)'
+      accessed_date: '2026-10-16'
+    div_yield_12m_pct:
+      value: 15.04
+      ci_pct:
+      - 12.54
+      - 16.05
+    div_confidence: MEDIUM
+    div_basis: 'Mode 4 27.09: DPS 2026 ≈18,3–19,0 ₽ (объявлено 9,80 ₽: 5,19 за 1К
+      + 4,61 за 1П; на 2П ≈8,5–9,2 ₽) → ≈15% к цене до налога. Прошлая оценка 16,9%
+      была завышена. На закрытие 27.10 (123,87 ₽) доходность 15,04% — пересчёт прошлой
+      оценки по цене (123,79 → 123,87 ₽, закрытие 15.10 → 27.10); допущения по DPS
+      не менялись.'
+    div_sources:
+    - url: https://invest-era.ru/analytics-and-news/v2v-rts-divdokhodnost-v-17-20260825-161847
+      label: Оценка дивдоходности 17–18% на 12 мес и payout >85% ЧП
+      accessed_date: '2026-08-27'
+    - url: https://www.kommersant.ru/doc/8781751
+      label: 'Коммерсантъ: акционеры утвердили дивиденды за Q1 2026 — 5,19 ₽ на акцию'
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: expected
+      year1_yield_pct: 15.04
+      year2_yield_pct: 15.04
+      year2_basis: carry_forward
+      source: 'Mode 4 27.09: гайденс CFO 25.08 (payout >85%) + объявленные 9,80 ₽'
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: DPS 2026 ≈18,3–19,0 ₽ (Mode 4 27.09); после реестра 11.10 (4,61 ₽) пересчитано
+        на цену 15.10.2026 (123.79 ₽); год 2 — перенос.
+    catalyst:
+    - id: btbr_guidance_2026_beat
+      kind: binary
+      trigger: 'Исполнение гайденса 2026: выручка 9,2–9,3 млрд ₽ + доход от управления
+        активами ≈1,5 млрд, маржа ЧП 36–37%, payout >85%'
+      date_window: 2027-Q1
+      p: 0.6
+      upside_pct: 12.0
+      upside_ci_pct:
+      - -4.0
+      - 25.0
+      source: https://smart-lab.ru/blog/news/1343799.php
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: btbr_quarterly_dividend_flow
+      kind: binary
+      trigger: Ежеквартальные выплаты при payout >85% ЧП — дивдоходность 17–18% на
+        12 мес
+      date_window: 2026-Q4..2027-Q3
+      p: 0.75
+      upside_pct: 0.0
+      upside_ci_pct:
+      - -4.0
+      - 5.0
+      source: https://invest-era.ru/analytics-and-news/v2v-rts-divdokhodnost-v-17-20260825-161847
+        — прогноз payout
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: btbr_ipo_gate_expiry
+      kind: binary
+      trigger: 'Истечение IPO-гейта: 8 полных кварталов торгов на MOEX (сейчас 1 —
+        IPO апрель 2026)'
+      date_window: 2028-Q2
+      p: 0.95
+      upside_pct: 0.0
+      upside_ci_pct:
+      - -3.0
+      - 3.0
+      source: 'advisor estimate: listing_age_quarters из снапшота, порог гейта — 8
+        кварталов'
+      source_quality: HIGH
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - kind: binary
+      source_trust:
+        analyst: external
+        subdomain: primary
+      id: btbr_marketplace_procurement
+      trigger: 'Эксперимент 278-ФЗ: малые закупки детсадов/школ/колледжей (до 5 млн
+        ₽) через маркетплейсы с 01.10.2026 по 30.09.2028 — узкий охват'
+      date_window: 2026-Q4..2027-Q4
+      p: 0.2
+      downside_pct: 3.0
+      downside_ci_pct:
+      - 0.0
+      - 6.0
+      source: https://www.gov-zakupki.ru/pub/278-fz-04-08-2026-id215
+      source_quality: MEDIUM
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.6
+    confidence_basis: 'источник новостей (Investmint) недоступен, веб-поиск дал только
+      общие страницы: окно 14–28.10 по бумаге не проверено'
+    advisor_verdict_basis: Держать 1,49% (план 1,5%, −0,01 пп). Добор запрещён IPO-гейтом
+      (2 квартала из 8). Новости окна не проверены — вердикт перенесён с прошлой недели,
+      пометка carried_over.
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-27'
+      set_by: mode_4
+    advisor_verdict_constraints: []
+    carried_over: true
+    user_constraints: []
+  GLRX:
+    sector: Потребительский цикличный
+    sector_ru: Потребительский цикличный
+    name: Glorax
+    weight_real_pct: 1.2214
+    weight_user_planned_pct: null
+    weight_ie_target_pct: 2.0
+    weight_divergence_vs_planned_pp: null
+    weight_divergence_vs_ie_pp: -0.7786
+    weight_divergence_pp: -0.7786
+    listing_age_quarters: 3
+    post_ipo_guard: true
+    on_iis: false
+    price_rub: 39.32
+    xirr: -0.4479
+    pnl_rub: -8264.24
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] SELL'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Глоракс: 1,22% L2 (плана нет, IE 2,0%), цена 39,32 ₽
+      (+2,61%, закрытие 15.10 → закрытие 27.10). Выкуп по 44,57 ₽ (реорганизация —
+      присоединение ООО «СЗ «НТВО»): собрание — 05.10 по прошлому обзору, 07.10 по
+      marketpower (09.10) — дата не подтверждена; выкуп 20.11–19.12 (marketpower);
+      срок подачи требований (19.11 по прошлому обзору), лимит 10% чистых активов
+      и пропорциональность в источниках этой недели не указаны. Разрыв к рынку: 13,4%
+      (на 15.10 было 16,3%). Оферта для участников IPO по 76,48 ₽ (контрольный период
+      02–06.11) к нашей позиции не применима: покупки 19–28.01.2026 вне 30 дней после
+      листинга (условия по marketpower/Investmint). Операционные результаты 9М (20.10):
+      продажи +8% до 34 млрд ₽ (Investmint, вторично); Т-Инвестиции 23.10: «Покупать»,
+      цель 62 ₽; 26.10 — допразмещение «зелёных» облигаций 002P-01 на 1,5 млрд ₽ (доходность
+      не выше 24,28%). Дивидендов нет.'
+    fundamental_score_sources:
+    - url: https://marketpower.pro/publications/glorax-dve-oferty-i-ralli-s-podvokhom
+      label: 'marketpower: ВОСА Глоракс утвердило присоединение НТВО; выкуп 44,57
+        ₽ — требования до 19.11, оплата 20.11–19.12'
+      accessed_date: '2026-10-16'
+    - url: https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json
+      label: 'MOEX ISS: котировки 08.10.2026 (снапшот 09:18 и live 09:55 MSK), сравнение
+        со снапшотом 01.10'
+      accessed_date: '2026-10-08'
+    - url: https://smart-lab.ru/blog/1360050.php
+      label: 'smart-lab (раскрытие): ГЛОРАКС — решения собрания 05.10, порядок выкупа,
+        срок требований до 19.11, оплата 20.11–19.12'
+      accessed_date: '2026-10-08'
+    - url: https://www.finam.ru/publications/item/reorganizatsiya-gloraks-osnovnye-sobytiya-5-oktyabrya-20261005-0900/
+      label: 'Финам, 05.10: реорганизация Глоракс — основные события'
+      accessed_date: '2026-10-08'
+    - url: https://www.vbr.ru/novosti/ipoteka/2026/09/29/akcii-zastroisikov-padaut-na-fone-reformi-semeinoi-ipoteki/
+      label: 'vbr.ru: акции застройщиков падают на реформе семейной ипотеки (29.09)'
+      accessed_date: '2026-10-01'
+    - url: https://marketpower.pro/publications/glorax-dve-oferty-i-ralli-s-podvokhom
+      label: 'MarketPower, 09.10: выкуп 44,57 ₽ при реорганизации, период 20.11–19.12;
+        оферта IPO 76,48 ₽'
+      accessed_date: '2026-10-28'
+    - url: https://investmint.ru/glrx/news/
+      label: 'Investmint (агрегатор), 14–26.10: операционные результаты 9М (20.10),
+        Т-Инвестиции (23.10), допразмещение облигаций (26.10)'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 0.0
+      ci_pct:
+      - 0.0
+      - 0.0
+    div_confidence: HIGH
+    div_basis: Компания дивиденды не платит; дивидендная политика после IPO осени
+      2025 не объявлена.
+    div_sources:
+    - url: https://glorax.com/investors/
+      label: Раздел для инвесторов Glorax
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: none
+      year2_basis: none
+      source: дивиденды не выплачиваются, политика не объявлена
+      as_of: '2026-10-28'
+      confidence: HIGH
+      note: Вклад в total return — только курсовой.
+    catalyst:
+    - id: glrx_buyout_demand_4457
+      kind: binary
+      trigger: 'Выкуп по 44,57 ₽ при реорганизации (присоединение ООО «СЗ «НТВО»):
+        собрание 05.10 или 07.10 (источники расходятся), выкуп 20.11–19.12 (marketpower);
+        срок подачи требований, лимит 10% СЧА и пропорциональность не подтверждены'
+      date_window: 2026-10..2026-12
+      p: 0.85
+      upside_pct: 5.0
+      upside_ci_pct:
+      - 0.0
+      - 21.4
+      source: https://smart-lab.ru/blog/1360050.php — текст решения; https://smart-lab.ru/blog/1344472.php
+        — условия выкупа (вторичный)
+      source_quality: HIGH
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: glrx_ipo_offer_price_support
+      kind: binary
+      trigger: Попытки менеджмента поднять котировки к уровням IPO, чтобы избежать
+        оферты для участников размещения осени 2025
+      date_window: 2026-Q4..2027-Q2
+      p: 0.5
+      upside_pct: 20.0
+      upside_ci_pct:
+      - -10.0
+      - 40.0
+      source: https://invest-era.ru/analytics-and-news/glorax-reorganizatsiya-i-oferta-20260821-124033
+        — интерпретация мотива реорганизации
+      source_quality: LOW
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: null
+    - id: glrx_devtech_rate_sensitivity
+      kind: quantitative
+      trigger: Стоимость проектного финансирования и спрос на первичку при снижении
+        КС
+      date_window: 2026-Q4..2028-Q1
+      upside_by_scenario:
+        A: 10.0
+        B: 18.0
+        C: 26.0
+        D: 8.0
+      upside_ci_by_scenario:
+        A:
+        - -18.0
+        - 30.0
+        B:
+        - -8.0
+        - 40.0
+        C:
+        - 0.0
+        - 50.0
+        D:
+        - -22.0
+        - 30.0
+      source: 'advisor estimate: чувствительность девелоперов к КС и программам господдержки'
+      source_quality: MEDIUM
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: glrx_h1_2026_debt_cost
+      kind: quantitative
+      trigger: 'Стоимость долга: средняя ставка портфеля 11,8% (−1,4 пп) — дальнейшая
+        динамика вслед за КС'
+      date_window: 2026-Q4..2027-Q4
+      upside_by_scenario:
+        A: 14.0
+        B: 22.0
+        C: 30.0
+        D: 6.0
+      upside_ci_by_scenario:
+        A:
+        - -8.0
+        - 30.0
+        B:
+        - 0.0
+        - 40.0
+        C:
+        - 8.0
+        - 50.0
+        D:
+        - -18.0
+        - 26.0
+      source: https://www.fontanka.ru/2026/08/31/76616507/ — результаты 1П2026, средняя
+        ставка по кредитам 11,8%
+      source_quality: MEDIUM
+      source_trust:
+        analyst: fontanka
+        subdomain: consumer-ru
+      macro_dependency: A
+    - id: glrx_family_mortgage_reform
+      kind: binary
+      trigger: Реформа семейной ипотеки с 01.10.2026 (ставка для семей с 1 ребёнком
+        6% → 10–12%, субсидирование 30 → 15 лет) — давление на продажи девелоперов
+      date_window: 2026-Q4..2027-Q2
+      p: 0.6
+      downside_pct: 6.0
+      downside_ci_pct:
+      - 0.0
+      - 15.0
+      source: https://www.vbr.ru/novosti/ipoteka/2026/09/29/akcii-zastroisikov-padaut-na-fone-reformi-semeinoi-ipoteki/
+      source_quality: MEDIUM
+      source_trust:
+        analyst: external
+        subdomain: primary
+      macro_dependency: A
+    advisor_verdict: SELL
+    advisor_verdict_confidence: 0.7
+    confidence_basis: срок подачи требования (19.11 в прошлом обзоре) и правило пропорциональности
+      в источниках этой недели не подтверждены; дата собрания 05.10 или 07.10
+    p_outperform_3m: 0.6
+    advisor_verdict_basis: 'SELL через требование выкупа: подать через брокера требование
+      на все 1 550 акций по 44,57 ₽ (полное удовлетворение — 207 252 ₽ против 60 946
+      ₽ по рынку), в рынок не продавать, пока окно открыто и цена ниже 44,57 ₽. Срок
+      подачи и право на требование (не голосовавшие «за») уточнить у брокера и в сообщении
+      эмитента — в источниках этой недели не подтверждены. При пропорциональном выкупе
+      остаток после разблокировки продать в рынок, если цена ≥38 ₽, иначе пересмотреть.'
+    verification_priority: HIGH
+    gate_status_snapshot:
+      status: reviewed_reduce
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+    user_constraints: []
+    last_corp_event: '2026-10-26: допразмещение «зелёных» облигаций 002P-01 на 1,5
+      млрд ₽ объявлено'
+    next_corp_event: '2026-11-20: начало периода выкупа по 44,57 ₽ (marketpower, вторично;
+      срок подачи требований не подтверждён)'
+    week_note:
+      what_happened:
+      - 'Выкуп по 44,57 ₽ при реорганизации (присоединение ООО «СЗ «НТВО»): окно 20.11–19.12;
+        дата собрания 05.10 или 07.10 (источники расходятся); срок подачи требований,
+        лимит 10% СЧА и пропорциональность не подтверждены.'
+      - Оферта IPO по 76,48 ₽ к позиции не применима (покупки 19–28.01 вне 30 дней
+        после листинга).
+      - 20.10 продажи 9М +8% до 34 млрд ₽; 26.10 допразмещение «зелёных» облигаций
+        на 1,5 млрд ₽.
+      recommendation:
+      - SELL через требование выкупа на все 1 550 акций по 44,57 ₽ (полное удовлетворение
+        ≈207,3 тыс. ₽ против 182,7 тыс. ₽ по рынку); срок подачи уточнить у брокера.
+        Гейт «Сократить» до 03.11.
+      macro_link: null
+  LENT:
+    sector: Потребительский защитный
+    sector_ru: Потребительский защитный
+    name: Лента
+    weight_real_pct: 0.9168
+    weight_user_planned_pct: 1.0
+    weight_ie_target_pct: 4.0
+    weight_divergence_vs_planned_pp: -0.0832
+    weight_divergence_vs_ie_pp: -3.0832
+    weight_divergence_pp: -3.0832
+    listing_age_quarters: 19
+    post_ipo_guard: false
+    on_iis: false
+    price_rub: 1830.0
+    xirr: 0.2507
+    pnl_rub: 7509.57
+    ie_divergence_intentional: true
+    ie_divergence_basis: '[user_plan] KEEP'
+    fundamental_score: MEDIUM
+    fundamental_score_basis: 'Лента: 0,92% L2 (план 1,0%, IE 4,0%), цена 1 830 ₽ (+4,18%,
+      закрытие 15.10 → закрытие 27.10). Новое за окно (Investmint): 23.10 выручка
+      1П2026 +26,2% до 648,5 млрд ₽, первое круглосуточное кафе без персонала; 26.10
+      Т-Инвестиции ждут выручку 3К +35% г/г (консолидация), маржа EBITDA −1,3 пп,
+      ЧП −16% (выше процентные расходы и амортизация после консолидации «О''КЕЙ»);
+      27.10 «Держать», цель 2 000 ₽. 05.10 стратегия до 2028: выручка ≈2,2 трлн ₽
+      (вдвое к 2025), маржа EBITDA 8%; 02.10 синдицированный кредит Альфа-Банка; 14.10
+      партия готовой еды снята с продажи (кишечная палочка); 09.10 арест бывшего совладельца
+      Костыгина до 06.12. Официального раскрытия сделки «Мария-Ра», решений СД и сообщений
+      о дивидендах в источнике нет. Листинг: 3-й уровень с 12.08 (по заявлению компании
+      — технический).'
+    fundamental_score_sources:
+    - url: https://1prime.ru/20261015/lenta-874255051.html
+      label: '1prime, 15.10: Лента изучает рестораны в гипермаркетах'
+      accessed_date: '2026-10-16'
+    - url: https://1prime.ru/20261014/lenta-874226643.html
+      label: '1prime, 14.10: готовая еда Ленты направлена на проверку, партия снята
+        с продажи'
+      accessed_date: '2026-10-16'
+    - url: https://t.me/vedomosti/86201
+      label: 'Ведомости (Telegram), 09.10: доля онлайна продуктов не превысит 15%
+        рынка (вторичный)'
+      accessed_date: '2026-10-16'
+    - url: https://www.dp.ru/a/2026/09/23/lenta-kupila-krupnejshuju
+      label: 'dp.ru 23.09: «Лента» купила «Марию-Ра»; официально не подтверждено'
+      accessed_date: '2026-09-26'
+    - url: https://investmint.ru/lent/news/
+      label: 'Investmint (агрегатор), 14–27.10: выручка 1П2026, ожидания Т-Инвестиций
+        по 3К, стратегия до 2028, E. coli, арест Костыгина'
+      accessed_date: '2026-10-28'
+    div_yield_12m_pct:
+      value: 0.0
+      ci_pct:
+      - 0.0
+      - 3.84
+    div_confidence: MEDIUM
+    div_basis: Компания дивиденды не платит, направляя денежный поток на M&A и снижение
+      долга. Верхняя граница CI 4% отражает обсуждавшуюся возможность начала выплат,
+      решения СД нет.
+    div_sources:
+    - url: https://lenta.com/investoram/
+      label: Раздел для инвесторов «Ленты»
+      accessed_date: '2026-08-27'
+    dividend_forward:
+      policy_state: none
+      year2_basis: none
+      source: дивиденды не выплачиваются; решения о начале выплат нет
+      as_of: '2026-10-28'
+      confidence: MEDIUM
+      note: Вклад в total return — только курсовой.
+    catalyst:
+    - id: lent_dividend_initiation
+      kind: binary
+      trigger: Решение о начале дивидендных выплат после снижения долговой нагрузки
+      date_window: '2027'
+      p: 0.3
+      upside_pct: 10.0
+      upside_ci_pct:
+      - -4.0
+      - 22.0
+      source: 'advisor estimate: траектория долговой нагрузки эмитента; решения СД
+        нет'
+      source_quality: LOW
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: null
+    - id: lent_ma_consolidation
+      kind: quantitative
+      trigger: 'Подтверждение сделки «Мария-Ра» (≈1 300 магазинов, 40–60 млрд ₽):
+        параметры, финансирование, одобрение ФАС'
+      date_window: 2026-Q4..2027-Q2
+      upside_by_scenario:
+        A: 8.0
+        B: 14.0
+        C: 18.0
+        D: 8.0
+      upside_ci_by_scenario:
+        A:
+        - -8.0
+        - 22.0
+        B:
+        - -2.0
+        - 30.0
+        C:
+        - 2.0
+        - 36.0
+        D:
+        - -8.0
+        - 24.0
+      source: https://www.amic.ru/news/magaziny-mariya-ra-mogut-pereimenovat-v-monetku-posle-prodazhi-592293
+        и https://ngs.ru/text/business/2026/09/14/76634683/ — СМИ 14.09.2026, стороны
+        официально не подтвердили
+      source_quality: LOW
+      source_trust:
+        analyst: advisor
+        subdomain: self
+      macro_dependency: A
+    - id: lent_maria_ra_deal_disclosure
+      kind: binary
+      trigger: Официальное раскрытие сделки с «Марией-Ра» (цена, долг, ФАС); отраслевые
+        СМИ подают как закрытую 18.09
+      date_window: 2026-10..2026-12
+      p: 0.8
+      downside_pct: 3.0
+      downside_ci_pct:
+      - -5.0
+      - 10.0
+      source: https://www.dp.ru/a/2026/09/23/lenta-kupila-krupnejshuju — СМИ, компания
+        не комментирует
+      source_quality: LOW
+      source_trust:
+        analyst: external
+        subdomain: media
+      macro_dependency: null
+    advisor_verdict: HOLD
+    advisor_verdict_confidence: 0.6
+    confidence_basis: сделка «Мария-Ра» официально не раскрыта; факты окна — из агрегатора
+    advisor_verdict_basis: Позиция микро (0,92% L2, −0,08 пп к плану 1,0%); вопрос
+      о выходе — Mode 3. Ожидаемое ухудшение маржи и ЧП 3К при росте долга — не повод
+      докупать; дивидендов нет.
+    verification_priority: LOW
+    gate_status_snapshot:
+      status: reviewed_keep
+      set_date: '2026-09-19'
+      set_by: mode_8
+    advisor_verdict_constraints: []
+    user_constraints: []
+amendments:
+- version: 2
+  date: '2026-10-28'
+  reason: 'Решение владельца 28.10 после выпуска обзора: OZON — срезать ≈20 акций
+    до плана 5,0%'
+  changes:
+  - 'OZON: в basis записано решение владельца; вердикт и условия не менялись (сделка
+    не исполнена, условие ozon-date-2808 остаётся до следующего обзора)'
+  verdicts_changed: []
+coverage:
+  carried_over:
+  - BTBR
+  checked_this_run:
+  - CNRU
+  - DATA
+  - GLRX
+  - GMKN
+  - LENT
+  - LSNGP
+  - MBNK
+  - MDMG
+  - MOEX
+  - MRKP
+  - NVTK
+  - OZON
+  - PLZL
+  - PRMD
+  - RENI
+  - SBER
+  - SBERP
+  - T
+  - X5
+  - YDEX
+  not_checked: []
+  tickers_total: 5
+  method: sweep_collect
+  note: 'Сбор новостей окна 14–28.10: ярус 1 (сводка по тикерам, дешёвая модель) +
+    ручная перепроверка advisor. Инцидент: строки яруса 1 со статусом «quiet» оказались
+    ложными по CNRU, MDMG, YDEX, X5, PLZL, PRMD, LENT, MRKP, LSNGP, GMKN, NVTK — по
+    ним новости найдены и проверены заново (Investmint, РБК, Интерфакс, Moscow Times,
+    x5.ru, ir.yandex). BTBR проверить не удалось: Investmint не открылся (client_error),
+    поиск вернул общие страницы без дат — carried_over. События RENI и MBNK взяты
+    из сводки яруса 1 с URL, родителем не перепроверялись. Первичка: x5.ru (дата МСФО
+    3К), ir.yandex/events (даты 3К нет), moex.com/s1456; по остальным эмитентам e-disclosure
+    и IR-сайты недоступны — факты из СМИ и агрегаторов (вторичные).'

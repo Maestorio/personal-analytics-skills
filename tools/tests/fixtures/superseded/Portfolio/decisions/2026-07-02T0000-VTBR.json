@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-02T0000-VTBR",
+  "key": "VTBR",
+  "verdict": "TRIM",
+  "target_pct": null,
+  "review_by": "2026-07-15",
+  "note": "Mode 4: reduce/exit в облигации. Дивиденд 9.71 руб за 2025 (~13.6%) фондируется допэмиссией = хронический разбавитель, нетто value-destructive; капитал хрупок, stress -4%. Микро 0.96% L2 без convicti…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-07-02T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

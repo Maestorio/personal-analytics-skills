@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-15T0000-LENT",
+  "key": "LENT",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-08-29",
+  "note": "Mode 8 15.07: осознанная микро-доля 0,97% (planned 1%, дрейф от IE 4% записан). Растущий ритейл, но стресс −8,1% (ставка). Гейт истёк 11.07 — refresh.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-07-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

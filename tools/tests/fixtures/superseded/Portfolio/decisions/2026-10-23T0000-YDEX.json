@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-10-23T0000-YDEX",
+  "key": "YDEX",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-12-07",
+  "note": "Удары 8–11.10 остановили ЦОД в Сасово, Калуге и Владимире; эмитент ущерб, капзатраты и сроки не раскрыл. Ядро прибыли (Поиск и ИИ ≈72% скорр. EBITDA) восстановлено, облако 4% выручки, ND/EBITDA 0,02,…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-10-23T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

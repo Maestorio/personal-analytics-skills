@@ -1,0 +1,255 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: xauusd-price-2026-2028-2026-09-17.md
+status: active
+replaces: forecasts/xauusd-price-2026-2028-2026-07-29-v2.yaml
+
+forecast:
+  date: 2026-09-17
+  horizon: 2028-12-31          # == последний элемент horizons (инвариант проверен)
+  horizons:
+    - 2026-12-31
+    - 2027-06-30
+    - 2027-12-31
+    - 2028-12-31
+  domain: global-banks
+  topic: xauusd-price
+  method: fca
+  central_estimate: "XAU/USD: $4,500/oz к 2026-12-31 (weighted median, P10 4350/P90 4900); $4,925/oz к 2027-06-30 (fallback equal-weight median, P10 4371/P90 5500); $5,113/oz к 2027-12-31 (fallback equal-weight median, P10 4371/P90 5500); $5,250/oz к 2028-12-31 (composite vintage-adjusted anchors, DERIVED, P10 4702/P90 5533). Спот $4,300 (17.09, после хайка ФРС 16.09) -> implied +4.7% / +14.5% / +18.9% / +22.1%"
+  confidence: 0.47
+  source_coverage_score: 0.47
+  anchor_share: 0.154
+  confidence_by_horizon:
+    "2026-12-31": 0.47
+    "2027-06-30": 0.44
+    "2027-12-31": 0.39
+    "2028-12-31": 0.29
+  upstream_snapshot: []
+
+isolated: true
+isolated_reason: "Геополитика — второстепенный upstream после USD-цикла (реальные ставки, DXY); безопасно-гаванный спрос учитывается как фоновый фактор, не как per-scenario декомпозиция (обоснование пользователя)"
+
+baseline_spot:
+  xauusd_usd_oz: 4300
+  as_of: 2026-09-17
+  source: "USAGOLD daily precious metals market report, 17.09.2026 (после хайка ФРС 16.09; диапазон $4,300-4,320, внутридневной минимум $4,190-4,250)"
+
+fca_stats:
+  "2026-12-31":
+    kind: level
+    unit: "USD/oz"
+    l1_weighted: 4500
+    l1_unweighted: 4650
+    l2_ev: null
+    p10: 4350
+    p90: 4900
+    degenerate: false
+    center_method: weighted_median
+    n_in_consensus: 5
+    anchor_share: 0.333
+  "2027-06-30":
+    kind: level
+    unit: "USD/oz"
+    l1_weighted: 4371              # каноническая (вырожденная) величина — см. degeneracy
+    l1_unweighted: 4925            # = fallback центр, использован как central estimate
+    l2_ev: null
+    p10: 4371
+    p90: 5500
+    degenerate: true
+    degeneracy:
+      reason: "weighted_median == p10 при n=2 и равных весах (World Bank 0.5 + JPM vintage-adj 0.5); тот же паттерн, что зафиксирован в снапшоте 07-29 -> 07-29-v2"
+      canonical_weighted_median: 4371
+      canonical_p10: 4371
+      canonical_p90: 4688
+      canonical_n_in_consensus: 2
+      canonical_anchor_share: 0.50
+    center_method: fallback_equal_weight_median
+    fallback_cross_check:
+      method: "equal-weight median по расширенному пулу из 5 источников (World Bank, JPM vintage-adj, HSBC, Commerzbank, Wells Fargo)"
+      value: 4925
+      agrees: true
+    raw_range: [4371, 5500]
+  "2027-12-31":
+    kind: level
+    unit: "USD/oz"
+    l1_weighted: 4371              # каноническая (вырожденная) величина — см. degeneracy
+    l1_unweighted: 5112.5          # = fallback центр, использован как central estimate
+    l2_ev: null
+    p10: 4371
+    p90: 5500
+    degenerate: true
+    degeneracy:
+      reason: "тот же вырожденный паттерн, что 2027-06-30 (только 2 audited-источника — World Bank, JPM vintage-adj — с равными весами 0.5)"
+      canonical_weighted_median: 4371
+      canonical_p10: 4371
+      canonical_p90: 4688
+      canonical_n_in_consensus: 2
+      canonical_anchor_share: 0.50
+    center_method: fallback_equal_weight_median
+    fallback_cross_check:
+      method: "equal-weight median по пулу из 6 источников (World Bank, JPM vintage-adj, HSBC, UBS, Wells Fargo, Commerzbank), включая свежий UBS YE-2027 $5,400 (13.09.2026)"
+      value: 5112.5
+      agrees: true
+    raw_range: [4371, 5500]
+  "2028-12-31":
+    kind: level
+    unit: "USD/oz"
+    l1_weighted: 5533              # trust-weighted (GS HIGH доминирует) — НЕ использован как central estimate
+    l1_unweighted: 5250            # composite unweighted median 3 vintage-adjusted anchors — использован как central estimate
+    l2_ev: null
+    p10: 4702
+    p90: 5533
+    degenerate: true
+    degeneracy:
+      reason: "0 native sources с прямым покрытием горизонта 2028-12-31; центр DERIVED из 3 долгосрочных якорей, приведённых vintage-коэффициентами (совпадает с прямым, недисконтированным якорем HSBC 2028-2029)"
+      canonical_weighted_median: 5533
+      canonical_n_in_consensus: 0
+    center_method: composite_vintage_adjusted_anchors
+    composite_inputs:
+      - { source: "HSBC", raw: 5250, horizon_raw: "2028-2029", vintage: "2026-07-09", k: 1.000, adjusted: 5250 }
+      - { source: "Goldman Sachs", raw: 6100, horizon_raw: "2030", vintage: "~2026-01 (stale)", k: 0.907, adjusted: 5533 }
+      - { source: "Westpac", raw: 4970, horizon_raw: "2030", vintage: "~2025H2-2026H1 (stale)", k: 0.946, adjusted: 4702 }
+    coverage: DERIVED
+
+vintage_adjustment:
+  rule: "k = текущий таргет источника / его же предыдущий таргет на общем горизонте (YE/Q4-2026). Только наблюдаемые пересмотры; при отсутствии наблюдённого пересмотра k = 1.000"
+  coefficients:
+    goldman:   { k: 0.907, evidence: "YE-2026: $5,400 -> $4,900 (19.06.2026) — тот же наблюдённый коэффициент, что применён в снапшоте 07-29-v2; собственный пересмотр GS не менялся" }
+    westpac:   { k: 0.946, evidence: "Q3-2026 avg: $4,560 (июль) -> $4,350 (20.08, -4.6%)" }
+    jpmorgan:  { k: 0.750, evidence: "Q4-2026: $6,000 (09.06) -> $4,500 (03.07) — таблица 2027 JPM не обновлялась, коэффициент перенесён без изменений" }
+    hsbc:      { k: 1.000, evidence: "не пересматривался с 09.07.2026 — текущий винтаж" }
+    ubs:       { k: 1.000, evidence: "12M/YE-2027 таргет от 13.09.2026 — текущий винтаж, самая свежая публикация пула" }
+    world_bank: { k: 1.000, evidence: "CMO не обновлялся с 28.04.2026; следующий выпуск — октябрь" }
+    commerzbank: { k: 1.000, evidence: "собственного пересмотра не наблюдалось; цитирование низкого качества (вторичный агрегатор)" }
+
+monotonicity_check:
+  path: [4500, 4925, 5113, 5250]
+  verdict: PASS
+  shape: "ускоренное восстановление в 2027 (доигрывание цикла смягчения несмотря на хайк 16.09), резкое затухание темпа к 2028 (плато)"
+  non_monotonic_segments: []
+  method_mixing_note: "центр 2026-12-31 — weighted median (канонический, невырожден); центры 2027-06-30 и 2027-12-31 — fallback equal-weight median (канонический вырожден при n=2); центр 2028-12-31 — composite vintage-adjusted anchors (0 native источников). Переход между методиками не создаёт скачка — монотонность (4500 -> 4925 -> 5113 -> 5250) подтверждена по построенной траектории."
+
+reclassification_note: >-
+  GS/MS/JPM не имеют оценённого субдомена commodities-non-oil; взвешены через nearest-domain
+  ny-rates (реальные ставки — главный драйвер золота). GS=HIGH (ny-rates), MS/JPM=MEDIUM.
+  Прямой субдомен commodities-non-oil есть только у Westpac (MEDIUM, аудит покрывает именно
+  золото) и World Bank CMO (MEDIUM, кросс-доменное включение по правилу смешанных доменов).
+  HSBC/UBS/Citi/BofA/Wells Fargo/Commerzbank/ING/Deutsche Bank/Macquarie — не аудированы,
+  вес 0 в консенсусе, показаны отдельно.
+
+methodology_notes: >-
+  Снимок методологически идентичен 07-29-v2: тот же вырожденный n=2-паттерн (равные веса)
+  на mid/YE-2027, тот же fallback (equal-weight median по расширенному пулу), тот же DERIVED-
+  композит на дальний горизонт. Изменения относительно 07-29-v2: (1) горизонт 2028-06-30
+  заменён на 2028-12-31 и добавлен отдельный горизонт 2027-12-31 (запрос пользователя,
+  4 горизонта вместо 3); (2) DERIVED-композит на 2028-12-31 теперь включает свежий прямой
+  якорь HSBC (2028-2029, 09.07.2026) как недисконтированную точку, а не только экстраполяции
+  из 2030-таргетов; (3) в пул добавлены 3 новых участника (ING, Deutsche Bank, Macquarie).
+  Ключевое макрособытие после составления снапшота-предшественника: ФРС повысила ставку на
+  25 б.п. до 3.75-4.00% 16.09.2026 (первый хайк с июля 2023, под новым председателем Кевином
+  Уоршем; 16/18 членов FOMC сигнализируют продолжение цикла) — прямая реализация риска,
+  который сам Goldman Sachs закладывал как downside-сценарий $4,400. US 10Y TIPS реальная
+  доходность выросла до ~2.55% (10.09), уже выше заявленного GS порога "критическая
+  чувствительность >2.5% устойчиво = минус $300-500". Ни один источник в пуле не пересмотрен
+  после 16.09 — весь filtered consensus построен на до-хайковых данных (см. монитор
+  bank-post-hike-revision и раздел "Свежее событие" в .md). Частичный структурный противовес:
+  central bank net purchases Q2 2026 = 289т (+62% г/г, рекорд за 4 года, НБК 20-й месяц
+  подряд) — опровергает майский стресс-тест-сценарий "Китай приостанавливает покупки".
+
+outcome_log:
+  - resolve_date: 2026-12-31
+    logged_at: 2026-09-17
+    record_type: horizon_resolve
+    kind: level
+    forecast_l1_weighted: 4500
+    forecast_l1_unweighted: 4650
+    forecast_l2_ev: null
+    p10_p90: [4350, 4900]
+    confidence_at_forecast: 0.47
+    actual: null
+    in_p10_p90: null
+    error_pct: null
+    actual_source: null
+    shock_flag: none
+
+reviews:
+  interval_months: 3
+  next_due: 2026-12-17
+  last_completed: null
+  history: []
+
+final_audit:
+  due: 2028-12-31
+  status: pending
+
+monitoring:
+  - id: fed-dec-hike
+    description: "Второй хайк ФРС на декабрьском заседании 2026 — прямой triggering-фактор для синхронного пересмотра всего пула вниз (наблюдался в июне-июле 2026 после первого хайк-опасения)"
+    source: "https://www.cnbc.com/2026/09/16/fed-rate-decision-september-2026.html"
+    threshold: "Ставка ФРС > 4.00-4.25% по итогам декабрьского заседания 2026"
+    check_date: 2026-12-17
+    impact: invalidates
+    severity: critical
+    auto_checkable: true
+    side: down
+  - id: cb-gold-demand-q3
+    description: "Спрос центробанков на золото Q3 2026 (WGC Gold Demand Trends) — подтверждение/опровержение структурного пола выше 40 т/мес после рекордного Q2 (289т, +62% г/г)"
+    source: "https://www.gold.org/goldhub/research/gold-demand-trends"
+    threshold: "Q3 2026 < 150 т (аннуализировано ~50 т/мес) = сигнал ослабления структурного пола"
+    check_date: 2026-11-15
+    impact: mixed
+    severity: high
+    auto_checkable: true
+    side: down
+  - id: bank-post-hike-revision
+    description: "Пересмотр таргетов банками (GS, Westpac, ING, Deutsche Bank) вслед за хайком ФРС 16.09 — GS явно закладывал $4,400 как downside-сценарий именно при хайке"
+    source: "https://en.cryptonomist.ch/2026/09/03/goldman-sachs-gold-price/"
+    threshold: "GS официально режет YE-2026 target ниже $4,900"
+    check_date: 2026-10-15
+    impact: invalidates
+    severity: high
+    auto_checkable: false
+    side: down
+  - id: us-real-yield-10y
+    description: "Реальная доходность US 10Y TIPS — выросла до 2.55% (10.09), уже выше порога GS 'критическая чувствительность >2.5% устойчиво = минус $300-500'"
+    source: "https://convextrade.com/today/10-year-real-yield"
+    threshold: "TIPS 10Y устойчиво > 2.75% в течение месяца"
+    check_date: 2026-10-17
+    impact: invalidates
+    severity: critical
+    auto_checkable: true
+    side: down
+
+assumptions:
+  - id: single-fed-hike
+    text: "Хайк ФРС 16.09 — разовый, а не начало продолжительного цикла повышений"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+  - id: cb-demand-structural-strengthened
+    text: "CB-спрос удерживается на уровне ≥40-50 т/мес несмотря на более жёсткую ФРС (Q2 2026 факт: 289т, +62% г/г — допущение усилилось относительно прошлого снапшота)"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+  - id: dollar-no-further-sustained-strength
+    text: "Доллар не переходит в устойчивый ещё более крепкий тренд сверх текущего пост-хайкового уровня"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+  - id: vintage-transfer-valid-2027-2028
+    text: "Vintage-коэффициенты корректно переносят наблюдённый пересмотр ближних таргетов на дальние горизонты 2027-2028. JPM k=0.75 — самый агрессивный случай в пуле"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+  - id: averages-proxy-points
+    text: "Годовые/квартальные средние (Westpac Q3, World Bank annual) корректно проксируют точечные YE/mid-year горизонты; вносит ~±$150 неопределённости"
+    robustness: MEDIUM
+    sensitivity: moderate
+    auto_checkable: false
+  - id: jewelry-demand-shift-structural
+    text: "Падение ювелирного спроса (-17% г/г, минимум с пандемии) — устойчивый сдвиг структуры спроса к ЦБ/инвестициям, а не ранний сигнал ценовой эластичности розничного покупателя"
+    robustness: MEDIUM
+    sensitivity: moderate
+    auto_checkable: false
+
+methodology_precedent_link: "Продолжение цепочки xauusd-price: 2026-05-04 -> 2026-06-10 -> 2026-07-01 -> 2026-07-29 -> 2026-07-29-v2 -> 2026-09-17 (текущий). Fallback- и DERIVED-методология впервые формализована в 07-29-v2 self-audit, применена здесь без изменений в логике."

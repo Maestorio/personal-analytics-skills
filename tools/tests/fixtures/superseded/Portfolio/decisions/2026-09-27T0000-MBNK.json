@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-27T0000-MBNK",
+  "key": "MBNK",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-11-26",
+  "note": "МСФО 1П26: ЧП 7,2 млрд (×2,1), ROE 13,6%, NIM 8,3%, NPL 8,7% (4 кв. снижения), НКР A+. P/E ~2x, P/B ~0,3x. Стресс EV h12 +9,5% vs книга +4,15%. Ограничители: Н1.1 9,2% держит payout на 25%, CoR 7,3%,…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-27T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

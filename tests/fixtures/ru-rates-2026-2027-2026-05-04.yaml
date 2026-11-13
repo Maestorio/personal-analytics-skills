@@ -1,0 +1,187 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: ru-rates-2026-2027-2026-05-04.md
+status: active
+
+# ─── Tier 1 — FCA snapshot ───────────────────────────────────────────────────
+
+forecast:
+  date: 2026-05-04
+  horizon: 2027-12-31
+  horizons: [2026-12-31, 2027-12-31]
+  domain: ru-macro
+  topic: ru-rates-2026-2027
+  method: fca
+  central_estimate: >
+    Ключевая ставка ЦБ РФ: 12.5–13.0% к 2026-12-31 (weighted median 12.7%);
+    10.0–11.0% к 2027-12-31 (weighted median 10.7%).
+    Траектория Q2–Q3 2026: −50 б.п. июнь → 14.0%, пауза/−50 б.п. июль, −50 б.п. сентябрь.
+    Post-HST диапазон 2026-12-31 расширен до 12.5–14.0% (upside bias H2 ~35–40%).
+  confidence: 0.40
+  confidence_method: fca_weighted_median
+  geopolitics_translation:
+    method: linear
+    distribution_used: true
+    note: >
+      cbr_rate indifferent к обеим осям геополитической матрицы напрямую
+      (подтверждено Downstream Sensitivity Hints в scenario-geopolitics-ru-west-2026-05-04.md).
+      Трансляция исключительно через CPI upstream → функция реакции ЦБ (CPI+500 bp floor).
+    distribution:
+      Sc-A: 0.25
+      Sc-B: 0.25
+      Sc-C: 0.25
+      Sc-D: 0.25
+    scenario_rates_2026:
+      Sc-A: "10.5%"
+      Sc-B: "12.5%"
+      Sc-C: "11.5%"
+      Sc-D: "13.5%"
+    scenario_rates_2027:
+      Sc-A: "8.0%"
+      Sc-B: "10.5%"
+      Sc-C: "9.5%"
+      Sc-D: "11.5%"
+  upstream_snapshot:
+    - factor: ru-cpi-2026-2027
+      central_estimate: "CPI 6.5–7.5% к 2026-12-31 (P50=7.0%); 5.0–6.5% к 2027-12-31"
+      confidence: 0.40
+      forecast_date: 2026-05-04
+      source_file: "forecasts/ru-cpi-2026-2027-2026-05-04.md"
+    - factor: geopolitics-ru-west
+      central_estimate: "Pure Shell 0.25/0.25/0.25/0.25 (D1, no modal)"
+      confidence: 0.55
+      forecast_date: 2026-05-04
+      source_file: "scenarios/scenario-geopolitics-ru-west-2026-05-04.md"
+  internal_contradiction_flag: true
+  internal_contradiction_note: >
+    CPI 7%+ при ставке 12% несовместимы с исторической функцией реакции ЦБ (CPI+500 bp floor).
+    H1 требует joint probability ~18%. H2 (14%+) вероятнее H1 (~35–40%).
+
+reviews:
+  interval_months: 3
+  next_due: 2026-08-04
+  last_completed: null
+  history: []
+
+final_audit:
+  due: 2027-12-31
+  status: pending
+
+# ─── Tier 2 — HST patch ──────────────────────────────────────────────────────
+
+monitoring:
+  - id: cbr-jun-meeting
+    description: "Решение ЦБ на заседании 19.06.2026: снижение/пауза/повышение"
+    check_date: 2026-06-19
+    auto_checkable: true
+    threshold: "−50 б.п. → H1 подтверждается; 0 б.п. или +X б.п. → пересмотр в сторону H2"
+  - id: cbr-jul-meeting
+    description: "Решение ЦБ на заседании 25.07.2026 после ЖКУ-импульса"
+    check_date: 2026-07-25
+    auto_checkable: true
+    threshold: "Пауза после ЖКУ → H2-давление нарастает"
+  - id: ru-cpi-monthly
+    description: "Ежемесячный CPI РФ (Росстат): отслеживать тренд vs прогноз 6.5–7.5%"
+    check_date: 2026-08-04  # review date
+    auto_checkable: true
+    threshold: "CPI >9% → SPOF 1 активируется; CPI <5% → Sc-A trajectory"
+  - id: cbr-sep-meeting
+    description: "Решение ЦБ 11.09.2026 (третье заседание в горизонте H2 2026)"
+    check_date: 2026-09-11
+    auto_checkable: true
+    threshold: "−50 б.п. → траектория 13.5% к декабрю 2026 подтверждается"
+
+assumptions:
+  - id: cpi-500-floor
+    description: "CPI+500 б.п. floor сохраняется как функция реакции ЦБ"
+    status: critical
+    auto_checkable: false
+    note: >
+      Подтверждено 3 из 3 эпизодов (2014, 2022, 2023–2024).
+      Риск: ВПК-лобби продавливает ставку ниже floor.
+      При нарушении → прогноз занижен на 200–300 б.п.
+  - id: cpi-upstream-correctness
+    description: "CPI 2026 upstream (6.5–7.5%) корректен"
+    status: critical
+    auto_checkable: false
+    note: >
+      Confidence upstream = 0.40 = confidence ставки. Ошибка CPI → прямая ошибка прогноза ставки.
+      CPI >9%: H2 активируется. CPI <5%: Sc-A trajectory.
+  - id: h1-stability
+    description: "H1 (12.5–13%) — достижимое равновесие (joint prob. ~18%)"
+    status: critical
+    auto_checkable: false
+    note: >
+      Требует 4 одновременных условий: (a) CPI снижается к 6.5%, (b) ВВП-давление,
+      (c) бюджет в норме, (d) нет нового geopolitical shock в H2 2026.
+      H2 вероятнее H1 (~35–40% vs ~18%).
+  - id: bks-position-current
+    description: "BKS-позиция (Зельцер, апрель 2026) актуальна"
+    status: moderate
+    auto_checkable: false
+    note: "Свежая (апрель 2026). Проверить после июньского заседания ЦБ."
+
+thresholds:
+  - id: cpi-spof-high
+    description: "CPI выше 9.25% (+1.5 п.п. выше Sc-D 7.75%)"
+    threshold: "CPI > 9.25%"
+    check_date: 2026-09-30
+    auto_checkable: true
+    consequence: "Ставка 2026-12-31 → 14.5–15% (SPOF 1). Прогноз пересматривается."
+    probability: "~10–15%"
+  - id: brent-spof-low
+    description: "Brent ниже $65/bbl — бюджетный стресс"
+    threshold: "Brent < $65/bbl"
+    check_date: 2026-09-30
+    auto_checkable: true
+    consequence: "Минфин-давление → снижение быстрее чем CPI-floor допускает. Ставка к H3 (11–11.5%)."
+    probability: "~15–20%"
+
+deadlines:
+  - id: zhku-tariff-revision
+    description: "Пересмотр тарифов ЖКУ — CPI-импульс до +2 п.п. к CPI H2 2026"
+    due: 2026-07-01
+    auto_checkable: true
+    consequence: "Ускорение CPI в июле-августе. Критический тест для ЦБ на заседании 25.07."
+  - id: eu-21st-package
+    description: "Принятие 21-го пакета санкций ЕС (с 3rd-country measures CN/IN)"
+    due: 2026-07-31
+    auto_checkable: true
+    consequence: "Через Urals discount → CPI (импортные цены) → ставка. Ускоряет Sc-D / Sc-B."
+
+falsifiers:
+  - id: cbr-no-cut-june
+    description: "ЦБ НЕ снижает на заседании 19.06.2026 (ставка остаётся 16%)"
+    auto_checkable: true
+    check_date: 2026-06-19
+    consequence: "H1 опровергается. Прогноз пересматривается в сторону H2 (14%+) к 2026-12-31."
+  - id: cpi-acceleration-q3
+    description: "CPI ускоряется выше 9% в Q3 2026"
+    auto_checkable: true
+    check_date: 2026-09-30
+    consequence: "SPOF 1 активируется. Ставка 14.5–15% к 2026-12-31. H1 и H3 опровергаются."
+  - id: ceasefire-cpi-drop
+    description: "Перемирие Украина–Россия + частичное снятие санкций → CPI <5%"
+    auto_checkable: false
+    check_date: 2026-12-31
+    consequence: "Sc-A реализуется. Ставка 10–10.5% к 2026-12-31. H1 и H2 опровергаются."
+
+agents:
+  - id: minfin-ru
+    description: "Минфин РФ — давление на снижение ставки при бюджетном стрессе"
+    auto_checkable: false
+    note: >
+      При Brent <$65 → нефтегазовые доходы падают → Минфин активирует давление на ЦБ.
+      Исторически: Минфин vs ЦБ конфликт в 2014–2015, 2022. ЦБ Набиуллиной устоял.
+  - id: eu-us-sanctions
+    description: "EU/US sanctions authorities — через 21-й пакет → CPI-канал"
+    auto_checkable: false
+    note: >
+      21-й пакет июль 2026 (secondary measures CN/IN) → Urals discount расширяется →
+      импортные цены растут → CPI разгоняется → ставка 14%+ (усиление Sc-D).
+  - id: vpk-lobby
+    description: "ВПК-лобби — структурное давление на снижение ставки несмотря на CPI"
+    auto_checkable: false
+    note: >
+      Лагерь «ВПК-реалисты» в perspective-maps: ставка нерелевантна при военной экономике.
+      Если давление усиливается → риск нарушения CPI+500 floor → H3-scenario.

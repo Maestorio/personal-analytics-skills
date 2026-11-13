@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-15T0000-X5",
+  "key": "X5",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-09-13",
+  "note": "Mode 8 15.07: докупка исполнена (3,70% vs planned 3,5%), тезис жив (EV/EBITDA ~4, LFL +6,1%, fwd div 14–22%), но стресс-худший (−8,1% h12) — добор только лимиткой ≤1850. Гейт истёк 14.07 — refresh.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-07-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

@@ -1,0 +1,900 @@
+schema_version: 1
+type: macro-scenarios
+run_id: MFC-20261004-1325
+assembled_date: '2026-10-04'
+assembled_by: macro-forecast-chain
+mode: PARTIAL
+mode_note: 'Запрос «обнови макро-прогноз» -> QUICK-REFRESH; coverage_report.py (2026-10-04): 9/10 готовы (9 FRESH,
+  1 STALE — geopolitics, 95д при пороге 90), 0 MISSING, 0 BROKEN, 0 критичных; скрипт рекомендовал QUICK-REFRESH,
+  но каскад от geopolitics затрагивает все 9 downstream-факторов. Пользователь выбрал вариант [D] (as-is, PARTIAL):
+  FCA и scenario-builder в этом run НЕ запускались. Содержимое прогнозов идентично bundle 2026-09-17: mtime всех
+  9 forecast-YAML и geopolitics-матрицы <= 2026-09-17 (до сборки предыдущего bundle 21:02); выборочная сверка by_scenario
+  brent/usdrub/cbr_rate с источниками совпала. Обновлены только метаданные (run_id, снапшот портфеля 2026-10-01,
+  статус geopolitics, caveats). baseline_spot и pct_vs_spot НЕ обновлялись (факт-анкоры 2026-09-07..09-17). stale_flags.yaml
+  (2026-09-03, пуст) не регенерировался forecast-monitor.'
+supersedes: macro-scenarios-2026-09-17.yaml
+portfolio_snapshot: portfolio-2026-10-01.json
+ready_for_stress_test: partial
+ready_for_stress_test_note: 'PARTIAL: geopolitics STALE (95д) принят как есть; downstream-прогнозы от 2026-09-17
+  построены на той же матрице, фактического расхождения upstream нет, но каскад формально не пересобран. baseline_spot
+  17-20 дней давности — pct_vs_spot считать относительно спота на 2026-09-17, не на сегодня. Consistency_check перенесён
+  из run 2026-09-17 без изменений (входные числа идентичны; Checkpoint 2 от 2026-09-17).'
+blocking_issues: []
+coverage_score: 9/10
+chain_target_horizons:
+- '2026-12-31'
+- '2027-12-31'
+scenario_matrix:
+  type: scenario_matrix
+  status: STALE (95д, порог 90; дата файла 2026-07-01; веса пересмотрены 2026-08-05; горизонт расширен 2026-09-17
+    без пересмотра осей/сценариев) — принято как есть (вариант D)
+  source_file: scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml
+  modal_flag: no_modal
+  modal_scenario: none
+  axis_x: 'интенсивность конфликта: война vs перемирие/заморозка'
+  axis_y: 'санкционный режим: единый/ужесточённый vs фрагментация/снятие'
+  scenarios:
+    A:
+      label: Затяжная осада
+      axis_x: HIGH
+      axis_y: HIGH
+    B:
+      label: Война на расколотом фронте
+      axis_x: HIGH
+      axis_y: LOW
+    C:
+      label: Замороженный конфликт под давлением
+      axis_x: LOW
+      axis_y: MEDIUM
+    D:
+      label: Большая сделка и разрядка
+      axis_x: LOW
+      axis_y: LOW
+  scenario_weights_by_horizon:
+    '2026-12-31':
+      A: 0.28
+      B: 0.12
+      C: 0.42
+      D: 0.18
+    '2027-06-30':
+      A: 0.15
+      B: 0.15
+      C: 0.35
+      D: 0.35
+    '2027-12-31':
+      A: 0.24
+      B: 0.16
+      C: 0.36
+      D: 0.24
+    '2028-12-31':
+      A: 0.24
+      B: 0.16
+      C: 0.36
+      D: 0.24
+  horizon_grid_note: h6=2026-12-31, h12=2027-06-30, h24 ПЕРЕОПРЕДЕЛЁН с 2028-06-30 на 2027-12-31 (расширение горизонта
+    2026-09-17 upstream-прогонами), h30=2028-12-31 использует те же веса, что h24 (см. cbr_rate/inflation_ru/usdrub
+    upstream_snapshot notes).
+baseline_spot:
+  brent_price: 104.18
+  urals_brent_discount: 24.14
+  usdrub_rate: 84.1732
+  cnyrub_rate: 12.5457
+  inflation_ru: 6.3
+  cbr_rate: 14.0
+  budget_deficit_ru_pct_gdp: 3.82
+  xauusd_price: 4300
+factors:
+  brent_price:
+    unit: usd_per_bbl
+    confidence: 0.5
+    type: conditional
+    geopolitics_translation: nonlinear
+    source_forecast: brent
+    fact_anchor:
+      value: 104.18
+      as_of: '2026-09-17'
+      source: Brent front-month (Nov-26 contract), TradingEconomics
+    by_scenario:
+      A:
+        '2026-12-31':
+          value: 91
+          pct_vs_spot: -12.65
+        '2027-06-30':
+          value: 83
+          pct_vs_spot: -20.33
+        '2027-12-31':
+          value: 83
+          pct_vs_spot: -20.33
+      B:
+        '2026-12-31':
+          value: 87
+          pct_vs_spot: -16.49
+        '2027-06-30':
+          value: 79
+          pct_vs_spot: -24.17
+        '2027-12-31':
+          value: 79
+          pct_vs_spot: -24.17
+      C:
+        '2026-12-31':
+          value: 83
+          pct_vs_spot: -20.33
+        '2027-06-30':
+          value: 75
+          pct_vs_spot: -28.01
+        '2027-12-31':
+          value: 76
+          pct_vs_spot: -27.05
+      D:
+        '2026-12-31':
+          value: 79
+          pct_vs_spot: -24.17
+        '2027-06-30':
+          value: 71
+          pct_vs_spot: -31.85
+        '2027-12-31':
+          value: 72
+          pct_vs_spot: -30.89
+    l2_ev:
+      '2026-12-31':
+        value: 85.0
+        pct_vs_spot: -18.41
+      '2027-06-30':
+        value: 75.4
+        pct_vs_spot: -27.63
+      '2027-12-31':
+        value: 77.2
+        pct_vs_spot: -25.9
+  urals_brent_discount:
+    unit: usd_per_bbl
+    confidence: 0.4
+    type: conditional
+    geopolitics_translation: axis_dependent
+    source_forecast: urals_discount
+    fact_anchor:
+      value: 24.14
+      as_of: '2026-09-14'
+      source: Argus, Urals FOB Приморск к North Sea Dated, via Интерфакс/neftegaz.ru
+    by_scenario:
+      A:
+        '2026-12-31':
+          value: 27
+          pct_vs_spot: 11.85
+        '2027-06-30':
+          value: 25
+          pct_vs_spot: 3.56
+        '2027-12-31':
+          value: 24
+          pct_vs_spot: -0.58
+        '2028-12-31':
+          value: 22
+          pct_vs_spot: -8.86
+      B:
+        '2026-12-31':
+          value: 22
+          pct_vs_spot: -8.86
+        '2027-06-30':
+          value: 15
+          pct_vs_spot: -37.86
+        '2027-12-31':
+          value: 14
+          pct_vs_spot: -42.0
+        '2028-12-31':
+          value: 12
+          pct_vs_spot: -50.29
+      C:
+        '2026-12-31':
+          value: 17
+          pct_vs_spot: -29.58
+        '2027-06-30':
+          value: 12
+          pct_vs_spot: -50.29
+        '2027-12-31':
+          value: 11
+          pct_vs_spot: -54.43
+        '2028-12-31':
+          value: 10
+          pct_vs_spot: -58.57
+      D:
+        '2026-12-31':
+          value: 11
+          pct_vs_spot: -54.43
+        '2027-06-30':
+          value: 7.5
+          pct_vs_spot: -68.93
+        '2027-12-31':
+          value: 7
+          pct_vs_spot: -71.0
+        '2028-12-31':
+          value: 6
+          pct_vs_spot: -75.14
+    l2_ev:
+      '2026-12-31':
+        value: 19.32
+        pct_vs_spot: -19.97
+      '2027-06-30':
+        value: 12.825
+        pct_vs_spot: -46.87
+      '2027-12-31':
+        value: 13.64
+        pct_vs_spot: -43.5
+      '2028-12-31':
+        value: 12.24
+        pct_vs_spot: -49.3
+  usdrub_rate:
+    unit: rub_per_usd
+    confidence: 0.4
+    type: conditional
+    geopolitics_translation: nonlinear
+    source_forecast: usdrub
+    fact_anchor:
+      value: 84.1732
+      as_of: '2026-09-17'
+      source: Банк России, официальный курс
+    by_scenario:
+      A:
+        '2026-12-31':
+          value: 90.3
+          pct_vs_spot: 7.28
+        '2027-06-30':
+          value: 95.0
+          pct_vs_spot: 12.86
+        '2027-12-31':
+          value: 99.7
+          pct_vs_spot: 18.45
+        '2028-12-31':
+          value: 101.8
+          pct_vs_spot: 20.94
+      B:
+        '2026-12-31':
+          value: 75.2
+          pct_vs_spot: -10.66
+        '2027-06-30':
+          value: 79.1
+          pct_vs_spot: -6.03
+        '2027-12-31':
+          value: 83.0
+          pct_vs_spot: -1.39
+        '2028-12-31':
+          value: 84.7
+          pct_vs_spot: 0.63
+      C:
+        '2026-12-31':
+          value: 83.0
+          pct_vs_spot: -1.39
+        '2027-06-30':
+          value: 87.3
+          pct_vs_spot: 3.71
+        '2027-12-31':
+          value: 91.6
+          pct_vs_spot: 8.82
+        '2028-12-31':
+          value: 93.5
+          pct_vs_spot: 11.08
+      D:
+        '2026-12-31':
+          value: 80.7
+          pct_vs_spot: -4.13
+        '2027-06-30':
+          value: 84.9
+          pct_vs_spot: 0.86
+        '2027-12-31':
+          value: 89.1
+          pct_vs_spot: 5.85
+        '2028-12-31':
+          value: 90.9
+          pct_vs_spot: 7.99
+    l2_ev:
+      '2026-12-31':
+        value: 83.694
+        pct_vs_spot: -0.57
+      '2027-06-30':
+        value: 86.385
+        pct_vs_spot: 2.63
+      '2027-12-31':
+        value: 91.568
+        pct_vs_spot: 8.79
+      '2028-12-31':
+        value: 93.46
+        pct_vs_spot: 11.03
+  cnyrub_rate:
+    unit: rub_per_cny
+    confidence: 0.22
+    type: conditional
+    geopolitics_translation: nonlinear
+    source_forecast: cnyrub
+    fact_anchor:
+      value: 12.5457
+      as_of: '2026-09-17'
+      source: Банк России, официальный курс
+    by_scenario:
+      A:
+        '2026-12-31':
+          value: 14.33
+          pct_vs_spot: 14.22
+        '2027-06-30':
+          value: 15.21
+          pct_vs_spot: 21.24
+        '2027-12-31':
+          value: 16.06
+          pct_vs_spot: 28.01
+        '2028-12-31':
+          value: 16.6
+          pct_vs_spot: 32.32
+      B:
+        '2026-12-31':
+          value: 11.31
+          pct_vs_spot: -9.85
+        '2027-06-30':
+          value: 12.01
+          pct_vs_spot: -4.27
+        '2027-12-31':
+          value: 12.68
+          pct_vs_spot: 1.07
+        '2028-12-31':
+          value: 13.1
+          pct_vs_spot: 4.42
+      C:
+        '2026-12-31':
+          value: 12.43
+          pct_vs_spot: -0.92
+        '2027-06-30':
+          value: 13.19
+          pct_vs_spot: 5.14
+        '2027-12-31':
+          value: 13.92
+          pct_vs_spot: 10.95
+        '2028-12-31':
+          value: 14.38
+          pct_vs_spot: 14.62
+      D:
+        '2026-12-31':
+          value: 11.9
+          pct_vs_spot: -5.15
+        '2027-06-30':
+          value: 12.63
+          pct_vs_spot: 0.67
+        '2027-12-31':
+          value: 13.33
+          pct_vs_spot: 6.25
+        '2028-12-31':
+          value: 13.78
+          pct_vs_spot: 9.84
+    l2_ev:
+      '2026-12-31':
+        value: 12.7322
+        pct_vs_spot: 1.49
+      '2027-06-30':
+        value: 13.12
+        pct_vs_spot: 4.58
+      '2027-12-31':
+        value: 14.0936
+        pct_vs_spot: 12.34
+      '2028-12-31':
+        value: 14.564
+        pct_vs_spot: 16.09
+  inflation_ru:
+    unit: percent
+    confidence: 0.4
+    type: conditional
+    geopolitics_translation: linear
+    source_forecast: inflation_ru
+    fact_anchor:
+      value: 6.3
+      as_of: '2026-09-07'
+      source: Rosstat via finance.mail.ru/Vedomosti
+    by_scenario:
+      A:
+        '2026-12-31':
+          value: 7.6
+          pct_vs_spot: 20.63
+        '2027-06-30':
+          value: 5.8
+          pct_vs_spot: -7.94
+        '2027-12-31':
+          value: 5.2
+          pct_vs_spot: -17.46
+        '2028-12-31':
+          value: 5.6
+          pct_vs_spot: -11.11
+      B:
+        '2026-12-31':
+          value: 6.7
+          pct_vs_spot: 6.35
+        '2027-06-30':
+          value: 4.6
+          pct_vs_spot: -26.98
+        '2027-12-31':
+          value: 4.1
+          pct_vs_spot: -34.92
+        '2028-12-31':
+          value: 4.2
+          pct_vs_spot: -33.33
+      C:
+        '2026-12-31':
+          value: 6.5
+          pct_vs_spot: 3.17
+        '2027-06-30':
+          value: 4.3
+          pct_vs_spot: -31.75
+        '2027-12-31':
+          value: 4.0
+          pct_vs_spot: -36.51
+        '2028-12-31':
+          value: 4.0
+          pct_vs_spot: -36.51
+      D:
+        '2026-12-31':
+          value: 5.9
+          pct_vs_spot: -6.35
+        '2027-06-30':
+          value: 3.9
+          pct_vs_spot: -38.1
+        '2027-12-31':
+          value: 3.6
+          pct_vs_spot: -42.86
+        '2028-12-31':
+          value: 3.6
+          pct_vs_spot: -42.86
+    l2_ev:
+      '2026-12-31':
+        value: 6.724
+        pct_vs_spot: 6.73
+      '2027-06-30':
+        value: 4.43
+        pct_vs_spot: -29.68
+      '2027-12-31':
+        value: 4.208
+        pct_vs_spot: -33.21
+      '2028-12-31':
+        value: 4.32
+        pct_vs_spot: -31.43
+  cbr_rate:
+    unit: rate_pct
+    confidence: 0.3
+    type: conditional
+    geopolitics_translation: linear
+    source_forecast: cbr_rate
+    fact_anchor:
+      value: 14.0
+      as_of: '2026-09-11'
+      source: Банк России, пресс-релиз 11.09.2026
+    by_scenario:
+      A:
+        '2026-12-31':
+          value: 14.73
+          pct_vs_spot: 5.21
+        '2027-06-30':
+          value: 14.69
+          pct_vs_spot: 4.93
+        '2027-12-31':
+          value: 13.95
+          pct_vs_spot: -0.36
+        '2028-12-31':
+          value: 10.85
+          pct_vs_spot: -22.5
+      B:
+        '2026-12-31':
+          value: 13.83
+          pct_vs_spot: -1.21
+        '2027-06-30':
+          value: 13.49
+          pct_vs_spot: -3.64
+        '2027-12-31':
+          value: 12.85
+          pct_vs_spot: -8.21
+        '2028-12-31':
+          value: 9.45
+          pct_vs_spot: -32.5
+      C:
+        '2026-12-31':
+          value: 13.63
+          pct_vs_spot: -2.64
+        '2027-06-30':
+          value: 13.19
+          pct_vs_spot: -5.79
+        '2027-12-31':
+          value: 12.75
+          pct_vs_spot: -8.93
+        '2028-12-31':
+          value: 9.25
+          pct_vs_spot: -33.93
+      D:
+        '2026-12-31':
+          value: 13.03
+          pct_vs_spot: -6.93
+        '2027-06-30':
+          value: 12.79
+          pct_vs_spot: -8.64
+        '2027-12-31':
+          value: 12.35
+          pct_vs_spot: -11.79
+        '2028-12-31':
+          value: 8.85
+          pct_vs_spot: -36.79
+    l2_ev:
+      '2026-12-31':
+        value: 13.854
+        pct_vs_spot: -1.04
+      '2027-06-30':
+        value: 13.32
+        pct_vs_spot: -4.86
+      '2027-12-31':
+        value: 12.958
+        pct_vs_spot: -7.44
+      '2028-12-31':
+        value: 9.57
+        pct_vs_spot: -31.64
+  budget_deficit_ru:
+    unit: 'mixed: trln_rub_annual (2026-12-31) | percent_gdp_annual (2027-12-31, 2028-12-31)'
+    confidence: 0.4
+    type: conditional
+    geopolitics_translation: linear
+    source_forecast: budget_deficit
+    fact_anchor:
+      value: 3.82
+      as_of: '2026-09-09'
+      source: Минфин РФ YTD янв-авг 2026, аннуализация
+    by_scenario:
+      A:
+        '2026-12-31':
+          value: 9.85
+        '2027-12-31':
+          value: 3.4
+          pct_vs_spot: -10.99
+        '2028-12-31':
+          value: 3.6
+          pct_vs_spot: -5.76
+      B:
+        '2026-12-31':
+          value: 8.8
+        '2027-12-31':
+          value: 2.5
+          pct_vs_spot: -34.55
+        '2028-12-31':
+          value: 2.3
+          pct_vs_spot: -39.79
+      C:
+        '2026-12-31':
+          value: 7.2
+        '2027-12-31':
+          value: 1.55
+          pct_vs_spot: -59.42
+        '2028-12-31':
+          value: 1.25
+          pct_vs_spot: -67.28
+      D:
+        '2026-12-31':
+          value: 5.75
+        '2027-12-31':
+          value: 0.85
+          pct_vs_spot: -77.75
+        '2028-12-31':
+          value: 0.55
+          pct_vs_spot: -85.6
+    l2_ev:
+      '2026-12-31':
+        value: 7.873
+      '2027-12-31':
+        value: 1.978
+        pct_vs_spot: -48.22
+      '2028-12-31':
+        value: 1.814
+        pct_vs_spot: -52.51
+    unit_mismatch_note: 2026-12-31 в трлн ₽ (номинал), 2027/2028 в %ВВП (структурный). pct_vs_spot вычислен ТОЛЬКО
+      для 2027/2028 против fact_anchor в %ВВП; для 2026-12-31 pct_vs_spot не считается (единицы несопоставимы).
+  xauusd_price:
+    unit: usd_per_troy_oz
+    confidence: 0.47
+    type: isolated
+    fact_anchor:
+      value: 4300
+      as_of: '2026-09-17'
+      source: USAGOLD daily report 17.09.2026, после хайка ФРС 16.09
+    level_all_scenarios:
+      '2026-12-31':
+        value: 4500
+        pct_vs_spot: 4.65
+      '2027-06-30':
+        value: 4925
+        pct_vs_spot: 14.53
+      '2027-12-31':
+        value: 5113
+        pct_vs_spot: 18.91
+      '2028-12-31':
+        value: 5250
+        pct_vs_spot: 22.09
+  sanctions_russia:
+    unit: qualitative
+    confidence: 0.6
+    type: isolated
+    own_horizon_grid_note: Использует горизонты 2026-12-31/2027-06-30/2028-06-30/2028-12-31 (СТАРАЯ сетка geopolitics-матрицы),
+      НЕ новую 2027-12-31-точку, применённую в остальных 6 conditional-факторах этого run.
+    regime_marginal:
+      '2026-12-31':
+        holding: 0.52
+        tightening: 0.28
+        relief: 0.16
+        lift: 0.04
+      '2027-06-30':
+        holding: 0.46
+        tightening: 0.26
+        relief: 0.22
+        lift: 0.06
+      '2028-06-30':
+        holding: 0.4
+        tightening: 0.24
+        relief: 0.26
+        lift: 0.1
+      '2028-12-31':
+        holding: 0.37
+        tightening: 0.23
+        relief: 0.28
+        lift: 0.12
+    axis_link:
+      axis: axis_y (sanctions_intensity)
+      by_construction_mapping:
+        A: tightening
+        B: relief
+        C: holding
+        D: lift
+consistency_check:
+  method: coverage_report.check_consistency_pair над 4 сценариями x 4 горизонта = 16 комбинаций (2028-12-31 без
+    brent-члена — форекаст brent не покрывает эту точку, brent_pct_change=0 => нефтяные правила там не действуют)
+  raw_counts:
+    critical: 1
+    medium: 10
+    low: 0
+  compatible: false
+  items:
+  - where: B@2026-12-31
+    rule: oil_drop_rub_strength
+    severity: medium
+    message: Нефть↓ + рубль↑ — нетипично
+    resolution: benign
+    resolution_note: Многолетний дезинфляционный/rate-cut цикл к нейтрали ЦБ (~9%), не одногоризонтный шок — пороги
+      правил откалиброваны под шок, не под glide path. Подтверждено пользователем 2026-09-17 (Checkpoint 2).
+  - where: B@2026-12-31
+    rule: geopol_without_sanctions
+    severity: medium
+    message: Геополитическая эскалация без ужесточения санкций — исторически редко
+    resolution: by_construction
+    resolution_note: 'Sc-B = война на расколотом фронте: эскалация ПРИ фрагментации/снятии санкций — сама конструкция
+      оси Y, не аномалия. Подтверждено пользователем 2026-07-29, перенесено без изменений.'
+  - where: B@2027-06-30
+    rule: oil_drop_rub_strength
+    severity: medium
+    message: Нефть↓ + рубль↑ — нетипично
+    resolution: benign
+    resolution_note: Многолетний дезинфляционный/rate-cut цикл к нейтрали ЦБ (~9%), не одногоризонтный шок — пороги
+      правил откалиброваны под шок, не под glide path. Подтверждено пользователем 2026-09-17 (Checkpoint 2).
+  - where: B@2027-06-30
+    rule: geopol_without_sanctions
+    severity: medium
+    message: Геополитическая эскалация без ужесточения санкций — исторически редко
+    resolution: by_construction
+    resolution_note: 'Sc-B = война на расколотом фронте: эскалация ПРИ фрагментации/снятии санкций — сама конструкция
+      оси Y, не аномалия. Подтверждено пользователем 2026-07-29, перенесено без изменений.'
+  - where: A@2027-12-31
+    rule: weak_rub_low_inflation
+    severity: medium
+    message: Рубль слабеет >15% при инфляции <6% — нетипично
+    resolution: benign
+    resolution_note: Многолетний дезинфляционный/rate-cut цикл к нейтрали ЦБ (~9%), не одногоризонтный шок — пороги
+      правил откалиброваны под шок, не под glide path. Подтверждено пользователем 2026-09-17 (Checkpoint 2).
+  - where: B@2027-12-31
+    rule: geopol_without_sanctions
+    severity: medium
+    message: Геополитическая эскалация без ужесточения санкций — исторически редко
+    resolution: by_construction
+    resolution_note: 'Sc-B = война на расколотом фронте: эскалация ПРИ фрагментации/снятии санкций — сама конструкция
+      оси Y, не аномалия. Подтверждено пользователем 2026-07-29, перенесено без изменений.'
+  - where: A@2028-12-31
+    rule: rate_cut_weak_rub
+    severity: medium
+    message: ЦБ снижает ставку при слабеющем рубле — риск ускорения инфляции
+    resolution: benign
+    resolution_note: Многолетний дезинфляционный/rate-cut цикл к нейтрали ЦБ (~9%), не одногоризонтный шок — пороги
+      правил откалиброваны под шок, не под glide path. Подтверждено пользователем 2026-09-17 (Checkpoint 2).
+  - where: A@2028-12-31
+    rule: weak_rub_low_inflation
+    severity: medium
+    message: Рубль слабеет >15% при инфляции <6% — нетипично
+    resolution: benign
+    resolution_note: Многолетний дезинфляционный/rate-cut цикл к нейтрали ЦБ (~9%), не одногоризонтный шок — пороги
+      правил откалиброваны под шок, не под glide path. Подтверждено пользователем 2026-09-17 (Checkpoint 2).
+  - where: B@2028-12-31
+    rule: geopol_without_sanctions
+    severity: medium
+    message: Геополитическая эскалация без ужесточения санкций — исторически редко
+    resolution: by_construction
+    resolution_note: 'Sc-B = война на расколотом фронте: эскалация ПРИ фрагментации/снятии санкций — сама конструкция
+      оси Y, не аномалия. Подтверждено пользователем 2026-07-29, перенесено без изменений.'
+  - where: C@2028-12-31
+    rule: rate_cut_weak_rub
+    severity: medium
+    message: ЦБ снижает ставку при слабеющем рубле — риск ускорения инфляции
+    resolution: benign
+    resolution_note: Многолетний дезинфляционный/rate-cut цикл к нейтрали ЦБ (~9%), не одногоризонтный шок — пороги
+      правил откалиброваны под шок, не под glide path. Подтверждено пользователем 2026-09-17 (Checkpoint 2).
+  - where: D@2028-12-31
+    rule: extreme_rate_cut
+    severity: critical
+    message: Снижение ставки >500 б.п. — экстремальный сценарий
+    resolution: benign
+    resolution_note: Многолетний дезинфляционный/rate-cut цикл к нейтрали ЦБ (~9%), не одногоризонтный шок — пороги
+      правил откалиброваны под шок, не под glide path. Подтверждено пользователем 2026-09-17 (Checkpoint 2).
+  genuine_contradictions: 0
+  interpretation: '10 medium + 1 critical. Medium-флаги (geopol_without_sanctions на Sc-B; weak_rub_low_inflation
+    и rate_cut_weak_rub на дальних горизонтах A/C) — та же категория, что пользователь принял в Checkpoint 2 2026-07-29
+    и переносил 3 запуска подряд (08-15→08-30→09-04): by_construction для Sc-B (эскалация при фрагментации/снятии
+    санкций — сама конструкция оси Y), benign для rate/inflation-комбинаций (многолетний дезинфляционный цикл, не
+    шок). Требуют переподтверждения по существу (не новые типы), но НЕ являются новыми суждениями. КРИТИЧЕСКИЙ флаг
+    D@2028-12-31 (extreme_rate_cut, ставка 14.00%→8.85%, -515 б.п. за 27 мес.) — того же типа, что дважды подтверждался
+    ранее (Sc-B/Sc-D на runs 07-29..09-04), но теперь на НОВОЙ горизонт-точке (2028-12-31 заменила 2028-06-30) и
+    с иным численным значением. Формально требует нового Checkpoint 2.'
+  carried_over_from: macro-scenarios-2026-09-17.yaml
+  carried_over_note: Входные by_scenario/L2 EV идентичны run 2026-09-17, поэтому проверка и resolution (в т.ч. critical
+    D@2028-12-31 extreme_rate_cut, benign) перенесены без пересчёта. Не новое подтверждение пользователем — при
+    желании подтвердить заново.
+caveats:
+- type: DATA_GAP
+  factor: geopolitics
+  status: STALE
+  stale_since: '2026-07-01'
+  severity: medium
+  impact_on_downstream:
+  - sanctions
+  - brent
+  - budget_deficit
+  - urals_discount
+  - usdrub
+  - xauusd
+  - cnyrub
+  - inflation_ru
+  - cbr_rate
+  note: 'PARTIAL (вариант D): age 95д > порога 90д. Матрица не пересобиралась; веса последний раз пересмотрены 2026-08-05.
+    Если картина мира с 07-01 изменилась (оси/сценарии) — by_scenario блоки 6 conditional-факторов устарели.'
+- type: BASELINE_SPOT_STALE
+  severity: medium
+  message: 'baseline_spot и fact_anchor не обновлялись в этом run: brent/usdrub/cnyrub/xauusd — 2026-09-17, urals_discount
+    — 2026-09-14, inflation_ru — 2026-09-07, cbr_rate — 2026-09-11, budget_deficit — 2026-09-09. Последний macro-snapshot
+    — ru-2026-09-16. pct_vs_spot относительно этих значений; для актуального спота запустить macro-ru-watcher.'
+- type: PORTFOLIO_SNAPSHOT_CHANGED
+  severity: info
+  message: 'Снапшот 2026-10-01 vs 2026-09-16: добавлена RU000A10FAK6 (ОФЗ 36 CNY, bonds_fx -> usdrub/cnyrub/sanctions,
+    факторы покрыты), ушли RU000A105GN3 и RU000A10B2F7; 70 активных позиций, 44.0 млн ₽ (было 71 / 44.3 млн ₽).
+    Набор нужных факторов прежний (10), UNMAPPED нет.'
+- type: STALE_FLAGS_UNCHECKED
+  severity: info
+  message: stale_flags.yaml сгенерирован forecast-monitor 2026-09-03 (пуст, 31 день назад); свежий monitor-run не
+    выполнялся.
+- type: STALE_UPSTREAM_CONTEXT
+  factor: sanctions
+  upstream: geopolitics
+  severity: low
+  note: 'Каскад формальный: прогноз FRESH (2026-09-17) и построен на текущей версии матрицы; geopolitics STALE (95д),
+    не пересобрана (вариант D).'
+- type: STALE_UPSTREAM_CONTEXT
+  factor: brent
+  upstream: geopolitics
+  severity: low
+  note: 'Каскад формальный: прогноз FRESH (2026-09-17) и построен на текущей версии матрицы; geopolitics STALE (95д),
+    не пересобрана (вариант D).'
+- type: STALE_UPSTREAM_CONTEXT
+  factor: budget_deficit
+  upstream: geopolitics
+  severity: low
+  note: 'Каскад формальный: прогноз FRESH (2026-09-17) и построен на текущей версии матрицы; geopolitics STALE (95д),
+    не пересобрана (вариант D).'
+- type: STALE_UPSTREAM_CONTEXT
+  factor: urals_discount
+  upstream: geopolitics
+  severity: low
+  note: 'Каскад формальный: прогноз FRESH (2026-09-17) и построен на текущей версии матрицы; geopolitics STALE (95д),
+    не пересобрана (вариант D).'
+- type: STALE_UPSTREAM_CONTEXT
+  factor: usdrub
+  upstream: geopolitics
+  severity: low
+  note: 'Каскад формальный: прогноз FRESH (2026-09-17) и построен на текущей версии матрицы; geopolitics STALE (95д),
+    не пересобрана (вариант D).'
+- type: STALE_UPSTREAM_CONTEXT
+  factor: xauusd
+  upstream: geopolitics
+  severity: low
+  note: 'Каскад формальный: прогноз FRESH (2026-09-17) и построен на текущей версии матрицы; geopolitics STALE (95д),
+    не пересобрана (вариант D).'
+- type: STALE_UPSTREAM_CONTEXT
+  factor: cnyrub
+  upstream: geopolitics
+  severity: low
+  note: 'Каскад формальный: прогноз FRESH (2026-09-17) и построен на текущей версии матрицы; geopolitics STALE (95д),
+    не пересобрана (вариант D).'
+- type: STALE_UPSTREAM_CONTEXT
+  factor: inflation_ru
+  upstream: geopolitics
+  severity: low
+  note: 'Каскад формальный: прогноз FRESH (2026-09-17) и построен на текущей версии матрицы; geopolitics STALE (95д),
+    не пересобрана (вариант D).'
+- type: STALE_UPSTREAM_CONTEXT
+  factor: cbr_rate
+  upstream: geopolitics
+  severity: low
+  note: 'Каскад формальный: прогноз FRESH (2026-09-17) и построен на текущей версии матрицы; geopolitics STALE (95д),
+    не пересобрана (вариант D).'
+- type: BASELINE_SPOT_MAJOR_MOVE
+  severity: high
+  factor: brent
+  message: Brent front-month вырос до $104.18 (17.09, TradingEconomics) с $95.02 (03.09) — +9.6% за 2 недели; независимо
+    macro-ru-watcher (16.09, EIA-индекс) показал $105.91 (+11.46% WoW, z=+1.19σ, аномалия). При этом L2 EV-прогноз
+    brent на 2026-12-31 = $85 (-18.4% от текущего спота), на 2027-06-30 = $75.4 (-27.6%) — модальный прогноз (сценарий
+    C, вес 0.42) ожидает существенную коррекцию цены вниз со всех сторон, включая эскалационный сценарий A ($91,
+    -12.65%). Конус односторонний вниз по построению источников (см. counter_world_reason в brent-price-2026-09-17.yaml)
+    — ни один из 11 проверенных источников не прогнозирует Brent выше текущего спота ни на одном горизонте. Это
+    значимо для нефтегазовой экспозиции портфеля (NVTK, 0.57%) и для urals_discount/budget_deficit/usdrub, унаследовавших
+    brent как upstream.
+- type: BASELINE_SPOT_FIXED
+  severity: info
+  factor: urals_discount
+  message: Предыдущий baseline_spot (2.5 usd/bbl, стоял с 08-06/07-15, был помечен BASELINE_SPOT_SUSPECT — на порядок
+    ниже всех прогнозных значений 6.5-28) заменён на свежий факт-анкор 24.14 usd/bbl (Argus, 14.09.2026) из самого
+    forecast YAML. Устраняет многомесячную аномалию pct_vs_spot по этому фактору.
+- type: BASELINE_SPOT_REFRESHED
+  severity: info
+  message: usdrub 84.1732 (ЦБ РФ 17.09), cnyrub 12.5457 (ЦБ РФ 17.09), inflation_ru 6.3% (Росстат на 07.09), cbr_rate
+    14.00% (пресс-релиз ЦБ 11.09), xauusd $4,300 (USAGOLD 17.09, после хайка ФРС 16.09) — все взяты из fact_anchor
+    каждого forecast YAML (свежее macro-ru-watcher на 1 день для usdrub/cnyrub/inflation/cbr, точнее по источнику
+    для brent/xauusd).
+- type: BUDGET_DEFICIT_UNIT_MIX
+  severity: medium
+  factor: budget_deficit
+  message: 'budget_deficit_ru смешивает единицы по горизонтам: 2026-12-31 задан в трлн ₽ номинально (9.85/8.8/7.2/5.75
+    по A/B/C/D), 2027-12-31 и 2028-12-31 — в %ВВП структурного дефицита. fact_anchor (3.82% ВВП, Минфин YTD) сопоставим
+    только с 2027/2028 точками. pct_vs_spot для 2026-12-31 НЕ вычислен (единицы несопоставимы) — не путать отсутствие
+    поля с ошибкой.'
+- type: HORIZON_GRID_EXTENDED
+  severity: medium
+  message: '6 из 7 conditional-факторов (кроме budget_deficit, у которого горизонты остались годовыми) перешли на
+    новую сетку 2026-12-31/2027-06-30/2027-12-31/2028-12-31, заменив прежнюю 2026-12-31/2027-06-30/2028-06-30. Матрица
+    geopolitics (p_by_horizon h6/h12/h24/h30) была ''растянута'' задним числом: h24 переопределён с 2028-06-30 на
+    2027-12-31, h30=2028-12-31 добавлен с ТЕМИ ЖЕ весами, что h24 (см. upstream_snapshot в cbr_rate/inflation_ru/usdrub
+    2026-09-17.yaml: ''h24=h30 .24/.16/.36/.24''). Сама geopolitics-матрица (scenario-geopolitics-ru-west-2026-07-01.yaml)
+    при этом НЕ обновлялась — её horizon_intermediate по-прежнему [2026-12-31, 2027-06-30, 2028-06-30]. Расширение
+    зафиксировано только в downstream-прогнозах, не в самой матрице — рекомендация: при следующем QUICK-REFRESH/FULL
+    geopolitics внести horizon_intermediate=[2026-12-31, 2027-06-30, 2027-12-31] и horizon=2028-12-31 явно в файл
+    матрицы.'
+- type: SANCTIONS_GEOPOLITICS_GRID_MISALIGNMENT
+  severity: low
+  message: sanctions_russia (isolated) и сама geopolitics-матрица остались на СТАРОЙ сетке (..., 2028-06-30, ...),
+    не 2027-12-31, как остальные 6 факторов. Не блокирует (sanctions используется через статическую axis-интенсивность
+    на сценарий, не через time-series), но при чтении regime_marginal_2028-06-30 не путать с 2027-12-31-точкой других
+    факторов.
+- type: LOW_CONFIDENCE
+  severity: medium
+  factor: cnyrub_rate
+  message: confidence 0.22 (0 trust-weighted источников, supplementary/производный от usdrub). Каскадом влияет на
+    переоценку EUR-link замещающих облигаций (ГазКЗ-27Е).
+- type: LOW_CONFIDENCE
+  severity: low
+  factor: cbr_rate
+  message: confidence 0.30 (n=1-3 взвешенных источников по горизонтам, вырожденная точка на 2027-12-31).
+- type: NO_CONFIDENCE
+  severity: medium
+  factor: geopolitics
+  message: 'geopolitics-матрица без скалярного confidence (scenario-builder, не FCA-агрегация). STALE: age=95д (порог
+    90д), файл датирован 2026-07-01, веса пересмотрены 2026-08-05 (60д назад), горизонт расширен 2026-09-17. Принято
+    как есть пользователем 2026-10-04 (вариант D).'
+- type: SECTOR_FORECAST_CANDIDATES
+  severity: low
+  message: 'По доле рыночной стоимости >10% на 2026-09-16 (портфель без заблокированных позиций, 44.3 млн ₽): bonds_rub
+    42.31%, banks_finance 15.21%, bonds_fx_synthetic 11.88%. Кандидаты на секторальные прогнозы Level 6 (sector_bonds_rub,
+    sector_banks, sector_bonds_fx); не запускались в этом run (не запрошено пользователем). (Доли не пересчитаны
+    на снапшоте 2026-10-01 — перенесено из run 2026-09-17.)'
+- type: CHECKPOINT2_CONFIRMED
+  severity: info
+  message: 'D@2028-12-31: extreme_rate_cut, ставка ЦБ 14.00%→8.85% (-515 б.п. за ~27 мес). Подтверждено пользователем
+    2026-09-17 (Checkpoint 2) как benign — легитимный многолетний цикл смягчения к нейтрали ~9%, не шоковый срез;
+    та же интерпретация, что на runs 07-29..09-04 (тогда — Sc-B/Sc-D на горизонте 2028-06-30, числа 8.75-8.95%),
+    перенесена на новую горизонт-точку 2028-12-31 и новое число 8.85%.'
+unmapped_tickers: []

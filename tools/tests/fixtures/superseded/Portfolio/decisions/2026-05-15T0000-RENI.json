@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-05-15T0000-RENI",
+  "key": "RENI",
+  "verdict": "ADD",
+  "target_pct": null,
+  "review_by": "2026-05-29",
+  "note": "BUY до 6-8%. NII растёт при ставке >12%, recovery продаж OSAGO/КАСКО. Underweight: 2.91% vs IE 12%.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-05-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

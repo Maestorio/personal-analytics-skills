@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-11T0000-PLZL",
+  "key": "PLZL",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-08-10",
+  "note": "Дивидендная нога тезиса сломана (СД 'принял к сведению' приостановку до 2030, 10.07.2026, kommersant.ru/doc/26400969), долг вырос (Debt/Equity 0.88->3.6), но hedge-нога (золото/USD-RUB) жива по стресс…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-07-11T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

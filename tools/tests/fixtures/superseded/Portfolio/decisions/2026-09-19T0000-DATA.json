@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-DATA",
+  "key": "DATA",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-10-19",
+  "note": "Выручка 1П +86%, но годовой ориентир понижен до «не менее 20%» — тезис завязан на снижение ставки, которого консенсус ждёт только в 2027. IPO-гейт: 7 кварталов.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

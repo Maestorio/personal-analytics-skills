@@ -1,0 +1,431 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: cbr-rate-2026-2027-2026-09-17.md
+status: active
+replaces:
+  - cbr-rate-2026-2027-2026-07-29
+
+forecast:
+  date: 2026-09-17
+  horizon: 2028-12-31
+  horizons: ["2026-12-31", "2027-06-30", "2027-12-31", "2028-12-31"]
+  domain: ru-macro
+  topic: cbr-rate-2026-2027
+  method: fca
+  unit: percent_annual
+  basis: "Ключевая ставка Банка России, % годовых, значение на дату"
+  central_estimate: >
+    Ключевая ставка ЦБ РФ, Layer 1 marginal: 13.625% к 2026-12-31 (weighted median, P10 13.50/P90
+    13.75, n=3 взвешенных); ~13.19% к 2027-06-30 (линейная интерполяция между якорями, НЕ нативная
+    FCA-точка); 12.75% к 2027-12-31 (вырожден, n=1 взвешенный, БКС); 9.25% к 2028-12-31 (DERIVED,
+    0 взвешенных источников, midpoint официального коридора ЦБ 8.0-9.0% и медианы макроопроса
+    10.0%). Факт: 14.00% подтверждены 11.09.2026 (пауза, попадание в модальный прогноз прошлого
+    снапшота p=0.65). Следующее заседание — опорное 23.10.2026.
+    L2 by_scenario (derived_from_upstream через inflation_ru, канал cpi_floor_plus_buffer):
+    A 14.73/14.69/13.95/10.85 · B 13.83/13.49/12.85/9.45 · C 13.63/13.19/12.75/9.25 ·
+    D 13.03/12.79/12.35/8.85. L2 EV (D1 no_modal, p_by_horizon-взвешенный): 13.85/13.32/12.88/9.57.
+  confidence: 0.30
+  source_coverage_score: 0.30
+  confidence_note: >
+    Итоговый скаляр — консервативная оценка по полному горизонту до 2028 (не механический вывод
+    скрипта на одном горизонте). weighted_consensus.py на 2026-12-31 даёт 0.33 (share_HIGH=1/3,
+    asymmetry_warning=true — камп-дистрибуция 100% монетаристская, только SberCIB+ЦБ). На
+    2027-12-31 — 0.12 (anchor_share=1.00 капает confidence_by_horizon, единственный взвешенный
+    источник БКС). 2027-06-30 и 2028-12-31 не гоняются через скрипт напрямую (интерполяция/DERIVED)
+    — их confidence_by_horizon оценены вручную с явной пометкой ниже.
+  confidence_by_horizon:
+    "2026-12-31": 0.33
+    "2027-06-30": 0.22
+    "2027-12-31": 0.12
+    "2028-12-31": 0.10
+  anchor_share_by_horizon:
+    "2026-12-31": 0.50
+    "2027-06-30": null
+    "2027-12-31": 1.00
+    "2028-12-31": null
+  upstream_snapshot:
+    - factor: inflation_ru
+      central_estimate: "L1 6.5/4.2/4.0/4.0 по горизонтам; by_scenario A 7.6/5.8/5.2/5.6 · B 6.7/4.6/4.1/4.2 · C 6.5/4.3/4.0/4.0 · D 5.9/3.9/3.6/3.6"
+      confidence: 0.40
+      forecast_date: 2026-09-17
+      source_file: "forecasts/inflation-ru-2026-09-17.yaml"
+    - factor: geopolitics_ru_west
+      central_estimate: "D1 с весами по горизонту (не pure shell): h6 .28/.12/.42/.18, h12 .15/.15/.35/.35, h24=h30 .24/.16/.36/.24. Матрица 07-01, горизонт расширен 2026-09-17 до 2028-12-31"
+      confidence: null
+      forecast_date: 2026-07-01
+      source_file: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+    - factor: cbr_reaction_function
+      central_estimate: "CPI+500bp floor + буфер; буфер измерен относительно Sc-C (dominant implicit world): 2.125 / 3.8875 / 3.75 / 0.25 п.п. по горизонтам — немонотонен (пауза цикла на 2027, конвергенция к нейтрали на 2028)"
+      confidence: 0.80
+      forecast_date: 2026-04-27
+      source_file: "domains/ru-macro/cbr-rf-2024-2025.md"
+  notes:
+    - "СОБЫТИЕ 11.09.2026: ЦБ сохранил ставку 14.00% (пауза). Совпадает с модальным прогнозом прошлого снапшота (predicted_p 0.65) — hit. Сигнал нейтральный: 'решения будут приняты в зависимости от динамики инфляции и инфляционных ожиданий', явного направления нет. ЦБ отмечает преобладание проинфляционных рисков."
+    - "ЗАМЕДЛЕНИЕ ЦИКЛА СМЯГЧЕНИЯ: темп снижения L1 с 2026-12-31 к 2027-12-31 существенно медленнее, чем закладывал прошлый снапшот (07-29: 13.75→12.125 за 6 мес; сейчас 13.625→12.75 за 12 мес). Главный драйвер — БКС (Илья Фёдоров, 16.09.2026) явно пересмотрел прогноз-2027 ВВЕРХ с 11.5% до 12.5-13% при условии продолжения паузы 3-6 мес."
+    - "ЕДИНСТВЕННЫЙ ВЗВЕШЕННЫЙ ИСТОЧНИК НА 2027-12-31 (anchor_share=1.00): та же структурная слабость, что и в 07-29 (там — на 2027-06-30). Проблема не устранена третий снапшот подряд — БКС остаётся единственным ру-sellside источником с MEDIUM+ trust на ru-rates-forecast, дающим точку на дальний горизонт."
+    - "Т-ИНВЕСТИЦИИ И BLOOMBERG ECONOMICS НЕ АУДИРОВАНЫ: оба дают содержательные, разумные прогнозы (Т-Инв 13.5/11.5, Bloomberg 13.0/10.0), но 0 вес в consensus. Т-Инвестиции особенно приоритетен для аудита — крупный ру-sellside игрок, регулярно публикует по теме."
+    - "КАРТА ЛАГЕРЕЙ §2.1: покрыт только Монетаристы (SberCIB + ЦБ как embodying институт). Структуралисты (ЦМАКП/ИНП РАН) — целевой поиск дал только методологическую статью ИНП РАН о координации ЦБ-Минфин без числовой позиции по ставке (Ведомости, 21.05.2026) — НЕ включено как источник. ВПК-реалисты (Промсвязьбанк/РСМД) — целевой поиск не дал прямой позиции по ставке. Оба Significant-лагеря помечены как gap. Радикальные критики (Делягин и др., Minority) — не включались, не обязательны."
+    - "ПЕРЕВОД avg→point для ЦБ на 2026-12-31 (13.75) унаследован без изменений из 07-29 — официальный коридор средней ставки 2026 (14.5-14.6%) не пересматривался ни 11.09, ни после. Для 2027 (10.5-12.5% avg) и 2028 (8.0-9.0% avg) также без изменений с июля."
+    - "L2 by_scenario derived_from_upstream (НЕ native_fca) — ни один из 3 взвешенных источников (ЦБ/SberCIB/БКС) не даёт явной привязки к geopolitics-осям. Буфер над floor_C калиброван per-horizon напрямую как L1(h)-floor_C(h), а НЕ интерполяцией самого буфера между 07-29 и текущим — это даёт точное совпадение Sc-C с L1 marginal на всех 4 горизонтах by construction."
+    - "2027-06-30 — интерполированный (не нативный FCA) горизонт: линейная интерполяция L1 между 2026-12-31 (13.625) и 2027-12-31 (12.75) по времени (50%). Аналогично weighted_consensus.py конвенции в inflation-ru-09-17 для сценарных весов на непокрытых нативно горизонтах (интерполяция самих p_by_horizon весов между h12 и h24)."
+
+isolated: false
+isolated_reason: null
+
+geopolitics_translation:
+  method: linear
+  source_scenario_matrix: scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml
+  modal_scenario_id: null
+  modal_probability: 0.35
+  no_modal_flag: true
+  alternatives_recorded: true
+  distribution_used: true
+
+conditional_on_scenarios:
+  method: linear
+  no_modal: true
+  modal_flag: D1_no_modal_horizon_weighted
+  source_matrix: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  scenario_id_format: short
+  translation_channel: cpi_floor_plus_buffer_linear
+  translation_k: 1.0
+  unit: percent_annual
+  l2_informative: true
+  l2_informative_note: >-
+    Буфер измерен относительно Sc-C и переносит в L2 всю независимую геометрию upstream
+    inflation_ru.by_scenario (не тавтология собственного L1) — тот же осознанный паттерн, что
+    в 07-29 и в inflation-ru-2026-09-17.
+
+  fact_anchor:
+    value: 14.00
+    as_of: 2026-09-11
+    source: "Банк России, пресс-релиз 11.09.2026: ставка сохранена на 14,00% годовых https://www.cbr.ru/press/keypr/"
+
+  one_sided_cone: true
+  cone_side:
+    "2026-12-31": two_sided
+    "2027-06-30": two_sided
+    "2027-12-31": down
+    "2028-12-31": down
+  counter_world_reason: >-
+    На 2026-12-31 и 2027-06-30 конус двусторонний: верх диапазона Sc-A (15.325 и 15.3875) выше
+    факта 14.00, низ Sc-D (12.425 и 12.0875) ниже — встречный мир (ставка выше факта) представлен
+    внутри Sc-A range. На 2027-12-31 и 2028-12-31 конус односторонне вниз: даже верх Sc-A
+    (14.75 и 11.85) остаётся ниже текущих 14.00 — многолетний цикл смягчения к нейтрали
+    (собственный ориентир ЦБ на 2028: 8.0-9.0%) доминирует над сценарным разбросом на этих
+    горизонтах. Встречный мир «ставка выше 14% через 15+ мес.» потребовал бы срыва функции
+    реакции (фискальное доминирование) — отдельный falsifier, не сценарий матрицы.
+
+  by_scenario:
+    A:
+      label: "Затяжная осада (война + единый/ужесточённый санкционный режим)"
+      values:
+        "2026-12-31": { central: 14.73, range: [14.13, 15.33] }
+        "2027-06-30": { central: 14.69, range: [13.89, 15.39] }
+        "2027-12-31": { central: 13.95, range: [13.15, 14.75] }
+        "2028-12-31": { central: 10.85, range: [9.85, 11.85] }
+      provenance: derived_from_upstream
+      sources_used: []
+      coverage_quality: DERIVED
+      reasoning_summary: >
+        floor(CPI_A+5.00) + буфер(h). Наследует худший инфляционный мир upstream (7.6/5.8/5.2/5.6).
+        Единственный сценарий, где цикл смягчения фактически паузится и частично разворачивается
+        на ближних горизонтах (14.73/14.69 — выше текущих 14.00), прежде чем на 2028 всё равно
+        конвергировать к нейтрали.
+      upstream_used:
+        - { factor: inflation_ru, value: 7.6, unit: pct_yoy, horizon: "2026-12-31" }
+        - { factor: inflation_ru, value: 5.8, unit: pct_yoy, horizon: "2027-06-30" }
+        - { factor: inflation_ru, value: 5.2, unit: pct_yoy, horizon: "2027-12-31" }
+        - { factor: inflation_ru, value: 5.6, unit: pct_yoy, horizon: "2028-12-31" }
+    B:
+      label: "Война на расколотом фронте (война + фрагментация/снятие санкций)"
+      values:
+        "2026-12-31": { central: 13.83, range: [13.23, 14.43] }
+        "2027-06-30": { central: 13.49, range: [12.79, 14.19] }
+        "2027-12-31": { central: 12.85, range: [12.25, 13.55] }
+        "2028-12-31": { central: 9.45, range: [8.75, 10.25] }
+      provenance: derived_from_upstream
+      sources_used: []
+      coverage_quality: DERIVED
+      reasoning_summary: >
+        Снятие нефтяного cap при продолжающейся войне — курсовой канал дезинфляционен относительно
+        Sc-A, фискальный канал (ВПК-дефицит) остаётся проинфляционным. Второй сверху по ставке
+        на всех горизонтах.
+      upstream_used:
+        - { factor: inflation_ru, value: 6.7, unit: pct_yoy, horizon: "2026-12-31" }
+        - { factor: inflation_ru, value: 4.6, unit: pct_yoy, horizon: "2027-06-30" }
+        - { factor: inflation_ru, value: 4.1, unit: pct_yoy, horizon: "2027-12-31" }
+        - { factor: inflation_ru, value: 4.2, unit: pct_yoy, horizon: "2028-12-31" }
+    C:
+      label: "Замороженный конфликт под давлением (перемирие + holding санкций)"
+      values:
+        "2026-12-31": { central: 13.63, range: [13.13, 14.13] }
+        "2027-06-30": { central: 13.19, range: [12.59, 13.79] }
+        "2027-12-31": { central: 12.75, range: [12.25, 13.25] }
+        "2028-12-31": { central: 9.25, range: [8.65, 9.85] }
+      provenance: derived_from_upstream
+      sources_used: []
+      coverage_quality: DERIVED
+      reasoning_summary: >
+        By construction совпадает с L1 marginal на всех 4 горизонтах (буфер калиброван
+        относительно C) — облако взвешенных источников (ЦБ/SberCIB/БКС) публикует в мире, де-факто
+        близком к статус-кво Sc-C (модальный сценарий на h6, вес 0.42). Dominant implicit world.
+      upstream_used:
+        - { factor: inflation_ru, value: 6.5, unit: pct_yoy, horizon: "2026-12-31" }
+        - { factor: inflation_ru, value: 4.3, unit: pct_yoy, horizon: "2027-06-30" }
+        - { factor: inflation_ru, value: 4.0, unit: pct_yoy, horizon: "2027-12-31" }
+        - { factor: inflation_ru, value: 4.0, unit: pct_yoy, horizon: "2028-12-31" }
+    D:
+      label: "Большая сделка и разрядка (мир + снятие санкций)"
+      values:
+        "2026-12-31": { central: 13.03, range: [12.43, 13.63] }
+        "2027-06-30": { central: 12.79, range: [12.09, 13.49] }
+        "2027-12-31": { central: 12.35, range: [11.75, 12.95] }
+        "2028-12-31": { central: 8.85, range: [8.25, 9.45] }
+      provenance: derived_from_upstream
+      sources_used: []
+      coverage_quality: DERIVED
+      reasoning_summary: >
+        Минимум на всех горизонтах — структурный канал (возврат конкуренции/поставок) плюс
+        фискальный (сокращение военных расходов) дезинфляционны сильнее курсового эффекта
+        разморозки активов.
+      upstream_used:
+        - { factor: inflation_ru, value: 5.9, unit: pct_yoy, horizon: "2026-12-31" }
+        - { factor: inflation_ru, value: 3.9, unit: pct_yoy, horizon: "2027-06-30" }
+        - { factor: inflation_ru, value: 3.6, unit: pct_yoy, horizon: "2027-12-31" }
+        - { factor: inflation_ru, value: 3.6, unit: pct_yoy, horizon: "2028-12-31" }
+
+  marginal:
+    method: linear
+    modal_scenario_id: none
+    values:
+      "2026-12-31": { central: 13.85, range: [12.43, 15.33] }
+      "2027-06-30": { central: 13.32, range: [12.09, 15.39] }
+      "2027-12-31": { central: 12.88, range: [11.75, 14.75] }
+      "2028-12-31": { central: 9.57, range: [8.25, 11.85] }
+    aggregation_formula: "weighted_mean (p_by_horizon: h6 .28/.12/.42/.18 · h12 .15/.15/.35/.35 · h18(2027-12-31, интерполяция h12/h24 по времени) .195/.155/.355/.295 · h30=h24 .24/.16/.36/.24)"
+
+  coverage_diagnostic:
+    per_scenario:
+      A: { sources_used: 0, confidence_level: DERIVED }
+      B: { sources_used: 0, confidence_level: DERIVED }
+      C: { sources_used: 0, confidence_level: DERIVED }
+      D: { sources_used: 0, confidence_level: DERIVED }
+    asymmetry_warning: "все 4 сценария DERIVED — публичная аналитика по ставке ЦБ привязана к календарному году, не к геополитическому режиму (третий снапшот подряд без native_fca атрибуции)"
+    dominant_implicit_world: "C — облако источников (ЦБ/SberCIB/БКС) публикует в мире, близком к статус-кво; наблюдаемый факт 14.00 на 11.09 также ближе к C/консенсусу, чем к A"
+
+coherence_diagnostic:
+  layer1_marginal: 13.625
+  layer2_marginal: 13.85
+  divergence_pct: 1.65
+  severity: LOW
+  warning: null
+  by_horizon:
+    "2026-12-31": { layer1_marginal: 13.625, layer2_marginal: 13.85, divergence_pct: 1.65, severity: LOW }
+    "2027-06-30": { layer1_marginal: 13.1875, layer2_marginal: 13.32, divergence_pct: 0.99, severity: LOW }
+    "2027-12-31": { layer1_marginal: 12.75, layer2_marginal: 12.88, divergence_pct: 1.02, severity: LOW }
+    "2028-12-31": { layer1_marginal: 9.25, layer2_marginal: 9.57, divergence_pct: 3.46, severity: LOW }
+  explanation: >-
+    Расхождение везде LOW и однонаправленное (L2 > L1) — тот же механизм, что в 07-29 и
+    inflation-ru-09-17: буфер измерен относительно Sc-C, но L2 marginal взвешивает A/B выше веса C
+    на некоторых горизонтах (особенно h6: вес A=0.28 > 0.15 из D1), что тянет L2 EV немного выше
+    L1≈Sc-C. Порог MEDIUM (5%) не достигнут ни на одном горизонте.
+
+sensitivity:
+  cpi_plus_150bp:
+    trigger: "CPI +1.5 п.п. от сценарного базиса"
+    rate_shift: "+150 б.п. на всех горизонтах (k=1.0)"
+    direction: upward
+    applicable_to: "все сценарии"
+  cpi_minus_150bp:
+    trigger: "CPI -1.5 п.п. от сценарного базиса"
+    rate_shift: "-150 б.п. на всех горизонтах, ограничено нижней границей ориентира ЦБ на 2028 (8.0%)"
+    direction: downward
+    applicable_to: "все сценарии"
+  pause_extension:
+    trigger: "ЦБ держит паузу ещё 2+ заседания подряд (23.10 и 18.12 без снижения)"
+    rate_shift: "L1-2027 пересматривается вверх к верхней границе БКС-диапазона (13.0%), аналогично пересмотру 16.09.2026"
+    direction: upward
+    applicable_to: "все, наиболее чувствителен L1-2027-12-31 (anchor_share=1.00 на одном источнике)"
+  fiscal_dominance:
+    trigger: "Стимулирующий бюджет-2027-29 (проект ожидается конец сентября 2026) + кредит физлицам ускоряется при CPI >7%"
+    rate_shift: "+25...+75 б.п. сверх пасс-через; смещение к Sc-A"
+    direction: upward
+    applicable_to: "все, остро в Sc-A/B"
+
+fca_stats:
+  "2026-09-11":
+    kind: event
+    predicted_p: null
+    event_description: "РЕЗОЛВИРОВАНО (унаследовано из cbr-rate-07-29): предсказана пауза p=0.65, факт — пауза, ставка сохранена на 14.00%. Hit."
+  "2026-10-23":
+    kind: event
+    predicted_p: 0.55
+    event_description: "-25 б.п. до 13.75% на опорном заседании 23.10.2026 (унаследовано из 07-29, не пересмотрено — нет новых сигналов ЦБ с 11.09, кроме подтверждения нейтрального тона)"
+  "2026-12-18":
+    kind: event
+    predicted_p: 0.50
+    event_description: "удержание 13.75% (унаследовано из 07-29)"
+  "2026-12-31":
+    kind: level
+    unit: percent_annual
+    l1_weighted: 13.625
+    l1_unweighted: 13.5
+    l2_ev: 13.85
+    p10: 13.5
+    p90: 13.75
+  "2027-06-30":
+    kind: level
+    unit: percent_annual
+    l1_weighted: null   # TODO: интерполированный горизонт, не нативная FCA-точка
+    l1_unweighted: 13.1875
+    l2_ev: 13.32
+    p10: null
+    p90: null
+  "2027-12-31":
+    kind: level
+    unit: percent_annual
+    l1_weighted: 12.75
+    l1_unweighted: 11.5
+    l2_ev: 12.88
+    p10: 12.75   # вырожден: n_in_consensus=1, anchor_share 1.00
+    p90: 12.75   # вырожден: n_in_consensus=1, anchor_share 1.00
+  "2028-12-31":
+    kind: level
+    unit: percent_annual
+    l1_weighted: null   # TODO: 0 источников с ненулевым весом; L1 9.25 = DERIVED (midpoint ЦБ 8.5 / макроопрос 10.0)
+    l1_unweighted: 9.25
+    l2_ev: 9.57
+    p10: null
+    p90: null
+
+outcome_log:
+  - resolve_date: 2026-10-23
+    logged_at: 2026-10-26
+    record_type: horizon_resolve
+    kind: event
+    predicted_p: 0.55
+    confidence_at_forecast: 0.30
+    resolved: 0
+    actual_source: "https://www.interfax.ru/business/1124522"
+    shock_flag: none
+
+reviews:
+  interval_months: 3
+  next_due: 2026-12-17
+  last_completed: null
+  history: []
+
+final_audit:
+  due: 2028-12-31
+  status: pending
+
+monitoring:
+  - id: cbr-oct23-decision
+    description: "Опорное заседание 23.10.2026: держит ли ЦБ паузу (усиливает пересмотр БКС вверх к 13.0%) или возвращается к снижению (подтверждает модальную траекторию -25 б.п. до 13.75%)"
+    source: "https://www.cbr.ru/press/keypr/"
+    threshold: "решение != -25 б.п."
+    check_date: 2026-10-23
+    impact: mixed
+    severity: critical
+    auto_checkable: true
+    side: both
+  - id: cbr-dec18-decision
+    description: "Заседание 18.12.2026 — последнее в 2026 году, определяет фактическое значение на 2026-12-31"
+    source: "https://www.cbr.ru/press/keypr/"
+    threshold: "итоговая ставка вне диапазона P10-P90 [13.50, 13.75]"
+    check_date: 2026-12-18
+    impact: invalidates
+    severity: critical
+    auto_checkable: true
+    side: both
+  - id: budget-2027-29-draft
+    description: "Публикация проекта федерального бюджета 2027-2029 (ожидается конец сентября 2026) — фискальный импульс напрямую входит в sensitivity.fiscal_dominance"
+    source: "https://www.m24.ru/news/09092026/939457"
+    threshold: "дефицит/расходы существенно выше заложенных в текущем upstream budget-deficit-ru-09-17"
+    check_date: 2026-09-30
+    impact: mixed
+    severity: high
+    auto_checkable: false
+    side: both
+  - id: bks-2027-revision-confirmed
+    description: "Подтверждается ли пересмотр БКС 2027-прогноза вверх (12.5-13%) другими источниками, или это outlier одного экономиста"
+    source: "https://smart-lab.ru/blog/news/1352248.php"
+    threshold: "минимум ещё 1 trust-weighted источник даёт 2027-точку выше 12.0% ИЛИ ниже 11.5% (опровержение)"
+    check_date: 2026-12-17
+    impact: mixed
+    severity: high
+    auto_checkable: false
+    side: both
+  - id: cpi-above-cbr-band-2026
+    description: "Пробой инфляцией-2026 верхней границы полосы ЦБ 7.0% (унаследовано из 07-29, всё ещё в силе)"
+    source: "https://rosstat.gov.ru/price"
+    threshold: "прогноз дек/дек-2026 поднят выше 7.0%"
+    check_date: 2026-10-23
+    impact: supports
+    severity: critical
+    auto_checkable: true
+    side: up
+
+falsifiers:
+  - id: cbr-hike-2026
+    description: "ЦБ повышает ставку на любом из заседаний 23.10 / 18.12.2026"
+    side: up
+    auto_checkable: true
+    check_date: 2026-12-18
+    consequence: "Sc-A реализуется; весь трек пересматривается вверх"
+  - id: rate-above-anchor-2027
+    description: "Ставка на 2027-12-31 оказывается ВЫШЕ якоря 14.00% — мир вне конуса by_scenario"
+    side: up
+    auto_checkable: true
+    check_date: 2027-12-31
+    consequence: "Срыв функции реакции (фискальное доминирование), а не сценарий матрицы; весь Layer 2 недействителен"
+  - id: rate-below-1300-2026
+    description: "Ставка опускается ниже 13.00% к 2026-12-31 (ниже даже самого агрессивного из собранных прогнозов)"
+    side: down
+    auto_checkable: true
+    check_date: 2026-12-31
+    consequence: "Возврат к более быстрому смягчению вопреки паузе 11.09; L1 пересмотрен вниз"
+  - id: single-source-2027-invalidated
+    description: "БКС пересматривает свой 2027-прогноз вниз обратно к 11.5% или ниже (отказ от пересмотра 16.09)"
+    side: down
+    auto_checkable: false
+    check_date: 2026-12-17
+    consequence: "L1-2027-12-31 требует пересборки — единственный якорь сменил позицию дважды за 3 мес."
+
+assumptions:
+  - id: cbr-floor-reaction
+    text: "ЦБ применяет CPI+500 б.п. floor + буфер как операционный таргет, k=1.0 линейно. Буфер измерен относительно Sc-C напрямую по горизонтам (2.125/3.8875/3.75/0.25 п.п.) — НЕМОНОТОНЕН (рост на 2027 из-за паузы цикла, обвал к 2028 из-за конвергенции к нейтрали)"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+  - id: single-source-anchor-2027-persists
+    text: "Третий снапшот подряд (после 07-05 и 07-29 на других горизонтах) весь взвешенный consensus на дальнем горизонте держится на ОДНОМ источнике — сейчас БКС на 2027-12-31 (anchor_share=1.00, только что пересмотревшем позицию вверх). p10=p90 вырождены, амортизации ошибки нет"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: true
+  - id: interpolated-2027-06-30
+    text: "2027-06-30 не имеет ни одного прямого источника — L1 получен линейной интерполяцией по времени между 2026-12-31 (13.625) и 2027-12-31 (12.75). Если истинная траектория нелинейна (напр., резкий довод к паузе или резкий возврат к снижению между этими датами), интерполяция ошибочна"
+    robustness: LOW
+    sensitivity: high
+    auto_checkable: false
+  - id: derived-l1-2028
+    text: "L1-2028-12-31 = 9.25 держится на ДВУХ источниках с НУЛЕВЫМ trust-весом (официальный коридор ЦБ 8.0-9.0% IGNORE 12+мес; макроопрос 33 экономистов не аудирован как единый источник, 10.0%). Значение не менялось с 07-29 — де-факто перенос без переоценки"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+  - id: monetarist-camp-only
+    text: "Камп-дистрибуция целиком монетаристская (SberCIB + ЦБ, 2/2 = 100% ≥ порог асимметрии 0.7). Структуралисты (ЦМАКП/ИНП РАН) и ВПК-реалисты (Промсвязьбанк/РСМД) — оба Significant-лагеря §2.1 — не покрыты после целевого поиска в этом запуске"
+    robustness: MEDIUM
+    sensitivity: high
+    auto_checkable: false
+  - id: bks-revision-fresh
+    text: "Пересмотр БКС 2027-прогноза вверх (11.5%→12.5-13%) опубликован 16.09.2026, за день до этого запуска — самая свежая точка данных в наборе, но пока не подтверждена другими источниками"
+    robustness: LOW
+    sensitivity: high
+    auto_checkable: true
+  - id: d1-horizon-weighted
+    text: "Матрица использует p_by_horizon (не чистый D1 0.25 каждому) с весами, зависящими от даты; для непокрытого нативно горизонта 2027-12-31 веса получены линейной интерполяцией между h12 и h24 по времени — тот же метод, что в inflation-ru-09-17 (проверено воспроизведением её marginal.values)"
+    robustness: MEDIUM
+    sensitivity: medium
+    auto_checkable: false

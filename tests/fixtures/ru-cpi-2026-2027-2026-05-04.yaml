@@ -1,0 +1,192 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: ru-cpi-2026-2027-2026-05-04.md
+status: active
+
+forecast:
+  date: 2026-05-04
+  horizon: 2027-12-31
+  horizons: ["2026-12-31", "2027-12-31"]
+  domain: ru-macro
+  topic: ru-cpi-2026-2027
+  method: fca
+  central_estimate: "CPI YoY: 6.5–7.5% к 2026-12-31; 5.0–6.5% к 2027-12-31"
+  confidence: 0.40
+  upstream_snapshot:
+    - factor: usd_rub
+      central_estimate: "базовый 91–93 к 2026-12-31; скорр. 93–105 (стресс)"
+      confidence: 0.35
+      forecast_date: 2026-05-03
+      source_file: "forecasts/usd-rub-dec2026-dec2027-2026-05-03.yaml"
+    - factor: budget_deficit_ru
+      central_estimate: "1.5–2.2% ВВП к 2026-12-31; 1.8–3.5% к 2027-12-31"
+      confidence: 0.38
+      forecast_date: 2026-05-03
+      source_file: "forecasts/byudzhetnyj-defitsit-rf-2026-05-03.yaml"
+    - factor: cbr_rate
+      central_estimate: "~12% к 2026-12-31 (weighted median, MEDIUM×0.5)"
+      confidence: 0.52
+      forecast_date: 2026-04-28
+      source_file: "forecasts/ru-rates-2026-2026-04-28.yaml"
+    - factor: geopolitics
+      central_estimate: "modal Sc-D «Железный занавес-2» p=0.525; conflict 0.85, sanctions 0.80"
+      confidence: 0.48
+      forecast_date: 2026-05-04
+      source_file: "scenarios/scenario-geopolitics-ru-west-2026-05-04.yaml"
+  geopolitics_translation:
+    method: linear
+    distribution_used: true
+    source_scenario_matrix: "scenarios/scenario-geopolitics-ru-west-2026-05-04.yaml"
+
+reviews:
+  interval_months: 3
+  next_due: 2026-08-04
+  last_completed: null
+  history: []
+
+final_audit:
+  due: 2027-12-31
+  status: pending
+
+monitoring:
+  - id: cpi-rosstat-q3-saar
+    description: "Росстат CPI Q3 2026 в пересчёте SAAR — превышение 8% сигнализирует о стопе цикла ЦБ"
+    source: "https://rosstat.gov.ru/price"
+    threshold: "SAAR CPI Q3 2026 > 8%"
+    check_date: 2026-10-05
+    impact: mixed
+    severity: critical
+    auto_checkable: true
+
+  - id: usdrub-100-breach
+    description: "USD/RUB > 100 устойчиво (≥2 месяца) — нелинейный рост pass-through"
+    source: "https://cbr.ru/currency_base/daily/"
+    threshold: "USD/RUB > 100 в течение 2+ месяцев"
+    check_date: 2026-09-30
+    impact: mixed
+    severity: critical
+    auto_checkable: true
+
+  - id: budget-deficit-h1
+    description: "Исполнение бюджета РФ за H1 2026 — дефицит выше 1.5% ВВП в H1 сигнализирует о рисках"
+    source: "https://minfin.gov.ru/ru/statistics/fedbud/execute/"
+    threshold: "Дефицит H1 2026 > 1.5% ВВП (≈ ₽3 трлн)"
+    check_date: 2026-08-04
+    impact: mixed
+    severity: high
+    auto_checkable: true
+
+  - id: zhkh-tariff-actual
+    description: "Фактическая индексация ЖКУ с 1 июля 2026 — превышение 11% плана"
+    source: "https://fstrf.ru/press/news"
+    threshold: "Фактическая индексация ЖКУ > 12%"
+    check_date: 2026-07-15
+    impact: mixed
+    severity: medium
+    auto_checkable: true
+
+assumptions:
+  - id: cbr-rate-cuts-12pct
+    text: "ЦБ РФ снижает КС до ~12% к концу 2026 (базовый цикл смягчения)"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+
+  - id: fx-passthrough-013
+    text: "FX pass-through коэффициент 0.13 сохраняется (импортная корзина не меняется структурно)"
+    robustness: MEDIUM
+    sensitivity: high
+    auto_checkable: false
+
+  - id: budget-deficit-range
+    text: "Бюджетный дефицит остаётся в рамках 1.5–2.2% ВВП (no emergency spending beyond plan)"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+
+  - id: scd-probability-stable
+    text: "Вероятность Sc-D «Железный занавес-2» не превышает ~65% (иначе взвешенный CPI > 8%)"
+    robustness: MEDIUM
+    sensitivity: high
+    auto_checkable: false
+
+thresholds:
+  - id: cbr-rate-stays-high
+    variable: "Ключевая ставка ЦБ РФ к 2026-12-31"
+    condition: "КС ≥ 16% (ЦБ не снижает в ответ на CPI > 7%)"
+    flips_to: "H2/H3: CPI 5.5–6.5% (demand destruction доминирует)"
+    auto_checkable: true
+
+  - id: usdrub-above-100-sustained
+    variable: "USD/RUB среднеквартальный"
+    condition: "USD/RUB > 100 устойчиво 2+ квартала"
+    flips_to: "H4: CPI > 8.0–9.0% (нелинейный pass-through)"
+    auto_checkable: true
+
+  - id: brent-below-70
+    variable: "Brent spot (квартальный средний)"
+    condition: "Brent < $70/bbl среднеквартально"
+    flips_to: "H4: CPI > 8.0% через фискальный канал (дефицит > 3% ВВП)"
+    auto_checkable: true
+
+deadlines:
+  - id: zhkh-tariff-effective
+    date: 2026-07-01
+    description: "Индексация ЖКУ вступает в силу (+11% плановая)"
+    action: "Проверить фактический размер индексации; если >12% — пересмотреть food/utility компонент прогноза на +0.3–0.5 pp"
+    auto_checkable: true
+
+  - id: q3-cpi-data
+    date: 2026-10-05
+    description: "Росстат публикует сентябрьские данные CPI (Q3 итог)"
+    action: "Если SAAR Q3 > 8% → ЦБ останавливает цикл; запустить FCA-обновление по ru-cpi-2026-2027 и пересмотреть ru-rates-2026 upstream"
+    auto_checkable: true
+
+falsifiers:
+  - id: cbr-halts-easing
+    description: "ЦБ РФ прекращает цикл снижения ставки и фиксирует КС ≥ 16% до конца 2026"
+    would_resolve: false  # ослабляет прогноз вниз, но не закрывает (2027 горизонт остаётся)
+    auto_checkable: true
+
+  - id: budget-deficit-3pct
+    description: "Бюджетный дефицит превышает 3% ВВП по итогам 2026 (аварийное расширение)"
+    would_resolve: false  # меняет направление — CPI выше, прогноз занижен
+    auto_checkable: true
+
+  - id: sc-a-b-materialize
+    description: "Сценарий A или B реализуется (p > 60% на Polymarket ceasefire-by-end-2026 или санкционный relief)"
+    would_resolve: true  # геополитическая надбавка исчезает; прогноз нерелевантен
+    auto_checkable: true
+
+agents:
+  - id: cbr-emergency-hike
+    agent: "ЦБ РФ"
+    action: "Вводит экстренное повышение ставки при CPI SAAR > 9% в Q2 2026"
+    window: "2026-04-01/2026-09-30"
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: minfin-emergency-spending
+    agent: "Минфин РФ"
+    action: "Расширяет бюджетный дефицит до 4%+ ВВП через доп. военные ассигнования"
+    window: "2026-06-01/2026-12-31"
+    impact: mixed
+    severity: high
+    auto_checkable: false
+
+  - id: govt-tariff-freeze
+    agent: "Правительство РФ"
+    action: "Отменяет или откладывает ЖКУ индексацию (популистская мера перед выборами)"
+    window: "2026-04-01/2026-07-01"
+    impact: mixed
+    severity: medium
+    auto_checkable: false
+
+  - id: opec-production-cut
+    agent: "ОПЕК+"
+    action: "Резкое сокращение добычи → Brent $100+; нефтедоходы покрывают дефицит"
+    window: "2026-05-01/2026-12-31"
+    impact: mixed
+    severity: medium
+    auto_checkable: false

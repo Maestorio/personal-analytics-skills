@@ -1,0 +1,1760 @@
+{
+ "horizons": [
+  6,
+  12,
+  24
+ ],
+ "primary_horizon": 12,
+ "review_bonds": {
+  "horizon_ends": {
+   "h12": "2027-07-31",
+   "h24": "2028-07-31",
+   "h6": "2027-01-31"
+  },
+  "horizons": [
+   6,
+   12,
+   24
+  ],
+  "per_bond": {
+   "RU000A1038V6": {
+    "advisor_verdict": "HOLD_TO_MAT",
+    "advisor_verdict_basis": "ОФЗ 26238 (2041-05, dur 7.2 г), YTM 15.34%, 116.5 тыс ₽ суммарно (80 шт main + 130 шт ИИС-3). Самый низкий купон в ОФЗ-корзине (7.1%) → максимальная чувствительность цены, но и худший текущий carry. Тело +3.5% за неделю. Держать обе ноги; докупать предпочтительнее 26253/26247 с купоном 12–13%.",
+    "advisor_verdict_confidence": 0.85,
+    "bond_type": "ofz",
+    "catalyst": [
+     {
+      "date_window": "2026-09 to 2027-12",
+      "downside_ci_pct": null,
+      "downside_pct": null,
+      "id": "rate_cut_capital_gain",
+      "kind": "binary",
+      "macro_dependency": null,
+      "p": 0.6,
+      "source": "advisor estimate (дюрация × ожидаемый сдвиг кривой; КС из пресс-релиза ЦБ 24.07.2026)",
+      "source_quality": "MEDIUM",
+      "trigger": "Продолжение цикла снижения КС (14.00% на 24.07.2026 → прогноз ЦБ по средней ставке 2027 10.5–12.5%) → переоценка тела, дюрация 7.2 г",
+      "upside_ci_pct": [
+       3.5,
+       18.5
+      ],
+      "upside_pct": 10.5
+     }
+    ],
+    "coupon_pct": 7.1,
+    "coupon_value": null,
+    "credit_quality": "HIGH",
+    "credit_rating": "AAA(RU)/ruAAA (суверен РФ)",
+    "credit_rating_agency": "—",
+    "current_price": 54.273,
+    "duration_days": 2631,
+    "face_value": 1000.0,
+    "fundamental_score": "HIGH",
+    "fundamental_sources": [
+     {
+      "accessed_date": "2026-07-31",
+      "label": "MOEX ISS — котировка/YTM/дюрация 31.07.2026",
+      "url": "https://iss.moex.com/iss/engines/stock/markets/bonds/securities.json"
+     },
+     {
+      "accessed_date": "2026-07-31",
+      "label": "Банк России — решение по ключевой ставке 24.07.2026 (14.00%)",
+      "url": "https://www.cbr.ru/press/keypr/"
+     }
+    ],
+    "iis_share_pct": 61.9,
+    "issuer": "Минфин РФ (ОФЗ)",
+    "last_corp_event": null,
+    "maturity_date": "2041-05-15",
+    "moex_bond_type_raw": "unknown",
+    "name": "ОФЗ 26238",
+    "next_corp_event": null,
+    "next_coupon_date": "2026-12-02",
+    "nominal_currency": "SUR",
+    "offer_date": null,
+    "on_iis": false,
+    "qty": 210.0,
+    "qty_iis": 130.0,
+    "qty_main": 80.0,
+    "value_rub": 349391.7,
+    "value_rub_iis": 216290.1,
+    "value_rub_main": 133101.6,
+    "verification_priority": "LOW",
+    "weight_in_bonds_pct": 1.6404,
+    "weight_real_pct": 0.9017,
+    "ytm_currency": "RUB",
+    "ytm_pct": 15.34,
+    "ytm_source": "moex_iss"
+   },
+   "RU000A106E90": {
+    "advisor_verdict": "ADD",
+    "advisor_verdict_basis": "Длинная ОФЗ (2038-05, dur 6.2 г), YTM 15.60% при КС 14.00% — премия к ставке +160 б.п. Крупнейшая ОФЗ-позиция main (7.4% облиг. корзины, 487.6 тыс ₽). За неделю тело +3.3% (69.21→71.46), YTM −58 б.п. на дезинфл. сюрпризе ЦБ 24.07. Тезис прошлого обзора «длину на main не наращивать» снят: ястребиный блок (пауза аукционов Минфина, инфл.ожидания) разрешился десятым подряд снижением против консенсуса 18 из 24. ОФЗ-корзина недобрана на 624 тыс ₽ — это первоочередной адрес для средств от погашений.",
+    "advisor_verdict_confidence": 0.78,
+    "bond_type": "ofz",
+    "catalyst": [
+     {
+      "date_window": "2026-09 to 2027-12",
+      "downside_ci_pct": null,
+      "downside_pct": null,
+      "id": "rate_cut_capital_gain",
+      "kind": "binary",
+      "macro_dependency": null,
+      "p": 0.6,
+      "source": "advisor estimate (дюрация × ожидаемый сдвиг кривой; КС из пресс-релиза ЦБ 24.07.2026)",
+      "source_quality": "MEDIUM",
+      "trigger": "Продолжение цикла снижения КС (14.00% на 24.07.2026 → прогноз ЦБ по средней ставке 2027 10.5–12.5%) → переоценка тела, дюрация 6.2 г",
+      "upside_ci_pct": [
+       3.0,
+       16.0
+      ],
+      "upside_pct": 9.0
+     }
+    ],
+    "coupon_pct": 9.8,
+    "coupon_value": null,
+    "credit_quality": "HIGH",
+    "credit_rating": "AAA(RU)/ruAAA (суверен РФ)",
+    "credit_rating_agency": "—",
+    "current_price": 71.46,
+    "duration_days": 2278,
+    "face_value": 1000.0,
+    "fundamental_score": "HIGH",
+    "fundamental_sources": [
+     {
+      "accessed_date": "2026-07-31",
+      "label": "MOEX ISS — котировка/YTM/дюрация 31.07.2026",
+      "url": "https://iss.moex.com/iss/engines/stock/markets/bonds/securities.json"
+     },
+     {
+      "accessed_date": "2026-07-31",
+      "label": "Банк России — решение по ключевой ставке 24.07.2026 (14.00%)",
+      "url": "https://www.cbr.ru/press/keypr/"
+     }
+    ],
+    "iis_share_pct": 0.0,
+    "issuer": "Минфин РФ (ОФЗ)",
+    "last_corp_event": null,
+    "maturity_date": "2038-05-19",
+    "moex_bond_type_raw": "unknown",
+    "name": "ОФЗ 26243",
+    "next_corp_event": null,
+    "next_coupon_date": "2026-12-02",
+    "nominal_currency": "SUR",
+    "offer_date": null,
+    "on_iis": false,
+    "qty": 667.0,
+    "qty_iis": 0.0,
+    "qty_main": 667.0,
+    "value_rub": 1462690.98,
+    "value_rub_iis": 0.0,
+    "value_rub_main": 1462690.98,
+    "verification_priority": "LOW",
+    "weight_in_bonds_pct": 6.8674,
+    "weight_real_pct": 3.7749,
+    "ytm_currency": "RUB",
+    "ytm_pct": 15.6,
+    "ytm_source": "moex_iss"
+   }
+  },
+  "review_date": "2026-07-31",
+  "schema_version": 2,
+  "snapshot_id": "portfolio-2026-07-31.json"
+ },
+ "review_stocks": {
+  "horizon_ends": {
+   "h12": "2027-07-31",
+   "h24": "2028-07-31",
+   "h6": "2027-01-31"
+  },
+  "horizons": [
+   6,
+   12,
+   24
+  ],
+  "per_stock": {
+   "SBER": {
+    "advisor_verdict": "HOLD",
+    "advisor_verdict_basis": "10,87% L2 при IE-цели 6% — перевес +4,87 пп, но осознанный (user_plan WAIT/TRIM, gate reviewed_keep до 06.09). Срез связки SBER+SBERP (20,68% L2 на одного эмитента) по решению 29.06 приходится на SBERP, не на SBER: после дивгэпа 20.07 SBER ≈ целевые 11% L2. Фундаментал HIGH, дивполитика 50% подтверждена заявлением CFO. Действий по SBER не требуется.",
+    "advisor_verdict_confidence": 0.72,
+    "advisor_verdict_constraints": null,
+    "catalyst": [
+     {
+      "date_window": "2026-08..2026-09",
+      "id": "sber_h1_2026_ifrs",
+      "kind": "binary",
+      "macro_dependency": null,
+      "p": 0.85,
+      "source": "https://smart-lab.ru/blog/news/1326196.php",
+      "source_quality": "MEDIUM",
+      "trigger": "Публикация МСФО 1П2026 (дата не объявлена)",
+      "upside_ci_pct": [
+       -3.0,
+       10.0
+      ],
+      "upside_pct": 4.0
+     },
+     {
+      "date_window": "2026-Q3..2027-Q1",
+      "id": "sber_rate_cut_rerating",
+      "kind": "binary",
+      "macro_dependency": null,
+      "p": 0.55,
+      "source": "https://www.cbr.ru/press/keypr/",
+      "source_quality": "HIGH",
+      "trigger": "Продолжение цикла снижения КС → рост P/B (заседание 11.09.2026)",
+      "upside_ci_pct": [
+       2.0,
+       20.0
+      ],
+      "upside_pct": 10.0
+     },
+     {
+      "date_window": "2026-Q4..2027-Q1",
+      "id": "sber_div_policy_2027_2029",
+      "kind": "binary",
+      "macro_dependency": null,
+      "p": 0.6,
+      "source": "https://www.vedomosti.ru/investments/news/2026/07/29/1217519-sberbank-nameren-sohranit",
+      "source_quality": "MEDIUM",
+      "trigger": "Утверждение стратегии 2027–2029 с сохранением payout 50% ЧП",
+      "upside_ci_pct": [
+       -6.0,
+       8.0
+      ],
+      "upside_pct": 3.0
+     },
+     {
+      "active_scenarios": [
+       "C",
+       "D"
+      ],
+      "date_window": "2026-09..2027-03",
+      "id": "synthetic_scenario_binary",
+      "kind": "binary",
+      "p": 0.4,
+      "source": "fixture",
+      "source_quality": "HIGH",
+      "trigger": "СИНТЕТИЧЕСКИЙ катализатор фикстуры: покрытие ветки active_scenarios",
+      "upside_ci_pct": [
+       4.0,
+       14.0
+      ],
+      "upside_pct": 9.0
+     }
+    ],
+    "div_basis": "Дивиденд за 2025 — 37,64 ₽ (ГОСА 30.06, реестр 20.07.2026) — УЖЕ ОТСЕЧЁН, в forward-окно не входит. Forward 12 мес = дивиденд за 2026 (ГОСА ~июнь 2027, отсечка ~июль 2027): при 50% ЧП МСФО и росте прибыли ~+15–20% г/г оценка 35–42 ₽ → 13,5% к 276,52 ₽. Даты ГОСА-2027 и отсечки НЕ назначены.",
+    "div_confidence": "MEDIUM",
+    "div_sources": [
+     {
+      "accessed_date": "2026-07-31",
+      "label": "SBER ГОСА 30.06 — 37,64 ₽, реестр 20.07",
+      "url": "https://www.interfax.ru/business/1099207"
+     }
+    ],
+    "div_yield_12m_pct": {
+     "ci_pct": [
+      11.0,
+      16.0
+     ],
+     "value": 13.5
+    },
+    "dividend_forward": {
+     "as_of": "2026-07-31",
+     "confidence": "MEDIUM",
+     "note": "Год 1 = дивиденд за 2026 (отсечка ~июль 2027, дата не назначена); год 2 — за 2027 по той же политике 50% ЧП.",
+     "policy_state": "expected",
+     "source": "дивполитика 50% ЧП МСФО + заявление CFO 29.07.2026 по стратегии 2027–2029",
+     "year1_yield_pct": 13.5,
+     "year2_basis": "analyst",
+     "year2_yield_pct": 12.0
+    },
+    "fundamental_score": "HIGH",
+    "fundamental_score_basis": "Крупнейший банк РФ. РПБУ 1П2026: ЧП 995,3 млрд ₽ (+20,4% г/г), ROE 23% (перенос с обзора 11.07 — новой отчётности за период нет). Новое за неделю: 29.07 финдиректор Т. Скворцов заявил, что в стратегии 2027–2029 банк намерен сохранить выплату 50% ЧП на дивиденды — заявление менеджмента, не утверждённое решение. Цена +4,60% за 23.07→31.07 на снижении КС.",
+    "fundamental_score_sources": [
+     {
+      "accessed_date": "2026-07-31",
+      "label": "SBER дивполитика 2027–2029",
+      "url": "https://www.vedomosti.ru/investments/news/2026/07/29/1217519-sberbank-nameren-sohranit"
+     },
+     {
+      "accessed_date": "2026-07-11",
+      "label": "Сбер РПБУ 6М2026",
+      "url": "https://smart-lab.ru/blog/news/1326196.php"
+     }
+    ],
+    "gate_status": "reviewed_keep",
+    "ie_divergence_basis": "[user_plan] WAIT/TRIM",
+    "ie_divergence_intentional": true,
+    "last_corp_event": "2026-07-20: закрытие реестра под дивиденд 37,64 ₽ за 2025 (последний день с дивидендом 17.07)",
+    "listing_age_quarters": 58,
+    "next_corp_event": "2026-08..09 (дата не объявлена): МСФО 1П2026",
+    "on_iis": false,
+    "pnl_rub": 399132.99,
+    "post_ipo_guard": false,
+    "price_rub": 276.52,
+    "sector": "Финансовый",
+    "verification_priority": "LOW",
+    "weight_divergence_pp": 4.8743,
+    "weight_ie_target_pct": 6.0,
+    "weight_real_pct": 10.8743,
+    "xirr": 0.1426
+   },
+   "YDEX": {
+    "advisor_verdict": "HOLD",
+    "advisor_verdict_basis": "11,02% L2 при IE-цели 10% — перевес +1,02 пп, ниже порога дисциплины 1,5 пп, действий не требует. Отчёт 2К2026 сильный (скорр. ЧП +56%), но он уже в цене: +5,93% за неделю. Дивиденд 110 ₽ — только рекомендация менеджмента, СД заседает 31.07 — по правилу 16 не считаю его объявленным. Крупнейшая позиция корзины (1512 тыс. ₽); наращивать поверх IE-цели на постотчётном максимуме не вижу оснований. HOLD.",
+    "advisor_verdict_confidence": 0.7,
+    "advisor_verdict_constraints": null,
+    "catalyst": [
+     {
+      "date_window": "2026-07..2026-08",
+      "id": "ydex_board_div_confirm",
+      "kind": "binary",
+      "macro_dependency": null,
+      "p": 0.8,
+      "source": "https://yandex.ru/company/news/29-07-2026",
+      "source_quality": "HIGH",
+      "trigger": "Решение СД 31.07.2026 по дивиденду 110 ₽ за 1П2026 (итог не опубликован на момент обзора)",
+      "upside_ci_pct": [
+       -4.0,
+       4.0
+      ],
+      "upside_pct": 0.0
+     },
+     {
+      "date_window": "2027-Q1..2027-Q2",
+      "id": "ydex_h2_div",
+      "kind": "binary",
+      "macro_dependency": null,
+      "p": 0.55,
+      "source": "advisor estimate based on рекомендации менеджмента 29.07.2026",
+      "source_quality": "LOW",
+      "trigger": "Объявление дивиденда за 2П2026 (симметрично 1П)",
+      "upside_ci_pct": [
+       -3.0,
+       3.0
+      ],
+      "upside_pct": 0.0
+     },
+     {
+      "date_window": "2026-Q4..2027-Q1",
+      "id": "ydex_ai_monetisation",
+      "kind": "binary",
+      "macro_dependency": null,
+      "p": 0.5,
+      "source": "https://yandex.ru/company/news/29-07-2026",
+      "source_quality": "MEDIUM",
+      "trigger": "Сохранение темпа скорр. EBITDA +35% г/г в 3К–4К2026 (отчёт ~октябрь 2026)",
+      "upside_ci_pct": [
+       0.0,
+       25.0
+      ],
+      "upside_pct": 12.0
+     },
+     {
+      "date_window": "2026-10..2027-06",
+      "id": "synthetic_scenario_quant",
+      "kind": "quantitative",
+      "source": "fixture",
+      "source_quality": "HIGH",
+      "trigger": "СИНТЕТИЧЕСКИЙ катализатор фикстуры: покрытие quantitative-ветки",
+      "upside_by_scenario": {
+       "A": -6.0,
+       "B": -2.0,
+       "C": 3.0,
+       "D": 11.0
+      },
+      "upside_ci_by_scenario": {
+       "A": [
+        -10.0,
+        -2.0
+       ],
+       "D": [
+        6.0,
+        16.0
+       ]
+      }
+     }
+    ],
+    "div_basis": "29.07.2026 менеджмент рекомендовал 110 ₽/акц за 1П2026 = 2,81% к 3 909,50 ₽. Это РЕКОМЕНДАЦИЯ МЕНЕДЖМЕНТА, не решение СД: заседание СД назначено на 31.07.2026, итог на момент обзора не опубликован. ГОСА/ВОСА и дата отсечки НЕ назначены. Годовая оценка 5,6% = 110 ₽ за 1П + аналогичная выплата за 2П (не объявлена). Нижняя граница CI 2,8% = только подтверждённое полугодие.",
+    "div_confidence": "MEDIUM",
+    "div_sources": [
+     {
+      "accessed_date": "2026-07-31",
+      "label": "Яндекс: рекомендация 110 ₽ за 1П2026, СД 31.07",
+      "url": "https://yandex.ru/company/news/29-07-2026"
+     },
+     {
+      "accessed_date": "2026-07-31",
+      "label": "Интерфакс: 110 ₽, СД рассмотрит 31.07",
+      "url": "https://www.interfax.ru/business/1106230"
+     }
+    ],
+    "div_yield_12m_pct": {
+     "ci_pct": [
+      2.8,
+      7.0
+     ],
+     "value": 5.6
+    },
+    "dividend_forward": {
+     "as_of": "2026-07-31",
+     "confidence": "LOW",
+     "note": "Год 2 — carry_forward года 1: устоявшейся дивполитики с формулой у МКПАО «Яндекс» нет, роста «с потолка» не закладываю.",
+     "policy_state": "expected",
+     "source": "рекомендация менеджмента 29.07.2026 (110 ₽ за 1П2026); СД 31.07, итог не опубликован",
+     "year1_yield_pct": 5.6,
+     "year2_basis": "carry_forward",
+     "year2_yield_pct": 5.6
+    },
+    "fundamental_score": "HIGH",
+    "fundamental_score_basis": "МСФО 2К2026 (29.07, первоисточник — IR Яндекса): выручка группы 386,3 млрд ₽ (+16% г/г), скорр. EBITDA 88,9 млрд ₽ (+35%, маржа 23%), скорр. ЧП 47,6 млрд ₽ (+56%). Прибыль растёт кратно быстрее выручки — операционный рычаг работает. Цена +5,93% за период, обновлён максимум почти за 1,5 месяца.",
+    "fundamental_score_sources": [
+     {
+      "accessed_date": "2026-07-31",
+      "label": "Яндекс МСФО 2К2026 (IR, первоисточник)",
+      "url": "https://yandex.ru/company/news/29-07-2026"
+     },
+     {
+      "accessed_date": "2026-07-31",
+      "label": "Реакция котировки на диврекомендацию",
+      "url": "https://www.interfax.ru/business/1106235"
+     }
+    ],
+    "gate_status": "reviewed_keep",
+    "ie_divergence_basis": "[user_plan] KEEP | [user_note_ai] Держать",
+    "ie_divergence_intentional": true,
+    "last_corp_event": "2026-07-29: МСФО 2К2026 + рекомендация менеджмента по дивиденду 110 ₽ за 1П2026",
+    "listing_age_quarters": 8,
+    "next_corp_event": "2026-07-31: заседание СД по дивиденду (итог на момент обзора не опубликован)",
+    "on_iis": false,
+    "pnl_rub": -5530.05,
+    "post_ipo_guard": false,
+    "price_rub": 3909.5,
+    "sector": "Коммуникации и развлечения",
+    "verification_priority": "LOW",
+    "weight_divergence_pp": 1.0182,
+    "weight_ie_target_pct": 10.0,
+    "weight_real_pct": 11.0182,
+    "xirr": -0.0029
+   }
+  },
+  "review_date": "2026-07-31",
+  "schema_version": 2,
+  "snapshot_id": "portfolio-2026-07-31.json"
+ },
+ "snapshot": {
+  "as_of_date": "2026-08-04",
+  "cash": {
+   "by_account": {
+    "iis_3": 27372.03,
+    "main": 1191256.17
+   },
+   "by_currency": {
+    "CNY": 28028.6,
+    "EUR": -0.0,
+    "RUB": -207568.62,
+    "USD": 183.4103
+   },
+   "cash_equiv_rub": 2369909.07,
+   "cash_equiv_tickers": {
+    "TMON": 846209.07,
+    "TPAY": 1523700.0
+   },
+   "liquid_rub": 3588537.27,
+   "note": "total_rub = «Имеется» (весь портфель вкл. ИИС, без blocked) − стоимость всех незаблокированных holdings; by_currency derived from trades",
+   "total_rub": 1218628.2
+  },
+  "holdings": [
+   {
+    "account": "main",
+    "asset_type": "stock",
+    "avg_cost_rub": 11859.0,
+    "currency": "RUB",
+    "current_price": 3952.0,
+    "current_price_source": "moex_iss",
+    "current_price_ts": "2026-08-04 09:17:24",
+    "first_appearance_date": "2026-07-02",
+    "is_blocked": false,
+    "isin": "RU000A107T19",
+    "listing_age_quarters": 8,
+    "listing_date": "2024-07-08",
+    "name": "Yandex",
+    "nominal_currency": null,
+    "qty": 129.0,
+    "sector": "it_telecom",
+    "status": "normal",
+    "ticker": "YDEX",
+    "value_rub": 1529811.0,
+    "ytm_pct": null,
+    "ytm_source": null
+   },
+   {
+    "account": "main",
+    "asset_type": "stock",
+    "avg_cost_rub": 281.55,
+    "currency": "RUB",
+    "current_price": 281.63,
+    "current_price_source": "moex_iss",
+    "current_price_ts": "2026-08-04 09:17:24",
+    "first_appearance_date": "2026-07-02",
+    "is_blocked": false,
+    "isin": "RU0009029540",
+    "listing_age_quarters": 58,
+    "listing_date": "2011-11-21",
+    "name": "Сбербанк",
+    "nominal_currency": null,
+    "qty": 1800.0,
+    "status": "normal",
+    "ticker": "SBER",
+    "value_rub": 1520370.0,
+    "ytm_pct": null,
+    "ytm_source": null
+   },
+   {
+    "account": "main",
+    "accrued_int": 12.25,
+    "asset_type": "bond",
+    "coupon_freq_per_year": 2,
+    "coupon_pct": 7.1,
+    "currency": "RUB",
+    "current_price": 54.08,
+    "current_price_source": "moex_iss",
+    "current_price_ts": "2026-08-04 09:17:24",
+    "duration_days": 2625,
+    "first_appearance_date": "2026-07-02",
+    "is_blocked": false,
+    "isin": "RU000A1038V6",
+    "maturity_date": "2041-05-15",
+    "name": "ОФЗ 26238",
+    "next_coupon_date": "2026-12-02",
+    "nominal": 1000.0,
+    "nominal_currency": "SUR",
+    "offer_date": null,
+    "qty": 80,
+    "status": "normal",
+    "ticker": "RU000A1038V6",
+    "value_rub": 132765.6,
+    "ytm_pct": 15.4,
+    "ytm_source": "moex_iss",
+    "ytm_to_offer_pct": null
+   },
+   {
+    "account": "main",
+    "accrued_int": 16.92,
+    "asset_type": "bond",
+    "coupon_freq_per_year": 2,
+    "coupon_pct": 9.8,
+    "currency": "RUB",
+    "current_price": 71.177,
+    "current_price_source": "moex_iss",
+    "current_price_ts": "2026-08-04 09:17:20",
+    "duration_days": 2274,
+    "first_appearance_date": "2026-07-02",
+    "is_blocked": false,
+    "isin": "RU000A106E90",
+    "maturity_date": "2038-05-19",
+    "name": "ОФЗ 26243",
+    "next_coupon_date": "2026-12-02",
+    "nominal": 1000.0,
+    "nominal_currency": "SUR",
+    "offer_date": null,
+    "qty": 667,
+    "status": "normal",
+    "ticker": "RU000A106E90",
+    "value_rub": 1457868.57,
+    "ytm_pct": 15.67,
+    "ytm_source": "moex_iss",
+    "ytm_to_offer_pct": null
+   }
+  ],
+  "schema_version": "2.0",
+  "total_active_rub": null
+ },
+ "stress": {
+  "baseline_spot": {
+   "brent_usd": 85.63,
+   "budget_deficit_pct_gdp": 2.6,
+   "cbr_rate_pct": 14.0,
+   "cnyrub": 11.5136,
+   "inflation_ru_pct_yoy": 5.3,
+   "urals_discount_usd": 2.5,
+   "usdrub": 77.9568,
+   "xauusd_usd": 4125.06
+  },
+  "bond_carry": {
+   "per_position": {
+    "RU000A1038V6": {
+     "by_horizon": {
+      "h12": {
+       "by_scenario": {
+        "A": {
+         "carry_pct": 13.1287,
+         "ci_pct": [
+          11.8158,
+          14.4416
+         ],
+         "components": {
+          "coupons": 13.1287,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "B": {
+         "carry_pct": 13.1287,
+         "ci_pct": [
+          11.8158,
+          14.4416
+         ],
+         "components": {
+          "coupons": 13.1287,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "C": {
+         "carry_pct": 13.1287,
+         "ci_pct": [
+          11.8158,
+          14.4416
+         ],
+         "components": {
+          "coupons": 13.1287,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "D": {
+         "carry_pct": 13.1287,
+         "ci_pct": [
+          11.8158,
+          14.4416
+         ],
+         "components": {
+          "coupons": 13.1287,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        }
+       },
+       "expected_carry_pct": 13.1287,
+       "flags": [],
+       "matures_within": false,
+       "t_live_months": 12.88
+      },
+      "h24": {
+       "by_scenario": {
+        "A": {
+         "carry_pct": 26.2574,
+         "ci_pct": [
+          23.6317,
+          28.8831
+         ],
+         "components": {
+          "coupons": 26.2574,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "B": {
+         "carry_pct": 26.2574,
+         "ci_pct": [
+          23.6317,
+          28.8831
+         ],
+         "components": {
+          "coupons": 26.2574,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "C": {
+         "carry_pct": 26.2574,
+         "ci_pct": [
+          23.6317,
+          28.8831
+         ],
+         "components": {
+          "coupons": 26.2574,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "D": {
+         "carry_pct": 26.2574,
+         "ci_pct": [
+          23.6317,
+          28.8831
+         ],
+         "components": {
+          "coupons": 26.2574,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        }
+       },
+       "expected_carry_pct": 26.2574,
+       "flags": [],
+       "matures_within": false,
+       "t_live_months": 24.9
+      },
+      "h6": {
+       "by_scenario": {
+        "A": {
+         "carry_pct": 6.5643,
+         "ci_pct": [
+          5.9079,
+          7.2208
+         ],
+         "components": {
+          "coupons": 6.5643,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "B": {
+         "carry_pct": 6.5643,
+         "ci_pct": [
+          5.9079,
+          7.2208
+         ],
+         "components": {
+          "coupons": 6.5643,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "C": {
+         "carry_pct": 6.5643,
+         "ci_pct": [
+          5.9079,
+          7.2208
+         ],
+         "components": {
+          "coupons": 6.5643,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "D": {
+         "carry_pct": 6.5643,
+         "ci_pct": [
+          5.9079,
+          7.2208
+         ],
+         "components": {
+          "coupons": 6.5643,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        }
+       },
+       "expected_carry_pct": 6.5643,
+       "flags": [],
+       "matures_within": false,
+       "t_live_months": 6.83
+      }
+     },
+     "event_date": "2041-05-15",
+     "flags": [],
+     "kind": "bond"
+    },
+    "RU000A106E90": {
+     "by_horizon": {
+      "h12": {
+       "by_scenario": {
+        "A": {
+         "carry_pct": 13.7685,
+         "ci_pct": [
+          12.3916,
+          15.1453
+         ],
+         "components": {
+          "coupons": 13.7685,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "B": {
+         "carry_pct": 13.7685,
+         "ci_pct": [
+          12.3916,
+          15.1453
+         ],
+         "components": {
+          "coupons": 13.7685,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "C": {
+         "carry_pct": 13.7685,
+         "ci_pct": [
+          12.3916,
+          15.1453
+         ],
+         "components": {
+          "coupons": 13.7685,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "D": {
+         "carry_pct": 13.7685,
+         "ci_pct": [
+          12.3916,
+          15.1453
+         ],
+         "components": {
+          "coupons": 13.7685,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        }
+       },
+       "expected_carry_pct": 13.7685,
+       "flags": [],
+       "matures_within": false,
+       "t_live_months": 12.88
+      },
+      "h24": {
+       "by_scenario": {
+        "A": {
+         "carry_pct": 27.537,
+         "ci_pct": [
+          24.7833,
+          30.2907
+         ],
+         "components": {
+          "coupons": 27.537,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "B": {
+         "carry_pct": 27.537,
+         "ci_pct": [
+          24.7833,
+          30.2907
+         ],
+         "components": {
+          "coupons": 27.537,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "C": {
+         "carry_pct": 27.537,
+         "ci_pct": [
+          24.7833,
+          30.2907
+         ],
+         "components": {
+          "coupons": 27.537,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "D": {
+         "carry_pct": 27.537,
+         "ci_pct": [
+          24.7833,
+          30.2907
+         ],
+         "components": {
+          "coupons": 27.537,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        }
+       },
+       "expected_carry_pct": 27.537,
+       "flags": [],
+       "matures_within": false,
+       "t_live_months": 24.9
+      },
+      "h6": {
+       "by_scenario": {
+        "A": {
+         "carry_pct": 6.8842,
+         "ci_pct": [
+          6.1958,
+          7.5727
+         ],
+         "components": {
+          "coupons": 6.8842,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "B": {
+         "carry_pct": 6.8842,
+         "ci_pct": [
+          6.1958,
+          7.5727
+         ],
+         "components": {
+          "coupons": 6.8842,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "C": {
+         "carry_pct": 6.8842,
+         "ci_pct": [
+          6.1958,
+          7.5727
+         ],
+         "components": {
+          "coupons": 6.8842,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        },
+        "D": {
+         "carry_pct": 6.8842,
+         "ci_pct": [
+          6.1958,
+          7.5727
+         ],
+         "components": {
+          "coupons": 6.8842,
+          "fx_income": 0.0,
+          "pull_to_par": 0.0,
+          "reinvest": 0.0
+         }
+        }
+       },
+       "expected_carry_pct": 6.8842,
+       "flags": [],
+       "matures_within": false,
+       "t_live_months": 6.83
+      }
+     },
+     "event_date": "2038-05-19",
+     "flags": [],
+     "kind": "bond"
+    }
+   },
+   "schema": "bond-carry@1"
+  },
+  "horizon_ends": {
+   "h12": "2027-08-31",
+   "h24": "2028-08-31",
+   "h6": "2027-02-28"
+  },
+  "horizons": [
+   6,
+   12,
+   24
+  ],
+  "per_position": {
+   "RU000A1038V6": {
+    "by_horizon": {
+     "h12": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -0.4,
+         9.6
+        ],
+        "value": 4.6
+       },
+       "B": {
+        "ci_pct": [
+         11.38,
+         26.56
+        ],
+        "value": 18.97
+       },
+       "C": {
+        "ci_pct": [
+         9.77,
+         22.79
+        ],
+        "value": 16.28
+       },
+       "D": {
+        "ci_pct": [
+         12.15,
+         28.35
+        ],
+        "value": 20.25
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        8.22,
+        21.82
+       ],
+       "value": 15.03
+      },
+      "tail_var_pct": 4.6,
+      "tail_var_scenario_id": "A"
+     },
+     "h24": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         11.55,
+         28.13
+        ],
+        "value": 19.84
+       },
+       "B": {
+        "ci_pct": [
+         20.95,
+         51.01
+        ],
+        "value": 35.98
+       },
+       "C": {
+        "ci_pct": [
+         19.73,
+         48.03
+        ],
+        "value": 33.88
+       },
+       "D": {
+        "ci_pct": [
+         22.04,
+         53.66
+        ],
+        "value": 37.85
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        18.57,
+        45.21
+       ],
+       "value": 31.89
+      },
+      "tail_var_pct": 19.84,
+      "tail_var_scenario_id": "A"
+     },
+     "h6": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -9.35,
+         0.65
+        ],
+        "value": -4.35
+       },
+       "B": {
+        "ci_pct": [
+         3.22,
+         13.22
+        ],
+        "value": 8.22
+       },
+       "C": {
+        "ci_pct": [
+         -0.07,
+         9.93
+        ],
+        "value": 4.93
+       },
+       "D": {
+        "ci_pct": [
+         3.89,
+         13.89
+        ],
+        "value": 8.89
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        -0.58,
+        9.42
+       ],
+       "value": 4.42
+      },
+      "tail_var_pct": -4.35,
+      "tail_var_scenario_id": "A"
+     }
+    },
+    "factor_betas": {
+     "brent": 0.0,
+     "cbr_rate": -7.11,
+     "cnyrub": 0.0,
+     "geopol": -0.216,
+     "sanctions": -0.36,
+     "usdrub": 0.0,
+     "xauusd": 0.0
+    },
+    "factor_betas_method": "corp/OFZ-RUB Tier 1: ОФЗ/суверен, duration 7.192yr (Δprice=−D×Δcbr); β_pol = −D×Δspread_bps/100 (bonds-sensitivity.md §4); рыночные беты reused from stress-2026-07-23",
+    "factor_betas_r2": null,
+    "on_iis": true,
+    "weight_pct": 0.5358
+   },
+   "RU000A106E90": {
+    "by_horizon": {
+     "h12": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -1.0,
+         9.0
+        ],
+        "value": 4.0
+       },
+       "B": {
+        "ci_pct": [
+         9.89,
+         23.09
+        ],
+        "value": 16.49
+       },
+       "C": {
+        "ci_pct": [
+         8.49,
+         19.81
+        ],
+        "value": 14.15
+       },
+       "D": {
+        "ci_pct": [
+         10.56,
+         24.64
+        ],
+        "value": 17.6
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        6.99,
+        19.14
+       ],
+       "value": 13.06
+      },
+      "tail_var_pct": 4.0,
+      "tail_var_scenario_id": "A"
+     },
+     "h24": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         10.04,
+         24.46
+        ],
+        "value": 17.25
+       },
+       "B": {
+        "ci_pct": [
+         18.2,
+         44.34
+        ],
+        "value": 31.27
+       },
+       "C": {
+        "ci_pct": [
+         17.15,
+         41.75
+        ],
+        "value": 29.45
+       },
+       "D": {
+        "ci_pct": [
+         19.14,
+         46.64
+        ],
+        "value": 32.89
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        16.13,
+        39.3
+       ],
+       "value": 27.71
+      },
+      "tail_var_pct": 17.25,
+      "tail_var_scenario_id": "A"
+     },
+     "h6": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -8.78,
+         1.22
+        ],
+        "value": -3.78
+       },
+       "B": {
+        "ci_pct": [
+         2.14,
+         12.14
+        ],
+        "value": 7.14
+       },
+       "C": {
+        "ci_pct": [
+         -0.72,
+         9.28
+        ],
+        "value": 4.28
+       },
+       "D": {
+        "ci_pct": [
+         2.73,
+         12.73
+        ],
+        "value": 7.73
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        -1.16,
+        8.84
+       ],
+       "value": 3.84
+      },
+      "tail_var_pct": -3.78,
+      "tail_var_scenario_id": "A"
+     }
+    },
+    "factor_betas": {
+     "brent": 0.0,
+     "cbr_rate": -6.18,
+     "cnyrub": 0.0,
+     "geopol": -0.187,
+     "sanctions": -0.311,
+     "usdrub": 0.0,
+     "xauusd": 0.0
+    },
+    "factor_betas_method": "corp/OFZ-RUB Tier 1: ОФЗ/суверен, duration 6.23yr (Δprice=−D×Δcbr); β_pol = −D×Δspread_bps/100 (bonds-sensitivity.md §4); рыночные беты reused from stress-2026-07-23",
+    "factor_betas_r2": null,
+    "on_iis": false,
+    "weight_pct": 3.6209
+   },
+   "SBER": {
+    "by_horizon": {
+     "h12": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -32.03,
+         -13.73
+        ],
+        "value": -22.88
+       },
+       "B": {
+        "ci_pct": [
+         0.09,
+         10.09
+        ],
+        "value": 5.09
+       },
+       "C": {
+        "ci_pct": [
+         1.54,
+         11.54
+        ],
+        "value": 6.54
+       },
+       "D": {
+        "ci_pct": [
+         27.52,
+         64.2
+        ],
+        "value": 45.86
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        -0.72,
+        18.02
+       ],
+       "value": 8.65
+      },
+      "tail_var_pct": -22.88,
+      "tail_var_scenario_id": "A"
+     },
+     "h24": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -33.93,
+         -13.93
+        ],
+        "value": -23.93
+       },
+       "B": {
+        "ci_pct": [
+         -0.89,
+         9.55
+        ],
+        "value": 4.33
+       },
+       "C": {
+        "ci_pct": [
+         0.76,
+         11.2
+        ],
+        "value": 5.98
+       },
+       "D": {
+        "ci_pct": [
+         26.46,
+         64.44
+        ],
+        "value": 45.45
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        -1.9,
+        17.81
+       ],
+       "value": 7.96
+      },
+      "tail_var_pct": -23.93,
+      "tail_var_scenario_id": "A"
+     },
+     "h6": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -29.72,
+         -12.74
+        ],
+        "value": -21.23
+       },
+       "B": {
+        "ci_pct": [
+         1.53,
+         11.53
+        ],
+        "value": 6.53
+       },
+       "C": {
+        "ci_pct": [
+         2.97,
+         12.97
+        ],
+        "value": 7.97
+       },
+       "D": {
+        "ci_pct": [
+         28.33,
+         66.11
+        ],
+        "value": 47.22
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        0.78,
+        19.47
+       ],
+       "value": 10.12
+      },
+      "tail_var_pct": -21.23,
+      "tail_var_scenario_id": "A"
+     }
+    },
+    "factor_betas": {
+     "brent": 0.1,
+     "cbr_rate": -0.12,
+     "cnyrub": 0.0,
+     "geopol": -20.0,
+     "sanctions": -35.0,
+     "usdrub": -0.05,
+     "xauusd": 0.0
+    },
+    "factor_betas_method": "sector prior, sector-sensitivities.md — banks §2 (SDN-risk, прямая блокировка расчётов); рыночные беты reused from stress-2026-07-23",
+    "factor_betas_r2": null,
+    "on_iis": false,
+    "sanctions_position": 0.9,
+    "weight_pct": 3.7762
+   },
+   "YDEX": {
+    "by_horizon": {
+     "h12": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -24.43,
+         -10.47
+        ],
+        "value": -17.45
+       },
+       "B": {
+        "ci_pct": [
+         -6.77,
+         3.23
+        ],
+        "value": -1.77
+       },
+       "C": {
+        "ci_pct": [
+         0.48,
+         10.48
+        ],
+        "value": 5.48
+       },
+       "D": {
+        "ci_pct": [
+         7.2,
+         17.2
+        ],
+        "value": 12.2
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        -5.88,
+        5.11
+       ],
+       "value": -0.38
+      },
+      "tail_var_pct": -17.45,
+      "tail_var_scenario_id": "A"
+     },
+     "h24": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -23.62,
+         -9.7
+        ],
+        "value": -16.66
+       },
+       "B": {
+        "ci_pct": [
+         -6.24,
+         4.2
+        ],
+        "value": -1.02
+       },
+       "C": {
+        "ci_pct": [
+         1.13,
+         11.57
+        ],
+        "value": 6.35
+       },
+       "D": {
+        "ci_pct": [
+         7.61,
+         18.53
+        ],
+        "value": 13.07
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        -5.28,
+        6.15
+       ],
+       "value": 0.44
+      },
+      "tail_var_pct": -16.66,
+      "tail_var_scenario_id": "A"
+     },
+     "h6": {
+      "delta_pct_by_scenario": {
+       "A": {
+        "ci_pct": [
+         -24.84,
+         -10.64
+        ],
+        "value": -17.74
+       },
+       "B": {
+        "ci_pct": [
+         -6.99,
+         3.01
+        ],
+        "value": -1.99
+       },
+       "C": {
+        "ci_pct": [
+         0.17,
+         10.17
+        ],
+        "value": 5.17
+       },
+       "D": {
+        "ci_pct": [
+         6.94,
+         16.94
+        ],
+        "value": 11.94
+       }
+      },
+      "expected_pct_pweighted": {
+       "ci_pct": [
+        -6.18,
+        4.87
+       ],
+       "value": -0.65
+      },
+      "tail_var_pct": -17.74,
+      "tail_var_scenario_id": "A"
+     }
+    },
+    "factor_betas": {
+     "brent": 0.05,
+     "cbr_rate": -0.3,
+     "cnyrub": 0.0,
+     "geopol": -10.0,
+     "sanctions": -15.0,
+     "usdrub": 0.05,
+     "xauusd": 0.0
+    },
+    "factor_betas_method": "sector prior, sector-sensitivities.md — tech §6; рыночные беты reused from stress-2026-07-23",
+    "factor_betas_r2": null,
+    "on_iis": false,
+    "sanctions_position": 0.2,
+    "weight_pct": 3.7996
+   }
+  },
+  "portfolio_snapshot_id": "portfolio-2026-08-04.json",
+  "primary_horizon": 12,
+  "scenarios": {
+   "A": {
+    "factors_by_horizon": {
+     "h12": {
+      "brent": -17.4999,
+      "cbr_rate": -0.707,
+      "cnyrub": 41.856,
+      "geopol": 0.8,
+      "sanctions": 0.7,
+      "usdrub": 34.2974,
+      "xauusd": 19.3922
+     },
+     "h24": {
+      "brent": -25.2598,
+      "cbr_rate": -2.85,
+      "cnyrub": 53.4707,
+      "geopol": 0.8,
+      "sanctions": 0.7,
+      "usdrub": 44.9521,
+      "xauusd": 19.3922
+     },
+     "h6": {
+      "brent": -4.8973,
+      "cbr_rate": 0.5523,
+      "cnyrub": 30.0619,
+      "geopol": 0.8,
+      "sanctions": 0.7,
+      "usdrub": 23.4782,
+      "xauusd": 15.7157
+     }
+    },
+    "name": "Затяжная осада (война + ужесточение санкций)",
+    "p": 0.25,
+    "portfolio_level_by_horizon": {
+     "h12": {
+      "delta_rub": 5276058,
+      "expected_pct_pweighted": 12.72,
+      "l1_price_only_delta_rub": -39515,
+      "l1_price_only_pct": -0.29
+     },
+     "h24": {
+      "delta_rub": 9964680,
+      "expected_pct_pweighted": 24.02,
+      "l1_price_only_delta_rub": 354904,
+      "l1_price_only_pct": 2.57
+     },
+     "h6": {
+      "delta_rub": 1911435,
+      "expected_pct_pweighted": 4.61,
+      "l1_price_only_delta_rub": -134833,
+      "l1_price_only_pct": -0.98
+     }
+    },
+    "probability": 0.25
+   },
+   "B": {
+    "factors_by_horizon": {
+     "h12": {
+      "brent": -21.9734,
+      "cbr_rate": -2.6579,
+      "cnyrub": 11.5753,
+      "geopol": 0.5,
+      "sanctions": -0.5,
+      "usdrub": 10.5558,
+      "xauusd": 19.3922
+     },
+     "h24": {
+      "brent": -28.7633,
+      "cbr_rate": -5.05,
+      "cnyrub": 19.5108,
+      "geopol": 0.5,
+      "sanctions": -0.5,
+      "usdrub": 18.0141,
+      "xauusd": 19.3922
+     },
+     "h6": {
+      "brent": -9.5685,
+      "cbr_rate": -1.1455,
+      "cnyrub": 3.5173,
+      "geopol": 0.5,
+      "sanctions": -0.5,
+      "usdrub": 2.9824,
+      "xauusd": 15.7157
+     }
+    },
+    "name": "Война на расколотом фронте (война + фрагментация/снятие санкций)",
+    "p": 0.25,
+    "portfolio_level_by_horizon": {
+     "h12": {
+      "delta_rub": 4899189,
+      "expected_pct_pweighted": 11.81,
+      "l1_price_only_delta_rub": 589643,
+      "l1_price_only_pct": 4.26
+     },
+     "h24": {
+      "delta_rub": 8770524,
+      "expected_pct_pweighted": 21.14,
+      "l1_price_only_delta_rub": 952213,
+      "l1_price_only_pct": 6.89
+     },
+     "h6": {
+      "delta_rub": 2133693,
+      "expected_pct_pweighted": 5.14,
+      "l1_price_only_delta_rub": 308980,
+      "l1_price_only_pct": 2.23
+     }
+    },
+    "probability": 0.25
+   },
+   "C": {
+    "factors_by_horizon": {
+     "h12": {
+      "brent": -26.249,
+      "cbr_rate": -2.2748,
+      "cnyrub": 22.6058,
+      "geopol": -0.5,
+      "sanctions": 0.0,
+      "usdrub": 22.1007,
+      "xauusd": 19.3922
+     },
+     "h24": {
+      "brent": -31.0989,
+      "cbr_rate": -4.75,
+      "cnyrub": 30.5413,
+      "geopol": -0.5,
+      "sanctions": 0.0,
+      "usdrub": 29.5589,
+      "xauusd": 19.3922
+     },
+     "h6": {
+      "brent": -14.2398,
+      "cbr_rate": -0.6781,
+      "cnyrub": 13.6696,
+      "geopol": -0.5,
+      "sanctions": 0.0,
+      "usdrub": 13.6626,
+      "xauusd": 15.7157
+     }
+    },
+    "name": "Замороженный конфликт под давлением (перемирие + holding санкций)",
+    "p": 0.25,
+    "portfolio_level_by_horizon": {
+     "h12": {
+      "delta_rub": 7194657,
+      "expected_pct_pweighted": 17.34,
+      "l1_price_only_delta_rub": 3074781,
+      "l1_price_only_pct": 7.41
+     },
+     "h24": {
+      "delta_rub": 11244879,
+      "expected_pct_pweighted": 27.11,
+      "l1_price_only_delta_rub": 4190616,
+      "l1_price_only_pct": 10.1
+     },
+     "h6": {
+      "delta_rub": 4181913,
+      "expected_pct_pweighted": 10.08,
+      "l1_price_only_delta_rub": 818614,
+      "l1_price_only_pct": 5.92
+     }
+    },
+    "probability": 0.25
+   },
+   "D": {
+    "factors_by_horizon": {
+     "h12": {
+      "brent": -30.7224,
+      "cbr_rate": -2.7748,
+      "cnyrub": 17.6375,
+      "geopol": -0.9,
+      "sanctions": -0.9,
+      "usdrub": 18.0351,
+      "xauusd": 19.3922
+     },
+     "h24": {
+      "brent": -34.6024,
+      "cbr_rate": -5.25,
+      "cnyrub": 24.6352,
+      "geopol": -0.9,
+      "sanctions": -0.9,
+      "usdrub": 24.4279,
+      "xauusd": 19.3922
+     },
+     "h6": {
+      "brent": -18.9111,
+      "cbr_rate": -1.1781,
+      "cnyrub": 9.7707,
+      "geopol": -0.9,
+      "sanctions": -0.9,
+      "usdrub": 10.679,
+      "xauusd": 15.7157
+     }
+    },
+    "name": "Большая сделка и разрядка (перемирие + снятие санкций + разморозка активов)",
+    "p": 0.25,
+    "portfolio_level_by_horizon": {
+     "h12": {
+      "delta_rub": 9084123,
+      "expected_pct_pweighted": 21.9,
+      "l1_price_only_delta_rub": 5349252,
+      "l1_price_only_pct": 12.9
+     },
+     "h24": {
+      "delta_rub": 12906687,
+      "expected_pct_pweighted": 31.11,
+      "l1_price_only_delta_rub": 6402297,
+      "l1_price_only_pct": 15.43
+     },
+     "h6": {
+      "delta_rub": 6263424,
+      "expected_pct_pweighted": 15.1,
+      "l1_price_only_delta_rub": 4701273,
+      "l1_price_only_pct": 11.33
+     }
+    },
+    "probability": 0.25
+   }
+  },
+  "schema_version": 2,
+  "snapshot_id": null
+ }
+}

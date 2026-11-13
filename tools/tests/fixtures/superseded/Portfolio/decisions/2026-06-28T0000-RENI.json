@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-06-28T0000-RENI",
+  "key": "RENI",
+  "verdict": "ADD",
+  "target_pct": null,
+  "review_by": "2026-07-26",
+  "note": "Страхование вне банк-минуса; rate-cut +8% NAV, байбэк идёт. До 9-12% ≤100. Stress −2.7%. Недовес 7.9% vs IE 12.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-06-28T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

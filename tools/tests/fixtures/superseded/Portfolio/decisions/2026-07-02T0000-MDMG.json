@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-02T0000-MDMG",
+  "key": "MDMG",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-09-19",
+  "note": "Mode 4 апгрейд under_review->keep: ГОСА 25.06 утвердило финальный дивиденд ~47 руб за 2025 (отсечка ~14.07, pending MOEX-раскрытие) — open-item гейта закрыт. FY2025 выручка 43.5 млрд, ЧП 10.8 млрд, M…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-07-02T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

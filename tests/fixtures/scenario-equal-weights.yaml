@@ -1,0 +1,13 @@
+scenarios:
+  A:
+    label: "Дипломатический оазис"
+    probability: 0.25
+  B:
+    label: "Заморозка с тисками"
+    probability: 0.25
+  C:
+    label: "Военная экономика — доходы текут"
+    probability: 0.25
+  D:
+    label: "Железный занавес-2"
+    probability: 0.25

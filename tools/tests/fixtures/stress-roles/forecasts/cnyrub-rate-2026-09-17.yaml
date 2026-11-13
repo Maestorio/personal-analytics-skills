@@ -1,0 +1,459 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: cnyrub-rate-2026-09-17.md
+status: active
+supplementary: true
+supplementary_reason: "Нет прямых CNY-позиций в портфеле; фактор ведётся для полноты upstream-контекста макро-цепочки (CNY/RUB как кросс через USD/RUB)."
+replaces:
+  - cnyrub-rate-2026-07-29
+
+forecast:
+  date: 2026-09-17
+  horizon: 2028-12-31
+  horizons:
+    - 2026-12-31
+    - 2027-06-30
+    - 2027-12-31
+    - 2028-12-31
+  domain: ru-macro
+  topic: cnyrub-rate
+  method: fca
+  unit: "RUB/CNY"
+  basis: "Официальный курс ЦБ РФ, CNY/RUB, точка на дату горизонта"
+  central_estimate: "L1 DERIVED (mean(CIP-форвард, L2 EV)): 12.8 / 13.4 / 14.0 / 14.8 по горизонтам; L2 EV 12.73 / 13.12 / 13.97 / 14.56; by_scenario A 14.33/15.21/16.06/16.60 · B 11.31/12.01/12.68/13.10 · C 12.43/13.19/13.92/14.38 · D 11.90/12.63/13.33/13.78. Weighted median null (0 trust-weighted источников); native unweighted median 12.60 на 2026-12-31 (единственный горизонт с покрытием)."
+  confidence: 0.22
+  confidence_note: >
+    weighted_consensus.py вернул 0.20 на нативных источниках (h1 только, degenerate:
+    n_in_consensus=0). Поднято до 0.22 (было 0.23 в 07-29): за упрощение USD/CNY
+    (единый путь вместо сценарной вариации без чёткого causal-обоснования) и за то,
+    что измеренная сегодня MOEX-премия (−0.05%) почти точно совпала с калибровочным
+    якорем Sc-C (0%), — сильное независимое подтверждение механизма. Против:
+    USD/CNY central-путь построен без свежей панели (дек-2025 панель устарела и
+    опровергнута спотом) — не позволяет поднять выше 0.22.
+  source_coverage_score: 0.24
+  confidence_by_horizon:
+    "2026-12-31": 0.27
+    "2027-06-30": 0.24
+    "2027-12-31": 0.21
+    "2028-12-31": 0.16
+  anchor_share: null
+  upstream_snapshot:
+    - factor: usdrub
+      central_estimate: "L1 82.25/86.53(интерп.)/90.8/92.7; L2 EV 83.7/86.4/91.5/93.5; by_scenario A 90.3/95.0/99.7/101.8 · B 75.2/79.1/83.0/84.7 · C 83.0/87.3/91.6/93.5 · D 80.7/84.9/89.1/90.9"
+      confidence: 0.40
+      forecast_date: 2026-09-17
+      source_file: "forecasts/usdrub-rate-2026-09-17.yaml"
+    - factor: usdcny
+      central_estimate: "спот 6.7057 (16.09); central-путь 6.68/6.62/6.58/6.50 по горизонтам (обновлено vs панель дек-2025 6.90-7.10 — юань обошёл панель)"
+      confidence: 0.30
+      forecast_date: 2026-09-17
+      source_file: null
+    - factor: moex_cny_premium
+      central_estimate: "наблюдаемая ≈ −0.05% (17.09.2026); шкала по сценариям A +6% · B +0.5% · C 0% · D −1.5% (перенесена из 07-29 без изменений)"
+      confidence: 0.30
+      forecast_date: 2026-09-17
+      source_file: null
+    - factor: geopolitics-ru-west
+      central_estimate: "D1 A=0.15/0.15/0.195/0.24 · B=0.15/0.15/0.155/0.16 · C=0.35/0.35/0.355/0.36 · D=0.35/0.35/0.295/0.24 (no_modal, per-horizon интерполяция h6/h12/h18≈/h24-h30)"
+      confidence: null
+      forecast_date: 2026-07-01
+      source_file: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  notes:
+    - "Type 2 conditional FCA — обновление cnyrub-rate-2026-07-29 с ротацией upstream на usdrub-rate-2026-09-17 (горизонт расширен до 2028-12-31, добавлен 2027-12-31)"
+    - "0 источников с ненулевым весом: nearest-domain = usd-rub-forecast, IGNORE у всего ru-домена (SberCIB подтверждено); Альфа-Банк и Цифра Брокер не аудированы"
+    - "Нативное покрытие ХУЖЕ, чем в 07-29 (было 4 источника на нескольких горизонтах, сейчас 3, все только на EOY2026) — 2027/2028 полностью DERIVED"
+    - "МЕТОДОЛОГИЧЕСКОЕ ИЗМЕНЕНИЕ vs 07-29: USD/CNY взят единым для всех 4 сценариев (ось РФ-Запад ортогональна юаню по собственному предыдущему анализу), а не варьируемым по сценарию — упрощение, снижает произвольность"
+    - "ПЕРЕВАЛИДАЦИЯ ПРЕМИИ: измеренная сегодня MOEX-премия -0.05% почти точно совпала с якорем Sc-C (0%) — второе подряд подтверждение (после 07-29: -0.33% против ожидаемых ~0%, теперь -0.05%, тренд к нулю)"
+    - "USD/CNY ПАНЕЛЬ УСТАРЕЛА СИЛЬНЕЕ: спот 6.7057 ниже почти всех таргетов панели дек-2025/янв-2026 (6.70-7.25); central-путь построен от спота без опоры на свежую панель — явный caveat LOW confidence"
+    - "КОНУС СТАЛ ОДНОСТОРОННИМ РАНЬШЕ, ЧЕМ У USD/RUB: уже на 2027-12-31 (не 2028-12-31) — CNY/RUB наследует carry-эффект USD/RUB ПЛЮС собственный слабый канал укрепления юаня, оба тянут кросс вверх одновременно"
+    - "Конус сдвинут вниз против 07-29 на ближнем горизонте (L1 12.8 vs 13.2 к 2026-12-31), но выше на дальнем (14.8 vs 14.5 к сопоставимому горизонту) — из-за расширения горизонта и обновлённого upstream USD/RUB"
+
+isolated: false
+isolated_reason: null
+
+conditional_on_scenarios:
+  method: nonlinear
+  no_modal: true
+  source_matrix: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  scenario_id_format: short
+  unit: "RUB/CNY"
+  l2_informative: false
+  derivation_formula: "CNY/RUB[sid] = USD/RUB[sid] / USD/CNY_base(horizon) × (1 + MOEX_premium[sid])"
+
+  fact_anchor:
+    value: 12.5457
+    as_of: 2026-09-17
+    source: "Официальный курс Банка России на 17.09.2026, cbr.ru/currency_base/daily"
+
+  one_sided_cone: true
+  cone_side:
+    "2026-12-31": two_sided
+    "2027-06-30": two_sided
+    "2027-12-31": up
+    "2028-12-31": up
+  counter_world_reason: >-
+    Конус двусторонний на первых двух горизонтах (Sc-B ниже спота), но становится
+    односторонним вверх с 2027-12-31: все 4 сценария, включая Sc-B (крепчайший рубль
+    набора), дают CNY/RUB выше сегодняшних 12.5457. Причина — структурный carry:
+    дифференциал номинальных ставок РФ (14%→10%) и КНР (~2%) механически толкает
+    кросс вверх при любом геополитическом исходе на горизонте >18 мес; это тот же
+    механизм, что даёт usdrub-rate-2026-09-17 односторонний конус на 2028-12-31, но
+    здесь он проявляется годом раньше из-за дополнительного (более слабого) канала
+    укрепления юаня. Контр-мир существует, но требует стека трёх экстремальных
+    допущений одновременно: (1) Sc-B, (2) USD/CNY у нижней границы диапазона
+    чувствительности (6.40), (3) MOEX-премия глубже -5% (не -1.5% текущей шкалы D) —
+    залповая конвертация экспортной выручки в юань сверх текущего наблюдаемого
+    режима. Ни один источник не закладывает эту комбинацию как центральный сценарий.
+    Off-axis downside отражён в нижних границах range у Sc-B/Sc-D и в monitoring.
+
+  by_scenario:
+    A:
+      label: "Затяжная осада (война + ужесточение санкций)"
+      values:
+        "2026-12-31": { central: 14.33, range: [12.6, 16.0] }
+        "2027-06-30": { central: 15.21, range: [13.3, 17.1] }
+        "2027-12-31": { central: 16.06, range: [14.0, 18.1] }
+        "2028-12-31": { central: 16.60, range: [14.4, 18.8] }
+      provenance: derived_from_marginal
+      sources_used: []
+      coverage_quality: DERIVED
+      methodology: { usd_rub: "90.3/95.0/99.7/101.8", usd_cny: "6.68/6.62/6.58/6.50 (base, единый по сценариям)", moex_premium_pct: 6.0 }
+      reasoning_summary: >
+        Максимум CNY/RUB — наследует слабейший рубль upstream (одностороннее ослабление
+        USD/RUB во всех точках) и наибольшую премию юаня на MOEX (correspondent-давление
+        на CN-банки при ужесточении санкций). Премия +6% перенесена из 07-29 без
+        переоценки — механизм её раскрытия (санкции на банки-корреспонденты) не
+        наблюдался ни в июле, ни сейчас (holding остаётся модальным на оси санкций).
+      upstream_used:
+        - { factor: usdrub_scenario_a, value: 90.3, unit: RUB/USD }
+        - { factor: usdcny_base, value: 6.68, unit: CNY/USD }
+        - { factor: moex_cny_premium_a, value: 6.0, unit: pct }
+    B:
+      label: "Война на расколотом фронте (война + фрагментация/снятие санкций)"
+      values:
+        "2026-12-31": { central: 11.31, range: [9.9, 12.7] }
+        "2027-06-30": { central: 12.01, range: [10.5, 13.5] }
+        "2027-12-31": { central: 12.68, range: [11.1, 14.3] }
+        "2028-12-31": { central: 13.10, range: [11.4, 14.8] }
+      provenance: derived_from_marginal
+      sources_used: []
+      coverage_quality: DERIVED
+      methodology: { usd_rub: "75.2/79.1/83.0/84.7", usd_cny: "6.68/6.62/6.58/6.50 (base)", moex_premium_pct: 0.5 }
+      reasoning_summary: >
+        Минимум набора — крепчайший рубль (US снимает нефтяной cap → максимальный поток
+        конвертируемой FX) при почти нулевой премии (фрагментация санкций слегка облегчает
+        расчёты). Единственный сценарий, где на первых двух горизонтах кросс ниже спота;
+        к 2027-12-31 даже этот мир пробивает спот вверх — carry-эффект берёт своё.
+      upstream_used:
+        - { factor: usdrub_scenario_b, value: 75.2, unit: RUB/USD }
+        - { factor: usdcny_base, value: 6.68, unit: CNY/USD }
+        - { factor: moex_cny_premium_b, value: 0.5, unit: pct }
+    C:
+      label: "Замороженный конфликт под давлением (перемирие + holding санкций)"
+      values:
+        "2026-12-31": { central: 12.43, range: [10.9, 13.9] }
+        "2027-06-30": { central: 13.19, range: [11.5, 14.8] }
+        "2027-12-31": { central: 13.92, range: [12.2, 15.6] }
+        "2028-12-31": { central: 14.38, range: [12.5, 16.2] }
+      provenance: derived_from_marginal
+      sources_used: []
+      coverage_quality: DERIVED
+      methodology: { usd_rub: "83.0/87.3/91.6/93.5", usd_cny: "6.68/6.62/6.58/6.50 (base)", moex_premium_pct: 0.0 }
+      reasoning_summary: >
+        Продолжение текущего режима — премия ровно 0%, это калибровочный якорь всей шкалы
+        (наблюдаемая сегодня премия -0.05% почти точно совпадает). Sc-C ближе всего к
+        marginal на всех горизонтах — самый "средний" мир набора.
+      upstream_used:
+        - { factor: usdrub_scenario_c, value: 83.0, unit: RUB/USD }
+        - { factor: usdcny_base, value: 6.68, unit: CNY/USD }
+        - { factor: moex_cny_premium_c, value: 0.0, unit: pct }
+    D:
+      label: "Большая сделка и разрядка (перемирие + снятие санкций + разморозка активов)"
+      values:
+        "2026-12-31": { central: 11.90, range: [10.4, 13.4] }
+        "2027-06-30": { central: 12.63, range: [11.0, 14.2] }
+        "2027-12-31": { central: 13.33, range: [11.6, 15.0] }
+        "2028-12-31": { central: 13.78, range: [12.0, 15.5] }
+      provenance: derived_from_marginal
+      sources_used: []
+      coverage_quality: DERIVED
+      methodology: { usd_rub: "80.7/84.9/89.1/90.9", usd_cny: "6.68/6.62/6.58/6.50 (base)", moex_premium_pct: -1.5 }
+      reasoning_summary: >
+        Снятие санкций уводит премию в дисконт (-1.5%) — юань теряет монополию расчётов,
+        но рубль в этом мире не самый крепкий из четырёх (это Sc-B) — согласуется с
+        non-monotone предупреждением матрицы для usdrub, унаследованным сюда.
+      upstream_used:
+        - { factor: usdrub_scenario_d, value: 80.7, unit: RUB/USD }
+        - { factor: usdcny_base, value: 6.68, unit: CNY/USD }
+        - { factor: moex_cny_premium_d, value: -1.5, unit: pct }
+
+  marginal:
+    method: nonlinear
+    modal_scenario_id: none
+    values:
+      "2026-12-31": { central: 12.73, range: [9.9, 16.0] }
+      "2027-06-30": { central: 13.12, range: [10.5, 17.1] }
+      "2027-12-31": { central: 13.97, range: [11.1, 18.1] }
+      "2028-12-31": { central: 14.56, range: [11.4, 18.8] }
+    aggregation_formula: "p_by_horizon weighted mean: h1≈h6 (.28/.12/.42/.18), h2≈h12 (.15/.15/.35/.35), h3 интерполирован h12-h24 (.195/.155/.355/.295), h4≈h24/h30 (.24/.16/.36/.24)"
+
+  coverage_diagnostic:
+    per_scenario:
+      A: { sources_used: 0, confidence_level: DERIVED }
+      B: { sources_used: 0, confidence_level: DERIVED }
+      C: { sources_used: 0, confidence_level: DERIVED }
+      D: { sources_used: 0, confidence_level: DERIVED }
+    asymmetry_warning: "все 4 сценария DERIVED; 3 нативных CNY/RUB-прогноза найдено, но только на горизонте 2026-12-31 и без сценарной привязки к оси РФ-Запад"
+    dominant_implicit_world: none
+
+coherence_diagnostic:
+  layer1_marginal: 12.84
+  layer2_marginal: 12.73
+  divergence_pct: 0.86
+  severity: N/A
+  warning: >-
+    by_scenario полностью DERIVED (l2_informative: false) — severity: N/A, а не LOW:
+    расхождение тавтологично, т.к. L1 = mean(CIP-форвард, L2 EV), т.е. наполовину
+    состоит из L2. Coherence здесь не измерение независимого согласия слоёв, а
+    артефакт конструкции. Информативная часть: |CIP - L2 EV| / 2 на каждом горизонте.
+  by_horizon:
+    "2026-12-31": { layer1_marginal: 12.84, layer2_marginal: 12.73, divergence_pct: 0.86, severity: N/A }
+    "2027-06-30": { layer1_marginal: 13.36, layer2_marginal: 13.12, divergence_pct: 1.83, severity: N/A }
+    "2027-12-31": { layer1_marginal: 14.05, layer2_marginal: 13.97, divergence_pct: 0.57, severity: N/A }
+    "2028-12-31": { layer1_marginal: 14.76, layer2_marginal: 14.56, divergence_pct: 1.37, severity: N/A }
+
+fca_stats:
+  "2026-12-31":
+    kind: level
+    unit: "RUB/CNY"
+    l1_weighted: null   # TODO: 0 источников с ненулевым весом
+    l1_unweighted: 12.60
+    l2_ev: 12.73
+    p10: null   # TODO: n_in_consensus=0
+    p90: null
+  "2027-06-30":
+    kind: level
+    unit: "RUB/CNY"
+    l1_weighted: null
+    l1_unweighted: null   # TODO: нет нативных источников на этот горизонт в этом запуске
+    l2_ev: 13.12
+    p10: null
+    p90: null
+  "2027-12-31":
+    kind: level
+    unit: "RUB/CNY"
+    l1_weighted: null
+    l1_unweighted: null   # TODO: нет нативных источников на этот горизонт
+    l2_ev: 13.97
+    p10: null
+    p90: null
+  "2028-12-31":
+    kind: level
+    unit: "RUB/CNY"
+    l1_weighted: null
+    l1_unweighted: null   # TODO: нет нативных источников на этот горизонт
+    l2_ev: 14.56
+    p10: null
+    p90: null
+
+derived_l1:
+  method: "mean(CIP_forward, L2_EV)"
+  spot: { value: 12.5457, as_of: 2026-09-17 }
+  spot_inputs:
+    usdrub: { value: 84.1732, as_of: 2026-09-17, source: "ЦБ РФ" }
+    usdcny_offshore: { value: 6.7057, as_of: 2026-09-16, source: "TradingEconomics" }
+    moex_premium_observed_pct: -0.05
+    formula_check: "84.1732/6.7057×(1-0.0005) = 12.552 vs факт 12.5457 (Δ ~0.05%)"
+  cip_forward:
+    "2026-12-31": { value: 12.94, t_years: 0.28, diff_pct_annual: 11.7 }
+    "2027-06-30": { value: 13.60, t_years: 0.79, diff_pct_annual: 10.7 }
+    "2027-12-31": { value: 14.12, t_years: 1.29, diff_pct_annual: 9.6 }
+    "2028-12-31": { value: 14.96, t_years: 2.29, diff_pct_annual: 8.0 }
+  values:
+    "2026-12-31": 12.8
+    "2027-06-30": 13.4
+    "2027-12-31": 14.0
+    "2028-12-31": 14.8
+  note: "Округление до 0.1 руб. — при confidence 0.22 сотые доли являются ложной точностью"
+
+sensitivity:
+  usdcny_base: { "2026-12-31": 6.68, "2027-06-30": 6.62, "2027-12-31": 6.58, "2028-12-31": 6.50 }
+  usdcny_730_trade_war:
+    description: "Торговая война США-КНР, тарифный ответ ПБК → USD/CNY 7.30"
+    note: "l1_shift вниз на 7-9% на всех горизонтах, аналогично 07-29"
+  usdcny_640_strong_yuan:
+    description: "Ускоренная интернационализация RMB → USD/CNY 6.40"
+    note: "l1_shift вверх на ~4-5%; даже в этой ветке Sc-B на дальних горизонтах остаётся выше спота без дополнительного премиального шока"
+  combined_counter_world:
+    description: "Sc-B + USD/CNY 6.40 + MOEX-премия < -5% одновременно"
+    note: "Единственная найденная комбинация, возвращающая CNY/RUB ниже спота 12.5457 на 2027-2028; не central case ни у одного источника"
+  moex_premium_shift:
+    plus_3pp: "central + ~3%"
+    minus_3pp: "central - ~3%"
+
+reviews:
+  interval_months: 3
+  next_due: 2026-12-17
+  last_completed: null
+  history:
+    - date: 2026-07-29
+      action: "snapshot refresh (replaces 2026-07-01)"
+    - date: 2026-09-17
+      action: "snapshot refresh + расширение горизонта до 2028-12-31 (добавлен 2027-12-31); ротация upstream на usdrub-rate-2026-09-17; USD/CNY переведён на единый (не сценарный) путь"
+
+monitoring:
+  - id: cnyrub-spot-q4
+    description: "CNY/RUB спот к 2026-12-31 — тест устойчивости L1 12.8"
+    source: "https://www.cbr.ru/currency_base/dynamics/"
+    threshold: "> 13.5 → ослабление опережает L1, сдвиг к Sc-A/C; < 11.5 устойчиво → Sc-B/off-axis, пересмотр L1 вниз"
+    check_date: 2026-12-31
+    impact: mixed
+    severity: critical
+    auto_checkable: true
+    side: both
+  - id: moex-cny-premium-vs-offshore
+    description: "Премия CNY/RUB на MOEX против офшорного кросса — главный RU-специфичный множитель, сейчас ≈ -0.05%"
+    source: "https://www.moex.com/ru/issue.aspx?board=CETS&code=CNYRUB_TOM"
+    threshold: "premium > +3% устойчиво → механизм Sc-A валиден; премия остаётся ≈0 при ужесточении санкций → шкала опровергнута"
+    check_date: 2026-12-17
+    impact: invalidates
+    severity: critical
+    auto_checkable: true
+    side: both
+  - id: usdcny-fresh-panel
+    description: "Появление свежего (< 6 мес.) панельного прогноза USD/CNY от нескольких банков — central-путь 6.68→6.50 построен без него"
+    source: "https://tradingeconomics.com/china/currency"
+    threshold: "публикация Reuters poll или сопоставимой панели с числами на 2027-2028"
+    check_date: 2026-12-17
+    impact: updates_consensus
+    severity: high
+    auto_checkable: false
+    side: both
+  - id: cbr-rate-path-vs-10
+    description: "Траектория ставки ЦБ от 14.00% — знаменатель CIP-форварда и carry-опора рубля к юаню"
+    source: "https://www.cbr.ru/dkp/"
+    threshold: "Ставка ≤ 10% к 2027 → carry ослабевает быстрее модели → CNY/RUB на 2027-2028 может оказаться ниже L1"
+    check_date: 2027-06-30
+    impact: mixed
+    severity: high
+    auto_checkable: true
+    side: down
+  - id: alfa-bank-audit-candidate
+    description: "Альфа-Банк — повторный кандидат №1 на retrospective-forecast-audit (также в usdrub-rate-2026-09-17)"
+    source: "https://alfabank.ru/"
+    threshold: "аудит проведён и добавлен в INDEX.md"
+    check_date: 2026-12-17
+    impact: updates_consensus
+    severity: medium
+    auto_checkable: false
+    side: both
+
+assumptions:
+  - id: zero-weighted-cnyrub-sources
+    text: "Ни один аудированный источник не имеет ненулевого веса по CNY/RUB (nearest-domain = usd-rub-forecast, IGNORE у всего ru-домена) → консенсус DERIVED, не market-tested"
+    robustness: HIGH
+    sensitivity: critical
+    auto_checkable: false
+  - id: usdrub-upstream-valid
+    text: "USD/RUB-upstream (usdrub-rate-2026-09-17, unweighted median 4 outliers) корректен — CNY/RUB наследует его как числитель целиком"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+  - id: usdcny-single-path-across-scenarios
+    text: "USD/CNY можно держать единым для всех 4 сценариев РФ-Запад (ортогональная ось) — методологическое упрощение против 07-29"
+    robustness: MEDIUM
+    sensitivity: moderate
+    auto_checkable: false
+  - id: usdcny-path-without-fresh-panel
+    text: "Central-путь USD/CNY 6.68→6.50, построенный от спота без свежей (< 6 мес.) банковской панели, продолжит текущий тренд укрепления юаня, затухающий на длинном горизонте"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: true
+  - id: moex-premium-scenario-ladder
+    text: "MOEX-премия управляется шкалой A+6%/B+0.5%/C0%/D-1.5%, перенесённой из 07-29 без переоценки — второй раз подряд без пересборки от первых принципов"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: true
+  - id: cip-anchor-valid
+    text: "CIP-форвард с дифференциалом ставок РФ/КНР валиден как якорь при отсутствии полноценного длинного форварда CNY/RUB"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+
+thresholds:
+  - id: usdcny-flip
+    variable: "USD/CNY"
+    condition: "USD/CNY > 7.00 устойчиво (реверс укрепления юаня) или < 6.40 (ускоренное укрепление)"
+    flips_to: "CNY/RUB L1 смещается на ±5-9% от текущей central-траектории"
+    auto_checkable: true
+  - id: premium-mechanism-flip
+    variable: "MOEX CNY-премия"
+    condition: "Премия остаётся ≈0 при дальнейшем ужесточении санкций (Sc-A не реализует свою премию)"
+    flips_to: "Шкала премии опровергнута; дисперсия между мирами A и C/D сжимается"
+    auto_checkable: true
+  - id: cbr-rate-flip
+    variable: "Ставка ЦБ РФ"
+    condition: "Ставка ≤ 10% быстрее модельного пути"
+    flips_to: "Carry-эффект слабее допущения → CNY/RUB на 2027-2028 ниже L1"
+    auto_checkable: true
+
+falsifiers:
+  - id: cnyrub-stays-sub-12-2026
+    description: "CNY/RUB остаётся ≤ 12.0 к 2026-12-31 — L1 12.8 завышает"
+    would_resolve: false
+    auto_checkable: true
+    side: down
+  - id: cnyrub-over-15-2026
+    description: "CNY/RUB > 15 к 2026-12-31 — L1 12.8 критически занижен, вероятна реализация Sc-A"
+    would_resolve: false
+    auto_checkable: true
+    side: up
+  - id: forward-beaten-two-years
+    description: "CNY/RUB < 12.5 (ниже сегодняшнего спота) к 2027-12-31 — контр-мир реализовался, односторонний конус вверх был ошибкой"
+    would_resolve: false
+    auto_checkable: true
+    side: down
+
+agents:
+  - id: ofac-correspondent-action
+    agent: "US Treasury / OFAC"
+    action: "Correspondent-based ограничения на CNY-транзакции в пользу РФ → раскрытие премии Sc-A"
+    window: "2026-09-17/2027-12-31"
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+  - id: pboc-devaluation-response
+    agent: "Народный банк Китая"
+    action: "Девальвация юаня как ответ на тарифы США → USD/CNY за 7.0 → кросс вниз на 5-7% при неизменном рубле"
+    window: "2026-09-17/2028-12-31"
+    impact: strengthens_ruble
+    severity: high
+    auto_checkable: true
+  - id: cbr-fast-easing
+    agent: "Банк России"
+    action: "Ускоренное снижение ставки к однозначным числам к 2027 → carry ослабевает быстрее модели"
+    window: "2026-09-17/2027-06-30"
+    impact: weakens_ruble
+    severity: critical
+    auto_checkable: false
+
+final_audit:
+  due: 2028-12-31
+  status: pending
+
+outcome_log:
+  - resolve_date: 2026-12-31
+    logged_at: 2026-09-17
+    record_type: horizon_resolve
+    kind: level
+    forecast_l1_weighted: null
+    forecast_l1_unweighted: 12.60
+    forecast_l2_ev: 12.73
+    forecast_l1_derived: 12.8
+    p10_p90: null
+    confidence_at_forecast: 0.27
+    actual: null
+    in_p10_p90: null
+    error_pct: null
+    actual_source: null
+    shock_flag: none

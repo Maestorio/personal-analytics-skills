@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-T",
+  "key": "T",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-11-18",
+  "note": "Операционная ЧП 2К +25%, ROE 28,1%, FWD P/E 2,8, байбек 5%. EV +7,52%, но худший хвост книги −25,8% и NPL 7,3%. Добор до 7% — только против встречного среза в банковском кластере.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

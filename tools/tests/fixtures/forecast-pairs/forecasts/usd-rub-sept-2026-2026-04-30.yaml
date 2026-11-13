@@ -1,0 +1,177 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: usd-rub-sept-2026-2026-04-30.md
+status: resolved
+superseded_by: usdrub-rate-2026-06-10.yaml
+
+forecast:
+  date: 2026-04-30
+  horizon: 2026-09-01
+  domain: ru-macro
+  topic: usd-rub-sept-2026
+  central_estimate: "USD/RUB: 85–90 (центр ~87–88) к 2026-09-01"
+  confidence: 0.40  # 0.4 + 0.4×(0/8 HIGH) − 0.2×0 = 0.40; все аудированные источники IGNORE по usd-rub
+
+isolated: true
+isolated_reason: "Type 1 isolated: no scenario translation in source (auto-fix from pre-migration backup, 2026-05-10)"
+
+
+outcome_log:
+  - resolve_date: 2026-09-01
+    logged_at: 2026-10-29
+    record_type: horizon_resolve
+    kind: level
+    forecast_l1_weighted: null
+    forecast_l1_unweighted: 89.0
+    forecast_l2_ev: null
+    p10_p90: null
+    confidence_at_forecast: 0.40
+    actual: 86.3793
+    in_p10_p90: null
+    error_pct: -2.9784
+    actual_source: "https://www.cbr.ru/currency_base/daily/ (официальный курс ЦБ РФ на 01.09.2026, XML_dynamic R01235: 86,3793)"
+    shock_flag: none
+
+reviews:
+  interval_months: 3
+  next_due: 2026-07-30
+  last_completed: null
+  history: []
+
+final_audit:
+  due: 2026-09-01
+  status: done
+  completed: 2026-10-29
+  result: "hit — факт 86,3793 (официальный курс ЦБ на 01.09.2026) внутри заявленного modal-диапазона 85–90 (~50%) и ниже центра ~87–88 на ~1,1–1,6 руб (−1,3% к 87,5; −2,98% к unweighted-медиане 89). Оговорка по механизму: допущение brent-sustainable-rally (Brent $70–80) не подтвердилось — Brent в сентябре существенно выше (monitor-report 2026-10-08: avg $114,16), т.е. попадание по уровню, а не по драйверам. Полный retrospective-forecast-audit не проводился: одноточечный прогноз, n=1; confidence 0.40 (потолок: 0 источников с trust>0)."
+
+monitoring:
+  - id: brent-price-h2
+    description: "Brent удерживается в $70–80/bbl в H2 2026"
+    source: "https://www.eia.gov/dnav/pet/pet_pri_spt_s1_d.htm"
+    threshold: "Brent < $62/bbl (сдвиг в Camp 2) или > $87/bbl (Camp 1)"
+    check_date: 2026-07-30
+    impact: mixed
+    severity: critical
+    auto_checkable: true
+
+  - id: cbr-rate-path
+    description: "ЦБ снижает ставку умеренно — не более 200 б.п. к Q3"
+    source: "https://www.cbr.ru/hd_base/KeyRate/"
+    threshold: "Ключевая ставка < 17% к июлю 2026"
+    check_date: 2026-07-30
+    impact: mixed
+    severity: high
+    auto_checkable: true
+
+  - id: sanctions-no-new-package
+    description: "Нет нового ударного санкционного пакета (НКЦ / нефть)"
+    threshold: "SDN-листинг НКЦ или OFAC-ограничения на нефтяной экспорт РФ"
+    check_date: 2026-07-30
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: cbr-macro-survey-revision
+    description: "ЦБ макроопрос: пересмотр avg-2026 курса"
+    source: "https://www.cbr.ru/statistics/ddkp/mo_br/"
+    threshold: "Пересмотр >5 руб вверх (>86.2) или вниз (<76.2) от текущих 81.2"
+    check_date: 2026-07-30
+    impact: mixed
+    severity: high
+    auto_checkable: true
+
+  - id: cbr-july-rate-cut
+    description: "ЦБ не срезает ставку более чем на 200 б.п. за одно заседание (июль)"
+    threshold: "Снижение >200 б.п. на заседании 2026-07-25"
+    check_date: 2026-07-25
+    impact: invalidates
+    severity: high
+    auto_checkable: true
+
+  - id: ofac-china-bank-sdn
+    description: "OFAC не вводит SDN на китайские банки-посредники (Chouzhou-тип)"
+    threshold: "SDN-листинг ≥3 китайских банков с российской экспозицией"
+    check_date: 2026-07-30
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+assumptions:
+  - id: brent-sustainable-rally
+    text: "Нефтяное ралли Q1–Q2 — устойчивый тренд, а не spike на Ближневосточной премии"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+
+  - id: export-revenue-conversion
+    text: "Экспортная выручка РФ конвертируется в рубли штатно через банки третьих стран"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+
+  - id: backwardlooking-cbr-survey
+    text: "ЦБ макроопрос 81.2 — прогноз H2, а не артефакт крепости H1"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+
+thresholds:
+  - id: brent-below-62
+    variable: "Brent (USD/bbl)"
+    condition: "Brent < $62/bbl устойчиво в июле 2026"
+    flips_to: "USD/RUB 92–100 (Camp 2 — санкционное давление)"
+    auto_checkable: true
+
+  - id: cbr-rate-cut-450bp
+    variable: "Ключевая ставка ЦБ (суммарное снижение к Q3)"
+    condition: "Снижение >450 б.п. суммарно с начала цикла к 1 августа"
+    flips_to: "USD/RUB 91–96 (carry unwind)"
+    auto_checkable: true
+
+deadlines:
+  - id: cbr-july-decision
+    date: 2026-07-25
+    description: "Заседание ЦБ РФ — ключевой темп снижения ставки в цикле"
+    action: "Пересмотреть прогноз; если снижение >200 б.п. + Brent <$68 — перейти к H3 (92–100)"
+    auto_checkable: true
+
+falsifiers:
+  - id: brent-drops-below-60
+    description: "Brent падает ниже $60/bbl и держится >3 недель"
+    would_resolve: true
+    auto_checkable: true
+
+  - id: ofac-sdn-china-banks
+    description: "OFAC вводит SDN против 3+ китайских банков-посредников РФ"
+    would_resolve: true
+    auto_checkable: false
+
+  - id: cbr-aggressive-cut
+    description: "ЦБ снижает ставку на 400+ б.п. суммарно к 1 августа"
+    would_resolve: false
+    auto_checkable: true
+
+agents:
+  - id: ofac-sdn-banks
+    agent: "США / OFAC"
+    action: "SDN-листинг китайских банков-посредников российской торговли (Chouzhou-тип)"
+    window: "2026-05-01/2026-08-01"
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: opec-saudi-output
+    agent: "Саудовская Аравия / ОПЕК+"
+    action: "Увеличение добычи на 500+ тыс. б/д, разрыв квот ОПЕК+"
+    window: "2026-06-01/2026-08-01"
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: ru-govt-rate-pressure
+    agent: "Правительство РФ / Минэкономразвития"
+    action: "Политическое давление на ЦБ для ускоренного снижения ставки"
+    window: "2026-05-01/2026-07-25"
+    impact: mixed
+    severity: high
+    auto_checkable: false

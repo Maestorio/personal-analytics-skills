@@ -1,0 +1,283 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: brent-price-2026-10-08.md
+status: active
+replaces:
+  - brent-price-2026-09-17
+
+forecast:
+  date: 2026-10-08
+  horizon: 2028-12-31
+  horizons:
+    - 2026-12-31
+    - 2027-06-30
+    - 2027-12-31
+    - 2028-12-31
+  domain: commodity-agencies
+  topic: brent-price
+  method: fca
+  central_estimate: "Brent L1 marginal: $90/bbl к 2026-12-31 (с JPMorgan; без него $100), $87/bbl к 2027-06-30, нет trust-weighted консенсуса к 2027-12-31 (справочно unweighted ~$77.5, LOW), нет данных к 2028-12-31"
+  confidence: 0.50
+  source_coverage_score: 0.50
+  confidence_by_horizon:
+    "2026-12-31": 0.50
+    "2027-06-30": 0.38
+    "2027-12-31": 0.30
+    "2028-12-31": null   # TODO: 0 источников с точечным прогнозом на этот горизонт
+  anchor_share: 0.40
+  upstream_snapshot: []
+  notes:
+    - "Type 2 conditional FCA — матрица ru-west 2026-07-01 (D1 no_modal); горизонты 2026-12-31/2027-06-30/2027-12-31/2028-12-31; пересборка brent-price-2026-09-17 после EIA STEO 06.10 (Q4-26 $104.69, +$14 м/м)"
+    - "Режим карты позиций 1.5A: Full-auto (тема в триггерах Hormuz/Иран perspective-maps §1.1, но карта по исходу цены Brent там отсутствует) — 3 лагеря по предпосылке о длительности сбоя в Заливе: prolonged / gradual / fast; без опоры на perspective-maps.md и аудиты; доля крупнейшего лагеря 0.56 < 0.70 → asymmetry_warning false"
+    - "Смешение доменов commodity-agencies + global-banks(oil-forecast): IEA/OPEC не публикуют ценовых целей; World Bank (апрельский CMO, годовая средняя 2026) несопоставим; добавлены JPMorgan/Goldman/Morgan Stanley/Westpac"
+    - "JPMorgan (HIGH oil-forecast) 17.09: 'впервые с начала конфликта у нас нет базового прогноза'; в консенсус 2026-12-31 включена только его оценка Dec-26 при текущих потоках (~$86, выведена из заметки: $7-8 выше прежних маркеров $80/$78); без неё weighted median 2026-12-31 = $100, confidence 0.40"
+    - "Morgan Stanley: в INDEX нет субдомена oil-forecast → fallback MEDIUM (trust-application §nearest-domain), warning fallback_medium"
+    - "Источники-вектора: EIA 06.10 (свежий), остальные 25.08-17.09 — stale-vintage lag: EIA м/м +$14 на Q4-26 при зафиксированных в сентябре оценках $85-100 у MEDIUM/HIGH источников"
+    - "2027-12-31: 0 источников trust >= MEDIUM (EIA brent-24m LOW, Goldman LOW) — l1_weighted null; unweighted $77.5 — справочный, не прогноз; by_scenario на этом горизонте построен от unweighted-референса (DERIVED, LOW)"
+    - "2028-12-31: 0 свежих источников; единственный найденный 2028-ориентир Goldman '$80 к концу 2028' датирован 27.11.2025 (до войны в Заливе, >6 мес.) и не включён; WEO-2026 выходит 18.11.2026 — перезапуск после неё"
+    - "Веса сценариев: h6->2026-12-31, h12->2027-06-30, h24->2027-12-31 (конвенция macro-chain MFC-20260917: h24 переопределён на 2027-12-31). Интерполяция весов запрещена (scenario-yaml-spec). Прогноз 09-17 использовал интерполированные веса .195/.155/.355/.295 на 2027-12-31 — здесь это исправлено"
+    - "by_scenario DERIVED: ни один источник не привязывает прогноз к оси Russia-West (драйвер шока — США/Израиль-Иран и Ормуз); дельты +7.5/+2.5/-2.5/-7.5% к L1 (Brent monotone по оси X, axis_x hints); внешний ориентир величины — Goldman (26.11.2025): мир+снятие санкций = -$4-9/bbl к базе 2026-27"
+
+isolated: false
+isolated_reason: null
+
+conditional_on_scenarios:
+  source_matrix: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  scenario_id_format: short
+  unit: "USD/bbl"
+  l2_informative: false   # §18: весь by_scenario DERIVED — L2 не несёт независимой информации
+
+  fact_anchor:
+    value: 102.88
+    as_of: 2026-10-08
+    source: "TradingEconomics Brent (CFD), 2026-10-08; ICE Dec-26 фронт ~102.4 (oilprice.com, 07.10)"
+
+  one_sided_cone: true
+  cone_side:
+    "2026-12-31": down
+    "2027-06-30": down
+    "2027-12-31": down
+  counter_world_reason: >-
+    Встречный мир (Brent выше текущего спота $102.88) существует и источниками подтверждён, но его
+    драйвер лежит ВНЕ оси матрицы: Ормуз/Залив, а не Russia-West. EIA (06.10) даёт Q4-26 $104.69
+    (выше спота), TradingEconomics-модель $106.6, Goldman — >$120 при дефиците Залива 4 млн б/с
+    в 2027, BofA — $120-150 при новых повреждениях инфраструктуры; Dated Brent 02.10 торговался
+    выше $120 при ICE ~$101. Отдельным ключом by_scenario он нереализуем: схема требует строго
+    {A,B,C,D}. Поэтому off-axis upside внесён в верхнюю границу range всех четырёх сценариев
+    ($120, не масштабируется дельтами — драйвер ортогонален оси) и в monitoring с side: up.
+    Односторонность центров вниз — содержательный вывод: trust-взвешенная медиана ($90) держится
+    на оценках 25.08-17.09, а единственный свежий источник (EIA) стоит у спота.
+
+  by_scenario:
+    A:
+      values:
+        "2026-12-31": { central: 96.8, range: [75, 120] }
+        "2027-06-30": { central: 93.5, range: [70, 120] }
+        "2027-12-31": { central: 83.3, range: [70, 120] }
+      provenance: derived_from_marginal
+      sources_used: []
+      coverage_quality: DERIVED
+    B:
+      values:
+        "2026-12-31": { central: 92.2, range: [72, 120] }
+        "2027-06-30": { central: 89.2, range: [67, 120] }
+        "2027-12-31": { central: 79.4, range: [67, 120] }
+      provenance: derived_from_marginal
+      sources_used: []
+      coverage_quality: DERIVED
+    C:
+      values:
+        "2026-12-31": { central: 87.8, range: [68, 120] }
+        "2027-06-30": { central: 84.8, range: [63, 120] }
+        "2027-12-31": { central: 75.6, range: [63, 120] }
+      provenance: derived_from_marginal
+      sources_used: []
+      coverage_quality: DERIVED
+    D:
+      values:
+        "2026-12-31": { central: 83.2, range: [65, 120] }
+        "2027-06-30": { central: 80.5, range: [60, 120] }
+        "2027-12-31": { central: 71.7, range: [60, 120] }
+      provenance: derived_from_marginal
+      sources_used: []
+      coverage_quality: DERIVED
+
+  marginal:
+    method: linear
+    modal_scenario_id: none
+    values:
+      "2026-12-31": { central: 90.02, range: [65, 120] }
+      "2027-06-30": { central: 85.26, range: [60, 120] }
+      "2027-12-31": { central: 77.12, range: [60, 120] }
+    aggregation_formula: "weighted_mean"
+
+coherence_diagnostic:
+  layer1_marginal: 90
+  layer2_marginal: 90.02
+  divergence_pct: 0.02
+  severity: N/A
+  warning: >-
+    §18: by_scenario полностью DERIVED из L1 marginal — расхождение тавтологично (L2 построен из L1),
+    а не свидетельство согласованности. Читать как N/A. На 2027-12-31 база L1 — unweighted-референс
+    (нет trust-weighted консенсуса), т.е. L2 производен от LOW-источников.
+  by_horizon:
+    "2026-12-31": { layer1_marginal: 90.00, layer2_marginal: 90.02, divergence_pct: 0.02, severity: N/A }
+    "2027-06-30": { layer1_marginal: 87.00, layer2_marginal: 85.26, divergence_pct: 2.00, severity: N/A }
+    "2027-12-31": { layer1_marginal: null, layer2_marginal: 77.12, divergence_pct: null, severity: N/A }
+
+fca_stats:
+  "2026-12-31":
+    kind: level
+    unit: "USD/bbl"
+    l1_weighted: 90
+    l1_unweighted: 88.0
+    l2_ev: 90.02
+    p10: 86
+    p90: 104.69
+  "2027-06-30":
+    kind: level
+    unit: "USD/bbl"
+    l1_weighted: 87.0
+    l1_unweighted: 85
+    l2_ev: 85.26
+    p10: 87.0
+    p90: 90
+  "2027-12-31":
+    kind: level
+    unit: "USD/bbl"
+    l1_weighted: null   # TODO: 0 trust-weighted источников (EIA brent-24m LOW, Goldman LOW)
+    l1_unweighted: 77.5
+    l2_ev: 77.12
+    p10: null   # TODO: n=0 в weighted consensus
+    p90: null   # TODO: n=0 в weighted consensus
+  "2028-12-31":
+    kind: level
+    unit: "USD/bbl"
+    l1_weighted: null   # TODO: 0 источников на этот горизонт
+    l1_unweighted: null   # TODO: 0 источников на этот горизонт
+    l2_ev: null
+    p10: null
+    p90: null
+
+reviews:
+  interval_months: 3
+  next_due: 2027-01-08
+  last_completed: null
+  history: []
+
+monitoring:
+  - id: brent-month-avg-above-100
+    description: "Месячная средняя Brent удерживается выше $100 — взвешенная медиана $90 и все 4 центра сценариев пробиты вверх"
+    source: "https://tradingeconomics.com/commodity/brent-crude-oil"
+    threshold: "месячная средняя Brent > $100 за ноябрь или декабрь 2026"
+    check_date: 2026-12-31
+    auto_checkable: true
+    impact: invalidates
+    severity: high
+    side: up
+  - id: eia-steo-november
+    description: "Ноябрьский EIA STEO: закрепление премии (2027 avg > $90) или откат к glut (2027 avg < $75)"
+    source: "https://www.eia.gov/outlooks/steo/"
+    threshold: "2027 avg > $90 -> премия закрепилась; < $75 -> glut-ветка (Citi/JPM peace case)"
+    check_date: 2026-11-15
+    auto_checkable: true
+    impact: mixed
+    severity: critical
+    side: both
+  - id: dated-brent-physical-tightness
+    description: "Физический дефицит: Dated Brent выше фьючерса ICE более чем на $10 (02.10: Dated > $120 при ICE ~$101)"
+    source: "oilprice.com / Platts Dated Brent vs ICE front-month"
+    threshold: "спред Dated-ICE > $10 дольше 2 недель подряд"
+    check_date: 2026-12-31
+    auto_checkable: false
+    impact: invalidates
+    severity: high
+    side: up
+  - id: hormuz-flows-pre-war
+    description: "Экспорт Залива/Хормуз возвращается к докризисному уровню (Kpler ~80%, JPM до 98%, Goldman 23.3 млн б/с в конце сентября)"
+    source: "https://www.eia.gov/outlooks/steo/ ; Kpler/Goldman/JPM"
+    threshold: "потоки < 85% докризисного уровня дольше 60 дней -> ветка Goldman/BofA ($120+)"
+    check_date: 2026-12-31
+    auto_checkable: false
+    impact: invalidates
+    severity: critical
+    side: up
+  - id: supply-surplus-2027-materializes
+    description: "Профицит 2027 материализуется (EIA: Q4-27 $73.94; Citi/JPM peace case: $64-65)"
+    source: "https://www.eia.gov/outlooks/steo/"
+    threshold: "EIA/JPM/IEA подтверждают glut-баланс 2027 в обновлениях Q4-2026/Q1-2027"
+    check_date: 2027-06-30
+    auto_checkable: false
+    impact: supports
+    severity: critical
+    side: down
+  - id: iea-weo-2026-long-horizon
+    description: "IEA WEO 2026 (18.11.2026) — первое ценовое допущение, достающее до 2028; повод перезапустить FCA на 2028-12-31"
+    source: "https://www.iea.org/events/world-energy-outlook-2026"
+    threshold: "опубликованы ценовые допущения Brent на 2028"
+    check_date: 2026-11-18
+    auto_checkable: false
+    impact: supports
+    severity: medium
+    side: both
+  - id: ru-ukraine-ceasefire
+    description: "Ось матрицы: перемирие/сделка РФ-Украина (A/B -> C/D) - вторичный, не текущий драйвер Brent"
+    source: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+    threshold: "объявлено прекращение огня -> сдвиг к C/D"
+    check_date: 2027-06-30
+    auto_checkable: false
+    impact: mixed
+    severity: medium
+    side: down
+
+assumptions:
+  - id: gulf-flows-recover-gradually
+    text: "Экспорт Залива восстанавливается постепенно, большая часть добычи региона возвращается к концу 2кв27 (EIA); атаки на танкеры и Саудовскую инфраструктуру не приводят к новой остановке"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+  - id: surplus-2027
+    text: "Профицит предложения материализуется в 2027 (Goldman >3 млн б/с; JPM: 7 стран наращивают добычу; Citi: профицит больше докризисного)"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+  - id: premium-is-gulf-not-ruwest
+    text: "Текущая ценовая премия объясняется Заливом/Ормузом, а не Russia-West"
+    robustness: HIGH
+    sensitivity: critical
+    auto_checkable: false
+  - id: stale-vintage-lag
+    text: "Оценки MS (25.08), Goldman (08.09), Westpac (14.09), JPM (17.09) не отстают от EIA (06.10: Q4-26 +$14 м/м до $104.69)"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+  - id: jpm-no-baseline
+    text: "Выведенная оценка JPMorgan Dec-26 ~$86 пригодна как точка консенсуса, хотя сам банк заявил об отсутствии базового прогноза"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+  - id: g7-release-priced-in
+    text: "Выпуск 100 млн барр. G7 (02.10) в основном уже в цене и не создаёт устойчивого снижения"
+    robustness: MEDIUM
+    sensitivity: moderate
+    auto_checkable: false
+
+final_audit:
+  due: 2028-12-31
+  status: pending
+
+outcome_log:
+  - resolve_date: 2026-12-31
+    logged_at: 2026-10-08
+    record_type: horizon_resolve
+    kind: level
+    forecast_l1_weighted: 90
+    forecast_l1_unweighted: 88.0
+    forecast_l2_ev: 90.02
+    p10_p90: [86, 104.69]
+    confidence_at_forecast: 0.50
+    actual: null
+    in_p10_p90: null
+    error_pct: null
+    actual_source: null
+    shock_flag: none

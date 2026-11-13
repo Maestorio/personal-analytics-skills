@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-05-29T0000-DATA",
+  "key": "DATA",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-06-28",
+  "note": "Q1 выручка +93%, но дорого и микро-доля. Buy только <=90 (лимитка).",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-05-29T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

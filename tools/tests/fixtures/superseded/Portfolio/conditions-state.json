@@ -1,0 +1,56 @@
+{
+ "schema_version": "conditions-state@1",
+ "events": [
+  {
+   "condition_id": "lsngp-tranche2-rsbu9m",
+   "version": 1,
+   "event": "reopened",
+   "at": "2026-10-28T00:00:00+03:00",
+   "by": "owner",
+   "time_estimated": true,
+   "data": {
+    "note": "Перенос с 31.10 (суббота): РСБУ 9М2026 выходит 02.11 (MOEX-календарь через portfely.ru, проверить на IR эмитента). Разбор Mode 4 от 28.10 выполнен; добавлены ценовой порог ≤ ~350 ₽ и порог ЧП 9М"
+   }
+  },
+  {
+   "condition_id": "tmon-date-3110",
+   "version": 1,
+   "event": "fired",
+   "at": "2026-10-29T00:00:00+03:00",
+   "by": "script",
+   "time_estimated": true,
+   "data": {}
+  },
+  {
+   "condition_id": "tmon-date-3110",
+   "version": 1,
+   "event": "done",
+   "at": "2026-10-29T00:00:00+03:00",
+   "by": "site",
+   "time_estimated": true,
+   "data": {
+    "decision_id": "2026-10-28T1600-TMON"
+   }
+  },
+  {
+   "condition_id": "x5-ifrs3q-review",
+   "version": 1,
+   "event": "fired",
+   "at": "2026-10-29T00:00:00+03:00",
+   "by": "script",
+   "time_estimated": true,
+   "data": {}
+  },
+  {
+   "condition_id": "x5-ifrs3q-review",
+   "version": 1,
+   "event": "done",
+   "at": "2026-10-29T00:00:00+03:00",
+   "by": "site",
+   "time_estimated": true,
+   "data": {
+    "decision_id": "2026-10-29T0000-X5"
+   }
+  }
+ ]
+}

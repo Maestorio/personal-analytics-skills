@@ -1,0 +1,136 @@
+# Синтетические определения conditions@2 для теста модуля объединения; «сегодня» в тестах = 2026-10-30.
+schema_version: conditions@2
+conditions:
+-
+  id: c-pending
+  version: 1
+  key: AAAA
+  kind: review
+  trigger: {type: date, value: '2026-12-01'}
+  while_pending: {verdict: HOLD, text: ждём}
+  on_trigger: {action: run_analysis, verdict: HOLD, text: разобрать}
+  valid_until: '2026-12-31'
+  source: {kind: report, doc: reports/x.md}
+  created_at: '2026-10-01T10:00:00+03:00'
+  created_by: mode_4
+  withdrawn: null
+  superseded_by: null
+- {id: c-price-fired, version: 1, key: AAAA, kind: trade,
+   trigger: {type: price_below, value: 90}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: set_target_pct, verdict: BUY, target_pct: 5, text: добрать}, source: {kind: owner, doc: null},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: owner, withdrawn: null, superseded_by: null}
+- {id: c-fired, version: 1, key: BBBB, kind: review,
+   trigger: {type: date, value: '2026-10-20'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-done, version: 1, key: BBBB, kind: trade,
+   trigger: {type: date, value: '2026-10-20'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: set_verdict, verdict: SELL, text: продать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-withdrawn, version: 1, key: CCCC, kind: review,
+   trigger: {type: date, value: '2026-10-20'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: 'c-withdrawn@2'}
+- {id: c-withdrawn, version: 2, key: CCCC, kind: review,
+   trigger: {type: date, value: '2026-10-20'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: owner, doc: null},
+   created_at: '2026-10-15T10:00:00+03:00', created_by: owner,
+   withdrawn: {at: '2026-10-28T09:00:00+03:00', by: owner, reason: не актуально}, superseded_by: null}
+- {id: c-expired, version: 1, key: CCCC, kind: review,
+   trigger: {type: price_above, value: 200}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, valid_until: '2026-10-01',
+   on_expiry: {action: set_verdict, verdict: TRIM, text: срезать часть},
+   source: {kind: report, doc: reports/x.md}, created_at: '2026-09-01T10:00:00+03:00', created_by: mode_4,
+   withdrawn: null, superseded_by: null}
+- {id: c-report-passed, version: 1, key: DDDD, kind: review,
+   trigger: {type: report_published, value: 'МСФО 9М 2026', window_end: '2026-10-20'},
+   while_pending: {verdict: HOLD, text: ждём}, on_trigger: {action: run_analysis, verdict: null, text: разобрать},
+   source: {kind: report, doc: reports/x.md}, created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4,
+   withdrawn: null, superseded_by: null}
+- {id: c-report-future, version: 1, key: DDDD, kind: review,
+   trigger: {type: report_published, value: 'МСФО 2026', window_end: '2026-12-20'},
+   while_pending: {verdict: HOLD, text: ждём}, on_trigger: {action: run_analysis, verdict: null, text: разобрать},
+   source: {kind: report, doc: reports/x.md}, created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4,
+   withdrawn: null, superseded_by: null}
+- {id: c-multi, version: 1, key: AAAA, kind: review,
+   trigger: {type: date, value: '2026-10-10'}, while_pending: {verdict: HOLD, text: старая},
+   on_trigger: {action: run_analysis, verdict: null, text: старая}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: 'c-multi@2'}
+- {id: c-multi, version: 2, key: AAAA, kind: review,
+   trigger: {type: date, value: '2026-10-25'}, while_pending: {verdict: WATCH, text: новая},
+   on_trigger: {action: run_analysis, verdict: null, text: новая}, source: {kind: owner, doc: null},
+   created_at: '2026-10-12T10:00:00+03:00', created_by: owner, withdrawn: null, superseded_by: null}
+- {id: c-multi-after, version: 1, key: AAAA, kind: trade,
+   trigger: {type: price_above, value: 300}, while_pending: {verdict: HOLD, text: старая},
+   on_trigger: {action: set_verdict, verdict: TRIM, text: старая}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: 'c-multi-after@2'}
+- {id: c-multi-after, version: 2, key: AAAA, kind: trade,
+   trigger: {type: price_above, value: 320}, while_pending: {verdict: HOLD, text: новая},
+   on_trigger: {action: set_verdict, verdict: TRIM, text: новая}, source: {kind: owner, doc: null},
+   note: порог поднят после закрытия первой версии,
+   created_at: '2026-10-12T10:00:00+03:00', created_by: owner, withdrawn: null, superseded_by: null}
+- {id: c-expired-event, version: 1, key: BBBB, kind: review,
+   trigger: {type: date, value: '2026-12-01'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-date-deadline, version: 1, key: EEEE, kind: review,
+   trigger: {type: date, value: '2026-10-20'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-reopened, version: 1, key: EEEE, kind: review,
+   trigger: {type: date, value: '2026-12-10'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-reopened-fired, version: 1, key: EEEE, kind: review,
+   trigger: {type: date, value: '2026-12-10'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-mark-done, version: 1, key: FFFF, kind: review,
+   trigger: {type: date, value: '2026-12-10'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-mark-dismissed, version: 1, key: FFFF, kind: review,
+   trigger: {type: date, value: '2026-12-10'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-deferred, version: 1, key: FFFF, kind: review,
+   trigger: {type: date, value: '2026-12-10'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-deferred-past, version: 1, key: FFFF, kind: review,
+   trigger: {type: date, value: '2026-12-10'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-deferred-deadline, version: 1, key: FFFF, kind: review,
+   trigger: {type: date, value: '2026-10-20'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-found, version: 1, key: GGGG, kind: review,
+   trigger: {type: report_published, value: 'МСФО 9М', window_end: '2026-12-20'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+# дополнения для теста паритета Python = JS (tools/tests/test_conditions_merge_parity.py)
+- {id: c-found-fired, version: 1, key: HHHH, kind: review,
+   trigger: {type: report_published, value: 'РСБУ 9М', window_end: '2026-12-20'}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать}, source: {kind: report, doc: reports/x.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+- {id: c-defer-before-fire, version: 1, key: HHHH, kind: review,
+   trigger: {type: price_above, value: 150}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: notify_only, text: сообщить}, source: {kind: owner, doc: null},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: owner, withdrawn: null, superseded_by: null}
+- {id: c-expired-then-done, version: 1, key: HHHH, kind: trade,
+   trigger: {type: price_below, value: 50}, while_pending: {verdict: HOLD, text: ждём},
+   on_trigger: {action: set_verdict, verdict: BUY, text: купить}, valid_until: '2026-10-09',
+   on_expiry: {action: notify_only, text: срок вышел}, source: {kind: owner, doc: null},
+   created_at: '2026-09-01T10:00:00+03:00', created_by: owner, withdrawn: null, superseded_by: null}
+- {id: ru000a000aa0-bond, version: 1, key: RU000A000AA0, kind: watch,
+   trigger: {type: date, value: '2026-11-15'}, while_pending: {verdict: HOLD_TO_MAT, text: держим},
+   on_trigger: {action: run_analysis, verdict: null, text: разобрать облигацию}, not_before: '2026-10-01',
+   valid_until: '2026-12-31', source: {kind: report, doc: reports/y.md},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: mode_4, withdrawn: null, superseded_by: null}
+# R30 (03.11): исход «реинвестировать» — цель (корзина или ключ бумаги) и источник денег несутся строкой как есть
+- {id: c-reinvest, version: 1, key: RU000A000BB0, kind: trade,
+   trigger: {type: date, value: '2026-11-19'}, while_pending: {verdict: HOLD_TO_MAT, text: держим до погашения},
+   on_trigger: {action: reinvest, target: ОФЗ/>10, amount_source: redemption, text: 'погашение → реинвест в ОФЗ длиннее 10 лет'},
+   source: {kind: owner, doc: null},
+   created_at: '2026-10-01T10:00:00+03:00', created_by: owner, withdrawn: null, superseded_by: null}

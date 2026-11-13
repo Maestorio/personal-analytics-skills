@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-MRKP",
+  "key": "MRKP",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-11-03",
+  "note": "Стресс-EV отрицателен на обоих горизонтах (−1,84 / −1,18). Идея IE с дивдоходностью ~20% отфильтрована (dividend-stocks = IGNORE). План 2,0% не меняю до тарифных решений на 2027.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

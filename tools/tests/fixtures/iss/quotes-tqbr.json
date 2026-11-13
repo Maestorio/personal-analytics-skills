@@ -1,0 +1,4007 @@
+{
+ "schema": "quotes@1",
+ "fetched_at": "2026-10-13T14:14:05+03:00",
+ "source": "moex_iss",
+ "delayed_min": 15,
+ "stale": false,
+ "boards": {
+  "TQBR": {
+   "fetched_at": "2026-10-13T14:14:05+03:00",
+   "stale": false
+  }
+ },
+ "items": {
+  "ABIO": {
+   "price": 45.88,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 44.7
+  },
+  "ABRD": {
+   "price": 117.6,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:21",
+   "prev_close": 116.2
+  },
+  "AFKS": {
+   "price": 7.78,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 7.367
+  },
+  "AFLT": {
+   "price": 35.57,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 34.26
+  },
+  "AIIQ": {
+   "price": 11.327,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 11.169
+  },
+  "AKAI": {
+   "price": 100.28,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:03",
+   "prev_close": 98.3
+  },
+  "AKBC": {
+   "price": 93.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:29",
+   "prev_close": 92.6
+  },
+  "AKCN": {
+   "price": 78.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 76.6
+  },
+  "AKFB": {
+   "price": 142.26,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:26",
+   "prev_close": 142.16
+  },
+  "AKFN": {
+   "price": 97.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:18",
+   "prev_close": 95.6
+  },
+  "AKGD": {
+   "price": 249.98,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 250.19
+  },
+  "AKGP": {
+   "price": 1.165,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 1.155
+  },
+  "AKHT": {
+   "price": 95.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 92.98
+  },
+  "AKIE": {
+   "price": 891.57,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 878.0
+  },
+  "AKMB": {
+   "price": 1.9714,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 1.9694
+  },
+  "AKMC": {
+   "price": 1320.77,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 1322.55
+  },
+  "AKME": {
+   "price": 182.88,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 179.34
+  },
+  "AKMM": {
+   "price": 179.36,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 179.28
+  },
+  "AKMP": {
+   "price": 1.2779,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1.2774
+  },
+  "AKPP": {
+   "price": 132.15,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 131.84
+  },
+  "AKQU": {
+   "price": 68.58,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:21",
+   "prev_close": 67.65
+  },
+  "AKRN": {
+   "price": 17132.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 17020.0
+  },
+  "AKUP": {
+   "price": 12.63,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 12.53
+  },
+  "ALRS": {
+   "price": 20.66,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 20.48
+  },
+  "AMEZ": {
+   "price": 68.05,
+   "price_kind": "prev_close",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 68.05
+  },
+  "AMFL": {
+   "price": 142.4,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 142.2
+  },
+  "AMGB": {
+   "price": 126.2,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:56:01",
+   "prev_close": 126.3
+  },
+  "AMGL": {
+   "price": 134.2,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 134.7
+  },
+  "AMIX": {
+   "price": 101.3,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 99.9
+  },
+  "AMNR": {
+   "price": 158.43,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 158.368
+  },
+  "AMNY": {
+   "price": 1337.66,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 1338.86
+  },
+  "AMRE": {
+   "price": 106.9,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:00",
+   "prev_close": 105.5
+  },
+  "AMRH": {
+   "price": 165.6,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:50",
+   "prev_close": 165.4
+  },
+  "AMVD": {
+   "price": 799.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:30",
+   "prev_close": 802.0
+  },
+  "AMVY": {
+   "price": 1236.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:16",
+   "prev_close": 1240.0
+  },
+  "APRI": {
+   "price": 15.97,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 16.05
+  },
+  "APTK": {
+   "price": 6.254,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:28",
+   "prev_close": 6.226
+  },
+  "AQUA": {
+   "price": 325.1,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 319.5
+  },
+  "ARSA": {
+   "price": 7.49,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:11",
+   "prev_close": 7.37
+  },
+  "ASSB": {
+   "price": 2.55,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 2.555
+  },
+  "ASTR": {
+   "price": 224.75,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 217.55
+  },
+  "AVAN": {
+   "price": 540.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 540.0
+  },
+  "BANE": {
+   "price": 1324.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:27",
+   "prev_close": 1286.0
+  },
+  "BANEP": {
+   "price": 789.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 786.5
+  },
+  "BAZA": {
+   "price": 123.16,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:11",
+   "prev_close": 119.02
+  },
+  "BCSB": {
+   "price": 16.556,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:07",
+   "prev_close": 16.574
+  },
+  "BCSD": {
+   "price": 14.516,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:11",
+   "prev_close": 14.513
+  },
+  "BCSE": {
+   "price": 943.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 936.0
+  },
+  "BCSG": {
+   "price": 13.37,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 13.28
+  },
+  "BCSR": {
+   "price": 10.67,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 10.45
+  },
+  "BCSW": {
+   "price": 11.08,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:17",
+   "prev_close": 11.01
+  },
+  "BELU": {
+   "price": 265.4,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 259.0
+  },
+  "BISVP": {
+   "price": 10.17,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 10.13
+  },
+  "BLNG": {
+   "price": 7.65,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:27",
+   "prev_close": 7.57
+  },
+  "BNDA": {
+   "price": 1252.3,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 11:46:48",
+   "prev_close": 1247.0
+  },
+  "BNDB": {
+   "price": 1334.4,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:54:01",
+   "prev_close": 1341.1
+  },
+  "BNDC": {
+   "price": 1302.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:11:59",
+   "prev_close": 1293.5
+  },
+  "BOND": {
+   "price": 1694.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1693.0
+  },
+  "BRZL": {
+   "price": 1194.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 1188.0
+  },
+  "BSPB": {
+   "price": 252.81,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 251.1
+  },
+  "BSPBP": {
+   "price": 33.9,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:27",
+   "prev_close": 33.15
+  },
+  "BTBR": {
+   "price": 124.98,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:26",
+   "prev_close": 124.46
+  },
+  "CARM": {
+   "price": 0.707,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:26",
+   "prev_close": 0.7025
+  },
+  "CASH": {
+   "price": 13.834,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 13.827
+  },
+  "CBOM": {
+   "price": 10.013,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 9.544
+  },
+  "CHGZ": {
+   "price": 116.6,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 117.2
+  },
+  "CHKZ": {
+   "price": 15050.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:35",
+   "prev_close": 14950.0
+  },
+  "CHMF": {
+   "price": 713.6,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 682.4
+  },
+  "CHMK": {
+   "price": 3200.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:21",
+   "prev_close": 3110.0
+  },
+  "CNRU": {
+   "price": 668.6,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 654.6
+  },
+  "CNTL": {
+   "price": 8.36,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 8.38
+  },
+  "CNTLP": {
+   "price": 4.36,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:33",
+   "prev_close": 4.32
+  },
+  "CNYM": {
+   "price": 142.48,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 142.47
+  },
+  "CORP": {
+   "price": 103.26,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 103.22
+  },
+  "DATA": {
+   "price": 98.84,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 95.56
+  },
+  "DELI": {
+   "price": 45.85,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 45.2
+  },
+  "DIAS": {
+   "price": 1179.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:03",
+   "prev_close": 1187.5
+  },
+  "DIOD": {
+   "price": 7.81,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:02",
+   "prev_close": 7.73
+  },
+  "DIVD": {
+   "price": 1113.2,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 1097.8
+  },
+  "DOMRF": {
+   "price": 2113.7,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 2082.3
+  },
+  "DVEC": {
+   "price": 1.612,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:16",
+   "prev_close": 1.61
+  },
+  "DZRD": {
+   "price": 1200.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1210.0
+  },
+  "DZRDP": {
+   "price": 1780.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:17",
+   "prev_close": 1780.0
+  },
+  "EELT": {
+   "price": 7.64,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 7.66
+  },
+  "ELFV": {
+   "price": 0.396,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:29",
+   "prev_close": 0.3858
+  },
+  "ELMT": {
+   "price": 0.09925,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:18",
+   "prev_close": 0.09875
+  },
+  "ENPG": {
+   "price": 313.45,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 306.6
+  },
+  "EQMX": {
+   "price": 133.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:27",
+   "prev_close": 131.35
+  },
+  "ESGE": {
+   "price": 70.52,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 68.77
+  },
+  "ESGR": {
+   "price": 1057.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:17",
+   "prev_close": 1040.5
+  },
+  "ETLN": {
+   "price": 20.9,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 20.12
+  },
+  "EUTR": {
+   "price": 23.25,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 23.15
+  },
+  "EVRZ": {
+   "price": 48.35,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:28",
+   "prev_close": 47.5
+  },
+  "FEES": {
+   "price": 0.0562,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 0.05498
+  },
+  "FESH": {
+   "price": 63.96,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:20",
+   "prev_close": 62.99
+  },
+  "FINC": {
+   "price": 1436.6,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:28:01",
+   "prev_close": 1434.1
+  },
+  "FIXR": {
+   "price": 0.4035,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 0.3991
+  },
+  "FLOT": {
+   "price": 85.76,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 84.22
+  },
+  "FLOW": {
+   "price": 1018.1,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1017.5
+  },
+  "FMBR": {
+   "price": 11.572,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 11.546
+  },
+  "FMMM": {
+   "price": 13.986,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 13.986
+  },
+  "FMSA": {
+   "price": 10.354,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 10.099
+  },
+  "GAZA": {
+   "price": 420.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:34",
+   "prev_close": 415.0
+  },
+  "GAZAP": {
+   "price": 314.5,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 312.0
+  },
+  "GAZC": {
+   "price": 659.0,
+   "price_kind": "prev_close",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 659.0
+  },
+  "GAZP": {
+   "price": 103.39,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 101.7
+  },
+  "GAZS": {
+   "price": 839.0,
+   "price_kind": "prev_close",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 839.0
+  },
+  "GAZT": {
+   "price": 1739.0,
+   "price_kind": "prev_close",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1739.0
+  },
+  "GCHE": {
+   "price": 3540.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:25",
+   "prev_close": 3526.0
+  },
+  "GECO": {
+   "price": 14.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:23",
+   "prev_close": 14.48
+  },
+  "GEMA": {
+   "price": 94.8,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:25",
+   "prev_close": 95.1
+  },
+  "GEMC": {
+   "price": 618.4,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:27",
+   "prev_close": 610.1
+  },
+  "GLRX": {
+   "price": 39.02,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:21",
+   "prev_close": 39.34
+  },
+  "GMKN": {
+   "price": 118.84,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 117.16
+  },
+  "GOLD": {
+   "price": 2.855,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 2.85
+  },
+  "GOOD": {
+   "price": 1411.4,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:49:01",
+   "prev_close": 1409.6
+  },
+  "GROD": {
+   "price": 724.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:03",
+   "prev_close": 710.0
+  },
+  "GTRK": {
+   "price": 47.1,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 46.3
+  },
+  "HEAD": {
+   "price": 2833.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 2765.0
+  },
+  "HIMCP": {
+   "price": 13.66,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:01",
+   "prev_close": 13.52
+  },
+  "HNFG": {
+   "price": 288.4,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 281.6
+  },
+  "HYDR": {
+   "price": 0.4259,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 0.4074
+  },
+  "IGST": {
+   "price": 4100.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 4080.0
+  },
+  "IGSTP": {
+   "price": 3100.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:06",
+   "prev_close": 3100.0
+  },
+  "INCB": {
+   "price": 67.28,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 67.18
+  },
+  "INFL": {
+   "price": 153.74,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:44",
+   "prev_close": 153.72
+  },
+  "INGO": {
+   "price": 169.95,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:16",
+   "prev_close": 169.35
+  },
+  "IRAO": {
+   "price": 2.565,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:21",
+   "prev_close": 2.529
+  },
+  "IRKT": {
+   "price": 20.0,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:26",
+   "prev_close": 19.42
+  },
+  "IVAT": {
+   "price": 68.65,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 65.65
+  },
+  "JNOS": {
+   "price": 28.62,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:04",
+   "prev_close": 29.18
+  },
+  "JNOSP": {
+   "price": 12.58,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:45",
+   "prev_close": 12.78
+  },
+  "KAZT": {
+   "price": 344.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 339.2
+  },
+  "KAZTP": {
+   "price": 348.5,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 342.5
+  },
+  "KBSB": {
+   "price": 891.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 885.0
+  },
+  "KCHE": {
+   "price": 0.449,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 0.456
+  },
+  "KCHEP": {
+   "price": 0.945,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:04:45",
+   "prev_close": 0.96
+  },
+  "KFBA": {
+   "price": 1550.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:55:22",
+   "prev_close": 1550.0
+  },
+  "KGKC": {
+   "price": 36.2,
+   "price_kind": "market",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:27",
+   "prev_close": 36.8
+  },
+  "KGKCP": {
+   "price": 37.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:56",
+   "prev_close": 37.0
+  },
+  "KLSB": {
+   "price": 19.1,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 19.04
+  },
+  "KLVZ": {
+   "price": 1.874,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1.864
+  },
+  "KMAZ": {
+   "price": 58.8,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:25",
+   "prev_close": 57.6
+  },
+  "KMEZ": {
+   "price": 1068.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1062.0
+  },
+  "KOGK": {
+   "price": 235.6,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:18",
+   "prev_close": 232.0
+  },
+  "KRKN": {
+   "price": 10400.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:15",
+   "prev_close": 10600.0
+  },
+  "KRKNP": {
+   "price": 6120.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:02",
+   "prev_close": 6100.0
+  },
+  "KRKOP": {
+   "price": 13.1,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 12.94
+  },
+  "KROT": {
+   "price": 1169.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:20",
+   "prev_close": 1162.0
+  },
+  "KROTP": {
+   "price": 530.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:34",
+   "prev_close": 524.0
+  },
+  "KRSB": {
+   "price": 20.24,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:46",
+   "prev_close": 20.18
+  },
+  "KRSBP": {
+   "price": 20.56,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 20.48
+  },
+  "KUZB": {
+   "price": 0.02565,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 0.02555
+  },
+  "KZOS": {
+   "price": 46.1,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 45.5
+  },
+  "KZOSP": {
+   "price": 14.61,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 14.6
+  },
+  "LEAS": {
+   "price": 670.7,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 670.8
+  },
+  "LENT": {
+   "price": 1770.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 1759.5
+  },
+  "LIFE": {
+   "price": 1.665,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1.64
+  },
+  "LKOH": {
+   "price": 5991.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 5983.0
+  },
+  "LMBZ": {
+   "price": 463.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:18",
+   "prev_close": 463.5
+  },
+  "LPSB": {
+   "price": 46.35,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 45.95
+  },
+  "LQDT": {
+   "price": 2.1078,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 2.107
+  },
+  "LSNG": {
+   "price": 14.45,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 14.06
+  },
+  "LSNGP": {
+   "price": 346.65,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 341.8
+  },
+  "LSRG": {
+   "price": 529.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:24",
+   "prev_close": 527.0
+  },
+  "LVHK": {
+   "price": 20.0,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:43",
+   "prev_close": 19.7
+  },
+  "MAGE": {
+   "price": 2.67,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:41",
+   "prev_close": 2.6
+  },
+  "MAGEP": {
+   "price": 2.245,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 2.305
+  },
+  "MAGN": {
+   "price": 22.75,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 22.05
+  },
+  "MBNK": {
+   "price": 963.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 949.0
+  },
+  "MDMG": {
+   "price": 1338.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1315.9
+  },
+  "MFGS": {
+   "price": 308.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 308.0
+  },
+  "MFGSP": {
+   "price": 236.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 234.5
+  },
+  "MGKL": {
+   "price": 1.9775,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1.9645
+  },
+  "MGNT": {
+   "price": 1755.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 1736.0
+  },
+  "MGNZ": {
+   "price": 7440.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 7440.0
+  },
+  "MGTS": {
+   "price": 1440.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:34",
+   "prev_close": 1430.0
+  },
+  "MGTSP": {
+   "price": 1172.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:37",
+   "prev_close": 1158.0
+  },
+  "MISB": {
+   "price": 52.2,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:16",
+   "prev_close": 51.5
+  },
+  "MISBP": {
+   "price": 48.6,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:10",
+   "prev_close": 48.3
+  },
+  "MKBD": {
+   "price": 976.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:04:02",
+   "prev_close": 968.0
+  },
+  "MOEX": {
+   "price": 159.29,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 154.97
+  },
+  "MONY": {
+   "price": 134.16,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:01:52",
+   "prev_close": 134.16
+  },
+  "MRKC": {
+   "price": 0.704,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:18",
+   "prev_close": 0.6974
+  },
+  "MRKK": {
+   "price": 13.82,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 13.74
+  },
+  "MRKP": {
+   "price": 0.5459,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 0.5376
+  },
+  "MRKS": {
+   "price": 0.4825,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 0.48
+  },
+  "MRKU": {
+   "price": 0.6584,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 0.6554
+  },
+  "MRKV": {
+   "price": 0.2135,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 0.2106
+  },
+  "MRKY": {
+   "price": 0.07425,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 0.07275
+  },
+  "MRKZ": {
+   "price": 0.13205,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:03",
+   "prev_close": 0.1315
+  },
+  "MRSB": {
+   "price": 1.0,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:00:47",
+   "prev_close": 1.0
+  },
+  "MSNG": {
+   "price": 1.3475,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1.3225
+  },
+  "MSRS": {
+   "price": 1.712,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 1.692
+  },
+  "MSTT": {
+   "price": 71.8,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 71.15
+  },
+  "MTLR": {
+   "price": 43.97,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 43.61
+  },
+  "MTLRP": {
+   "price": 40.95,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:05",
+   "prev_close": 40.25
+  },
+  "MTSS": {
+   "price": 174.2,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 170.85
+  },
+  "MVID": {
+   "price": 44.55,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:29",
+   "prev_close": 43.4
+  },
+  "NAUK": {
+   "price": 438.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:29",
+   "prev_close": 435.0
+  },
+  "NFAZ": {
+   "price": 198.5,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:39",
+   "prev_close": 195.0
+  },
+  "NFKL": {
+   "price": 103.97,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 11:21:00",
+   "prev_close": 103.92
+  },
+  "NKHP": {
+   "price": 387.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 386.0
+  },
+  "NKNC": {
+   "price": 45.2,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 45.2
+  },
+  "NKNCP": {
+   "price": 35.18,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:13",
+   "prev_close": 34.88
+  },
+  "NKSH": {
+   "price": 31.8,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 32.1
+  },
+  "NLMK": {
+   "price": 77.62,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 75.08
+  },
+  "NMTP": {
+   "price": 6.91,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 6.85
+  },
+  "NNSB": {
+   "price": 2570.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 2590.0
+  },
+  "NNSBP": {
+   "price": 1284.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:14",
+   "prev_close": 1288.0
+  },
+  "NSVZ": {
+   "price": 196.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:03",
+   "prev_close": 193.5
+  },
+  "NVTK": {
+   "price": 1074.1,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1069.0
+  },
+  "OBLG": {
+   "price": 211.62,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 211.64
+  },
+  "OFZS": {
+   "price": 102.76,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 102.58
+  },
+  "OGKB": {
+   "price": 0.2228,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:28",
+   "prev_close": 0.222
+  },
+  "OKEY": {
+   "price": 51.29,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 50.99
+  },
+  "OLIQ": {
+   "price": 104.17,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 104.13
+  },
+  "OMZZP": {
+   "price": 9520.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:47",
+   "prev_close": 9380.0
+  },
+  "OZON": {
+   "price": 3451.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 3316.0
+  },
+  "OZPH": {
+   "price": 46.18,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 45.75
+  },
+  "PAZA": {
+   "price": 8300.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:45",
+   "prev_close": 8340.0
+  },
+  "PHOR": {
+   "price": 5401.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:26",
+   "prev_close": 5320.0
+  },
+  "PIKK": {
+   "price": 547.2,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 550.2
+  },
+  "PLZL": {
+   "price": 1072.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1058.8
+  },
+  "PMSB": {
+   "price": 432.4,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 425.5
+  },
+  "PMSBP": {
+   "price": 476.8,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:16",
+   "prev_close": 472.6
+  },
+  "POSI": {
+   "price": 1105.6,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1092.0
+  },
+  "PRFN": {
+   "price": 2.982,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 2.946
+  },
+  "PRIE": {
+   "price": 940.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 940.0
+  },
+  "PRMB": {
+   "price": 18000.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 17800.0
+  },
+  "PRMD": {
+   "price": 404.2,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 401.05
+  },
+  "PSGM": {
+   "price": 13.154,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:26",
+   "prev_close": 13.105
+  },
+  "PSMM": {
+   "price": 14.816,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:29",
+   "prev_close": 14.802
+  },
+  "PSRB": {
+   "price": 14.027,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 14.01
+  },
+  "PSRE": {
+   "price": 9.456,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 9.258
+  },
+  "RAGR": {
+   "price": 74.72,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 73.18
+  },
+  "RASP": {
+   "price": 137.15,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:19",
+   "prev_close": 135.45
+  },
+  "RBCM": {
+   "price": 8.2,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 7.89
+  },
+  "RDRB": {
+   "price": 100.8,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:34",
+   "prev_close": 100.8
+  },
+  "RENI": {
+   "price": 73.42,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 71.1
+  },
+  "RGSS": {
+   "price": 0.18,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 0.181
+  },
+  "RKKE": {
+   "price": 11170.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:23",
+   "prev_close": 11120.0
+  },
+  "RNFT": {
+   "price": 92.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 92.6
+  },
+  "ROLO": {
+   "price": 0.4158,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 0.4118
+  },
+  "ROSN": {
+   "price": 376.15,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 377.95
+  },
+  "ROST": {
+   "price": 65.8,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 65.8
+  },
+  "RSHU": {
+   "price": 132.28,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:18",
+   "prev_close": 130.76
+  },
+  "RTGZ": {
+   "price": 34800.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:55:15",
+   "prev_close": 34800.0
+  },
+  "RTKM": {
+   "price": 42.86,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 41.14
+  },
+  "RTKMP": {
+   "price": 44.15,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 42.65
+  },
+  "RTSB": {
+   "price": 2.785,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:47",
+   "prev_close": 2.745
+  },
+  "RTSBP": {
+   "price": 1.266,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:49",
+   "prev_close": 1.244
+  },
+  "RU0005418747": {
+   "price": 183.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:53",
+   "prev_close": 181.5
+  },
+  "RU0006922010": {
+   "price": 124.65,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:25",
+   "prev_close": 124.6
+  },
+  "RU0006922044": {
+   "price": 151.4,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:27",
+   "prev_close": 147.6
+  },
+  "RU000A0HGNG6": {
+   "price": 12778.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:01",
+   "prev_close": 12682.0
+  },
+  "RU000A0HGNH4": {
+   "price": 9814.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:44",
+   "prev_close": 9650.0
+  },
+  "RU000A0JP773": {
+   "price": 4.57,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:25",
+   "prev_close": 4.57
+  },
+  "RU000A0JP799": {
+   "price": 4.33,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:24",
+   "prev_close": 4.33
+  },
+  "RU000A0JPMD2": {
+   "price": 10104.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:58",
+   "prev_close": 10122.0
+  },
+  "RU000A0JPZP8": {
+   "price": 6640000.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 6640000.0
+  },
+  "RU000A0JR282": {
+   "price": 48.75,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 47.7
+  },
+  "RU000A0JR290": {
+   "price": 8475.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:36",
+   "prev_close": 8390.0
+  },
+  "RU000A0JR2A5": {
+   "price": 14.55,
+   "price_kind": "prev_close",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 14.55
+  },
+  "RU000A0JR2C1": {
+   "price": 111.7,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 111.35
+  },
+  "RU000A0JRHC0": {
+   "price": 3015.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:34:26",
+   "prev_close": 3000.0
+  },
+  "RU000A0JRUQ3": {
+   "price": 8650.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 09:25:01",
+   "prev_close": 9050.0
+  },
+  "RU000A0JUR61": {
+   "price": 3800.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:01:23",
+   "prev_close": 4950.0
+  },
+  "RU000A0JUYB1": {
+   "price": 1459000.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1459000.0
+  },
+  "RU000A0JVJ29": {
+   "price": 302.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:54",
+   "prev_close": 303.0
+  },
+  "RU000A0JWCE7": {
+   "price": 1305.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 12:56:00",
+   "prev_close": 1300.0
+  },
+  "RU000A0JXP78": {
+   "price": 15650.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:16:59",
+   "prev_close": 15550.0
+  },
+  "RU000A0JXWF0": {
+   "price": 2823.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:43",
+   "prev_close": 2821.0
+  },
+  "RU000A0ZYC64": {
+   "price": 230000.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 09:25:01",
+   "prev_close": 240000.0
+  },
+  "RU000A0ZZ5R2": {
+   "price": 842.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 852.0
+  },
+  "RU000A0ZZCD8": {
+   "price": 3000.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 3060.0
+  },
+  "RU000A0ZZMD7": {
+   "price": 3280.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:22",
+   "prev_close": 3280.0
+  },
+  "RU000A0ZZME5": {
+   "price": 3437.13,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 3437.13
+  },
+  "RU000A0ZZML0": {
+   "price": 3160.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:33",
+   "prev_close": 3200.0
+  },
+  "RU000A0ZZMN6": {
+   "price": 4170.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:55:22",
+   "prev_close": 4140.0
+  },
+  "RU000A0ZZVH9": {
+   "price": 1845.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1845.0
+  },
+  "RU000A1000W4": {
+   "price": 3510.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:33:28",
+   "prev_close": 3485.0
+  },
+  "RU000A1000Y0": {
+   "price": 14300000.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 14300000.0
+  },
+  "RU000A100EQ2": {
+   "price": 12.7,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 12.57
+  },
+  "RU000A100WZ5": {
+   "price": 1393.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:35",
+   "prev_close": 1394.0
+  },
+  "RU000A101NK4": {
+   "price": 748.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:24",
+   "prev_close": 765.5
+  },
+  "RU000A101UK9": {
+   "price": 9000.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 9000.0
+  },
+  "RU000A101UY0": {
+   "price": 1990.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:04:45",
+   "prev_close": 2150.0
+  },
+  "RU000A1022Z1": {
+   "price": 8464.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 8568.0
+  },
+  "RU000A1027E5": {
+   "price": 15240.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:54:01",
+   "prev_close": 15220.0
+  },
+  "RU000A102AH5": {
+   "price": 370000.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 09:25:01",
+   "prev_close": 390000.0
+  },
+  "RU000A102N77": {
+   "price": 122100.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:13",
+   "prev_close": 122000.0
+  },
+  "RU000A102PE0": {
+   "price": 10000.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:37",
+   "prev_close": 10000.0
+  },
+  "RU000A102PF7": {
+   "price": 11200.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 10:54:19",
+   "prev_close": 11200.0
+  },
+  "RU000A102PQ4": {
+   "price": 12600.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:29:01",
+   "prev_close": 12600.0
+  },
+  "RU000A1034U7": {
+   "price": 89000.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:01",
+   "prev_close": 88400.0
+  },
+  "RU000A103B62": {
+   "price": 1441.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1445.0
+  },
+  "RU000A103HD7": {
+   "price": 103340.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 103340.0
+  },
+  "RU000A104172": {
+   "price": 1718.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1725.0
+  },
+  "RU000A104KU3": {
+   "price": 1195.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1194.0
+  },
+  "RU000A104M43": {
+   "price": 21600.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 21300.0
+  },
+  "RU000A104YX8": {
+   "price": 826.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 828.0
+  },
+  "RU000A105153": {
+   "price": 1736.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 10:15:31",
+   "prev_close": 1685.0
+  },
+  "RU000A105328": {
+   "price": 1147.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1144.0
+  },
+  "RU000A105GY0": {
+   "price": 96500.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:18:09",
+   "prev_close": 101500.0
+  },
+  "RU000A105R70": {
+   "price": 22900.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 22900.0
+  },
+  "RU000A105RJ8": {
+   "price": 1620.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:04:46",
+   "prev_close": 1620.0
+  },
+  "RU000A105TU1": {
+   "price": 483.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:25",
+   "prev_close": 486.0
+  },
+  "RU000A1068X9": {
+   "price": 1124.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1122.0
+  },
+  "RU000A106CX9": {
+   "price": 142760.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 142760.0
+  },
+  "RU000A106G80": {
+   "price": 905.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:01",
+   "prev_close": 911.5
+  },
+  "RU000A106LB6": {
+   "price": 1275.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1275.0
+  },
+  "RU000A106LC4": {
+   "price": 1025.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:55",
+   "prev_close": 1025.0
+  },
+  "RU000A106MG3": {
+   "price": 1302.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1302.0
+  },
+  "RU000A106N57": {
+   "price": 1150.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:25:01",
+   "prev_close": 1150.0
+  },
+  "RU000A106SA3": {
+   "price": 7273.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 7273.0
+  },
+  "RU000A106XE5": {
+   "price": 121.7,
+   "price_kind": "prev_close",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 121.7
+  },
+  "RU000A107860": {
+   "price": 1349.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1349.0
+  },
+  "RU000A1079J5": {
+   "price": 1049.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1049.0
+  },
+  "RU000A107RE5": {
+   "price": 90000.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 11:43:28",
+   "prev_close": 88000.0
+  },
+  "RU000A107U08": {
+   "price": 790.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:36",
+   "prev_close": 780.0
+  },
+  "RU000A108751": {
+   "price": 43000.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:18:54",
+   "prev_close": 43000.0
+  },
+  "RU000A108KP4": {
+   "price": 1210.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1210.0
+  },
+  "RU000A108TT7": {
+   "price": 68.74,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 67.96
+  },
+  "RU000A108UH0": {
+   "price": 837.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 842.0
+  },
+  "RU000A108VR7": {
+   "price": 1348.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:13",
+   "prev_close": 1348.0
+  },
+  "RU000A108ZB2": {
+   "price": 132100.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:29",
+   "prev_close": 131700.0
+  },
+  "RU000A1092L4": {
+   "price": 73000.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:31:14",
+   "prev_close": 73000.0
+  },
+  "RU000A1095D4": {
+   "price": 1250.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 10:15:31",
+   "prev_close": 1245.0
+  },
+  "RU000A1099U0": {
+   "price": 6.83,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 6.83
+  },
+  "RU000A109G79": {
+   "price": 2780.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:52:14",
+   "prev_close": 2380.0
+  },
+  "RU000A109GQ8": {
+   "price": 944.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 12:00:48",
+   "prev_close": 950.0
+  },
+  "RU000A109NL5": {
+   "price": 1230.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 10:20:01",
+   "prev_close": 1230.0
+  },
+  "RU000A109QR5": {
+   "price": 3140.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:52:55",
+   "prev_close": 3155.0
+  },
+  "RU000A109R27": {
+   "price": 656.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 639.5
+  },
+  "RU000A10A489": {
+   "price": 850.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:18:00",
+   "prev_close": 850.0
+  },
+  "RU000A10AN72": {
+   "price": 113700.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 11:49:01",
+   "prev_close": 106200.0
+  },
+  "RU000A10AQT4": {
+   "price": 12.716,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:01:01",
+   "prev_close": 12.681
+  },
+  "RU000A10ATA8": {
+   "price": 84000.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 09:37:11",
+   "prev_close": 88000.0
+  },
+  "RU000A10BBS6": {
+   "price": 745.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 738.0
+  },
+  "RU000A10BM31": {
+   "price": 10380.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:28",
+   "prev_close": 10435.0
+  },
+  "RU000A10BQP0": {
+   "price": 95.27,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 95.26
+  },
+  "RU000A10BQQ8": {
+   "price": 1390.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1390.0
+  },
+  "RU000A10BT42": {
+   "price": 1243.4,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1242.9
+  },
+  "RU000A10CFM8": {
+   "price": 768.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 769.0
+  },
+  "RU000A10CKQ9": {
+   "price": 126200.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 10:43:36",
+   "prev_close": 126200.0
+  },
+  "RU000A10CLY1": {
+   "price": 135000.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 135000.0
+  },
+  "RU000A10D7W9": {
+   "price": 112100.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 10:56:14",
+   "prev_close": 114600.0
+  },
+  "RU000A10D814": {
+   "price": 999.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:00:08",
+   "prev_close": 999.5
+  },
+  "RU000A10E3R7": {
+   "price": 108000.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 106000.0
+  },
+  "RU000A10ECF5": {
+   "price": 1000.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1000.0
+  },
+  "RU000A10EVE8": {
+   "price": 882.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 883.0
+  },
+  "RU000A10FDU9": {
+   "price": 1027.2,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1027.2
+  },
+  "RU000A10FQ17": {
+   "price": 503.9,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:27",
+   "prev_close": 503.7
+  },
+  "RUAL": {
+   "price": 24.95,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 24.45
+  },
+  "RUFO": {
+   "price": 109.53,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:54:35",
+   "prev_close": 109.71
+  },
+  "RUSI": {
+   "price": 57.7,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:15",
+   "prev_close": 57.4
+  },
+  "RZSB": {
+   "price": 34.18,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 34.14
+  },
+  "SAFE": {
+   "price": 18.62,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 18.615
+  },
+  "SAGO": {
+   "price": 2.075,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:34",
+   "prev_close": 2.07
+  },
+  "SAGOP": {
+   "price": 2.075,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 2.07
+  },
+  "SARE": {
+   "price": 0.808,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:12",
+   "prev_close": 0.811
+  },
+  "SAREP": {
+   "price": 0.4165,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:45:29",
+   "prev_close": 0.419
+  },
+  "SBBC": {
+   "price": 9.695,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 9.558
+  },
+  "SBBY": {
+   "price": 11.84,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 11.838
+  },
+  "SBCB": {
+   "price": 1445.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1430.0
+  },
+  "SBCN": {
+   "price": 13.529,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 13.579
+  },
+  "SBDS": {
+   "price": 3.39,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:32",
+   "prev_close": 3.345
+  },
+  "SBER": {
+   "price": 287.21,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 285.29
+  },
+  "SBERP": {
+   "price": 287.68,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 285.8
+  },
+  "SBFR": {
+   "price": 15.676,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:25",
+   "prev_close": 15.678
+  },
+  "SBGB": {
+   "price": 15.279,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:22",
+   "prev_close": 15.267
+  },
+  "SBGD": {
+   "price": 32.915,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 33.045
+  },
+  "SBHI": {
+   "price": 6.832,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 6.694
+  },
+  "SBLB": {
+   "price": 12.064,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 12.038
+  },
+  "SBMM": {
+   "price": 19.606,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 19.599
+  },
+  "SBMX": {
+   "price": 17.361,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 17.085
+  },
+  "SBPS": {
+   "price": 2.855,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 2.84
+  },
+  "SBRB": {
+   "price": 19.058,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:29",
+   "prev_close": 19.049
+  },
+  "SBRI": {
+   "price": 10.404,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 10.19
+  },
+  "SBRS": {
+   "price": 14.285,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 14.28
+  },
+  "SBSC": {
+   "price": 6.899,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:28",
+   "prev_close": 6.771
+  },
+  "SCFT": {
+   "price": 4.122,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:48",
+   "prev_close": 4.042
+  },
+  "SCLI": {
+   "price": 7.262,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:06:00",
+   "prev_close": 7.2565
+  },
+  "SELG": {
+   "price": 42.05,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 41.64
+  },
+  "SFIN": {
+   "price": 582.6,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 567.0
+  },
+  "SGZH": {
+   "price": 0.7135,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:30",
+   "prev_close": 0.7
+  },
+  "SIBN": {
+   "price": 607.15,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 633.9
+  },
+  "SILA": {
+   "price": 113.46,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:46:44",
+   "prev_close": 113.43
+  },
+  "SIPO": {
+   "price": 6.993,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 6.899
+  },
+  "SLEN": {
+   "price": 3.29,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 3.23
+  },
+  "SMCF": {
+   "price": 997.1,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:19:30",
+   "prev_close": 997.1
+  },
+  "SMLT": {
+   "price": 241.6,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 238.4
+  },
+  "SNGS": {
+   "price": 16.455,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 16.265
+  },
+  "SNGSP": {
+   "price": 41.03,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 41.015
+  },
+  "SOFL": {
+   "price": 50.4,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:23",
+   "prev_close": 49.32
+  },
+  "SPBE": {
+   "price": 171.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 165.9
+  },
+  "SPRN": {
+   "price": 9.97,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 9.927
+  },
+  "STME": {
+   "price": 4.145,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:29",
+   "prev_close": 4.125
+  },
+  "STSB": {
+   "price": 3.385,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 3.475
+  },
+  "STSBP": {
+   "price": 3.94,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 3.95
+  },
+  "SUGB": {
+   "price": 1555.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:00:32",
+   "prev_close": 1554.5
+  },
+  "SVAV": {
+   "price": 382.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:21",
+   "prev_close": 376.0
+  },
+  "SVCB": {
+   "price": 10.09,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 9.95
+  },
+  "SVET": {
+   "price": 9.48,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 9.5
+  },
+  "SVETP": {
+   "price": 14.95,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 14.9
+  },
+  "T": {
+   "price": 270.48,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 266.74
+  },
+  "TASB": {
+   "price": 1.378,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:21",
+   "prev_close": 1.374
+  },
+  "TASBP": {
+   "price": 0.828,
+   "price_kind": "market",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:51",
+   "prev_close": 0.834
+  },
+  "TATN": {
+   "price": 662.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 678.5
+  },
+  "TATNP": {
+   "price": 634.2,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 648.1
+  },
+  "TBEU": {
+   "price": 11.48,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 11.5
+  },
+  "TBRU": {
+   "price": 8.51,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 8.51
+  },
+  "TDIV": {
+   "price": 10.25,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:18",
+   "prev_close": 10.11
+  },
+  "TEUR": {
+   "price": 6.94,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 6.94
+  },
+  "TGKA": {
+   "price": 0.004516,
+   "price_kind": "last",
+   "lot_size": 100000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 0.004454
+  },
+  "TGKB": {
+   "price": 0.004965,
+   "price_kind": "last",
+   "lot_size": 1000000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 0.004765
+  },
+  "TGKBP": {
+   "price": 0.0078,
+   "price_kind": "last",
+   "lot_size": 100000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:43",
+   "prev_close": 0.00729
+  },
+  "TGKN": {
+   "price": 0.00384,
+   "price_kind": "last",
+   "lot_size": 100000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:03",
+   "prev_close": 0.0038
+  },
+  "TGLD": {
+   "price": 13.73,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 13.75
+  },
+  "TITR": {
+   "price": 4.7,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 4.6
+  },
+  "TLCB": {
+   "price": 11.13,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:26",
+   "prev_close": 11.2
+  },
+  "TMON": {
+   "price": 165.92,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 165.84
+  },
+  "TMOS": {
+   "price": 6.06,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 5.98
+  },
+  "TNSE": {
+   "price": 3500.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:02:33",
+   "prev_close": 3520.0
+  },
+  "TOFZ": {
+   "price": 13.76,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 13.61
+  },
+  "TOPS": {
+   "price": 114.86,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 111.9
+  },
+  "TORS": {
+   "price": 0.746,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:19",
+   "prev_close": 0.75
+  },
+  "TORSP": {
+   "price": 0.523,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:08",
+   "prev_close": 0.524
+  },
+  "TPAY": {
+   "price": 101.6,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 101.51
+  },
+  "TRMK": {
+   "price": 63.1,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 60.1
+  },
+  "TRND": {
+   "price": 9.13,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 9.0
+  },
+  "TRNFP": {
+   "price": 1084.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1073.8
+  },
+  "TRUR": {
+   "price": 10.05,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 10.03
+  },
+  "TSAV": {
+   "price": 5.17,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:27",
+   "prev_close": 5.17
+  },
+  "TTLK": {
+   "price": 0.6175,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 0.6065
+  },
+  "TUSD": {
+   "price": 7.22,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:16",
+   "prev_close": 7.21
+  },
+  "TUZA": {
+   "price": 89.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 87.0
+  },
+  "UGLD": {
+   "price": 0.7282,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 0.7271
+  },
+  "UKUZ": {
+   "price": 604.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 612.0
+  },
+  "UNAC": {
+   "price": 0.432,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:28",
+   "prev_close": 0.431
+  },
+  "UNKL": {
+   "price": 3140.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 3100.0
+  },
+  "UPRO": {
+   "price": 1.1375,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 1.111
+  },
+  "URKZ": {
+   "price": 202.4,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:49",
+   "prev_close": 195.0
+  },
+  "USBN": {
+   "price": 0.1143,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 0.1138
+  },
+  "UTAR": {
+   "price": 8.53,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:16",
+   "prev_close": 8.4
+  },
+  "UWGN": {
+   "price": 21.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:25",
+   "prev_close": 20.4
+  },
+  "VDOR": {
+   "price": 1046.29,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 1045.19
+  },
+  "VEON-RX": {
+   "price": 77.1,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 75.9
+  },
+  "VGSB": {
+   "price": 14.45,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:15",
+   "prev_close": 14.25
+  },
+  "VGSBP": {
+   "price": 10.8,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:10",
+   "prev_close": 10.5
+  },
+  "VJGZ": {
+   "price": 2670.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 2710.0
+  },
+  "VJGZP": {
+   "price": 1194.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:02:37",
+   "prev_close": 1204.0
+  },
+  "VKCO": {
+   "price": 138.9,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 134.25
+  },
+  "VLHZ": {
+   "price": 129.8,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:28",
+   "prev_close": 129.4
+  },
+  "VRSB": {
+   "price": 241.5,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 238.0
+  },
+  "VRSBP": {
+   "price": 121.8,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:41",
+   "prev_close": 123.0
+  },
+  "VSEH": {
+   "price": 80.65,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 79.59
+  },
+  "VSMO": {
+   "price": 23740.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:02",
+   "prev_close": 23360.0
+  },
+  "VSYD": {
+   "price": 9250.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:30",
+   "prev_close": 9300.0
+  },
+  "VSYDP": {
+   "price": 6600.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:00:05",
+   "prev_close": 6600.0
+  },
+  "VTBR": {
+   "price": 56.36,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 54.835
+  },
+  "WFLO": {
+   "price": 100.89,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 100.85
+  },
+  "WFUT": {
+   "price": 101.62,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:04",
+   "prev_close": 103.07
+  },
+  "WILD": {
+   "price": 962.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:17",
+   "prev_close": 950.5
+  },
+  "WOFZ": {
+   "price": 100.3,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:46:01",
+   "prev_close": 100.22
+  },
+  "WTCM": {
+   "price": 15.22,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 15.16
+  },
+  "WTCMP": {
+   "price": 12.76,
+   "price_kind": "last",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 12.66
+  },
+  "WUSD": {
+   "price": 100.08,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 100.25
+  },
+  "WUSH": {
+   "price": 37.1,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 36.26
+  },
+  "X5": {
+   "price": 2121.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 2086.0
+  },
+  "XACCSK": {
+   "price": 843.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:11",
+   "prev_close": 856.0
+  },
+  "XAVIUM": {
+   "price": 1000.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 12:45:17",
+   "prev_close": 1000.0
+  },
+  "XCREDI": {
+   "price": 900.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 900.0
+  },
+  "XEQTRU": {
+   "price": 1254.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1254.0
+  },
+  "XFMAGR": {
+   "price": 191000.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 191000.0
+  },
+  "XFMAIN": {
+   "price": 2260000.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 2260000.0
+  },
+  "XHEDGE": {
+   "price": 270.9,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 11:53:01",
+   "prev_close": 270.7
+  },
+  "XHOUSE": {
+   "price": 1110.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:03:06",
+   "prev_close": 1118.0
+  },
+  "XIPKSV": {
+   "price": 10500.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:49:14",
+   "prev_close": 10448.0
+  },
+  "XKLUCH": {
+   "price": 10.903,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 12:35:01",
+   "prev_close": 10.898
+  },
+  "XNIRUM": {
+   "price": 1035.4,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 09:34:11",
+   "prev_close": 1054.0
+  },
+  "XQUANT": {
+   "price": 1285.0,
+   "price_kind": "market",
+   "lot_size": 100,
+   "board": "TQBR",
+   "ts": "2026-10-13 10:15:14",
+   "prev_close": 1350.0
+  },
+  "XSBORA": {
+   "price": 6920.0,
+   "price_kind": "market",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 11:21:51",
+   "prev_close": 6920.0
+  },
+  "XSECUR": {
+   "price": 10.48,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:01",
+   "prev_close": 10.47
+  },
+  "XSKLAD": {
+   "price": 110.06,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:42:49",
+   "prev_close": 110.5
+  },
+  "XTRIUMF": {
+   "price": 819.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:25",
+   "prev_close": 820.0
+  },
+  "XXRONE": {
+   "price": 1143.0,
+   "price_kind": "prev_close",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-12",
+   "prev_close": 1143.0
+  },
+  "XXXXXX": {
+   "price": 870.9,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:31",
+   "prev_close": 860.0
+  },
+  "YAKG": {
+   "price": 35.25,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:08",
+   "prev_close": 35.1
+  },
+  "YDEX": {
+   "price": 3505.5,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:33",
+   "prev_close": 3369.5
+  },
+  "YKEN": {
+   "price": 0.406,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:31",
+   "prev_close": 0.4
+  },
+  "YKENP": {
+   "price": 0.311,
+   "price_kind": "last",
+   "lot_size": 10000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:25",
+   "prev_close": 0.307
+  },
+  "YRSB": {
+   "price": 688.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:44",
+   "prev_close": 688.0
+  },
+  "YRSBP": {
+   "price": 187.0,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:07:46",
+   "prev_close": 185.0
+  },
+  "YUAN": {
+   "price": 131.45,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 13:55:41",
+   "prev_close": 130.84
+  },
+  "ZAYM": {
+   "price": 126.2,
+   "price_kind": "last",
+   "lot_size": 10,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:16",
+   "prev_close": 124.85
+  },
+  "ZILL": {
+   "price": 4700.0,
+   "price_kind": "last",
+   "lot_size": 1,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:08:32",
+   "prev_close": 4700.0
+  },
+  "ZVEZ": {
+   "price": 5.46,
+   "price_kind": "last",
+   "lot_size": 1000,
+   "board": "TQBR",
+   "ts": "2026-10-13 14:05:27",
+   "prev_close": 5.46
+  }
+ }
+}

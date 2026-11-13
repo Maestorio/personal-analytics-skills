@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-06-28T0000-MDMG",
+  "key": "MDMG",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-07-05",
+  "note": "3-й транш ПАУЗА. Sell-side 1072<тек, buy ≤1200 / H1 МСФО. ГОСА 2025 не назначена на 28.06. Stress +3.2%.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-06-28T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

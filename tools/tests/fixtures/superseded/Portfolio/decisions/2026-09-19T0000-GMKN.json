@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-GMKN",
+  "key": "GMKN",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-10-02",
+  "note": "EV растёт с горизонтом (+4,79 → +6,81), USD-выручка против консенсуса USD/RUB 88,8 на 2027. План 2,0 → 3,0% L2 (узаконен фактический перевес). Хеджем Sc-A не является: хвост −20,4%.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

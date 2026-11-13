@@ -1,0 +1,287 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: urals-brent-discount-2026-09-17.md
+status: active
+replaces: urals-brent-discount-2026-07-28.yaml
+
+forecast:
+  date: 2026-09-17
+  horizon: 2028-12-31
+  horizons: [2026-12-31, 2027-06-30, 2027-12-31, 2028-12-31]
+  domain: ru-macro
+  topic: urals-brent-discount
+  method: fca
+  central_estimate: "Urals/Brent дисконт (FOB Приморск/Новороссийск ↔ Dated Brent) L1: $22/bbl к 2026-12-31, $15 к 2027-06-30, $14 к 2027-12-31, $12 к 2028-12-31 (единственный весовой источник — МЭР, fallback MEDIUM); L2 EV 19.25/14.88/14.00/12.50 (D1 no_modal); by_scenario A 27/25/24/22, B 22/15/14/12 (native), C 17/12/11/10, D 11/7.5/7/6"
+  confidence: 0.40
+  source_coverage_score: 0.40
+  confidence_by_horizon:
+    "2026-12-31": 0.30
+    "2027-06-30": 0.18
+    "2027-12-31": 0.12
+    "2028-12-31": 0.02
+  anchor_share: 1.00
+  unit: "USD/bbl"
+  basis: "FOB Приморск/Новороссийск vs North Sea Dated (Argus); НЕ DAP/CIF Asia (сейчас искажён Ормузской премией)"
+  upstream_snapshot:
+    - factor: brent
+      central_estimate: "$85/bbl к 2026-12-31; L2 EV $75.4/$76.65 на 2027-06-30/2027-12-31; нет консенсуса на 2028-12-31"
+      confidence: 0.50
+      forecast_date: 2026-09-17
+      source_file: "forecasts/brent-price-2026-09-17.yaml"
+    - factor: sanctions_intensity_by_scenario
+      central_estimate: "A 0.85 / B 0.55 / C 0.38 / D 0.12 (ось Y, by construction)"
+      confidence: null
+      forecast_date: 2026-07-01
+      source_file: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  notes:
+    - "Единственный весовой (>0) источник Layer 1 на всех 4 горизонтах — МЭР (fallback MEDIUM, нет oil-субдомена в профиле; аудит 06.07.2026 запрещает опору ≥12 мес. — риск для 2027/2028 точек, принят по необходимости, как и в 07-28)"
+    - "БКС/SberCIB/ВТБ Капитал/Атон: свежих (≤6 мес.) числовых позиций по Urals-дисконту не найдено несмотря на целевой поиск (5+ запросов); monitoring-пункт bcs-sbercib-refresh из 07-28 остаётся открытым 2.5 месяца"
+    - "CREA (Aug 2026, опубл. 10-11.09.2026): $22/bbl (24%), другой базис (landed/blended, не чистый FOB) — не входит в weighted median, показан как значимый неаудированный outlier"
+    - "Эйлер: $17 к концу 2026, единственный горизонт, институциональный статус не подтверждён"
+    - "Аномалия базиса: DAP-поставки в Азию торгуются с премией к Brent (+$7.77 Китай, +$1.3 Индия, первая половина сентября) из-за Ормузской военной премии за фрахт — off-axis для матрицы Russia-West, НЕ входит в консенсус, зеркалит собственное admission Brent-прогноза от той же даты"
+    - "Sc-A/C/D в Layer 2 НЕ пересчитаны с нуля — перенесены пропорционально из urals-brent-discount-2026-07-28.yaml (ratio A/B=1.647, C/B=0.788, D/B=0.500) из-за отсутствия новых источников со сценарной атрибуцией; это методологическое упрощение, а не новая FCA-оценка по сценариям"
+    - "one_sided_cone=true начиная с 2027-12-31 (down) — тот же содержательный вывод, что в 07-28: ни один сценарий не ожидает дисконт выше текущего уровня на горизонте ≥15 мес."
+
+isolated: false
+isolated_reason: null
+
+conditional_on_scenarios:
+  axis: sanctions_intensity
+  no_modal: true
+  modal_flag: D1_pure_shell
+  source_matrix: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+  scenario_id_format: short
+  unit: "USD/bbl"
+  l2_informative: true
+
+  fact_anchor:
+    value: 24.14
+    as_of: 2026-09-14
+    source: "Argus, Urals FOB Приморск к North Sea Dated (первая половина сентября 2026), via Интерфакс/neftegaz.ru"
+
+  one_sided_cone: true
+  cone_side:
+    "2026-12-31": two_sided
+    "2027-06-30": two_sided
+    "2027-12-31": down
+    "2028-12-31": down
+  counter_world_reason: >-
+    Ни один сценарий, включая Sc-A (максимальное санкционное давление), не предполагает
+    дисконт выше сегодняшнего уровня ($24.14) на горизонте 15+ месяцев. Институциональный
+    дискурс (включая структурно-широкий лагерь CREA) расходится в скорости адаптации
+    экспортной логистики, не в её направлении. Единственный контр-фактор — иранская/
+    ормузская военная премия, уже видимая как DAP-премия в Азии — лежит вне оси Russia-West
+    и учтена только как context (см. notes), не как пятый сценарий.
+
+  by_scenario:
+    A:
+      label: "Затяжная осада (tightening)"
+      sanctions_intensity: 0.85
+      values:
+        "2026-12-31": { central: 27, range: [20, 40] }
+        "2027-06-30": { central: 25, range: [18, 38] }
+        "2027-12-31": { central: 24, range: [16, 36] }
+        "2028-12-31": { central: 22, range: [14, 34] }
+      provenance: derived_from_marginal
+      reasoning_summary: >
+        Перенесено пропорционально из 07-28 (A/B=1.647) с обновлённым B-якорем. Держится
+        близко к fact_anchor как ценовой потолок при сохранении максимального давления
+        (secondary sanctions risk на покупателей CN/IN, продление cap).
+      sources_used: []
+      coverage_quality: DERIVED
+    B:
+      label: "Война на расколотом фронте (fragmentation)"
+      sanctions_intensity: 0.55
+      values:
+        "2026-12-31": { central: 22, range: [16, 28] }
+        "2027-06-30": { central: 15, range: [10, 22] }
+        "2027-12-31": { central: 14, range: [9, 21] }
+        "2028-12-31": { central: 12, range: [7, 18] }
+      provenance: native_fca
+      reasoning_summary: >
+        МЭР, базовый сценарий: разворот экспорта на Восток без снятия санкций — соответствует
+        continuation войны при постепенной эрозии эффективности санкционного режима.
+      sources_used:
+        - { source_id: mer, trust_level: MEDIUM_FALLBACK, camp_weight: 1.0, reasoning: "базовый сценарий СЭР 12.05.2026: Urals/Brent 2026 59/81, 2027 50/65, 2028 50/63, 2029 50/61" }
+      coverage_quality: LOW
+    C:
+      label: "Замороженный конфликт (holding → relief)"
+      sanctions_intensity: 0.38
+      values:
+        "2026-12-31": { central: 17, range: [11, 24] }
+        "2027-06-30": { central: 12, range: [7, 18] }
+        "2027-12-31": { central: 11, range: [6, 17] }
+        "2028-12-31": { central: 10, range: [5, 15] }
+      provenance: derived_from_marginal
+      reasoning_summary: >
+        Перенесено из 07-28 (ratio C/B=0.788, унаследовано из снапшота 07-01). Ни один
+        источник не моделирует перемирие явно в этом запуске.
+      sources_used: []
+      coverage_quality: DERIVED
+    D:
+      label: "Большая сделка (relief)"
+      sanctions_intensity: 0.12
+      values:
+        "2026-12-31": { central: 11, range: [6, 17] }
+        "2027-06-30": { central: 7.5, range: [3, 13] }
+        "2027-12-31": { central: 7, range: [3, 12] }
+        "2028-12-31": { central: 6, range: [2, 11] }
+      provenance: derived_from_marginal
+      reasoning_summary: >
+        Перенесено из 07-28 (ratio D/B=0.50). Структурный транспортно-страховой пол при
+        восстановленных G7-сервисах.
+      sources_used: []
+      coverage_quality: DERIVED
+
+  marginal:
+    method: linear
+    modal_scenario_id: none
+    values:
+      "2026-12-31": { central: 19.25, range: [6, 40] }
+      "2027-06-30": { central: 14.875, range: [3, 38] }
+      "2027-12-31": { central: 14.0, range: [3, 36] }
+      "2028-12-31": { central: 12.5, range: [2, 34] }
+    aggregation_formula: "weighted_mean"
+
+  coverage_diagnostic:
+    per_scenario:
+      A: { sources_used: 0, confidence_level: DERIVED }
+      B: { sources_used: 1, confidence_level: LOW }
+      C: { sources_used: 0, confidence_level: DERIVED }
+      D: { sources_used: 0, confidence_level: DERIVED }
+    asymmetry_warning: "3 из 4 сценариев без native-источников (то же соотношение, что в 07-28); весь аудированный/fallback набор — 1 источник, кластеризован в Sc-B"
+    dominant_implicit_world: B
+
+coherence_diagnostic:
+  layer1_marginal: 22.00
+  layer2_marginal: 19.25
+  divergence_pct: 12.5
+  severity: MEDIUM
+  warning: >-
+    Layer 1 полностью держится на МЭР (Sc-B-подобный); равновзвешенный Layer 2 включает
+    Sc-A (27) и тянет EV вниз меньше, чем можно было бы ожидать. MEDIUM не требует
+    остановки сохранения (порог HIGH >15% не пройден), но воспроизводится на ближнем
+    горизонте третий снапшот подряд с похожей структурой.
+  by_horizon:
+    "2026-12-31": { layer1_marginal: 22.00, layer2_marginal: 19.25, divergence_pct: 12.5, severity: MEDIUM }
+    "2027-06-30": { layer1_marginal: 15.00, layer2_marginal: 14.875, divergence_pct: 0.8, severity: LOW }
+    "2027-12-31": { layer1_marginal: 14.00, layer2_marginal: 14.0, divergence_pct: 0.0, severity: LOW }
+    "2028-12-31": { layer1_marginal: 12.00, layer2_marginal: 12.5, divergence_pct: 4.2, severity: LOW }
+
+fca_stats:
+  "2026-12-31":
+    kind: level
+    unit: "USD/bbl"
+    l1_weighted: 22.00
+    l1_unweighted: 22.00
+    l2_ev: 19.25
+    p10: 22.00
+    p90: 22.00
+  "2027-06-30":
+    kind: level
+    unit: "USD/bbl"
+    l1_weighted: 15.00
+    l1_unweighted: 15.00
+    l2_ev: 14.875
+    p10: 15.00
+    p90: 15.00
+  "2027-12-31":
+    kind: level
+    unit: "USD/bbl"
+    l1_weighted: 14.00
+    l1_unweighted: 14.00
+    l2_ev: 14.0
+    p10: 14.00
+    p90: 14.00
+  "2028-12-31":
+    kind: level
+    unit: "USD/bbl"
+    l1_weighted: 12.00
+    l1_unweighted: 12.00
+    l2_ev: 12.5
+    p10: 12.00
+    p90: 12.00
+
+reviews:
+  interval_months: 3
+  next_due: 2026-12-17
+  last_completed: null
+  history: []
+
+monitoring:
+  - id: bcs-sbercib-refresh
+    description: "Выход БКС/SberCIB со свежей числовой позицией по Urals-дисконту (открыт с 07-28, не закрыт 2.5 мес.)"
+    source: "https://bcs-express.ru/"
+    threshold: "публикация с явной числовой оценкой дисконта на 2026-2027"
+    check_date: 2026-12-17
+    impact: mixed
+    severity: high
+    auto_checkable: false
+    side: both
+  - id: urals-discount-narrow-below-10
+    description: "Дисконт Urals к Brent сужается ниже $10/bbl (leading indicator сценария B из scenario-geopolitics-ru-west)"
+    source: "scenarios/scenario-geopolitics-ru-west-2026-07-01.yaml"
+    threshold: "spread < $10/bbl (FOB basis)"
+    check_date: 2027-06-30
+    impact: supports
+    severity: high
+    auto_checkable: true
+    side: down
+  - id: graham-act-enforcement
+    description: "Реальное применение дискреционных вторичных тарифов Graham Act (не только подпись закона)"
+    source: "https://www.atlanticcouncil.org/dispatches/the-graham-sanctions-act-is-a-chance-to-punish-putin-heres-what-the-white-house-should-do-next/"
+    threshold: ">=25% тарифа на топ-импортёров Urals -> сдвиг к Sc-A"
+    check_date: 2027-06-30
+    impact: invalidates
+    severity: high
+    auto_checkable: true
+    side: up
+  - id: fob-dap-basis-divergence
+    description: "Сохраняется ли разрыв FOB-дисконт / DAP-Азия-премия (Ормузская военная премия за фрахт) или закрывается"
+    source: "https://energyandcleanair.org/"
+    threshold: "DAP-Китай возвращается к дисконту (не премии) в течение 2 мес. подряд"
+    check_date: 2026-12-31
+    impact: mixed
+    severity: medium
+    auto_checkable: true
+    side: both
+  - id: shadow-fleet-attrition
+    description: "Выбытие теневого флота из-за санкций на дозаправку/страхование"
+    source: "https://www.iea.org/reports/oil-market-report"
+    threshold: ">=3 конфискации/квартал или падение морского экспорта >10% м/м"
+    check_date: 2027-06-30
+    impact: mixed
+    severity: medium
+    auto_checkable: false
+    side: up
+
+assumptions:
+  - id: mer-implicit-scenario-b
+    text: "Базовый сценарий МЭР (разворот экспорта на Восток без снятия санкций) соответствует Sc-B, а не Sc-C/D"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+  - id: dap-premium-is-hormuz-not-ru-west
+    text: "Текущая DAP-премия в Азии ($7-8) — иранская/ормузская военная премия за фрахт, а не признак структурного улучшения условий продажи российской нефти"
+    robustness: MEDIUM_HIGH
+    sensitivity: high
+    auto_checkable: false
+  - id: sellside-coverage-gap
+    text: "Отсутствие свежих позиций БКС/SberCIB/ВТБ/Атона за 6 мес. — пробел покрытия, а не сигнал согласия рынка с МЭР"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+  - id: scenario-ratios-carried-forward
+    text: "Пропорции A/B/C/D, унаследованные из 07-28 (2.5 мес. назад), всё ещё отражают актуальную эластичность дисконта к санкционным шокам"
+    robustness: LOW
+    sensitivity: high
+    auto_checkable: false
+  - id: mer-fallback-beyond-12mo
+    text: "МЭР пригоден как единственный fallback-источник для горизонтов 2027-2028 несмотря на audit-запрет (06.07.2026) опоры на него ≥12 мес."
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+
+final_audit:
+  due: 2028-12-31
+  status: pending

@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-05-15T0000-YDEX",
+  "key": "YDEX",
+  "verdict": "ADD",
+  "target_pct": null,
+  "review_by": "2026-05-29",
+  "note": "BUY до 7-8%. Post-redomicile, реклама/Маркет/такси, +25-30% выручки. Триггер: Q1 МСФО или дивидендное решение.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-05-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

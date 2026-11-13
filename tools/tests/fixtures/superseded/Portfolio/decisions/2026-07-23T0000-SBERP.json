@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-23T0000-SBERP",
+  "key": "SBERP",
+  "verdict": "TRIM",
+  "target_pct": null,
+  "review_by": "2026-09-06",
+  "note": "Div-capture 17.07 закрыт. Основной срез связки: TRIM 9.94%->8% L2 (пара->19%), фиксировать >260. Концентрация SBER+SBERP 20.9% на одного эмитента стресс-отрицательна во всех 4 сценариях. Исполнение —…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "owner",
+  "recorded_at": "2026-07-23T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

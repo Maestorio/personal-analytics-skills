@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-SBER",
+  "key": "SBER",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-11-18",
+  "note": "Anchor. ЧП РПБУ 8М +19%, ROE 23,1%, форвардный дивиденд ~42 ₽ (15,2%). Стресс EV h12 +9,68%, худший хвост Sc-A −21,8%. План 10,0 → 10,5% L2 из свободных 3 пп.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

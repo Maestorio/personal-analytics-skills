@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-NVTK",
+  "key": "NVTK",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-11-18",
+  "note": "Закон Грэма подписан 19.09 — прямой канал риска через вторичные пошлины покупателям газа. EV −0,71 / +1,94. Sell-гейт 1 200 ₽ в силе, не наращивать.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

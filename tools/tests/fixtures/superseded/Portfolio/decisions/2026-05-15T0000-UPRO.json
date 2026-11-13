@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-05-15T0000-UPRO",
+  "key": "UPRO",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-05-22",
+  "note": "Weak-keep. Заморожен пакет Uniper (Германия), capital return заблокирован. XIRR −19.81%. Микро-доля 0.43%.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-05-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

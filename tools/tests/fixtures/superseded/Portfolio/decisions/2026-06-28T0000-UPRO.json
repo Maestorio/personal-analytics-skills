@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-06-28T0000-UPRO",
+  "key": "UPRO",
+  "verdict": "TRIM",
+  "target_pct": null,
+  "review_by": "2026-07-15",
+  "note": "RED FLAG: 83.7% Юнипро (доля Uniper SE) во временном управлении Росимущества (указ №302); дивиденды ≥3г, exit ≥5л. Forward мёртв. Exit → облигации. НЕ усреднять.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-06-28T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

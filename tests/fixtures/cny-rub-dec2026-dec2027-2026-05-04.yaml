@@ -1,0 +1,226 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: cny-rub-dec2026-dec2027-2026-05-04.md
+status: active
+
+forecast:
+  date: 2026-05-04
+  horizon: 2027-12-31
+  horizons: [2026-12-31, 2027-12-31]
+  domain: ru-macro
+  topic: cny-rub-dec2026-dec2027
+  method: fca
+  central_estimate: "CNY/RUB: 12.8–13.5 к 2026-12-31; 13.5–14.9 к 2027-12-31 (weighted FCA, Pure Shell 0.25 each)"
+  confidence: 0.40
+  upstream_snapshot:
+    - ref: usd-rub-dec2026-dec2027-2026-05-03
+      confidence: 0.40
+    - ref: sanctions-russia-2026-27-2026-05-02
+      confidence: 0.43
+  geopolitics_translation:
+    method: nonlinear
+    modal_scenario_id: none
+    modal_flag: no_modal
+    modal_probability: 0.25
+    alternatives_recorded: true
+    alternatives:
+      - scenario_id: A
+        label: "Дипломатический оазис"
+        probability: 0.25
+        cny_rub_2026: "10.8–12.6"
+        cny_rub_2027: "11.5–13.5"
+      - scenario_id: B
+        label: "Заморозка с тисками"
+        probability: 0.25
+        cny_rub_2026: "12.5–15.1"
+        cny_rub_2027: "13.5–16.0"
+      - scenario_id: C
+        label: "Военная экономика — доходы текут"
+        probability: 0.25
+        cny_rub_2026: "11.8–13.3"
+        cny_rub_2027: "12.5–14.0"
+
+reviews:
+  interval_months: 3
+  next_due: 2026-08-04
+  last_completed: null
+  history: []
+
+final_audit:
+  due: 2027-12-31
+  status: pending
+
+# --- Tier 2: hypothesis-stress-tester ---
+# Атакуемое допущение: «secondary sanctions остаются burner-bank уровня»
+# Вердикт: НИЗКАЯ устойчивость (4 ⚠️ KAC; SPOF = OFAC correspondent-based или ПБК директива)
+
+monitoring:
+  - id: usdcny-pbk-fixing
+    description: "USD/CNY spot / ПБК ежедневный фиксинг — отклонение от baseline 7.2–7.5"
+    threshold: "< 7.0 или > 7.8"
+    check_date: 2026-08-04
+    impact: mixed
+    severity: high
+    auto_checkable: true
+
+  - id: moex-cny-volume
+    description: "MOEX CNY объём торгов — снижение ниже стресс-уровня"
+    threshold: "< 50 млрд ₽/день на протяжении 2+ недель"
+    check_date: 2026-08-04
+    impact: invalidates
+    severity: critical
+    auto_checkable: true
+
+  - id: china-ru-oil-imports
+    description: "China seaborne oil imports from Russia (таможня КНР) — снижение как санкционный прокси"
+    threshold: "снижение > 15% QoQ"
+    check_date: 2026-10-01
+    impact: mixed
+    severity: high
+    auto_checkable: true
+
+  - id: ofac-sdn-cn-banks
+    description: "OFAC SDN additions: китайские финансовые институты — мониторинг списка"
+    threshold: "≥ 3 крупных банка (ICBC/BOC/CITIC-уровень)"
+    check_date: 2026-07-31
+    impact: invalidates
+    severity: critical
+    auto_checkable: true
+
+  - id: ofac-correspondent-action
+    description: "OFAC переход к correspondent-based sanctions по CNY-расчётам с РФ (любые публичные signal или меры)"
+    threshold: "любое официальное guidance или enforcement action против CN correspondent banks"
+    check_date: 2026-09-30
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: pbk-directive-ru-settlement
+    description: "ПБК директива или guidance о снижении расчётов с РФ (формальные или неформальные)"
+    threshold: "любое публичное заявление ПБК или утечка о внутренней директиве"
+    check_date: 2026-09-30
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: eu-21-cn-secondary
+    description: "EU 21-й пакет: включение CN secondary measures против расчётных банков"
+    threshold: "текст 21-го пакета содержит прямые меры против CN финансовых институтов"
+    check_date: 2026-07-31
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: chouzhou-type-pause
+    description: "Число крупных CN банков, приостановивших расчёты с РФ (по аналогии Chouzhou 2024)"
+    threshold: "≥ 5 банков второго эшелона приостановили операции одновременно"
+    check_date: 2026-10-01
+    impact: mixed
+    severity: high
+    auto_checkable: false
+
+assumptions:
+  - id: kitajskie-banki-prodolzhayut
+    text: "Китайские банки второго эшелона продолжают обслуживать РФ-расчёты ради маржи — burner-bank модель работает"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+
+  - id: ofac-ne-perehodit-k-correspondent
+    text: "OFAC не переходит от entity-based к correspondent-based sanctions по CNY-расчётам"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+
+  - id: pbk-ne-vypuskaet-direktiv
+    text: "ПБК не выпускает директиву об ограничении/запрете расчётов с РФ (формально или неформально)"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+
+  - id: moex-cny-likvdnost-sokhranyaetsya
+    text: "MOEX CNY рынок сохраняет минимальную ликвидность >50 млрд ₽/день"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+
+thresholds:
+  - id: sdn-cn-banks-flip
+    variable: "Число крупных китайских банков в OFAC SDN list (ICBC/BOC/CITIC уровня)"
+    condition: "≥ 3 крупных банка одновременно в SDN"
+    flips_to: "CNY/RUB 2026 modal 15.0–17.5 (+20–35% от baseline)"
+    auto_checkable: true
+
+  - id: usdcny-below-seven
+    variable: "USD/CNY spot rate"
+    condition: "USD/CNY < 7.0 (ПБК агрессивная поддержка юаня)"
+    flips_to: "CNY/RUB −8–10% vs modal при неизменном USD/RUB; временное укрепление рубля к юаню"
+    auto_checkable: true
+
+deadlines:
+  - id: gl55e-expiry
+    date: 2026-06-28
+    description: "Экспирация OFAC GL-55E (Sakhalin-2 energy waiver)"
+    action: "Если не продлено + shadow fleet restrictions — пересмотреть upstream USD/RUB вверх и CNY/RUB вверх; часть нефтегазовой CNY-выручки структурно теряется"
+    auto_checkable: true
+
+  - id: eu-21-package-deadline
+    date: 2026-07-31
+    description: "EU 21-й пакет санкций — дедлайн принятия"
+    action: "Если включены CN secondary measures — запустить FCA обновление; модель burner-bank требует пересмотра; severity escalates до critical"
+    auto_checkable: true
+
+  - id: intermediate-horizon-check
+    date: 2026-12-31
+    description: "Промежуточный горизонт прогноза — проверка фактического CNY/RUB vs modal 12.8–13.5"
+    action: "Если ≥3 крупных CN банков получили SDN к этой дате → прогноз фальсифицирован; закрыть как resolved-with-deviation и запустить ретроспективный аудит"
+    auto_checkable: true
+
+falsifiers:
+  - id: ofac-correspondent-sanctions-cn
+    description: "OFAC вводит correspondent banking restrictions против китайских банков, проводящих CNY-расчёты с РФ — burner-bank модель структурно неработоспособна"
+    would_resolve: true
+    auto_checkable: false
+
+  - id: pbk-voluntary-directive
+    description: "ПБК выпускает внутреннюю директиву о «добровольном» сокращении расчётов с РФ — 95% китайских банков прекращают операции в течение 3 месяцев"
+    would_resolve: true
+    auto_checkable: false
+
+  - id: three-major-cn-sdn
+    description: "≥ 3 крупных китайских банка (ICBC/BOC/CITIC-уровня) одновременно в SDN list — tier-2 burner-bank цепочка рушится без institutional replacement"
+    would_resolve: true
+    auto_checkable: true
+
+agents:
+  - id: ofac-agent
+    agent: "OFAC (US Treasury)"
+    action: "Вводит correspondent banking restrictions на китайские финансовые институты, проводящие CNY-расчёты с российскими контрагентами"
+    window: "2026-07-01/2026-12-31"
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: eu-agent
+    agent: "EU Council"
+    action: "Принимает 21-й пакет с прямыми CN secondary measures против расчётных банков"
+    window: "2026-06-01/2026-09-30"
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: pbk-agent
+    agent: "ПБК (Народный банк Китая)"
+    action: "Выпускает директиву о «добровольном» сокращении расчётов с РФ по модели иранского прецедента 2018–2019"
+    window: "2026-04-01/2026-12-31"
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+
+  - id: moex-agent
+    agent: "Московская биржа"
+    action: "Административно снижает лимиты CNY-торговли как реакция на санкционное давление и регуляторные запросы"
+    window: "2026-07-01/2026-12-31"
+    impact: mixed
+    severity: high
+    auto_checkable: false

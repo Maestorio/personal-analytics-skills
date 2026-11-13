@@ -1,0 +1,264 @@
+schema_version: 1
+type: scenario-events
+scenario_ref: scenario-geopolitics-ru-west-2026-07-01.md
+status: active
+replaces: scenario-geopolitics-ru-west-2026-06-10
+
+matrix:
+  date: 2026-07-01
+  horizon: 2028-12-31
+  horizon_intermediate: [2026-12-31, 2027-06-30, 2028-06-30]
+  # Горизонт расширен 2026-09-17: 2028-12-31 стал новым финальным horizon,
+  # прежний финал (2028-06-30) перешёл в horizon_intermediate. Оси, лейблы
+  # A/B/C/D и веса на h6/h12/h24 НЕ пересматривались — extend по запросу
+  # владельца, не новая матрица. p_by_horizon.h30 — перенос значений h24
+  # без новой FCA-оценки по осям.
+  domain: geopolitics
+  topic: geopolitics-ru-west
+  axis_x: "интенсивность конфликта: война vs перемирие/заморозка"
+  axis_y: "санкционный режим: единый/ужесточённый vs фрагментация/снятие"
+  # Модального сценария нет: на h12 у C и D одинаковые 0.35 (ничья), а на
+  # h6 модален C (0.42), на h24 — C (0.36). Назвать одного argmax'ом значило
+  # бы выбрать по порядку ключей — тот же дефект, что чинился в recalibrate.
+  modal_scenario: none
+  modal_probability: 0.35   # максимум по скалярным весам, не «вероятность модального»
+  modal_flag: no_modal
+  # §17 F4: какой id какому углу матрицы. Умолчания нет — перепутанная
+  # полярность не падает, а зеркалит веса (вес войны уезжает на разрядку).
+  polarity:
+    stress_pole: A      # обе оси HIGH: война продолжается + санкции ужесточены
+    detente_pole: D     # обе оси LOW: перемирие + фрагментация/снятие
+  # §5.1 спеки: append-only лог Type-A правок весов.
+  weight_history:
+    - date: 2026-08-05
+      old: { A: 0.25, B: 0.25, C: 0.25, D: 0.25 }
+      new: { A: 0.15, B: 0.15, C: 0.35, D: 0.35 }
+      reason: >-
+        Change of belief владельца: P(окончание войны) = 60/70/60 %,
+        P(снятие санкций) = 30/50/40 % на h6/h12/h24 (rho=0). Скаляр = h12;
+        одновременно добавлен p_by_horizon (h6 .28/.12/.42/.18,
+        h24 .24/.16/.36/.24). Запись внесена задним числом 2026-08-06 —
+        правка 08-05 не была залогирована.
+      provenance: joint_from_axes
+
+scenario_triggers:
+  - scenario_id: A
+    label: "Затяжная осада"
+    probability: 0.15   # = вес на primary_horizon (h12); скаляр обязателен рядом с p_by_horizon
+    p_by_horizon:
+      h6: 0.28
+      h12: 0.15
+      h24: 0.24
+      h30: 0.24   # перенос h24, горизонт расширен 2026-09-17, FCA не запускалась
+    enabling_conditions:
+      - "Путин держится Стамбульских условий 2022, переговоры буксуют"
+      - "ЕС/G7 сохраняют единство и продлевают санкции без вето"
+      - "Дальнобойные удары ВСУ поддерживают военный тупик без перелома"
+    leading_indicators:
+      - id: eu-renewal-unanimous
+        description: "ЕС продлевает секторальные санкции единогласно и в срок"
+        threshold: "продление без вето Венгрии/Словакии"
+        check_date: 2026-12-31
+        auto_checkable: false
+        manual_check_method: "Consilium timeline: факт единогласного продления в срок"
+      - id: eu-package-21
+        description: "Выход 21-го+ пакета санкций ЕС"
+        check_date: 2026-12-31
+        auto_checkable: false
+        manual_check_method: "Consilium.europa.eu → Sanctions Russia timeline: 21st package record"
+      - id: assets-remain-frozen-a
+        description: "Замороженные активы РФ остаются под контролем Euroclear"
+        check_date: 2027-06-30
+        auto_checkable: false
+        manual_check_method: "Euroclear/Совет ЕС: нет решения о разморозке/перенаправлении"
+      - id: frontline-static-a
+        description: "Линия фронта стабильна в пределах ±2% территории"
+        threshold: "изменение <2% контролируемой площади"
+        check_date: 2028-06-30
+        auto_checkable: false
+        manual_check_method: "ISW/Critical Threats interactive map: сравнение контроля к дате"
+      - id: frontline-static-a2
+        description: "Линия фронта остаётся стабильной относительно контура на 2028-06-30"
+        threshold: "доп. изменение <2% контролируемой площади сверх базы на 2028-06-30"
+        check_date: 2028-12-31
+        auto_checkable: false
+        manual_check_method: "ISW/Critical Threats interactive map: сравнение с контуром на 2028-06-30"
+
+  - scenario_id: B
+    label: "Война на расколотом фронте"
+    probability: 0.15   # = вес на primary_horizon (h12); скаляр обязателен рядом с p_by_horizon
+    p_by_horizon:
+      h6: 0.12
+      h12: 0.15
+      h24: 0.16
+      h30: 0.16   # перенос h24, горизонт расширен 2026-09-17, FCA не запускалась
+    enabling_conditions:
+      - "Высокие цены на нефть подталкивают США к снятию нефтяных санкций"
+      - "Расхождение США/ЕС, вето Венгрии/Словакии эродируют режим"
+      - "Военная экономика РФ восстанавливает доходы при том же уровне боёв"
+    leading_indicators:
+      - id: us-oil-exemptions-expand
+        description: "США расширяют нефтяные исключения с транзита на новые категории"
+        check_date: 2026-12-31
+        auto_checkable: false
+        manual_check_method: "OFAC general licenses / Steptoe-Mayer Brown updates: новые категории"
+      - id: eu-renewal-delayed
+        description: "Продление санкций ЕС проходит с задержкой или обходом вето"
+        check_date: 2027-06-30
+        auto_checkable: false
+        manual_check_method: "Consilium timeline: задержка/обходные процедуры"
+      - id: urals-discount-narrow-b
+        description: "Дисконт Urals к Brent сужается ниже $10/барр."
+        threshold: "spread < $10/bbl"
+        check_date: 2027-06-30
+        auto_checkable: true
+      - id: g7-public-split
+        description: "Публичный разрыв G7 по формулировкам о санкциях"
+        check_date: 2028-06-30
+        auto_checkable: false
+        manual_check_method: "Совместные заявления G7: отсутствие консенсусной формулировки"
+      - id: us-sectoral-exemptions-expand-b
+        description: "США расширяют исключения за пределы нефти — на финансовый/банковский сектор"
+        check_date: 2028-12-31
+        auto_checkable: false
+        manual_check_method: "OFAC general licenses: новые категории вне нефти (банки, страхование, судоходство)"
+
+  - scenario_id: C
+    label: "Замороженный конфликт под давлением"
+    probability: 0.35   # = вес на primary_horizon (h12); скаляр обязателен рядом с p_by_horizon
+    p_by_horizon:
+      h6: 0.42
+      h12: 0.35
+      h24: 0.36
+      h30: 0.36   # перенос h24, горизонт расширен 2026-09-17, FCA не запускалась
+    enabling_conditions:
+      - "Военное истощение + давление США → прекращение огня без договора"
+      - "ЕС увязывает снятие санкций с репарациями (no reparations, no relief)"
+      - "Развёрнут механизм мониторинга линии соприкосновения"
+    leading_indicators:
+      - id: ceasefire-declared-c
+        description: "Объявлено прекращение огня/перемирие без мирного договора"
+        check_date: 2027-06-30
+        auto_checkable: false
+        manual_check_method: "Заявления сторон/US-brokered track о прекращении огня"
+      - id: monitoring-mission-c
+        description: "Развёрнута наблюдательная миссия по линии соприкосновения"
+        check_date: 2028-06-30
+        auto_checkable: false
+        manual_check_method: "Решения о мандате миссии (ЕС/ОБСЕ/коалиция), развёртывание"
+      - id: eu-links-relief-reparations
+        description: "ЕС официально увязывает снятие санкций с репарациями/выводом войск"
+        check_date: 2028-06-30
+        auto_checkable: false
+        manual_check_method: "Решения Совета ЕС: явная привязка условий к репарациям"
+      - id: assets-frozen-despite-truce
+        description: "Активы РФ не разморожены несмотря на тишину на фронте"
+        check_date: 2028-06-30
+        auto_checkable: false
+        manual_check_method: "Euroclear/Совет ЕС: активы под контролем при перемирии"
+      - id: monitoring-mandate-renewed-c
+        description: "Мандат наблюдательной миссии продлён на новый срок без изменения статуса"
+        check_date: 2028-12-31
+        auto_checkable: false
+        manual_check_method: "Решение о продлении мандата (ЕС/ОБСЕ/коалиция) без изменений в санкционном режиме"
+
+  - scenario_id: D
+    label: "Большая сделка и разрядка"
+    probability: 0.35   # = вес на primary_horizon (h12); скаляр обязателен рядом с p_by_horizon
+    p_by_horizon:
+      h6: 0.18
+      h12: 0.35
+      h24: 0.24
+      h30: 0.24   # перенос h24, горизонт расширен 2026-09-17, FCA не запускалась
+    enabling_conditions:
+      - "Мирный план Трампа (территории + пункт 14 об активах) принимается"
+      - "США навязывают урегулирование без репараций, ЕС следует"
+      - "Возврат капитала и энергоэкспорта нормализует экономику РФ"
+    leading_indicators:
+      - id: peace-framework-signed-d
+        description: "Подписан рамочный мирный документ (не только обмены пленными)"
+        check_date: 2027-06-30
+        auto_checkable: false
+        manual_check_method: "Официальный текст соглашения РФ–Украина/US-brokered"
+      - id: assets-unfrozen-d
+        description: "Решение о разморозке/перенаправлении части активов РФ"
+        check_date: 2028-06-30
+        auto_checkable: false
+        manual_check_method: "Решение ЕС/Euroclear о разморозке или трансфере активов"
+      - id: us-sectoral-relief-d
+        description: "США снимают секторальные санкции официальным актом"
+        check_date: 2028-06-30
+        auto_checkable: false
+        manual_check_method: "OFAC: отмена секторальных directives, не отдельных лицензий"
+      - id: eu-renewal-lapses-d
+        description: "ЕС не продлевает очередной санкционный раунд (истечение)"
+        check_date: 2028-06-30
+        auto_checkable: true
+      - id: swift-reconnection-d
+        description: "Крупные российские банки повторно подключены к SWIFT"
+        check_date: 2028-12-31
+        auto_checkable: false
+        manual_check_method: "Решения SWIFT/Совета ЕС о восстановлении доступа конкретных банков"
+
+downstream_sensitivity_hints:
+  axes_meta:
+    axis_x:
+      name: "conflict_intensity"
+      domain:
+        low_label: "перемирие/заморозка"
+        high_label: "война продолжается"
+      typical_responders:
+        monotone:
+          - urals_discount
+          - brent
+        non_monotone:
+          - usdrub: "умеренная эскалация → risk-off ослабляет рубль; полная эскалация → capital controls могут укрепить"
+          - imoex: "затяжная война депрессирует, резкая заморозка даёт relief-ралли — отклик по режимам"
+        indifferent:
+          - xauusd
+      quantitative_anchor:
+        low_value: 0.0
+        high_value: 1.0
+        modal_expected_value: 0.60
+        # Убеждение владельца 2026-08-05: P(окончание войны) = 60/70/60 %
+        # на h6/h12/h24 → HIGH ('война продолжается') = 1 − это.
+        modal_expected_value_by_horizon: {h6: 0.40, h12: 0.30, h24: 0.40}
+    axis_y:
+      name: "sanctions_intensity"
+      domain:
+        low_label: "фрагментация/снятие"
+        high_label: "единый/ужесточённый"
+      typical_responders:
+        monotone:
+          - urals_discount
+          - sanctions_intensity
+        non_monotone:
+          - usdrub: "снятие санкций → приток капитала укрепляет рубль; разморозка активов + отток может ослабить — bimodal"
+        indifferent:
+          - brent
+      quantitative_anchor:
+        low_value: 0.0
+        high_value: 1.0
+        modal_expected_value: 0.55
+        # Убеждение владельца 2026-08-05: P(снятие санкций) = 30/50/40 %
+        # на h6/h12/h24 → HIGH ('единый/ужесточённый') = 1 − это.
+        modal_expected_value_by_horizon: {h6: 0.70, h12: 0.50, h24: 0.60}
+  cross_effects:
+    - factors_affected:
+        - brent
+        - urals_discount
+      explanation: "High-X + Low-Y (сценарий B): Urals-дисконт схлопывается при сохранении военной премии в Brent — разнонаправленно, эффект на рублёвую выручку нелинеен."
+    - factors_affected:
+        - usdrub
+        - imoex
+      explanation: "Low-X + Low-Y (сценарий D): одновременно relief-ралли акций и приток капитала, но разморозка €300 млрд создаёт встречный отток — курс bimodal."
+
+reviews:
+  interval_months: 3
+  next_due: 2026-10-01
+  last_completed: null
+  history: []
+
+final_audit:
+  due: 2028-12-31   # синхронизировано с новым matrix.horizon (расширение 2026-09-17)
+  status: pending

@@ -1,0 +1,22 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-10-02T0000-PLZL",
+  "key": "PLZL",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-10-23",
+  "note": "Налог на сверхдоходы внесён 01.10: золото 20% от выручки сверх цены 2025 ( 432) +10% с индексацией 1,1/1,21; 2026–2028, потолок 15% выручки за вычетом НДПИ. Для Полюса 27+22 млрд ₽ (Минфин) / 31 млрд…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": "Portfolio/reports/2026-10-02-single-analysis-plzl-gmkn.md",
+    "mode_codes": [
+      "4a"
+    ],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-10-02T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

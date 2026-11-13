@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-YDEX",
+  "key": "YDEX",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-10-16",
+  "note": "Крупнейший капитал книги (10,33%) при нулевом макро-EV (+0,33% h12). Доходность идиосинкратическая, стресс-матрицей не покрыта. Дивиденд 110 ₽ отсечён 21.09.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

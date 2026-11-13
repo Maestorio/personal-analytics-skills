@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-05-15T0000-OZON",
+  "key": "OZON",
+  "verdict": "WATCH",
+  "target_pct": null,
+  "review_by": "2026-05-29",
+  "note": "Under review. XIRR −28.73%, underweight 1.91% vs IE 7%. Profitability inflection 2026-27 не доказана. Mode 4 до adds.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-05-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

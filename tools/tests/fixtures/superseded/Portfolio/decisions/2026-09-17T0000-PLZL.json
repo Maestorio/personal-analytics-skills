@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-17T0000-PLZL",
+  "key": "PLZL",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-10-02",
+  "note": "Дивидендная нога сломана (пауза до 2030, FCF 1П≈0, TCC +64%), но роль диверсификатора жива: единственный положительный tail книги (stress h12 +16,5%), ND/EBITDA 1,1×, продажи отстают от добычи на ~34…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-17T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

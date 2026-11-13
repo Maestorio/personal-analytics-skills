@@ -1,0 +1,226 @@
+schema_version: 1
+type: forecast-events
+forecast_ref: sanctions-russia-2026-28-2026-09-17.md
+status: superseded
+superseded_by: sanctions-russia-2026-28-2026-10-29
+replaces: forecasts/sanctions-russia-2026-28-2026-07-01.yaml
+
+forecast:
+  date: 2026-09-17
+  horizon: 2028-12-31
+  horizons: [2026-12-31, 2027-06-30, 2028-06-30, 2028-12-31]
+  domain: geopolitics
+  topic: sanctions-russia-2026-28
+  method: fca
+  central_estimate: "Санкции РФ: modal holding ~52% (2026-12-31) -> ~46% (2027-06-30) -> ~40% (2028-06-30) -> ~37% (2028-12-31); tightening 28->26->24->23; relief 16->22->26->28; lift 4->6->10->12"
+  confidence: 0.60
+  source_coverage_score: 0.60
+  confidence_by_horizon:
+    "2026-12-31": 0.60
+    "2027-06-30": 0.57
+    "2028-06-30": 0.47
+    "2028-12-31": 0.42
+  upstream_snapshot: []
+
+# fca_stats (§14.1) намеренно ОПУЩЕН: это качественный (4-позиционный split), а не
+# скалярный численный прогноз — l1_weighted/l1_unweighted/p10/p90 не применимы без
+# фабрикации чисел (запрещено спекой). split_by_position ниже — честный эквивалент.
+qualitative_stats:
+  "2026-12-31": {holding: 52, tightening: 28, relief: 16, lift: 4}
+  "2027-06-30": {holding: 46, tightening: 26, relief: 22, lift: 6}
+  "2028-06-30": {holding: 40, tightening: 24, relief: 26, lift: 10}
+  "2028-12-31": {holding: 37, tightening: 23, relief: 28, lift: 12}
+  current_source_split_weight_sum: {holding: 1.5, tightening: 1.0, relief: 0.5}
+  extend_method: "trend-continuation: rate of change over 2027-06-30→2028-06-30 (per 6mo) applied to 2028-06-30→2028-12-31"
+
+isolated: true
+isolated_reason: "Type 1 isolated: ось Y (sanctions_intensity) матрицы scenario-geopolitics-ru-west-2026-07-01; значения оси per scenario by construction, FCA даёт marginal-распределение режимов."
+
+axis_link:
+  scenario_ref: scenario-geopolitics-ru-west-2026-07-01.md
+  axis: axis_y
+  axis_name: sanctions_intensity
+  by_construction_mapping:
+    A: tightening
+    B: relief
+    C: holding
+    D: lift
+
+reviews:
+  interval_months: 3
+  next_due: 2026-12-17
+  last_completed: null
+  history:
+    - date: 2026-07-01
+      action: "snapshot refresh (replaces 2026-06-10)"
+    - date: 2026-09-17
+      action: "extend horizon 2028-06-30 -> 2028-12-31; base точки 2026-12-31/2027-06-30/2028-06-30 не пересматривались"
+
+final_audit:
+  due: 2028-12-31
+  status: pending
+
+monitoring:
+  - id: eu-package-21
+    description: "ЕС принимает 21-й санкционный пакет и продлевает секторальные санкции в срок"
+    source: "https://www.consilium.europa.eu/en/press/press-releases/2026/07/23/21st-package-of-sanctions-eu-hits-russian-energy-financial-services-and-crypto-hard/"
+    threshold: "принят 23.07.2026 — событие УЖЕ РЕЗОЛВИРОВАНО в пользу holding/tightening"
+    check_date: 2026-12-31
+    impact: supports
+    severity: high
+    auto_checkable: false
+    side: up
+  - id: graham-act-enforcement
+    description: "Как Белый дом применяет дискреционную часть Graham Act — вейвер vs. реальные вторичные тарифы до 100%"
+    source: "https://www.atlanticcouncil.org/dispatches/the-graham-sanctions-act-is-a-chance-to-punish-putin-heres-what-the-white-house-should-do-next/"
+    threshold: "реальное применение >=25% тарифа на топ-импортёров -> tightening; массовые вейверы без применения -> holding/relief"
+    check_date: 2027-06-30
+    impact: mixed
+    severity: high
+    auto_checkable: true
+    side: both
+  - id: eu-2027-election-fatigue
+    description: "Электоральный цикл 2027 в ЕС и его влияние на единство по продлению санкций (риск, отмеченный Carnegie/Sus)"
+    source: "https://carnegieendowment.org/europe/strategic-europe/2026/07/taking-the-pulse-are-the-eus-watered-down-russia-sanctions-better-than-none"
+    threshold: "новые изъятия/блокировки сверх текущих (Греция/Болгария/Франция/Германия/Италия/Португалия) -> relief; статус-кво или ужесточение -> holding/tightening"
+    check_date: 2027-12-31
+    impact: invalidates
+    severity: high
+    auto_checkable: false
+    side: down
+  - id: hungary-magyar-blocking
+    description: "Новый премьер Венгрии (Мадьяр) блокирует продление санкций ЕС системно vs разово"
+    threshold: "системная блокировка >=2 раундов продления -> фрагментация/relief"
+    check_date: 2027-06-30
+    impact: invalidates
+    severity: high
+    auto_checkable: false
+    side: down
+  - id: peace-framework-signed
+    description: "Подписан рамочный мирный документ РФ-Украина (single-trigger broad relief)"
+    source: "https://www.globalsecurity.org/wmd/library/news/ukraine/2026/09/ukraine-260908-sputnik01.htm"
+    threshold: "официальный текст соглашения -> сдвиг marginal к relief/lift; по состоянию на 09.2026 — не подписан, переговоры застопорились"
+    check_date: 2028-06-30
+    impact: invalidates
+    severity: critical
+    auto_checkable: false
+    side: down
+  - id: assets-300bn-status
+    description: "Статус €300 млрд замороженных активов РФ — бессрочная заморозка (12.2025) + репарационный заём против полной разморозки/конфискации"
+    source: "https://institutdelors.eu/en/publications/eu-support-to-ukraine-in-2026-the-saga-of-the-reparations-loan/"
+    threshold: "полная разморозка -> lift; юридическая конфискация -> tightening; статус-кво (текущий) -> holding"
+    check_date: 2028-06-30
+    impact: mixed
+    severity: high
+    auto_checkable: false
+    side: both
+  - id: sanctions-bite-vs-form
+    description: "Эффективность режима vs формальный статус — нефтяные доходы РФ снижаются (Euronews 02.2026), санкции содержательны"
+    source: "https://www.euronews.com/business/2026/02/10/russias-oil-revenues-dwindle-as-sanctions-bite-hitting-economy"
+    threshold: "RU oil revenue восстанавливается >=20% YoY при формально holding-режиме -> де-факто relief"
+    check_date: 2027-06-30
+    impact: mixed
+    severity: high
+    auto_checkable: true
+    side: both
+  - id: us-2028-election-cycle
+    description: "2028 — год президентских выборов в США (Трамп у власти до 01.2029); влияние электорального цикла на сделочность по России во 2П 2028"
+    threshold: "публичные сигналы legacy-сделки с РФ в кампании 2028 -> relief; статус-кво/жёсткая риторика ради базы -> holding/tightening"
+    check_date: 2028-12-31
+    impact: mixed
+    severity: medium
+    auto_checkable: false
+    side: both
+
+assumptions:
+  - id: us-eu-bifurcation-persists
+    text: "US-EU бифуркация сохраняется: статутный жёсткий пол в США (Graham Act) при дискреционном правоприменении + смягчающийся, но не отменяемый режим ЕС"
+    robustness: MEDIUM_HIGH
+    sensitivity: critical
+    auto_checkable: false
+  - id: hungary-magyar-not-systemic-blocker
+    text: "Новый премьер Венгрии (Мадьяр) не блокирует продление ЕС системно -> база ЕС durable; подтверждено принятием 21-го пакета"
+    robustness: MEDIUM_HIGH
+    sensitivity: moderate
+    auto_checkable: false
+  - id: russia-rejects-compromise
+    text: "Россия не принимает территориальный компромисс; Кремль 09.2026 подтверждает жёсткую позицию -> нет single-trigger broad relief до 2028-12-31"
+    robustness: MEDIUM
+    sensitivity: critical
+    auto_checkable: false
+  - id: trump-respects-caatsa-now-statutory
+    text: "Trump не идёт на широкий executive lift; после Graham Act значительная часть режима статутна и требует нового акта Конгресса для отмены, не только указа"
+    robustness: MEDIUM_HIGH
+    sensitivity: high
+    auto_checkable: false
+  - id: no-new-external-shock
+    text: "Нет нового внешнего шока уровня иранской войны 03.2026, вынуждающего массовое послабление"
+    robustness: LOW
+    sensitivity: critical
+    auto_checkable: false
+
+thresholds:
+  - id: peace-flips-relief
+    variable: "Статус мирного урегулирования РФ-Украина"
+    condition: "подписан territorial framework до 2028-12-31"
+    flips_to: "relief/lift modal"
+    auto_checkable: false
+  - id: broad-gl-flips-relief
+    variable: "Охват OFAC GL / применение Graham Act waiver"
+    condition: "систематические широкие вейверы без применения дискреционных тарифов"
+    flips_to: "relief modal раньше срока"
+    auto_checkable: false
+  - id: graham-act-full-enforcement-flips-tightening
+    variable: "Применение дискреционной части Graham Act"
+    condition: "полные 100% вторичные тарифы применены к >=3 из топ-5 импортёров"
+    flips_to: "tightening modal"
+    auto_checkable: true
+
+deadlines:
+  - id: us-congress-fixed-2027
+    date: 2027-01-03
+    description: "Состав Конгресса США после midterms фиксируется до 2029 — коридор инерции по статутной части Graham Act"
+    action: "Пересмотр вероятности US-side relief/holding по составу Senate Banking/Foreign Relations"
+    auto_checkable: true
+  - id: graham-act-signing
+    date: 2026-09-30
+    description: "Ожидаемое окно подписания Graham Act президентом (закон направлен на подпись 16-17.09.2026)"
+    action: "Зафиксировать факт подписания/вето и первые публичные комментарии Трампа о планах применения"
+    auto_checkable: true
+
+falsifiers:
+  - id: peace-relief-cascade
+    description: "Перемирие -> нефтяной GL + условная дорожная карта ЕС -> relief/lift становится modal"
+    would_resolve: false
+    auto_checkable: false
+  - id: trump-broad-caatsa-lift
+    description: "Trump добивается от Конгресса отмены/существенного смягчения Graham Act вне energy/humanitarian"
+    would_resolve: false
+    auto_checkable: false
+  - id: assets-unfrozen
+    description: "ЕС/Euroclear размораживает или полностью конфискует €300 млрд активов РФ (выход за пределы текущего компромисса)"
+    would_resolve: false
+    auto_checkable: false
+
+agents:
+  - id: trump-orbit-waiver-lobby
+    agent: "Trump-orbit (переговорщики по Украине)"
+    action: "Использование дискреционных вейверов Graham Act как рычага в переговорах, а не как инструмента давления"
+    window: "2026-09-30/2028-12-31"
+    impact: invalidates
+    severity: high
+    auto_checkable: false
+  - id: congress-hawks-enforcement-push
+    agent: "Конгресс (Graham-Blumenthal коалиция, после смерти Грэма — сохранившие коалицию сенаторы)"
+    action: "Давление на администрацию за фактическое применение дискреционных тарифов, а не только за подпись закона"
+    window: "2026-09-30/2027-06-30"
+    impact: supports
+    severity: high
+    auto_checkable: false
+  - id: eu-frontline-tightening
+    agent: "Франтлайн-ЕС (Балтия, Польша, Северные) + Еврокомиссия"
+    action: "Продвижение 22-го+ пакета несмотря на электоральную усталость 2027"
+    window: "2026-09-17/2028-12-31"
+    impact: supports
+    severity: high
+    auto_checkable: false

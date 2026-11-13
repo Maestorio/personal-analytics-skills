@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-06-11T0000-OZON",
+  "key": "OZON",
+  "verdict": "ADD",
+  "target_pct": null,
+  "review_by": "2026-07-26",
+  "note": "Profitability inflection подтверждён 4 прибыльными кварталами подряд: Q1'26 чистая прибыль 4,5 млрд, EBITDA +50%, GMV +51%, редомициляция в РФ завершена, гайд EBITDA-2026 ~200 млрд, байбэк 25 млрд. b…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-06-11T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

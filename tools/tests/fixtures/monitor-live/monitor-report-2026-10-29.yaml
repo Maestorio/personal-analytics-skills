@@ -1,0 +1,37 @@
+schema_version: 1
+type: monitor-report
+generated_at: "2026-10-29T15:50:00+03:00"
+producer: "forecast-monitor"
+horizon_window_days: 7
+
+alerts:
+  - severity: LOW
+    category: factor_breach
+    target: "cpi-yoy-ocr-2026"
+    target_file: "forecasts/cpi-yoy-ocr-2026-2026-10-10.yaml"
+    target_kind: forecast
+    message: "Оценка МЭР г/г на 26.10 = 7.11% (порог <= 6.35% не достигнут), прогноз не опровергнут"
+    detected_at: "2026-10-29"
+    web_search_summary: "МЭР 28.10.2026: 7.11% на 26.10 (7.15% на 19.10)"
+    suggested_action: "ничего делать не нужно; повторить /forecast-monitor после публикации ИПЦ Росстата за октябрь (~10.11)"
+
+freshness_audit:
+  integrated_view: { age_days: 25, due_for_refresh: false }
+  stress: { age_days: 25, threshold_days: 90, due_for_refresh: false }
+  weekly_review: { age_days: 1, threshold_days: 14, due_for_refresh: false }
+  macro_snapshot: { age_days: 0, threshold_days: 14, due_for_refresh: false }
+  trust_matrix: { age_days: 25, threshold_days: 90, due_for_refresh: false }
+
+predictions:
+  total_active: 1
+  overdue_count: 0
+  due_30d_count: 0
+  overdue_list: []
+
+condition_events: []
+outcome_log_updates: []
+
+caveats:
+  - { severity: INFO, message: "Запуск по одному файлу (cpi-yoy-ocr-2026): остальные прогнозы не проверялись, калибровочный сторож не считался" }
+  - { severity: INFO, message: "stale_flags.yaml не перезаписан (частичный прогон, пробитий нет)" }
+  - { severity: INFO, message: "freshness_audit посчитан по дате в имени последних файлов Portfolio/ и macro-snapshots/ на 2026-10-29" }

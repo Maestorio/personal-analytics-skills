@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-05-15T0000-WUSH",
+  "key": "WUSH",
+  "verdict": "TRIM",
+  "target_pct": null,
+  "review_by": "2026-05-29",
+  "note": "Поэтапный exit. XIRR −39.44%/2.5 года, PnL −129K. Regulatory headwind kick-scooters в МСК/СПб структурный.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-05-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

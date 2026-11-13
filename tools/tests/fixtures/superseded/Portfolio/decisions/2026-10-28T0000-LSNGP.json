@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-10-28T0000-LSNGP",
+  "key": "LSNGP",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-12-12",
+  "note": "Разбор 28.10: тезис (10% РСБУ ЧП по уставу + тарифный цикл) цел; при 374 ₽ форвард ~11,8% ниже КС 14%, EV 12м ≈ +10,5%, стресс EV −1,8% — держим без докупки до цены ≤ ~350 ₽ и РСБУ 9М2026 (02.11)",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-10-28T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

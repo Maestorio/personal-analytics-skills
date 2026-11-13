@@ -1,0 +1,95 @@
+# Синтетическая фикстура conditions@1.2: вымышленные тикеры, числа условные.
+schema_version: conditions@1.2
+last_updated: '2026-10-20'
+conditions:
+- id: aaaa-branches
+  ticker: AAAA
+  created: '2026-06-01'
+  created_by: mode_4
+  kind: review
+  trigger: {type: date, value: '2026-11-30'}
+  event: Отчётность 9М AAAA
+  while_pending: {verdict: HOLD, note: ждём отчёт}
+  on_trigger:
+    action: Разбор Mode 4 после отчёта
+    set_status: review_needed
+    verdict: HOLD
+    branches:
+    - if: показатель не ниже порога
+      then: {verdict: HOLD, action: держать, note: порог продажи отдельным условием}
+    - if: показатель ниже порога
+      then: {verdict: TRIM, action: срез части, target_pct: 1.5, note: размер из условия}
+    otherwise: {verdict: HOLD, action: держать, note: решение владельца}
+  context: {plan_pct: 2.0, snapshot: portfolio-2026-10-20.json}
+  state: pending
+  fired_date: null
+  history:
+  - {date: '2026-06-01', event: created, note: создано}
+  - date: '2026-10-20'
+    event: edited
+    note: правка
+    changes: {trigger.value: ['2026-10-01', '2026-11-30']}
+- id: aaaa-below-100
+  ticker: AAAA
+  created: '2026-08-02'
+  created_by: user
+  trigger: {type: price_below, value: '100'}
+  while_pending: {verdict: HOLD, note: ждём цену}
+  on_trigger: {action: докупить до плана, set_status: null, verdict: BUY, target_pct: 5}
+  touched: {date: '2026-10-10', time: '14:35', price: 99.5, source: notifier}
+  state: pending
+  fired_date: null
+  history:
+  - {date: '2026-08-02', event: created, note: создано}
+  - {date: '2026-10-10', event: price_touched, note: касание}
+- id: bbbb-fired
+  ticker: BBBB
+  created: '2026-08-19'
+  created_by: mode_1
+  trigger: {type: date, value: '2026-10-29'}
+  while_pending: {verdict: HOLD, note: ждём дату}
+  on_trigger: {action: проверить позицию, set_status: null, verdict: null}
+  state: fired
+  fired_date: '2026-10-29'
+  history:
+  - {date: '2026-08-19', event: created, note: создано}
+  - {date: '2026-10-29', event: closed_manual, note: закрыто владельцем}
+- id: ru000a000aa0-date
+  ticker: RU000A000AA0
+  created: '2026-09-01'
+  created_by: robot
+  trigger: {type: date, value: '2026-11-19'}
+  while_pending: {verdict: HOLD, note: ждём погашение}
+  on_trigger: {action: продать к погашению, set_status: null, verdict: TRIM}
+  valid_until: '2026-12-01'
+  on_expiry: {action: ничего не делать, verdict: HOLD, set_status: null}
+  state: pending
+  fired_date: null
+  history:
+  - {date: '2026-09-01', event: created, note: создано}
+  - {date: '2026-10-28', event: reopened, note: открыто заново}
+- id: ffff-trade-notify
+  ticker: FFFF
+  created: '2026-09-10'
+  created_by: mode_3
+  kind: trade
+  trigger: {type: price_above, value: 12.5}
+  while_pending: {verdict: HOLD, note: ждём}
+  on_trigger: {action: известить владельца, set_status: null, verdict: null}
+  state: pending
+  fired_date: null
+  history:
+  - {date: '2026-09-10', event: created, note: создано}
+  - {date: '2026-09-12', event: weird_event, note: непонятное}
+- id: bbbb-trade-review-status
+  ticker: BBBB
+  created: '2026-09-11'
+  created_by: mode_4
+  kind: trade
+  trigger: {type: date, value: '2026-12-15'}
+  while_pending: {verdict: HOLD, note: ждём}
+  on_trigger: {action: добор после разбора, set_status: review_needed, verdict: ADD, target_pct: 3}
+  state: pending
+  fired_date: null
+  history:
+  - {date: '2026-09-11', event: created, note: создано}

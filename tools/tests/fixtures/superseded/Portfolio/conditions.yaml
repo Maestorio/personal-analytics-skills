@@ -1,0 +1,571 @@
+schema_version: conditions@2
+conditions:
+- id: nvtk-sellgate
+  version: 1
+  key: NVTK
+  kind: review
+  trigger:
+    type: report_published
+    value: МСФО НОВАТЭК за 9М2026
+    window_end: '2026-12-03'
+  converted_from_date: true
+  event_text: МСФО НОВАТЭК за 9М2026
+  while_pending:
+    verdict: HOLD
+    text: '27.10.2026: ценовой порог 1200 пройден (live 1204, снапшот 1207), срез
+      отложен до отчёта. Исходная логика хеджа эскалации утратила силу (стресс 04.10:
+      сценарий A −18%), план 2,0% KEEP, фундамент нейтральный. Дата отчёта 9М не объявлена
+      — срок 30.11 с запасом.'
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Разбор Mode 4 после МСФО 9М2026: EBITDA 3К, дивидендная база, санкции по
+      Аляске/Арктик СПГ-2 → держать или срез 30%'
+    branches:
+    - if_text: EBITDA 3К не ниже ≈215 млрд ₽ (уровень 1П), дивидендная база не урезана,
+        подтверждённых санкционных ограничений по Аляске и «Арктик СПГ-2» нет
+      then:
+        action: set_verdict
+        verdict: HOLD
+        text: держать 82 акции, порог продажи — разбор у 1 300 ₽ — 1 300 ₽ — цель
+          Т-Инвестиций; новый порог ставится отдельным условием
+    - if_text: EBITDA 3К ниже ≈200 млрд ₽, либо дивидендная база урезана, либо подтверждены
+        санкционные ограничения по Аляске или «Арктик СПГ-2»
+      then:
+        action: set_target_pct
+        verdict: TRIM
+        target_pct: 1.4
+        text: срез 30% позиции (24 акции) — Исходный размер среза из условия от 29.06;
+          долю после среза считает вьюер
+    otherwise:
+      action: set_verdict
+      verdict: HOLD
+      text: держать, EBITDA 3К между 200 и 215 млрд ₽ — решение владельца
+  context:
+    plan_pct: 2.0
+    snapshot_id: portfolio-2026-10-27.json
+    as_of: '2026-06-29T00:00:00+03:00'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-06-29T00:00:00+03:00'
+  time_estimated: true
+  created_by: mode_1
+  withdrawn: null
+  superseded_by: null
+- id: ozon-date-2808
+  version: 1
+  key: OZON
+  kind: review
+  trigger:
+    type: report_published
+    value: Финансовые результаты Ozon за 3К2026
+    window_end: '2026-12-03'
+  converted_from_date: true
+  event_text: Финансовые результаты Ozon за 3К2026
+  while_pending:
+    verdict: HOLD
+    text: 'Mode 4 от 17.09.2026: предпосылка «нет прямых попаданий» нарушена 11.09
+      (Саратов). Условие переведено из buy-гейта в review-гейт: план 5,5% → 5,0% L2
+      (= факт), добор отменён. Дата 31.10 → 30.11 под результаты 3К2026 (дата отчёта
+      не объявлена; исторически Ozon отчитывается за 3К в ноябре)'
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Разбор Mode 4 по OZON после результатов 3К2026 (раскрытие ущерба от ударов
+      22–24.08 и 11.09, влияние на скорр. EBITDA и капзатраты, страховое возмещение).
+      Добор к прежним 7% ОТМЕНЁН (решение 17.09). Докупка возможна только по итогам
+      разбора: скорр. EBITDA 3К2026 положительна и гайденс 2026 (~200 млрд ₽) не снижен
+      более чем на 15%, прямых попаданий в склады за окт–ноя нет'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-08-02T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: lsngp-tranche2-rsbu9m
+  version: 1
+  key: LSNGP
+  kind: trade
+  trigger:
+    type: report_published
+    value: Отчётность Ленэнерго по РСБУ за 9М2026
+    window_end: '2026-11-06'
+  converted_from_date: true
+  event_text: Отчётность Ленэнерго по РСБУ за 9М2026
+  while_pending:
+    verdict: HOLD
+    text: Вход траншами. Транш 1 (1,5%) — вне gate-реестра, осознанный override. Цель
+      3,0% обоснована уставными 10% ЧП РСБУ на префы (DSI 0,79)
+  on_trigger:
+    action: run_analysis
+    verdict: BUY
+    text: 'Транш 2: добор LSNGP до 3,0% L2 (≈17 лотов ≈ 196 800 ₽ по 374 ₽) — только
+      если цена ≤ ~350 ₽ (форвард ≥ 12,5%) И по РСБУ 9М2026 (выход 02.11) чистая прибыль
+      ≥ ~32,5 млрд ₽ (порог — оценка advisor, пересчитать после публикации). Иначе
+      — держать. Разбор Mode 4 сделан 28.10 (гейт «Держать»)'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-08-02T00:00:00+03:00'
+  time_estimated: true
+  created_by: mode_3
+  withdrawn: null
+  superseded_by: null
+- id: tmon-date-3110
+  version: 1
+  key: TMON
+  kind: review
+  trigger:
+    type: date
+    value: '2026-10-31'
+  while_pending:
+    verdict: HOLD
+    text: TMON — парковка, не аллокация. TER 1,20% против 0,29% у LQDT/SBMM; в T-Банке
+      покупается без брокерской комиссии, поэтому выигрывает только на коротком горизонте
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Пересмотреть парковку: если остаток в TMON > 900 000 ₽ и горизонт до следующего
+      триггера > 3 мес — перевести в LQDT/SBMM (TER 0,29%) или на вклад/накопительный
+      счёт; точка безубытка перехода = round-trip комиссия / 0,075% в месяц'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-08-19T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: eseg-redemption-1711
+  version: 1
+  key: RU000A108FX8
+  kind: trade
+  trigger:
+    type: date
+    value: '2026-11-17'
+  while_pending:
+    verdict: HOLD
+    text: 'Обзор облигаций 26.09: текст «единственная длинная CNY-бумага» устарел
+      — длинных юаневых выпусков несколько (разбор 04.09)'
+  on_trigger:
+    action: set_verdict
+    verdict: BUY
+    text: 'Погашение ЕСЭГ1PC5 17.11 (≈164 тыс ₽ в юанях) → реинвест в CNY: НорНик1P17
+      (RU000A10FC62, погашение 26.05.2030) и/или ОФЗ 36 CNY (RU000A10FAK6) по ценам
+      дня. Приоритет — бумаги с погашением позже 3 лет от покупки (ЛДВ). Недобор CNY
+      ≈431 тыс ₽ после реинвеста Борца'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-08-21T00:00:00+03:00'
+  time_estimated: true
+  created_by: mode_1
+  withdrawn: null
+  superseded_by: null
+- id: pik-redemption-1911
+  version: 1
+  key: RU000A105146
+  kind: trade
+  trigger:
+    type: date
+    value: '2026-11-19'
+  while_pending:
+    verdict: HOLD
+    text: Календарь обзора облигаций 21.08. Погашение само закрывает часть USD-перевеса
+      — при условии, что деньги не вернутся в ту же корзину
+  on_trigger:
+    action: set_verdict
+    verdict: BUY
+    text: Погашение ПИК К 1P5, +1 238 922 ₽ приходят в USD-корзину — крупнейший отток
+      из USD за календарь. Реинвест в ОФЗ/>10 (26247/26248), в USD НЕ возвращать
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-08-21T00:00:00+03:00'
+  time_estimated: true
+  created_by: mode_1
+  withdrawn: null
+  superseded_by: null
+- id: reni-9m2026-review
+  version: 1
+  key: RENI
+  kind: review
+  trigger:
+    type: report_published
+    value: МСФО Ренессанс Страхование за 9М2026
+    window_end: '2026-12-03'
+  converted_from_date: true
+  event_text: МСФО Ренессанс Страхование за 9М2026
+  while_pending:
+    verdict: HOLD
+    text: 'Mode 4 от 17.09.2026: убыток 1П2026 (−1,4 млрд ₽) и операционное ухудшение
+      (страховой результат −42%, LR non-life 98,5%). Stress h12 EV +1,6% при хвосте
+      −17% против carry облигаций +10,4%. План 12% → 10,5% L2 (= факт), без сделок.
+      Дата отчёта 9М не объявлена'
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Разбор RENI по МСФО 9М2026: вернуть план к 12% L2 и добирать, если одновременно
+      (а) чистая прибыль 3К2026 > 0, (б) комбинированный loss ratio non-life < 95%,
+      (в) достаточность капитала ≥ 120%. Если (а) не выполнено или loss ratio ≥ 98%
+      — рассмотреть срез до 8%. Иначе — держать на 10,5%'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-09-17T00:00:00+03:00'
+  time_estimated: true
+  created_by: mode_4
+  withdrawn: null
+  superseded_by: null
+- id: ru000a106ep1-coupon-0511
+  version: 1
+  key: RU000A106EP1
+  kind: review
+  trigger:
+    type: date
+    value: '2026-11-05'
+  while_pending:
+    verdict: HOLD
+    text: 'Mode 4 от 09.10.2026: HOLD, не докупать. Звонок брокера «продавать» (заметка
+      13.04.2026) как срочный сигнал не принят: прогнозы АКРА (24.07.2026) и Эксперт
+      РА (17.04.2026) уже «развивающийся», новых негативных событий нет. Цена 90,0%,
+      YTP 30,75% к оферте 04.02.2028 по 100.'
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Проверить зачисление купона 04.11 (14,79 ₽ × 123 шт. = 1 819 ₽). Не пришёл,
+      задержка или техдефолт → SELL немедленно, сверить e-disclosure и НРД. Заодно
+      сверить рейтинги: АКРА (BBB+(RU), прогноз «развивающийся» с 24.07.2026) и Эксперт
+      РА (ruBBB+, «развивающийся» с 17.04.2026) — понижение или негативный прогноз
+      любого → SELL. Новая добровольная оферта эмитента (последний выкуп 29.09 по
+      93,5% + НКД) по цене не ниже рынка → рассмотреть частичное предъявление.'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-09T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: ru000a106ep1-below-85
+  version: 1
+  key: RU000A106EP1
+  kind: review
+  trigger:
+    type: price_below
+    value: 85
+  while_pending:
+    verdict: HOLD
+    text: 'Рабочий порог пересмотра (не сигнал продажи): цена на 09.10.2026 — 90,0%,
+      внутридневной минимум 88,5% (MOEX ISS).'
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Цена ≤85% (09.10 — 90,0%) → Mode 4 по ПР-Лизингу: новости e-disclosure,
+      действия АКРА и Эксперт РА, цены 2P1/2P3/3P2, добровольные оферты. Причина рыночная
+      (ставка, сектор ВДО), кредитное качество не изменилось → HOLD; причина кредитная
+      → SELL.'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-09T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: ru000a106ep1-ifrs9m-3011
+  version: 1
+  key: RU000A106EP1
+  kind: review
+  trigger:
+    type: report_published
+    value: МСФО ПР-Лизинг за 9М2026
+    window_end: '2026-12-03'
+  converted_from_date: true
+  event_text: МСФО ПР-Лизинг за 9М2026
+  while_pending:
+    verdict: HOLD
+    text: 'Контрольная дата проверки, не дата раскрытия: срок публикации МСФО 9М 2026
+      не подтверждён.'
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Разбор Mode 4 по ПР-Лизингу после МСФО 9М 2026 (если вышла). База 6М 2026
+      (МСФО, по разбору Smart-lab): Net debt/Equity 5,08; Equity/Assets 14,1%; проблемные
+      активы 1,6% ЧИЛ; покрытие ликвидности 12М 0,95x; краткосрочный долг 34%; ICR
+      1,16x. Ухудшение этих показателей, рост изъятого имущества или доля просрочки
+      выше 5% (допущение АКРА) → SELL; иначе HOLD.'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-09T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: ozon-below-1610
+  version: 1
+  key: OZON
+  kind: review
+  trigger:
+    type: price_below
+    value: 3250
+  while_pending:
+    verdict: HOLD
+    text: 'Решение владельца 16.10 (обзор акций 16.10): держим, срез ≈20 акций не
+      делаем; ручное условие на анализ при цене ниже 3 250 ₽ (цена 15.10 — 3 481 ₽).
+      Формулировка подтверждена владельцем 26.10: «анализ с возможной продажей».'
+  on_trigger:
+    action: run_analysis
+    verdict: null
+    text: 'Цена OZON ≤ 3 250 ₽ → разбор бумаги (Mode 4) с возможной продажей: перевес
+      над планом 5,0% L2 (16.10 — 6,24%), раскрыт ли ущерб от ударов по складам, причина
+      снижения (рынок или эмитент). Решение — по итогам разбора, автоматической сделки
+      нет'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-16T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: ydex-q3-ifrs-guidance
+  version: 1
+  key: YDEX
+  kind: review
+  trigger:
+    type: report_published
+    value: 'МСФО Яндекса за 3К2026: гайденс скорр. EBITDA 2026 и раскрытие ущерба
+      ЦОД'
+    window_end: '2026-12-03'
+  converted_from_date: true
+  event_text: 'МСФО Яндекса за 3К2026: гайденс скорр. EBITDA 2026 и раскрытие ущерба
+    ЦОД'
+  while_pending:
+    verdict: HOLD
+    text: 'Mode 4 от 23.10.2026 (Portfolio/reports/2026-10-23-single-analysis-ydex-mdmg-plzl.md):
+      YDEX HOLD 8,97% L2 без добора, гейт reviewed_under_review. Удары 8–11.10 остановили
+      ЦОД в Сасово, Калуге и Владимире; эмитент ущерб и капзатраты не раскрыл. Дата
+      Q3 МСФО на IR-странице не объявлена — 30.11 стоит как крайний срок, не как дата
+      отчёта'
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Разбор YDEX по МСФО 3К2026 (Mode 4). ДОБОР до 10% L2 (≈ +158 700 ₽, ≈ 15
+      акций по 3 391,5 ₽ на 22.10; база после снятия гейта 14 701 374 ₽) — только если
+      одновременно: (а) гайденс скорр. EBITDA 2026 не ниже ≈ 332 млрд ₽ (не снижен
+      более чем на 5% от 350), (б) капзатраты ≤ 12% выручки, (в) нет новой остановки
+      ЦОД дольше 72 ч, (г) гейт снят. СРЕЗ до 7,0% L2 (≈ −288 000 ₽, ≈ 28 акций) —
+      если гайденс снижен более чем на 5% (< ≈ 332 млрд ₽), либо капзатраты > 12%
+      выручки без компенсации в EBITDA, либо выведен ещё один ЦОД / Cloud-Pay недоступен
+      > 72 ч. Иначе — держать 8,97%. Суммы — по снапшоту 23.10, перед сделкой пересчитать'
+  source:
+    kind: report
+    doc: Portfolio/reports/2026-10-23-single-analysis-ydex-mdmg-plzl.md
+  created_at: '2026-10-23T00:00:00+03:00'
+  time_estimated: true
+  created_by: mode_4
+  withdrawn: null
+  superseded_by: null
+- id: plzl-above-1180-no-gold
+  version: 1
+  key: PLZL
+  kind: trade
+  trigger:
+    type: price_above
+    value: 1180
+  while_pending:
+    verdict: HOLD
+    text: 'Mode 4 от 23.10.2026 (Portfolio/reports/2026-10-23-single-analysis-ydex-mdmg-plzl.md):
+      PLZL HOLD 4,06% L2 без добора, гейт reviewed_keep. С 02.10 бумага +14,5% без
+      раскрытий; 19.10 закрытие 1 180 ₽ при GLDRUB_TOM 33 315 ₽/г. Стресс-EV от текущей
+      цены ≈ −4% (оценка advisor), при 1 180 ₽ ≈ −11%'
+  on_trigger:
+    action: set_verdict
+    verdict: TRIM
+    text: PLZL закрылся на 1 180 ₽ или выше → проверить GLDRUB_TOM на ту же дату.
+      Если ≤ 33 315 ₽/г (рост без золота, уровень 19.10) — срез до 3,0% L2 (≈ −52
+      000 ₽, ≈ 47 акций). Если золото выше 11 105 — срез не делать, пересмотреть порог.
+      Добор до 4,5% — только при цене ≤ 1 000 ₽ и FCF 12М2026 > $500 млн без продления
+      налога на сверхдоходы
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-23T00:00:00+03:00'
+  time_estimated: true
+  created_by: mode_4
+  withdrawn: null
+  superseded_by: null
+- id: x5-ifrs3q-review
+  version: 1
+  key: X5
+  kind: review
+  trigger:
+    type: report_published
+    value: Финансовые результаты X5 за 3К2026 (МСФО)
+    window_end: '2026-11-01'
+  converted_from_date: true
+  event_text: Финансовые результаты X5 за 3К2026 (МСФО)
+  while_pending:
+    verdict: HOLD
+    text: 'Владелец 26.10: разбор бумаги после МСФО 3К2026 (ожидаются 29.10). Гейт
+      «Решение устарело» с 16.09 — разбор его обновит. Позиция на плане 6,0%.'
+  on_trigger:
+    action: run_analysis
+    verdict: null
+    text: 'Разбор бумаги (Mode 4) X5 по МСФО 3К2026: маржа adj EBITDA и ЧП г/г (2К:
+      ЧП −28,9%, adj EBITDA −2,4%), долг; рекламный сегмент (пост IE 26.10 — допущения
+      маржи 30–40% проверить по раскрытию); дивиденд за 9М (ВОСА 30.11, дата реестра
+      не подтверждена). Итог — директива гейта. Если МСФО 29.10 не вышли — перенести
+      на дату публикации.'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-26T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: prmd-9m2026-review
+  version: 1
+  key: PRMD
+  kind: review
+  trigger:
+    type: report_published
+    value: Финансовые результаты Промомеда за 9М2026 (МСФО или РСБУ)
+    window_end: '2026-12-03'
+  converted_from_date: true
+  event_text: Финансовые результаты Промомеда за 9М2026 (МСФО или РСБУ)
+  while_pending:
+    verdict: HOLD
+    text: 'Владелец 26.10: гейт «Решение устарело» с 19.10 (оценка качества 19.09:
+      выручка 1П +76%, ND/EBITDA 1,8×, гайденс подтверждён). Старую оценку не переподтверждаем
+      — разбор по отчёту за 9М. Доля 3,36% при плане 3,0%: докупки и так нет.'
+  on_trigger:
+    action: run_analysis
+    verdict: null
+    text: 'Разбор бумаги (Mode 4) PRMD по отчёту за 9М2026: выполнение гайденса по
+      выручке и EBITDA, долг (ND/EBITDA против 1,8× на 1П), регистрации и запуски
+      препаратов, оценка аналитиков. Итог — директива гейта. Отчёт не вышел к сроку
+      — перенести на дату публикации (дата не проверялась).'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-26T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: data-9m2026-review
+  version: 1
+  key: DATA
+  kind: review
+  trigger:
+    type: report_published
+    value: Финансовые результаты Аренадаты за 3К/9М2026
+    window_end: '2026-12-03'
+  converted_from_date: true
+  event_text: Финансовые результаты Аренадаты за 3К/9М2026
+  while_pending:
+    verdict: HOLD
+    text: '28.10.2026 разбор Mode 4: ориентир роста выручки срезан с ≥40% до ≥20%,
+      при нижней границе 2П2026 даёт всего +8% г/г; выручка признаётся в 4К, поэтому
+      отчёт 9М малоинформативен. Гейт «На пересмотре» до 25.02.2027, докупки нет (доля
+      2,31% при плане 2,0%). Отчёт 9М — только проверка денег и ориентира.'
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Проверка по отчёту за 9М2026, тезис не пересматривать (разбор 28.10, гейт
+      «На пересмотре» до 25.02.2027): денежная позиция (на 1П +1,6 млрд ₽) и сохранение
+      ориентира выручки года «не менее 20%» (нижняя граница ≈10,6 млрд ₽, консенсус
+      ≈11,4 млрд). Выручка признаётся в 4К — основной пересмотр по итогам 2026 (февраль–март
+      2027). Отчёт не вышел к сроку — перенести на дату публикации.'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-26T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: nvtk-below-1100
+  version: 1
+  key: NVTK
+  kind: review
+  trigger:
+    type: price_below
+    value: 1100
+  while_pending:
+    verdict: HOLD
+    text: '27.10.2026: триггер на разбор, не сделка и не стоп. 1 100 ₽ ≈ закрытие
+      09.10 до отсечки (1 108); средняя цена позиции 1 176 ₽, при 1 100 позиция в
+      минусе ≈6,5%. Вероятность касания за 20 торговых дней ≈28–42% (волатильность
+      ≈41% годовых).'
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'Цена вернулась под 1 100 ₽ (ралли с отсечки отыграно) — Mode 4: причина
+      падения, держать / докупить до плана 2,0% / сократить'
+  valid_until: '2026-11-30'
+  on_expiry:
+    action: run_analysis
+    verdict: HOLD
+    text: Срок истёк, цена не опускалась под 1 100 ₽ — закрыть или продлить после
+      разбора МСФО 9М
+  context:
+    plan_pct: 2.0
+    snapshot_id: portfolio-2026-10-27.json
+    as_of: '2026-10-27T00:00:00+03:00'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-27T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null
+- id: posi-date-1011
+  version: 1
+  key: POSI
+  kind: review
+  trigger:
+    type: report_published
+    value: 'Positive Technologies: отчёт за 3К и 9М2026 (отгрузки, МСФО)'
+    window_end: '2026-11-13'
+  converted_from_date: true
+  event_text: 'Positive Technologies: отчёт за 3К и 9М2026 (отгрузки, МСФО)'
+  while_pending:
+    verdict: HOLD
+    text: ''
+  on_trigger:
+    action: run_analysis
+    verdict: HOLD
+    text: 'разбор после отчёта 3К: открывать только при отгрузках 3К ≥6,75 млрд ₽
+      и подтверждённом прогнозе 40–45 млрд ₽'
+    branches:
+    - if_text: отгрузки 3К не ниже 6,75 млрд ₽, прогноз 2026 в 40–45 млрд ₽ подтверждён,
+        цена на дату решения проверена заново
+      then:
+        action: set_verdict
+        verdict: BUY
+        text: открыть позицию, размер считает скрипт после отчёта
+    otherwise:
+      action: set_verdict
+      verdict: HOLD
+      text: не открывать
+  context:
+    plan_pct: null
+    snapshot_id: portfolio-2026-10-28.json
+    as_of: '2026-10-28T00:00:00+03:00'
+  source:
+    kind: migration
+    doc: null
+  created_at: '2026-10-28T00:00:00+03:00'
+  time_estimated: true
+  created_by: owner
+  withdrawn: null
+  superseded_by: null

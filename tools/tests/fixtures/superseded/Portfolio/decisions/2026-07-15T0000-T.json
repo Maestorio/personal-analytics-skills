@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-07-15T0000-T",
+  "key": "T",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-09-13",
+  "note": "Mode 8 15.07: HIGH-качество (ROE 26,7%, P/B ~1.0) у IE-цели 6% (факт 5,68%). Банк-стресс −4,7% — концентрационный срез через связку Сбера, не через T. Гейт истёк 14.07 — refresh.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-07-15T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

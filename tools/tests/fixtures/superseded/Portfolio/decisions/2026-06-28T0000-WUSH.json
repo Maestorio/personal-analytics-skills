@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-06-28T0000-WUSH",
+  "key": "WUSH",
+  "verdict": "TRIM",
+  "target_pct": null,
+  "review_by": "2026-07-05",
+  "note": "Убыток 2.9 млрд 2025, downgrade BBB+ (АКРА/НРА), регуляторика СИМ структурна. Reduce поэтапно, тайминг по Q2 (август). НЕ усреднять.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-06-28T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

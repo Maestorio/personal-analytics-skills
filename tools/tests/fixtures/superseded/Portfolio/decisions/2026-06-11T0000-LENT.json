@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-06-11T0000-LENT",
+  "key": "LENT",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-07-11",
+  "note": "Снимаю reduce как преждевременный. Q1'26 выручка +23,4%, интеграция Монетки (+245 магазинов у дома), лучший XIRR в потребсекторе (+27,9%). Маржа −121 б.п./NI −16% — шум одного квартала, не структурны…",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-06-11T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

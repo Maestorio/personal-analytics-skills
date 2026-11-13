@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-CNRU",
+  "key": "CNRU",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-10-19",
+  "note": "Байбек плюс вторая выплата 2026 не менее 30 ₽ (≈4,7%). EV +1,49%. IPO-гейт: 6 кварталов на бирже, вердикт BUY/ADD запрещён — план 3,0% не поднимаю.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}

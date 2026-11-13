@@ -1,0 +1,20 @@
+{
+  "schema_version": "decision@1",
+  "id": "2026-09-19T0000-SBERP",
+  "key": "SBERP",
+  "verdict": "HOLD",
+  "target_pct": null,
+  "review_by": "2026-11-18",
+  "note": "Срез до 8,0% отменён: премия префа +0,07% (276,13 vs 275,94 на 19.09) ниже порога арбитража 1%. План 8,0 → 8,5% L2. Связка 19,80% при лимите 20,0% — 0,2 пп запаса.",
+  "conditions_created": [],
+  "conditions_resolved": [],
+  "source": {
+    "kind": "backfill",
+    "doc": null,
+    "mode_codes": [],
+    "stress_id": null
+  },
+  "author": "model",
+  "recorded_at": "2026-09-19T00:00:00+03:00",
+  "recorded_at_estimated": true
+}
